@@ -4,6 +4,7 @@ import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import { ConnectKitButton } from 'connectkit';
 import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router';
 import { formatEther } from 'viem';
@@ -15,26 +16,24 @@ import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import NavBarTreasury from '@/components/NavBarTreasury';
 import NavDropdown from '@/components/NavDropdown';
 import NavLocaleSwitcher from '@/components/NavLocaleSwitcher';
-import NavWallet from '@/components/NavWallet';
+import ShortAddress from '@/components/ShortAddress';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
 import classes from './NavBar.module.css';
+import navDropdownClasses from './NavBarDropdown.module.css';
 
-import navDropdownClasses from '@/components/NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 
 const NavBar = () => {
   const chainId = defaultChain.id;
   const isDaoGteV3 = useIsDaoGteV3();
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const location = useLocation();
@@ -249,7 +248,25 @@ const NavBar = () => {
               </NavDropdown>
             </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
-            <NavWallet address={activeAccount as Address} buttonStyle={nonWalletButtonStyle} />{' '}
+            <ConnectKitButton.Custom>
+              {({ isConnected, show, address }) => {
+                if (!isConnected)
+                  return (
+                    <NavBarButton
+                      buttonText="Connect"
+                      buttonStyle={nonWalletButtonStyle}
+                      onClick={show}
+                    />
+                  );
+                return (
+                  <NavBarButton
+                    buttonText={<ShortAddress address={address!} avatar={true} size={24} />}
+                    buttonStyle={nonWalletButtonStyle}
+                    onClick={show}
+                  />
+                );
+              }}
+            </ConnectKitButton.Custom>
           </Navbar.Collapse>
         </Container>
       </Navbar>
