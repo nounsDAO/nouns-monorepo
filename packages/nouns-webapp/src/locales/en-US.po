@@ -17,10 +17,6 @@ msgstr ""
 msgid "Update proposal"
 msgstr "Update proposal"
 
-#: src/components/NavWallet/index.tsx
-msgid "Disconnect"
-msgstr "Disconnect"
-
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
 msgstr "You voted <0>Against</0> this proposal"
@@ -659,10 +655,6 @@ msgstr "Expired"
 msgid "You've generated {0} years worth of Nouns"
 msgstr "You've generated {0} years worth of Nouns"
 
-#: src/components/NavWallet/index.tsx
-msgid "Switch"
-msgstr "Switch"
-
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr "Select Language"
@@ -681,10 +673,6 @@ msgstr "DAO"
 #: src/pages/Vote/index.tsx
 msgid "This proposal can be edited for "
 msgstr "This proposal can be edited for "
-
-#: src/components/WalletConnectModal/index.tsx
-msgid "Clear WalletConnect Data"
-msgstr "Clear WalletConnect Data"
 
 #. placeholder {0}: thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '
 #: src/pages/Fork/index.tsx
@@ -1101,10 +1089,6 @@ msgstr "Nouns voters can cast voting signals to give proposers of pending propos
 msgid "Thank you for voting."
 msgstr "Thank you for voting."
 
-#: src/components/NavWallet/index.tsx
-msgid "Switch wallet"
-msgstr "Switch wallet"
-
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This proposal candidate has been proposed onchain."
 msgstr "<0>Note: </0>This proposal candidate has been proposed onchain."
@@ -1240,10 +1224,6 @@ msgstr "Nounders receive rewards in the form of Nouns (10% of supply for first 5
 msgid "Nouns DAO"
 msgstr "Nouns DAO"
 
-#: src/components/NavWallet/index.tsx
-msgid "Sign out"
-msgstr "Sign out"
-
 #: src/pages/EditProposal/index.tsx
 msgid "Edit Proposal"
 msgstr "Edit Proposal"
@@ -1373,10 +1353,6 @@ msgstr "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs
 msgid "Logo"
 msgstr "Logo"
 
-#: src/components/WalletConnectModal/index.tsx
-msgid "Connect your wallet"
-msgstr "Connect your wallet"
-
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
@@ -1392,10 +1368,6 @@ msgstr "Back"
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "License"
-
-#: src/components/NavWallet/WalletConnectButton/index.tsx
-msgid "Connect"
-msgstr "Connect"
 
 #: src/components/VoteModal/index.tsx
 msgid "Transaction Failed"

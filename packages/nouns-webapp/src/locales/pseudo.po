@@ -17,10 +17,6 @@ msgstr ""
 msgid "Update proposal"
 msgstr ""
 
-#: src/components/NavWallet/index.tsx
-msgid "Disconnect"
-msgstr ""
-
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
 msgstr ""
@@ -659,10 +655,6 @@ msgstr ""
 msgid "You've generated {0} years worth of Nouns"
 msgstr ""
 
-#: src/components/NavWallet/index.tsx
-msgid "Switch"
-msgstr ""
-
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr ""
@@ -680,10 +672,6 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "This proposal can be edited for "
-msgstr ""
-
-#: src/components/WalletConnectModal/index.tsx
-msgid "Clear WalletConnect Data"
 msgstr ""
 
 #. placeholder {0}: thresholdPercentage && thresholdPercentage > 0 ? `${thresholdPercentage}% ` : ' '
@@ -1101,10 +1089,6 @@ msgstr ""
 msgid "Thank you for voting."
 msgstr ""
 
-#: src/components/NavWallet/index.tsx
-msgid "Switch wallet"
-msgstr ""
-
 #: src/pages/Candidate/index.tsx
 msgid "<0>Note: </0>This proposal candidate has been proposed onchain."
 msgstr ""
@@ -1240,10 +1224,6 @@ msgstr ""
 msgid "Nouns DAO"
 msgstr ""
 
-#: src/components/NavWallet/index.tsx
-msgid "Sign out"
-msgstr ""
-
 #: src/pages/EditProposal/index.tsx
 msgid "Edit Proposal"
 msgstr ""
@@ -1373,10 +1353,6 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: src/components/WalletConnectModal/index.tsx
-msgid "Connect your wallet"
-msgstr ""
-
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
@@ -1391,10 +1367,6 @@ msgstr ""
 #: src/pages/TraitsPage.tsx
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
-msgstr ""
-
-#: src/components/NavWallet/WalletConnectButton/index.tsx
-msgid "Connect"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
