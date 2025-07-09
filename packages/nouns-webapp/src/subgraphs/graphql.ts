@@ -4208,7 +4208,7 @@ export type TransferEvent = {
   id: Scalars['ID']['output'];
   /** New holder address */
   newHolder: Account;
-  /** The Noun being transfered */
+  /** The Noun being transferred */
   noun: Noun;
   /** Previous holder address */
   previousHolder: Account;
