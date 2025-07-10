@@ -61,7 +61,9 @@ const getCountdownCopy = (
         )
       : undefined;
 
-  const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
+  const expiresDate =
+    proposal &&
+    dayjs(proposal.eta).add(config.contractParameters.executor.GRACE_PERIOD_SECONDS, 'seconds');
 
   const now = dayjs();
 
