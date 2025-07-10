@@ -1,10 +1,11 @@
+import type { ProposalTransaction } from '@/wrappers/nounsDao';
 import type { AbiFunction } from 'viem';
-import { encodeFunctionData, getAbiItem, parseEther } from 'viem';
 
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
+import { encodeAbiParameters, getAbiItem, parseEther, toFunctionSignature } from 'viem';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
@@ -15,28 +16,41 @@ import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 
 import classes from './FunctionCallReviewStep.module.css';
 
-const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
+/**
+ * @internal
+ */
+export const handleActionAdd = (
+  state: ProposalActionModalState,
+  onActionAdd: (transaction: ProposalTransaction) => void,
+) => {
   const functionName = state.function ?? '';
-  let calldata = '0x';
+  let calldata: `0x${string}` = '0x';
 
-  if (state.abi && functionName) {
-    try {
-      const abiItem = getAbiItem({ abi: state.abi, name: functionName }) as AbiFunction;
-      calldata = encodeFunctionData({
-        abi: [abiItem],
-        functionName,
-        args: state.args ?? [],
-      });
-    } catch (error) {
-      console.error('Error encoding function data:', error);
-    }
+  const functionAbiItem =
+    state.abi && functionName
+      ? (getAbiItem({ abi: state.abi, name: functionName }) as AbiFunction)
+      : undefined;
+
+  if (functionAbiItem) {
+    calldata = encodeAbiParameters(functionAbiItem.inputs, state.args ?? []);
+    const signature = toFunctionSignature(functionAbiItem);
+
+    onActionAdd({
+      address: state.address,
+      value: state.amount ? parseEther(state.amount.toString()) : 0n,
+      signature,
+      decodedCalldata: JSON.stringify(state.args ?? []),
+      calldata,
+    });
+
+    return;
   }
 
   onActionAdd({
     address: state.address,
-    value: state.amount ? parseEther(state.amount.toString()).toString() : '0',
-    signature: functionName,
+    value: state.amount ? parseEther(state.amount.toString()) : 0n,
     decodedCalldata: JSON.stringify(state.args ?? []),
+    signature: '',
     calldata,
   });
 };
@@ -48,6 +62,11 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
   const value = state.amount;
   const func = state.function;
   const args = state.args ?? [];
+
+  const functionAbiItem =
+    state.abi && state.function
+      ? (getAbiItem({ abi: state.abi, name: state.function }) as AbiFunction)
+      : undefined;
 
   return (
     <div>
@@ -119,18 +138,14 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
           })()}
         </Col>
       </Row>
-      {state.abi &&
-        state.function &&
-        ((getAbiItem({ abi: state.abi, name: state.function }) as AbiFunction)?.inputs || []).map(
-          (input, i) => (
-            <Row key={i}>
-              <div className={classes.argument}>
-                <div className={classes.argValue}>{input.name}</div>
-                <div className={classes.argValue}>{args[i]}</div>
-              </div>
-            </Row>
-          ),
-        )}
+      {(functionAbiItem?.inputs ?? []).map((input, i) => (
+        <Row key={i}>
+          <div className={classes.argument}>
+            <div className={classes.argValue}>{input.name}</div>
+            <div className={classes.argValue}>{args[i]}</div>
+          </div>
+        </Row>
+      ))}
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}
