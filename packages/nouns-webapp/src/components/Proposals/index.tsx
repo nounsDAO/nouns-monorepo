@@ -40,7 +40,7 @@ import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.mo
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (
-  proposal: PartialProposal,
+  proposal: PartialProposal | undefined,
   currentBlock: bigint,
   locale: SupportedLocale,
 ) => {
@@ -65,17 +65,22 @@ const getCountdownCopy = (
 
   const now = dayjs();
 
-  if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+  if (
+    startDate !== undefined &&
+    startDate?.isBefore(now) &&
+    endDate !== undefined &&
+    endDate?.isAfter(now)
+  ) {
     return (
       <Trans>
-        Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+        Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()}
       </Trans>
     );
   }
-  if (endDate?.isBefore(now)) {
+  if (expiresDate !== undefined && endDate !== undefined && endDate?.isBefore(now)) {
     return (
       <Trans>
-        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()}
       </Trans>
     );
   }
@@ -83,7 +88,7 @@ const getCountdownCopy = (
     <Trans>
       Starts{' '}
       {dayjs(startDate)
-        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en)
         .fromNow()}
     </Trans>
   );
@@ -103,7 +108,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
   const dispatch = useAppDispatch();
   const candidates = useAppSelector(state => state.candidates.data);
-  const connectedAccountNounVotes = useUserVotes() || 0;
+  const connectedAccountNounVotes = useUserVotes() ?? 0;
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const threshold = (useProposalThreshold() ?? 0) + 1;
@@ -123,7 +128,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
         candidatesData ?? [],
         (candidate): candidate is ProposalCandidate => candidate !== undefined,
       );
-      if (filteredCandidates) {
+      if (filteredCandidates.length > 0) {
         dispatch(setCandidates(filteredCandidates));
       }
     })();
@@ -263,7 +268,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
       <Section fullWidth={false} className={classes.section}>
         {activeTab === 0 && (
           <Col lg={10} className={classes.proposalsList}>
-            {proposals?.length ? (
+            {proposals && proposals.length > 0 ? (
               proposals
                 .slice(0)
                 .reverse()
@@ -340,16 +345,16 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
           <Col lg={10} className={classes.proposalsList}>
             <Row>
               <Col lg={9}>
-                {nounsRequired && candidates?.length ? (
+                {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
                   candidates
                     .slice(0)
                     .reverse()
                     .map((c, i) => {
-                      if (c && c.proposalIdToUpdate && +c.proposalIdToUpdate > 0) {
+                      if (c.proposalIdToUpdate !== undefined && +c.proposalIdToUpdate > 0) {
                         const prop = find(proposals ?? [], p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
                           prop &&
-                          blockNumber &&
+                          blockNumber !== undefined &&
                           isProposalUpdatable(prop?.status, prop?.updatePeriodEndBlock, blockNumber)
                         );
                         if (!isOriginalPropUpdatable) return null;
@@ -361,7 +366,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                             candidate={c as unknown as ProposalCandidate}
                             key={c?.id}
                             nounsRequired={threshold}
-                            currentBlock={blockNumber ? blockNumber - 1n : 0n}
+                            currentBlock={blockNumber !== undefined ? blockNumber - 1n : 0n}
                           />
                         </div>
                       );
