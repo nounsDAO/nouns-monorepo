@@ -380,7 +380,7 @@ msgstr "门槛（通过提案所需的最低支持票数）是反对票数的函
 msgid "You can settle manually in {0} minutes"
 msgstr "您可在 {0} 分钟内手动结算"
 
-#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "结束于 {0}"
@@ -551,10 +551,6 @@ msgstr "提案 {0}"
 msgid "public domain"
 msgstr "公共领域"
 
-#: src/components/Bid/index.tsx
-msgid "Settle"
-msgstr "结算"
-
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr "Nouns 是一种实验性尝试，旨在改善链上头像社区的形成。虽然像 {cryptopunksLink} 这样的项目尝试启动数字社区和身份，Nouns 试图启动身份、社区、治理以及一个可以被社区使用的资金库。"
@@ -658,12 +654,6 @@ msgstr "您已生成价值 {0} 年的 Nouns"
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr "选择语言"
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Settle Auction"
-msgstr "结算拍卖"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
@@ -770,7 +760,7 @@ msgstr "在此次委托后，您的账户将少于{0}{1}。如果您没有足够
 msgid "Will have"
 msgstr "将拥有"
 
-#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
+#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en) .fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "{0}开始"
@@ -995,12 +985,6 @@ msgstr "支持"
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
 msgstr "函数"
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Place bid"
-msgstr "出价"
 
 #: src/pages/Vote/index.tsx
 msgid "Objection only period"
@@ -1534,7 +1518,7 @@ msgstr "更改"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "您对此提案<0>弃权</0>"
 
-#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
 msgstr "过期于 {0}"
@@ -1797,6 +1781,10 @@ msgstr "分叉 Nouns DAO"
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
 msgstr "编辑提案将清除所有先前的反馈"
+
+#: src/components/Bid/index.tsx
+msgid "Bid placed."
+msgstr "出价已提交。"
 
 #: src/pages/NounsPage.tsx
 msgid "Noggles"

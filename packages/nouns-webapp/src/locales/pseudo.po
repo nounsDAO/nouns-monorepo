@@ -380,7 +380,7 @@ msgstr ""
 msgid "You can settle manually in {0} minutes"
 msgstr ""
 
-#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr ""
@@ -551,10 +551,6 @@ msgstr ""
 msgid "public domain"
 msgstr ""
 
-#: src/components/Bid/index.tsx
-msgid "Settle"
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr ""
@@ -657,12 +653,6 @@ msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
-msgstr ""
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Settle Auction"
 msgstr ""
 
 #: src/components/NavBar/index.tsx
@@ -770,7 +760,7 @@ msgstr ""
 msgid "Will have"
 msgstr ""
 
-#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
+#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en) .fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr ""
@@ -994,12 +984,6 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
-msgstr ""
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Place bid"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -1534,7 +1518,7 @@ msgstr ""
 msgid "You <0>Abstained</0> from this proposal"
 msgstr ""
 
-#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
 msgstr ""
@@ -1796,6 +1780,10 @@ msgstr ""
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Bid placed."
 msgstr ""
 
 #: src/pages/NounsPage.tsx
