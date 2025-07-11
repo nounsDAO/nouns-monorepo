@@ -17,6 +17,12 @@ interface ExternalContractAddresses {
   steth: Address | undefined;
 }
 
+interface ContractParameters {
+  executor: {
+    GRACE_PERIOD_SECONDS: number;
+  };
+}
+
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
 
 interface AppConfig {
@@ -57,12 +63,12 @@ export const WALLET_CONNECT_V2_PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_
 const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
-  const custom = import.meta.env.VITE_MAINNET_JSONRPC;
+  const custom = import.meta.env.VITE_MAINNET_JSONRPC as string;
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
-  const custom = import.meta.env.VITE_MAINNET_WSRPC;
+  const custom = import.meta.env.VITE_MAINNET_WSRPC as string;
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
@@ -84,6 +90,24 @@ const app: Record<SupportedChains, AppConfig> = {
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
     enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
+  },
+};
+
+const contractParameters: Record<SupportedChains, ContractParameters> = {
+  [sepolia.id]: {
+    executor: {
+      GRACE_PERIOD_SECONDS: 1814400,
+    },
+  },
+  [mainnet.id]: {
+    executor: {
+      GRACE_PERIOD_SECONDS: 1814400,
+    },
+  },
+  [hardhat.id]: {
+    executor: {
+      GRACE_PERIOD_SECONDS: 1814400,
+    },
   },
 };
 
@@ -133,6 +157,7 @@ const getAddresses = (): ContractAddresses => {
 const config = {
   app: app[CHAIN_ID],
   addresses: getAddresses(),
+  contractParameters: contractParameters[CHAIN_ID],
   featureToggles: {
     daoGteV3: false,
     proposeOnV1: true,

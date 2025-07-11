@@ -2,7 +2,6 @@ version: 1
 checksums:
   2dcbdb82bbd9426760add22e823b434d:
     Update%20proposal/singular: 713af63b6d46993f6aa8492fa13ed3bf
-    Disconnect/singular: 8cd3daae20ec3d3bf09b25881caa2b8f
     You%20voted%20%3C0%3EAgainst%3C%2F0%3E%20this%20proposal/singular: b923ea7dec1b875e22257ab36818acbe
     bodies%20(%7B0%7D)/singular: 0aacccd7c667119af2c8d9feb9574665
     This%20will%20clear%20all%20previous%20sponsors%20and%20feedback%20votes/singular: c7f15ed2fb95748441125066134082f2
@@ -124,7 +123,6 @@ checksums:
     Winning%20bid/singular: 4159766d110977df75128e3dd03f438c
     Proposal%20%7B0%7D/singular: c339e1dc2f47bd1743ee47b4bfa44a26
     public%20domain/singular: abbdc28c827e4fa39031bbdd6ab6e68c
-    Settle/singular: 2d79d22abbbe4684021d123b48c03534
     Nouns%20are%20an%20experimental%20attempt%20to%20improve%20the%20formation%20of%20on-chain%20avatar%20communities.%20While%20projects%20such%20as%20%7BcryptopunksLink%7D%20have%20attempted%20to%20bootstrap%20digital%20community%20and%20identity%2C%20Nouns%20attempt%20to%20bootstrap%20identity%2C%20community%2C%20governance%2C%20and%20a%20treasury%20that%20can%20be%20used%20by%20the%20community./singular: a0678ea9c33546d109f0263ceebdd2e1
     All%20Nouns%20are%20members%20of%20Nouns%20DAO./singular: d1c63522b0d8d7241e7c917e5e0e1dc2
     days/singular: c95fe8aedde21a0b5653dbd0b3c58b48
@@ -147,12 +145,9 @@ checksums:
     Submit%20Vote/singular: c4db7ad62a351ec86b41651bee7330bb
     Expired/singular: 63b27cccba4ab2143e0f5f3d46e4168a
     You've%20generated%20%7B0%7D%20years%20worth%20of%20Nouns/singular: 893726293a2ea1118426308baa78cc91
-    Switch/singular: bab779e32d2519152481e180aea26879
     Select%20Language/singular: d75cf5fbce8a4c7a9055e2210af74480
-    Settle%20Auction/singular: 7eebfb04109e8863ede23d91cae67429
     DAO/singular: 36aaafa5e0afaf44b86074cb6d840f03
     This%20proposal%20can%20be%20edited%20for%20/singular: 28fe71c2505cff26c065bc29d7ae2b28
-    Clear%20WalletConnect%20Data/singular: b619c15787b90ca9c00182725455c153
     Any%20token%20holder%20can%20signal%20to%20fork%20(exit)%20in%20response%20to%20a%20governance%20proposal.%20If%20a%20%7B0%7Dquorum%20of%20tokens%20signal%20to%20exit%2C%20the%20fork%20will%20succeed./singular: ca55aa42d623c9211847a48eff1a54cf
     Please%20place%20a%20bid%20higher%20than%20or%20equal%20to%20the%20minimum%20bid%20amount%20of%20%7B0%7D%20ETH/singular: 2e0ecc066271695d322f69255aa1fbd7
     Creating%20ZIP.../singular: 1e7df2809396501e426b223732ab73b1
@@ -228,7 +223,6 @@ checksums:
     Streams%20start%20and%20end%20at%2000%3A00%20UTC%20on%20selected%20dates./singular: 8feac1b499ada78678e4c94ed4a7c841
     For/singular: 8b0967e702b1f00fe68d4aa62712d4e4
     Function/singular: 78f81382850e1c3bb6a3b404c55d3dc2
-    Place%20bid/singular: 3fad5b1b86d81c06235b124317bb8cb6
     Objection%20only%20period/singular: 6bc171189e99fedbecbe6558acae6673
     Loading.../singular: 82b4ea7ed1439094d7c4be13aaba9a66
     Execute/singular: 3fe1686d6b7aa4a7fd6eced8098c1da5
@@ -250,7 +244,6 @@ checksums:
     Body/singular: e88eb1ea71f5ef886aa43ea6ba292d87
     Nouns%20voters%20can%20cast%20voting%20signals%20to%20give%20proposers%20of%20pending%20proposals%20an%20idea%20of%20how%20they%20intend%20to%20vote%20and%20helpful%20guidance%20on%20proposal%20changes%20to%20change%20their%20vote./singular: 00213d58ed8b7cc085d1e59fb8b1dd37
     Thank%20you%20for%20voting./singular: ddd7b2fd75be7769c05cf5e3735fb95b
-    Switch%20wallet/singular: fe59d4b3e784e1b077e2ec5e7ea72597
     "%3C0%3ENote%3A%20%3C%2F0%3EThis%20proposal%20candidate%20has%20been%20proposed%20onchain./singular": 9806f5b2148be2cb8808df8b689f3e3b
     Create%20Proposal/singular: c1eb9c635f3f3cacdefb1b3e224d0acc
     Consequently%2C%20the%20Nouns%20Foundation%20anticipates%20being%20the%20steward%20of%20the%20veto%20power%20until%20Nouns%20DAO%20is%20ready%20to%20implement%20an%20alternative%2C%20and%20therefore%20wishes%20to%20clarify%20the%20conditions%20under%20which%20it%20would%20exercise%20this%20power./singular: 11d8fbe0cd42a8e8a16d0654096ea830
@@ -283,7 +276,6 @@ checksums:
     accessories%20(%7B0%7D)%20/singular: 0991ad9ae79db6ed146d11a186b86a1b
     Nounders%20receive%20rewards%20in%20the%20form%20of%20Nouns%20(10%25%20of%20supply%20for%20first%205%20years)./singular: 58b6410416fa637ef1ea0dea8c790d36
     Nouns%20DAO/singular: c3f0366bd3f915dfc504591c79fd661f
-    Sign%20out/singular: 6d842546a84e919c519bf8cbffdf25a0
     Edit%20Proposal/singular: ac1472bd9bdf1802c36500dcacfe4aae
     Did%20not%20re-sign/singular: 96b6fea61285630beb0e7050f3e791e5
     The%20Nounders/singular: 5cc604f95a281380fa56cb064d60dcf7
@@ -308,10 +300,8 @@ checksums:
     Voting%20with%20%3C0%3E%7B0%7D%3C%2F0%3E%20Noun/singular: 300d395ab969539e67552971f0454e3b
     By%20adopting%20the%20DUNA%20model%2C%20Nouns%20DAO%20sets%20a%20pioneering%20example%20for%20DAOs%20seeking%20to%20balance%20decentralized%20autonomy%20with%20legal%20certainty%2C%20further%20solidifying%20its%20position%20at%20the%20forefront%20of%20decentralized%20governance%20innovation./singular: 5954a8da4333f6e9806f8581136a70e0
     Logo/singular: 47fa6b3978c1c06acc29b6cae393b0c9
-    Connect%20your%20wallet/singular: ea3aa1daf84c79afec5497a30431d621
     Back/singular: f541015a827e37cb3b1234e56bc2aa3c
     License/singular: ac2bcac75151e2fcd9eb768cea275a77
-    Connect/singular: 8778ee245078a8be4a2ce855c8c56edc
     Transaction%20Failed/singular: 2c08ac7a26779692cf6828a2e8a14610
     Objection%20period/singular: 502cc68704f1c1b6db1e7ee84479417a
     "%3C0%3EDelegated%20Nouns%3A%20%3C%2F0%3E/singular": a3daa3880cf7446788115dcf57356333
@@ -408,6 +398,7 @@ checksums:
     Close/singular: 2c2e22f8424a1031de89063bd0022e16
     Fork%20Nouns%20DAO/singular: 45ae13b5f0f8ebe5dfc3899656c0351a
     Editing%20a%20proposal%20will%20clear%20all%20previous%20feedback/singular: 41d4cd850d3393ba421abed24827c9a1
+    Bid%20placed./singular: b982bdbcc469d055c1d2a79a01ba71ef
     Noggles/singular: 9e17cc531939912eabbceb79af92ff79
     Candidate/singular: 96b2dab65325c16ba829c9849b6fe09d
     Nouns%20DUNA%20is%20a%20legally%20recognized%20Decentralized%20Unincorporated%20Nonprofit%20Association%20established%20in%20Wyoming%20via%20%3C0%2F%3E%20designed%20to%20provide%20a%20robust%20legal%20framework%20that%20aligns%20with%20the%20decentralized%20nature%20of%20Nouns%20DAO.%20This%20structure%20allows%20Nouns%20DAO%20to%20operate%20with%20limited%20liability%20protection%20and%20legal%20clarity%20without%20compromising%20its%20decentralized%20governance%20ethos./singular: 26b580f64e8c3731bf7e3c224cee964a
