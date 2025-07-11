@@ -385,7 +385,7 @@ msgstr "閾値（提案を通過させるために必要な賛成票の最小数
 msgid "You can settle manually in {0} minutes"
 msgstr "{0} 分で手動で決済できます"
 
-#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
 msgstr "残り{0} で終了します"
@@ -556,10 +556,6 @@ msgstr "提案 {0}"
 msgid "public domain"
 msgstr "パブリックドメイン"
 
-#: src/components/Bid/index.tsx
-msgid "Settle"
-msgstr "決済する"
-
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
@@ -663,12 +659,6 @@ msgstr "{0} 年分のナウンを生成しました"
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr "言語を選択"
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Settle Auction"
-msgstr "オークションを決済する"
 
 #: src/components/NavBar/index.tsx
 #: src/components/NavBar/index.tsx
@@ -775,7 +765,7 @@ msgstr "この委任の後、あなたのアカウントは{0}{1}未満になり
 msgid "Will have"
 msgstr "票になります"
 
-#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en) .fromNow()
+#. placeholder {0}: dayjs(startDate) .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en) .fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "あと{0}で始まります"
@@ -1000,12 +990,6 @@ msgstr "賛成"
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
 msgstr "関数"
-
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-#: src/components/Bid/index.tsx
-msgid "Place bid"
-msgstr "入札をする"
 
 #: src/pages/Vote/index.tsx
 msgid "Objection only period"
@@ -1539,7 +1523,7 @@ msgstr "代理人を変更する"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "あなたはこの提案から<0>棄権</0>しました"
 
-#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()
+#. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
 msgstr "残り {0} で期限切れになります"
@@ -1802,6 +1786,10 @@ msgstr "Nouns DAOをフォークする"
 #: src/pages/EditCandidate/index.tsx
 msgid "Editing a proposal will clear all previous feedback"
 msgstr "提案を編集すると、以前のすべてのフィードバックがクリアされます"
+
+#: src/components/Bid/index.tsx
+msgid "Bid placed."
+msgstr "入札が行われました。"
 
 #: src/pages/NounsPage.tsx
 msgid "Noggles"

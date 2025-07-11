@@ -9,6 +9,7 @@
     "check": "tsc --noEmit --skipLibCheck",
     "clean": "rimraf dist .netlify",
     "dev": "vite",
+    "dev:sepolia": "vite --mode sepolia",
     "graphql-codegen": "graphql-codegen-esm --config codegen.config.ts",
     "graphql-codegen:watch": "graphql-codegen-esm --config codegen.config.ts --watch",
     "i18n:ai-translate": "lingo.dev i18n",
