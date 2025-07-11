@@ -38,7 +38,7 @@
     "@lingui/loader": "5.3.2",
     "@lingui/macro": "5.3.2",
     "@lingui/react": "5.3.2",
-    "@noundry/nouns-assets": "^1.16.0",
+    "@noundry/nouns-assets": "^1.17.0",
     "@nouns/assets": "workspace:*",
     "@nouns/contracts": "workspace:*",
     "@nouns/sdk": "workspace:*",
