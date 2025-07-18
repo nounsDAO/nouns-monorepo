@@ -1,4 +1,13 @@
-export * from './contracts';
+export * from './contracts/nouns-auction-house.gen';
+export * from './contracts/nouns-data.gen';
+export * from './contracts/nouns-descriptor.gen';
+export * from './contracts/nouns-governor.gen';
+export * from './contracts/nouns-legacy-treasury.gen';
+export * from './contracts/nouns-payer.gen';
+export * from './contracts/nouns-stream-factory.gen';
+export * from './contracts/nouns-token-buyer.gen';
+export * from './contracts/nouns-token.gen';
+export * from './contracts/nouns-treasury.gen';
 
 export { PNGCollectionEncoder } from './image/png-collection-encoder';
 export { buildSVG } from './image/svg-builder';
