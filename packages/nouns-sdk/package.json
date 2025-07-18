@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
+    "codegen": "wagmi generate",
     "lint": "eslint",
     "test": "vitest run"
   },
