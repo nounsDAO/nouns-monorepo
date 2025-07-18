@@ -31,7 +31,6 @@
   "dependencies": {
     "@ethersproject/providers": "^5.8.0",
     "@nouns/contracts": "workspace:*",
-    "ethers": "^5.8.0",
     "wagmi": "^2.15.6"
   },
   "devDependencies": {
@@ -43,8 +42,5 @@
     "terser": "^5.43.1",
     "tsup": "^8.5.0",
     "vitest": "^3.2.4"
-  },
-  "peerDependencies": {
-    "ethers": ">=5.0.0"
   }
 }
