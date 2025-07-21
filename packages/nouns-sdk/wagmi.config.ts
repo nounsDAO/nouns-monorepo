@@ -69,16 +69,16 @@ const contractConfigs = [
     },
   },
   {
-    name: 'NounsPayer',
-    fileName: 'nouns-payer',
+    name: 'NounsUSDCPayer',
+    fileName: 'nouns-usdc-payer',
     address: {
       [mainnet.id]: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
       [sepolia.id]: '0x5a2A0951C6b3479DBEe1D5909Aac7B325d300D94',
     },
   },
   {
-    name: 'NounsTokenBuyer',
-    fileName: 'nouns-token-buyer',
+    name: 'NounsUSDCTokenBuyer',
+    fileName: 'nouns-usdc-token-buyer',
     address: {
       [mainnet.id]: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
       [sepolia.id]: '0x821176470cFeF1dB78F1e2dbae136f73c36ddd48',
