@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.8.0",
-    "@nouns/contracts": "workspace:*",
     "wagmi": "^2.15.6"
   },
   "devDependencies": {
