@@ -3,7 +3,7 @@ import {
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsDescriptor
@@ -561,7 +561,7 @@ export const nounsDescriptorAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x33a9c445fb4fb21f2c030a6b2d3e2f12d017bfac)
@@ -570,7 +570,7 @@ export const nounsDescriptorAbi = [
 export const nounsDescriptorAddress = {
   1: '0x33A9c445fb4FB21f2c030A6b2d3e2F12D017BFAC',
   11155111: '0x79E04ebCDf1ac2661697B23844149b43acc002d5',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x33a9c445fb4fb21f2c030a6b2d3e2f12d017bfac)
@@ -579,7 +579,7 @@ export const nounsDescriptorAddress = {
 export const nounsDescriptorConfig = {
   address: nounsDescriptorAddress,
   abi: nounsDescriptorAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -594,7 +594,7 @@ export const nounsDescriptorConfig = {
 export const readNounsDescriptor = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"accessories"`
@@ -606,7 +606,7 @@ export const readNounsDescriptorAccessories = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'accessories',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"accessoryCount"`
@@ -618,7 +618,7 @@ export const readNounsDescriptorAccessoryCount = /*#__PURE__*/ createReadContrac
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'accessoryCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"arePartsLocked"`
@@ -630,7 +630,7 @@ export const readNounsDescriptorArePartsLocked = /*#__PURE__*/ createReadContrac
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'arePartsLocked',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"art"`
@@ -642,7 +642,7 @@ export const readNounsDescriptorArt = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'art',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"backgroundCount"`
@@ -654,7 +654,7 @@ export const readNounsDescriptorBackgroundCount = /*#__PURE__*/ createReadContra
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'backgroundCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"backgrounds"`
@@ -666,7 +666,7 @@ export const readNounsDescriptorBackgrounds = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'backgrounds',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"baseURI"`
@@ -678,7 +678,7 @@ export const readNounsDescriptorBaseUri = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'baseURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"bodies"`
@@ -690,7 +690,7 @@ export const readNounsDescriptorBodies = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'bodies',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"bodyCount"`
@@ -702,7 +702,7 @@ export const readNounsDescriptorBodyCount = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'bodyCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"dataURI"`
@@ -714,7 +714,7 @@ export const readNounsDescriptorDataUri = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'dataURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"generateSVGImage"`
@@ -726,7 +726,7 @@ export const readNounsDescriptorGenerateSvgImage = /*#__PURE__*/ createReadContr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'generateSVGImage',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"genericDataURI"`
@@ -738,7 +738,7 @@ export const readNounsDescriptorGenericDataUri = /*#__PURE__*/ createReadContrac
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'genericDataURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"getPartsForSeed"`
@@ -750,7 +750,7 @@ export const readNounsDescriptorGetPartsForSeed = /*#__PURE__*/ createReadContra
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'getPartsForSeed',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"glasses"`
@@ -762,7 +762,7 @@ export const readNounsDescriptorGlasses = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'glasses',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"glassesCount"`
@@ -774,7 +774,7 @@ export const readNounsDescriptorGlassesCount = /*#__PURE__*/ createReadContract(
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'glassesCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"headCount"`
@@ -786,7 +786,7 @@ export const readNounsDescriptorHeadCount = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'headCount',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"heads"`
@@ -798,7 +798,7 @@ export const readNounsDescriptorHeads = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'heads',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"isDataURIEnabled"`
@@ -810,7 +810,7 @@ export const readNounsDescriptorIsDataUriEnabled = /*#__PURE__*/ createReadContr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'isDataURIEnabled',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"owner"`
@@ -822,7 +822,7 @@ export const readNounsDescriptorOwner = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"palettes"`
@@ -834,7 +834,7 @@ export const readNounsDescriptorPalettes = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'palettes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"renderer"`
@@ -846,7 +846,7 @@ export const readNounsDescriptorRenderer = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'renderer',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"tokenURI"`
@@ -858,7 +858,7 @@ export const readNounsDescriptorTokenUri = /*#__PURE__*/ createReadContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'tokenURI',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__
@@ -869,7 +869,7 @@ export const readNounsDescriptorTokenUri = /*#__PURE__*/ createReadContract({
 export const writeNounsDescriptor = /*#__PURE__*/ createWriteContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addAccessories"`
@@ -881,7 +881,7 @@ export const writeNounsDescriptorAddAccessories = /*#__PURE__*/ createWriteContr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addAccessories',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addAccessoriesFromPointer"`
@@ -893,7 +893,7 @@ export const writeNounsDescriptorAddAccessoriesFromPointer = /*#__PURE__*/ creat
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addAccessoriesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBackground"`
@@ -905,7 +905,7 @@ export const writeNounsDescriptorAddBackground = /*#__PURE__*/ createWriteContra
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBackground',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBodies"`
@@ -917,7 +917,7 @@ export const writeNounsDescriptorAddBodies = /*#__PURE__*/ createWriteContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBodies',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBodiesFromPointer"`
@@ -929,7 +929,7 @@ export const writeNounsDescriptorAddBodiesFromPointer = /*#__PURE__*/ createWrit
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBodiesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addGlasses"`
@@ -941,7 +941,7 @@ export const writeNounsDescriptorAddGlasses = /*#__PURE__*/ createWriteContract(
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addGlasses',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addGlassesFromPointer"`
@@ -953,7 +953,7 @@ export const writeNounsDescriptorAddGlassesFromPointer = /*#__PURE__*/ createWri
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addGlassesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addHeads"`
@@ -965,7 +965,7 @@ export const writeNounsDescriptorAddHeads = /*#__PURE__*/ createWriteContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addHeads',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addHeadsFromPointer"`
@@ -977,7 +977,7 @@ export const writeNounsDescriptorAddHeadsFromPointer = /*#__PURE__*/ createWrite
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addHeadsFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addManyBackgrounds"`
@@ -989,7 +989,7 @@ export const writeNounsDescriptorAddManyBackgrounds = /*#__PURE__*/ createWriteC
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addManyBackgrounds',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"lockParts"`
@@ -1001,7 +1001,7 @@ export const writeNounsDescriptorLockParts = /*#__PURE__*/ createWriteContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'lockParts',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1013,7 +1013,7 @@ export const writeNounsDescriptorRenounceOwnership = /*#__PURE__*/ createWriteCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArt"`
@@ -1025,7 +1025,7 @@ export const writeNounsDescriptorSetArt = /*#__PURE__*/ createWriteContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArt',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArtDescriptor"`
@@ -1037,7 +1037,7 @@ export const writeNounsDescriptorSetArtDescriptor = /*#__PURE__*/ createWriteCon
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArtDescriptor',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArtInflator"`
@@ -1049,7 +1049,7 @@ export const writeNounsDescriptorSetArtInflator = /*#__PURE__*/ createWriteContr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArtInflator',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setBaseURI"`
@@ -1061,7 +1061,7 @@ export const writeNounsDescriptorSetBaseUri = /*#__PURE__*/ createWriteContract(
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setBaseURI',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setPalette"`
@@ -1073,7 +1073,7 @@ export const writeNounsDescriptorSetPalette = /*#__PURE__*/ createWriteContract(
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setPalette',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setPalettePointer"`
@@ -1085,7 +1085,7 @@ export const writeNounsDescriptorSetPalettePointer = /*#__PURE__*/ createWriteCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setPalettePointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setRenderer"`
@@ -1097,7 +1097,7 @@ export const writeNounsDescriptorSetRenderer = /*#__PURE__*/ createWriteContract
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setRenderer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"toggleDataURIEnabled"`
@@ -1109,7 +1109,7 @@ export const writeNounsDescriptorToggleDataUriEnabled = /*#__PURE__*/ createWrit
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'toggleDataURIEnabled',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1121,7 +1121,7 @@ export const writeNounsDescriptorTransferOwnership = /*#__PURE__*/ createWriteCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateAccessories"`
@@ -1133,7 +1133,7 @@ export const writeNounsDescriptorUpdateAccessories = /*#__PURE__*/ createWriteCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateAccessories',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateAccessoriesFromPointer"`
@@ -1145,7 +1145,7 @@ export const writeNounsDescriptorUpdateAccessoriesFromPointer = /*#__PURE__*/ cr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateAccessoriesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateBodies"`
@@ -1157,7 +1157,7 @@ export const writeNounsDescriptorUpdateBodies = /*#__PURE__*/ createWriteContrac
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateBodies',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateBodiesFromPointer"`
@@ -1169,7 +1169,7 @@ export const writeNounsDescriptorUpdateBodiesFromPointer = /*#__PURE__*/ createW
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateBodiesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateGlasses"`
@@ -1181,7 +1181,7 @@ export const writeNounsDescriptorUpdateGlasses = /*#__PURE__*/ createWriteContra
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateGlasses',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateGlassesFromPointer"`
@@ -1193,7 +1193,7 @@ export const writeNounsDescriptorUpdateGlassesFromPointer = /*#__PURE__*/ create
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateGlassesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateHeads"`
@@ -1205,7 +1205,7 @@ export const writeNounsDescriptorUpdateHeads = /*#__PURE__*/ createWriteContract
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateHeads',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateHeadsFromPointer"`
@@ -1217,7 +1217,7 @@ export const writeNounsDescriptorUpdateHeadsFromPointer = /*#__PURE__*/ createWr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateHeadsFromPointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__
@@ -1228,7 +1228,7 @@ export const writeNounsDescriptorUpdateHeadsFromPointer = /*#__PURE__*/ createWr
 export const simulateNounsDescriptor = /*#__PURE__*/ createSimulateContract({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addAccessories"`
@@ -1240,7 +1240,7 @@ export const simulateNounsDescriptorAddAccessories = /*#__PURE__*/ createSimulat
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addAccessories',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addAccessoriesFromPointer"`
@@ -1253,7 +1253,7 @@ export const simulateNounsDescriptorAddAccessoriesFromPointer =
     abi: nounsDescriptorAbi,
     address: nounsDescriptorAddress,
     functionName: 'addAccessoriesFromPointer',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBackground"`
@@ -1265,7 +1265,7 @@ export const simulateNounsDescriptorAddBackground = /*#__PURE__*/ createSimulate
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBackground',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBodies"`
@@ -1277,7 +1277,7 @@ export const simulateNounsDescriptorAddBodies = /*#__PURE__*/ createSimulateCont
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBodies',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addBodiesFromPointer"`
@@ -1289,7 +1289,7 @@ export const simulateNounsDescriptorAddBodiesFromPointer = /*#__PURE__*/ createS
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addBodiesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addGlasses"`
@@ -1301,7 +1301,7 @@ export const simulateNounsDescriptorAddGlasses = /*#__PURE__*/ createSimulateCon
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addGlasses',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addGlassesFromPointer"`
@@ -1313,7 +1313,7 @@ export const simulateNounsDescriptorAddGlassesFromPointer = /*#__PURE__*/ create
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addGlassesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addHeads"`
@@ -1325,7 +1325,7 @@ export const simulateNounsDescriptorAddHeads = /*#__PURE__*/ createSimulateContr
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addHeads',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addHeadsFromPointer"`
@@ -1337,7 +1337,7 @@ export const simulateNounsDescriptorAddHeadsFromPointer = /*#__PURE__*/ createSi
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addHeadsFromPointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"addManyBackgrounds"`
@@ -1349,7 +1349,7 @@ export const simulateNounsDescriptorAddManyBackgrounds = /*#__PURE__*/ createSim
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'addManyBackgrounds',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"lockParts"`
@@ -1361,7 +1361,7 @@ export const simulateNounsDescriptorLockParts = /*#__PURE__*/ createSimulateCont
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'lockParts',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1373,7 +1373,7 @@ export const simulateNounsDescriptorRenounceOwnership = /*#__PURE__*/ createSimu
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArt"`
@@ -1385,7 +1385,7 @@ export const simulateNounsDescriptorSetArt = /*#__PURE__*/ createSimulateContrac
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArt',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArtDescriptor"`
@@ -1397,7 +1397,7 @@ export const simulateNounsDescriptorSetArtDescriptor = /*#__PURE__*/ createSimul
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArtDescriptor',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setArtInflator"`
@@ -1409,7 +1409,7 @@ export const simulateNounsDescriptorSetArtInflator = /*#__PURE__*/ createSimulat
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setArtInflator',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setBaseURI"`
@@ -1421,7 +1421,7 @@ export const simulateNounsDescriptorSetBaseUri = /*#__PURE__*/ createSimulateCon
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setBaseURI',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setPalette"`
@@ -1433,7 +1433,7 @@ export const simulateNounsDescriptorSetPalette = /*#__PURE__*/ createSimulateCon
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setPalette',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setPalettePointer"`
@@ -1445,7 +1445,7 @@ export const simulateNounsDescriptorSetPalettePointer = /*#__PURE__*/ createSimu
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setPalettePointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"setRenderer"`
@@ -1457,7 +1457,7 @@ export const simulateNounsDescriptorSetRenderer = /*#__PURE__*/ createSimulateCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'setRenderer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"toggleDataURIEnabled"`
@@ -1469,7 +1469,7 @@ export const simulateNounsDescriptorToggleDataUriEnabled = /*#__PURE__*/ createS
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'toggleDataURIEnabled',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1481,7 +1481,7 @@ export const simulateNounsDescriptorTransferOwnership = /*#__PURE__*/ createSimu
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateAccessories"`
@@ -1493,7 +1493,7 @@ export const simulateNounsDescriptorUpdateAccessories = /*#__PURE__*/ createSimu
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateAccessories',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateAccessoriesFromPointer"`
@@ -1506,7 +1506,7 @@ export const simulateNounsDescriptorUpdateAccessoriesFromPointer =
     abi: nounsDescriptorAbi,
     address: nounsDescriptorAddress,
     functionName: 'updateAccessoriesFromPointer',
-  });
+  })
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateBodies"`
@@ -1518,7 +1518,7 @@ export const simulateNounsDescriptorUpdateBodies = /*#__PURE__*/ createSimulateC
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateBodies',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateBodiesFromPointer"`
@@ -1530,7 +1530,7 @@ export const simulateNounsDescriptorUpdateBodiesFromPointer = /*#__PURE__*/ crea
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateBodiesFromPointer',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateGlasses"`
@@ -1542,7 +1542,7 @@ export const simulateNounsDescriptorUpdateGlasses = /*#__PURE__*/ createSimulate
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateGlasses',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateGlassesFromPointer"`
@@ -1556,7 +1556,7 @@ export const simulateNounsDescriptorUpdateGlassesFromPointer = /*#__PURE__*/ cre
     address: nounsDescriptorAddress,
     functionName: 'updateGlassesFromPointer',
   },
-);
+)
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateHeads"`
@@ -1568,7 +1568,7 @@ export const simulateNounsDescriptorUpdateHeads = /*#__PURE__*/ createSimulateCo
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateHeads',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `functionName` set to `"updateHeadsFromPointer"`
@@ -1580,7 +1580,7 @@ export const simulateNounsDescriptorUpdateHeadsFromPointer = /*#__PURE__*/ creat
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   functionName: 'updateHeadsFromPointer',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__
@@ -1591,7 +1591,7 @@ export const simulateNounsDescriptorUpdateHeadsFromPointer = /*#__PURE__*/ creat
 export const watchNounsDescriptorEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"ArtUpdated"`
@@ -1603,7 +1603,7 @@ export const watchNounsDescriptorArtUpdatedEvent = /*#__PURE__*/ createWatchCont
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   eventName: 'ArtUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"BaseURIUpdated"`
@@ -1615,7 +1615,7 @@ export const watchNounsDescriptorBaseUriUpdatedEvent = /*#__PURE__*/ createWatch
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   eventName: 'BaseURIUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"DataURIToggled"`
@@ -1627,7 +1627,7 @@ export const watchNounsDescriptorDataUriToggledEvent = /*#__PURE__*/ createWatch
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   eventName: 'DataURIToggled',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1637,7 +1637,7 @@ export const watchNounsDescriptorDataUriToggledEvent = /*#__PURE__*/ createWatch
  */
 export const watchNounsDescriptorOwnershipTransferredEvent = /*#__PURE__*/ createWatchContractEvent(
   { abi: nounsDescriptorAbi, address: nounsDescriptorAddress, eventName: 'OwnershipTransferred' },
-);
+)
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"PartsLocked"`
@@ -1649,7 +1649,7 @@ export const watchNounsDescriptorPartsLockedEvent = /*#__PURE__*/ createWatchCon
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   eventName: 'PartsLocked',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsDescriptorAbi}__ and `eventName` set to `"RendererUpdated"`
@@ -1661,4 +1661,4 @@ export const watchNounsDescriptorRendererUpdatedEvent = /*#__PURE__*/ createWatc
   abi: nounsDescriptorAbi,
   address: nounsDescriptorAddress,
   eventName: 'RendererUpdated',
-});
+})

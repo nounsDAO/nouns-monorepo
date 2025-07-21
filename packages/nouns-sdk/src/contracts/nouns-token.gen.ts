@@ -3,7 +3,7 @@ import {
   createWriteContract,
   createSimulateContract,
   createWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsToken
@@ -546,7 +546,7 @@ export const nounsTokenAbi = [
     outputs: [{ name: '', internalType: 'uint96', type: 'uint96' }],
     stateMutability: 'view',
   },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03)
@@ -555,13 +555,13 @@ export const nounsTokenAbi = [
 export const nounsTokenAddress = {
   1: '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
   11155111: '0x4C4674bb72a096855496a7204962297bd7e12b85',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x4c4674bb72a096855496a7204962297bd7e12b85)
  */
-export const nounsTokenConfig = { address: nounsTokenAddress, abi: nounsTokenAbi } as const;
+export const nounsTokenConfig = { address: nounsTokenAddress, abi: nounsTokenAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Action
@@ -576,7 +576,7 @@ export const nounsTokenConfig = { address: nounsTokenAddress, abi: nounsTokenAbi
 export const readNounsToken = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"DELEGATION_TYPEHASH"`
@@ -588,7 +588,7 @@ export const readNounsTokenDelegationTypehash = /*#__PURE__*/ createReadContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'DELEGATION_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"DOMAIN_TYPEHASH"`
@@ -600,7 +600,7 @@ export const readNounsTokenDomainTypehash = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'DOMAIN_TYPEHASH',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"balanceOf"`
@@ -612,7 +612,7 @@ export const readNounsTokenBalanceOf = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'balanceOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"checkpoints"`
@@ -624,7 +624,7 @@ export const readNounsTokenCheckpoints = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'checkpoints',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"contractURI"`
@@ -636,7 +636,7 @@ export const readNounsTokenContractUri = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'contractURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"dataURI"`
@@ -648,7 +648,7 @@ export const readNounsTokenDataUri = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'dataURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"decimals"`
@@ -660,7 +660,7 @@ export const readNounsTokenDecimals = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'decimals',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"delegates"`
@@ -672,7 +672,7 @@ export const readNounsTokenDelegates = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'delegates',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"descriptor"`
@@ -684,7 +684,7 @@ export const readNounsTokenDescriptor = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'descriptor',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"getApproved"`
@@ -696,7 +696,7 @@ export const readNounsTokenGetApproved = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'getApproved',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"getCurrentVotes"`
@@ -708,7 +708,7 @@ export const readNounsTokenGetCurrentVotes = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'getCurrentVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"getPriorVotes"`
@@ -720,7 +720,7 @@ export const readNounsTokenGetPriorVotes = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'getPriorVotes',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"isApprovedForAll"`
@@ -732,7 +732,7 @@ export const readNounsTokenIsApprovedForAll = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'isApprovedForAll',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"isDescriptorLocked"`
@@ -744,7 +744,7 @@ export const readNounsTokenIsDescriptorLocked = /*#__PURE__*/ createReadContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'isDescriptorLocked',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"isMinterLocked"`
@@ -756,7 +756,7 @@ export const readNounsTokenIsMinterLocked = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'isMinterLocked',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"isSeederLocked"`
@@ -768,7 +768,7 @@ export const readNounsTokenIsSeederLocked = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'isSeederLocked',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"minter"`
@@ -780,7 +780,7 @@ export const readNounsTokenMinter = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'minter',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"name"`
@@ -792,7 +792,7 @@ export const readNounsTokenName = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'name',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"nonces"`
@@ -804,7 +804,7 @@ export const readNounsTokenNonces = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'nonces',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"noundersDAO"`
@@ -816,7 +816,7 @@ export const readNounsTokenNoundersDao = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'noundersDAO',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"numCheckpoints"`
@@ -828,7 +828,7 @@ export const readNounsTokenNumCheckpoints = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'numCheckpoints',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"owner"`
@@ -840,7 +840,7 @@ export const readNounsTokenOwner = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'owner',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"ownerOf"`
@@ -852,7 +852,7 @@ export const readNounsTokenOwnerOf = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'ownerOf',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"proxyRegistry"`
@@ -864,7 +864,7 @@ export const readNounsTokenProxyRegistry = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'proxyRegistry',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"seeder"`
@@ -876,7 +876,7 @@ export const readNounsTokenSeeder = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'seeder',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"seeds"`
@@ -888,7 +888,7 @@ export const readNounsTokenSeeds = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'seeds',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"supportsInterface"`
@@ -900,7 +900,7 @@ export const readNounsTokenSupportsInterface = /*#__PURE__*/ createReadContract(
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'supportsInterface',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"symbol"`
@@ -912,7 +912,7 @@ export const readNounsTokenSymbol = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'symbol',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"tokenByIndex"`
@@ -924,7 +924,7 @@ export const readNounsTokenTokenByIndex = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'tokenByIndex',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"tokenOfOwnerByIndex"`
@@ -936,7 +936,7 @@ export const readNounsTokenTokenOfOwnerByIndex = /*#__PURE__*/ createReadContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'tokenOfOwnerByIndex',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"tokenURI"`
@@ -948,7 +948,7 @@ export const readNounsTokenTokenUri = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'tokenURI',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"totalSupply"`
@@ -960,7 +960,7 @@ export const readNounsTokenTotalSupply = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'totalSupply',
-});
+})
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"votesToDelegate"`
@@ -972,7 +972,7 @@ export const readNounsTokenVotesToDelegate = /*#__PURE__*/ createReadContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'votesToDelegate',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__
@@ -983,7 +983,7 @@ export const readNounsTokenVotesToDelegate = /*#__PURE__*/ createReadContract({
 export const writeNounsToken = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"approve"`
@@ -995,7 +995,7 @@ export const writeNounsTokenApprove = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"burn"`
@@ -1007,7 +1007,7 @@ export const writeNounsTokenBurn = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"delegate"`
@@ -1019,7 +1019,7 @@ export const writeNounsTokenDelegate = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'delegate',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"delegateBySig"`
@@ -1031,7 +1031,7 @@ export const writeNounsTokenDelegateBySig = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'delegateBySig',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockDescriptor"`
@@ -1043,7 +1043,7 @@ export const writeNounsTokenLockDescriptor = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockDescriptor',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockMinter"`
@@ -1055,7 +1055,7 @@ export const writeNounsTokenLockMinter = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockMinter',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockSeeder"`
@@ -1067,7 +1067,7 @@ export const writeNounsTokenLockSeeder = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockSeeder',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"mint"`
@@ -1079,7 +1079,7 @@ export const writeNounsTokenMint = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1091,7 +1091,7 @@ export const writeNounsTokenRenounceOwnership = /*#__PURE__*/ createWriteContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"safeTransferFrom"`
@@ -1103,7 +1103,7 @@ export const writeNounsTokenSafeTransferFrom = /*#__PURE__*/ createWriteContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'safeTransferFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setApprovalForAll"`
@@ -1115,7 +1115,7 @@ export const writeNounsTokenSetApprovalForAll = /*#__PURE__*/ createWriteContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setApprovalForAll',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setContractURIHash"`
@@ -1127,7 +1127,7 @@ export const writeNounsTokenSetContractUriHash = /*#__PURE__*/ createWriteContra
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setContractURIHash',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setDescriptor"`
@@ -1139,7 +1139,7 @@ export const writeNounsTokenSetDescriptor = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setDescriptor',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setMinter"`
@@ -1151,7 +1151,7 @@ export const writeNounsTokenSetMinter = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setMinter',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setNoundersDAO"`
@@ -1163,7 +1163,7 @@ export const writeNounsTokenSetNoundersDao = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setNoundersDAO',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setSeeder"`
@@ -1175,7 +1175,7 @@ export const writeNounsTokenSetSeeder = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setSeeder',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"transferFrom"`
@@ -1187,7 +1187,7 @@ export const writeNounsTokenTransferFrom = /*#__PURE__*/ createWriteContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1199,7 +1199,7 @@ export const writeNounsTokenTransferOwnership = /*#__PURE__*/ createWriteContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__
@@ -1210,7 +1210,7 @@ export const writeNounsTokenTransferOwnership = /*#__PURE__*/ createWriteContrac
 export const simulateNounsToken = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"approve"`
@@ -1222,7 +1222,7 @@ export const simulateNounsTokenApprove = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'approve',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"burn"`
@@ -1234,7 +1234,7 @@ export const simulateNounsTokenBurn = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'burn',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"delegate"`
@@ -1246,7 +1246,7 @@ export const simulateNounsTokenDelegate = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'delegate',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"delegateBySig"`
@@ -1258,7 +1258,7 @@ export const simulateNounsTokenDelegateBySig = /*#__PURE__*/ createSimulateContr
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'delegateBySig',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockDescriptor"`
@@ -1270,7 +1270,7 @@ export const simulateNounsTokenLockDescriptor = /*#__PURE__*/ createSimulateCont
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockDescriptor',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockMinter"`
@@ -1282,7 +1282,7 @@ export const simulateNounsTokenLockMinter = /*#__PURE__*/ createSimulateContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockMinter',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"lockSeeder"`
@@ -1294,7 +1294,7 @@ export const simulateNounsTokenLockSeeder = /*#__PURE__*/ createSimulateContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'lockSeeder',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"mint"`
@@ -1306,7 +1306,7 @@ export const simulateNounsTokenMint = /*#__PURE__*/ createSimulateContract({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'mint',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1318,7 +1318,7 @@ export const simulateNounsTokenRenounceOwnership = /*#__PURE__*/ createSimulateC
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'renounceOwnership',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"safeTransferFrom"`
@@ -1330,7 +1330,7 @@ export const simulateNounsTokenSafeTransferFrom = /*#__PURE__*/ createSimulateCo
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'safeTransferFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setApprovalForAll"`
@@ -1342,7 +1342,7 @@ export const simulateNounsTokenSetApprovalForAll = /*#__PURE__*/ createSimulateC
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setApprovalForAll',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setContractURIHash"`
@@ -1354,7 +1354,7 @@ export const simulateNounsTokenSetContractUriHash = /*#__PURE__*/ createSimulate
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setContractURIHash',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setDescriptor"`
@@ -1366,7 +1366,7 @@ export const simulateNounsTokenSetDescriptor = /*#__PURE__*/ createSimulateContr
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setDescriptor',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setMinter"`
@@ -1378,7 +1378,7 @@ export const simulateNounsTokenSetMinter = /*#__PURE__*/ createSimulateContract(
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setMinter',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setNoundersDAO"`
@@ -1390,7 +1390,7 @@ export const simulateNounsTokenSetNoundersDao = /*#__PURE__*/ createSimulateCont
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setNoundersDAO',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"setSeeder"`
@@ -1402,7 +1402,7 @@ export const simulateNounsTokenSetSeeder = /*#__PURE__*/ createSimulateContract(
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'setSeeder',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"transferFrom"`
@@ -1414,7 +1414,7 @@ export const simulateNounsTokenTransferFrom = /*#__PURE__*/ createSimulateContra
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'transferFrom',
-});
+})
 
 /**
  * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsTokenAbi}__ and `functionName` set to `"transferOwnership"`
@@ -1426,7 +1426,7 @@ export const simulateNounsTokenTransferOwnership = /*#__PURE__*/ createSimulateC
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   functionName: 'transferOwnership',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__
@@ -1437,7 +1437,7 @@ export const simulateNounsTokenTransferOwnership = /*#__PURE__*/ createSimulateC
 export const watchNounsTokenEvent = /*#__PURE__*/ createWatchContractEvent({
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"Approval"`
@@ -1449,7 +1449,7 @@ export const watchNounsTokenApprovalEvent = /*#__PURE__*/ createWatchContractEve
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'Approval',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"ApprovalForAll"`
@@ -1461,7 +1461,7 @@ export const watchNounsTokenApprovalForAllEvent = /*#__PURE__*/ createWatchContr
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'ApprovalForAll',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"DelegateChanged"`
@@ -1473,7 +1473,7 @@ export const watchNounsTokenDelegateChangedEvent = /*#__PURE__*/ createWatchCont
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'DelegateChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"DelegateVotesChanged"`
@@ -1485,7 +1485,7 @@ export const watchNounsTokenDelegateVotesChangedEvent = /*#__PURE__*/ createWatc
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'DelegateVotesChanged',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"DescriptorLocked"`
@@ -1497,7 +1497,7 @@ export const watchNounsTokenDescriptorLockedEvent = /*#__PURE__*/ createWatchCon
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'DescriptorLocked',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"DescriptorUpdated"`
@@ -1509,7 +1509,7 @@ export const watchNounsTokenDescriptorUpdatedEvent = /*#__PURE__*/ createWatchCo
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'DescriptorUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"MinterLocked"`
@@ -1521,7 +1521,7 @@ export const watchNounsTokenMinterLockedEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'MinterLocked',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"MinterUpdated"`
@@ -1533,7 +1533,7 @@ export const watchNounsTokenMinterUpdatedEvent = /*#__PURE__*/ createWatchContra
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'MinterUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"NounBurned"`
@@ -1545,7 +1545,7 @@ export const watchNounsTokenNounBurnedEvent = /*#__PURE__*/ createWatchContractE
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'NounBurned',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"NounCreated"`
@@ -1557,7 +1557,7 @@ export const watchNounsTokenNounCreatedEvent = /*#__PURE__*/ createWatchContract
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'NounCreated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"NoundersDAOUpdated"`
@@ -1569,7 +1569,7 @@ export const watchNounsTokenNoundersDaoUpdatedEvent = /*#__PURE__*/ createWatchC
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'NoundersDAOUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
@@ -1581,7 +1581,7 @@ export const watchNounsTokenOwnershipTransferredEvent = /*#__PURE__*/ createWatc
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'OwnershipTransferred',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"SeederLocked"`
@@ -1593,7 +1593,7 @@ export const watchNounsTokenSeederLockedEvent = /*#__PURE__*/ createWatchContrac
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'SeederLocked',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"SeederUpdated"`
@@ -1605,7 +1605,7 @@ export const watchNounsTokenSeederUpdatedEvent = /*#__PURE__*/ createWatchContra
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'SeederUpdated',
-});
+})
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsTokenAbi}__ and `eventName` set to `"Transfer"`
@@ -1617,4 +1617,4 @@ export const watchNounsTokenTransferEvent = /*#__PURE__*/ createWatchContractEve
   abi: nounsTokenAbi,
   address: nounsTokenAddress,
   eventName: 'Transfer',
-});
+})

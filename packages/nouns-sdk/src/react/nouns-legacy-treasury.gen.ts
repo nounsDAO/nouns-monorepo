@@ -3,7 +3,7 @@ import {
   createUseWriteContract,
   createUseSimulateContract,
   createUseWatchContractEvent,
-} from 'wagmi/codegen';
+} from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsLegacyTreasury
@@ -184,7 +184,7 @@ export const nounsLegacyTreasuryAbi = [
     stateMutability: 'nonpayable',
   },
   { type: 'receive', stateMutability: 'payable' },
-] as const;
+] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x0BC3807Ec262cB779b38D65b38158acC3bfedE10)
@@ -193,7 +193,7 @@ export const nounsLegacyTreasuryAbi = [
 export const nounsLegacyTreasuryAddress = {
   1: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
   11155111: '0x332db58b51393f3a6b28d4DD8964234967e1aD33',
-} as const;
+} as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x0BC3807Ec262cB779b38D65b38158acC3bfedE10)
@@ -202,7 +202,7 @@ export const nounsLegacyTreasuryAddress = {
 export const nounsLegacyTreasuryConfig = {
   address: nounsLegacyTreasuryAddress,
   abi: nounsLegacyTreasuryAbi,
-} as const;
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -217,7 +217,7 @@ export const nounsLegacyTreasuryConfig = {
 export const useReadNounsLegacyTreasury = /*#__PURE__*/ createUseReadContract({
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"GRACE_PERIOD"`
@@ -229,7 +229,7 @@ export const useReadNounsLegacyTreasuryGracePeriod = /*#__PURE__*/ createUseRead
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'GRACE_PERIOD',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"MAXIMUM_DELAY"`
@@ -241,7 +241,7 @@ export const useReadNounsLegacyTreasuryMaximumDelay = /*#__PURE__*/ createUseRea
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'MAXIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"MINIMUM_DELAY"`
@@ -253,7 +253,7 @@ export const useReadNounsLegacyTreasuryMinimumDelay = /*#__PURE__*/ createUseRea
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'MINIMUM_DELAY',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"admin"`
@@ -265,7 +265,7 @@ export const useReadNounsLegacyTreasuryAdmin = /*#__PURE__*/ createUseReadContra
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'admin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"delay"`
@@ -277,7 +277,7 @@ export const useReadNounsLegacyTreasuryDelay = /*#__PURE__*/ createUseReadContra
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'delay',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"pendingAdmin"`
@@ -289,7 +289,7 @@ export const useReadNounsLegacyTreasuryPendingAdmin = /*#__PURE__*/ createUseRea
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'pendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"queuedTransactions"`
@@ -301,7 +301,7 @@ export const useReadNounsLegacyTreasuryQueuedTransactions = /*#__PURE__*/ create
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'queuedTransactions',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__
@@ -312,7 +312,7 @@ export const useReadNounsLegacyTreasuryQueuedTransactions = /*#__PURE__*/ create
 export const useWriteNounsLegacyTreasury = /*#__PURE__*/ createUseWriteContract({
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -324,7 +324,7 @@ export const useWriteNounsLegacyTreasuryAcceptAdmin = /*#__PURE__*/ createUseWri
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -336,7 +336,7 @@ export const useWriteNounsLegacyTreasuryCancelTransaction = /*#__PURE__*/ create
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'cancelTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -348,7 +348,7 @@ export const useWriteNounsLegacyTreasuryExecuteTransaction = /*#__PURE__*/ creat
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'executeTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -360,7 +360,7 @@ export const useWriteNounsLegacyTreasuryQueueTransaction = /*#__PURE__*/ createU
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'queueTransaction',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -372,7 +372,7 @@ export const useWriteNounsLegacyTreasurySetDelay = /*#__PURE__*/ createUseWriteC
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -384,7 +384,7 @@ export const useWriteNounsLegacyTreasurySetPendingAdmin = /*#__PURE__*/ createUs
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'setPendingAdmin',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__
@@ -395,7 +395,7 @@ export const useWriteNounsLegacyTreasurySetPendingAdmin = /*#__PURE__*/ createUs
 export const useSimulateNounsLegacyTreasury = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"acceptAdmin"`
@@ -407,7 +407,7 @@ export const useSimulateNounsLegacyTreasuryAcceptAdmin = /*#__PURE__*/ createUse
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'acceptAdmin',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"cancelTransaction"`
@@ -420,7 +420,7 @@ export const useSimulateNounsLegacyTreasuryCancelTransaction =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     functionName: 'cancelTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"executeTransaction"`
@@ -433,7 +433,7 @@ export const useSimulateNounsLegacyTreasuryExecuteTransaction =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     functionName: 'executeTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"queueTransaction"`
@@ -446,7 +446,7 @@ export const useSimulateNounsLegacyTreasuryQueueTransaction =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     functionName: 'queueTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"setDelay"`
@@ -458,7 +458,7 @@ export const useSimulateNounsLegacyTreasurySetDelay = /*#__PURE__*/ createUseSim
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   functionName: 'setDelay',
-});
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `functionName` set to `"setPendingAdmin"`
@@ -471,7 +471,7 @@ export const useSimulateNounsLegacyTreasurySetPendingAdmin =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     functionName: 'setPendingAdmin',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__
@@ -482,7 +482,7 @@ export const useSimulateNounsLegacyTreasurySetPendingAdmin =
 export const useWatchNounsLegacyTreasuryEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"CancelTransaction"`
@@ -495,7 +495,7 @@ export const useWatchNounsLegacyTreasuryCancelTransactionEvent =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     eventName: 'CancelTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"ExecuteTransaction"`
@@ -508,7 +508,7 @@ export const useWatchNounsLegacyTreasuryExecuteTransactionEvent =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     eventName: 'ExecuteTransaction',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"NewAdmin"`
@@ -520,7 +520,7 @@ export const useWatchNounsLegacyTreasuryNewAdminEvent = /*#__PURE__*/ createUseW
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   eventName: 'NewAdmin',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"NewDelay"`
@@ -532,7 +532,7 @@ export const useWatchNounsLegacyTreasuryNewDelayEvent = /*#__PURE__*/ createUseW
   abi: nounsLegacyTreasuryAbi,
   address: nounsLegacyTreasuryAddress,
   eventName: 'NewDelay',
-});
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"NewPendingAdmin"`
@@ -545,7 +545,7 @@ export const useWatchNounsLegacyTreasuryNewPendingAdminEvent =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     eventName: 'NewPendingAdmin',
-  });
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsLegacyTreasuryAbi}__ and `eventName` set to `"QueueTransaction"`
@@ -558,4 +558,4 @@ export const useWatchNounsLegacyTreasuryQueueTransactionEvent =
     abi: nounsLegacyTreasuryAbi,
     address: nounsLegacyTreasuryAddress,
     eventName: 'QueueTransaction',
-  });
+  })
