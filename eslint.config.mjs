@@ -46,6 +46,7 @@ export default defineConfig([
       // Generated code (use a more consistent pattern)
       '**/typechain/**',
       '**/src/{types,contracts,subgraphs}/**',
+      '**/*.gen.ts',
     ],
   },
 
