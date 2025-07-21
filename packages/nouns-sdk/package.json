@@ -1,6 +1,6 @@
 {
   "name": "@nouns/sdk",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
