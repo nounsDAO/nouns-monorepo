@@ -1,9 +1,9 @@
 import {
-  createReadContract,
-  createWriteContract,
-  createSimulateContract,
-  createWatchContractEvent,
-} from 'wagmi/codegen'
+  createUseReadContract,
+  createUseWriteContract,
+  createUseSimulateContract,
+  createUseWatchContractEvent,
+} from 'wagmi/codegen';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NounsUSDCTokenBuyer
@@ -421,7 +421,7 @@ export const nounsUsdcTokenBuyerAbi = [
   { type: 'function', inputs: [], name: 'unpause', outputs: [], stateMutability: 'nonpayable' },
   { type: 'function', inputs: [], name: 'withdrawETH', outputs: [], stateMutability: 'nonpayable' },
   { type: 'receive', stateMutability: 'payable' },
-] as const
+] as const;
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
@@ -430,7 +430,7 @@ export const nounsUsdcTokenBuyerAbi = [
 export const nounsUsdcTokenBuyerAddress = {
   1: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
   11155111: '0x821176470cFeF1dB78F1e2dbae136f73c36ddd48',
-} as const
+} as const;
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
@@ -439,838 +439,853 @@ export const nounsUsdcTokenBuyerAddress = {
 export const nounsUsdcTokenBuyerConfig = {
   address: nounsUsdcTokenBuyerAddress,
   abi: nounsUsdcTokenBuyerAbi,
-} as const
+} as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Action
+// React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyer = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyer = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"MAX_BPS"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"MAX_BPS"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerMaxBps = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerMaxBps = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'MAX_BPS',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"admin"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"admin"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerAdmin = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerAdmin = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'admin',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"baselinePaymentTokenAmount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"baselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerBaselinePaymentTokenAmount = /*#__PURE__*/ createReadContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'baselinePaymentTokenAmount',
-})
+export const useReadNounsUsdcTokenBuyerBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'baselinePaymentTokenAmount',
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"botDiscountBPs"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"botDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerBotDiscountBPs = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerBotDiscountBPs = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'botDiscountBPs',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"ethAmountPerTokenAmount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"ethAmountPerTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerEthAmountPerTokenAmount = /*#__PURE__*/ createReadContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'ethAmountPerTokenAmount',
-})
+export const useReadNounsUsdcTokenBuyerEthAmountPerTokenAmount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'ethAmountPerTokenAmount',
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"ethNeeded"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"ethNeeded"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerEthNeeded = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerEthNeeded = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'ethNeeded',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"maxAdminBaselinePaymentTokenAmount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"maxAdminBaselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerMaxAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerMaxAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseReadContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'maxAdminBaselinePaymentTokenAmount',
-  })
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"maxAdminBotDiscountBPs"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"maxAdminBotDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerMaxAdminBotDiscountBPs = /*#__PURE__*/ createReadContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'maxAdminBotDiscountBPs',
-})
+export const useReadNounsUsdcTokenBuyerMaxAdminBotDiscountBPs = /*#__PURE__*/ createUseReadContract(
+  {
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'maxAdminBotDiscountBPs',
+  },
+);
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"minAdminBaselinePaymentTokenAmount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"minAdminBaselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerMinAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerMinAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseReadContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'minAdminBaselinePaymentTokenAmount',
-  })
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"minAdminBotDiscountBPs"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"minAdminBotDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerMinAdminBotDiscountBPs = /*#__PURE__*/ createReadContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'minAdminBotDiscountBPs',
-})
+export const useReadNounsUsdcTokenBuyerMinAdminBotDiscountBPs = /*#__PURE__*/ createUseReadContract(
+  {
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'minAdminBotDiscountBPs',
+  },
+);
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"owner"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"owner"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerOwner = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerOwner = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'owner',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paused"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paused"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPaused = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerPaused = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'paused',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"payer"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"payer"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPayer = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerPayer = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'payer',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paymentToken"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paymentToken"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPaymentToken = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerPaymentToken = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'paymentToken',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paymentTokenDecimalsDigits"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"paymentTokenDecimalsDigits"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPaymentTokenDecimalsDigits = /*#__PURE__*/ createReadContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'paymentTokenDecimalsDigits',
-})
+export const useReadNounsUsdcTokenBuyerPaymentTokenDecimalsDigits =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'paymentTokenDecimalsDigits',
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"price"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"price"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPrice = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerPrice = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'price',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"priceFeed"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"priceFeed"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerPriceFeed = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerPriceFeed = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'priceFeed',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeeded"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeeded"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerTokenAmountNeeded = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerTokenAmountNeeded = /*#__PURE__*/ createUseReadContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'tokenAmountNeeded',
-})
+});
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeededAndETHPayout"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountNeededAndETHPayout"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerTokenAmountNeededAndEthPayout =
-  /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerTokenAmountNeededAndEthPayout =
+  /*#__PURE__*/ createUseReadContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'tokenAmountNeededAndETHPayout',
-  })
+  });
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountPerEthAmount"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"tokenAmountPerEthAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const readNounsUsdcTokenBuyerTokenAmountPerEthAmount = /*#__PURE__*/ createReadContract({
+export const useReadNounsUsdcTokenBuyerTokenAmountPerEthAmount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'tokenAmountPerEthAmount',
+  });
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useWriteNounsUsdcTokenBuyer = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
-  functionName: 'tokenAmountPerEthAmount',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyer = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerBuyEth = /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerBuyEth = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'buyETH',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"pause"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"pause"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerPause = /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerPause = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'pause',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerRenounceOwnership = /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerRenounceOwnership = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'renounceOwnership',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerSetAdmin = /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerSetAdmin = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'setAdmin',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerSetBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerSetBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseWriteContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'setBaselinePaymentTokenAmount',
-  })
+  });
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'setBotDiscountBPs',
-})
+});
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createWriteContract({
+export const useWriteNounsUsdcTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseWriteContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  })
+  });
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const writeNounsUsdcTokenBuyerSetMaxAdminBotDiscountBPs = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setMaxAdminBotDiscountBPs',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createWriteContract({
-    abi: nounsUsdcTokenBuyerAbi,
-    address: nounsUsdcTokenBuyerAddress,
-    functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  })
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerSetMinAdminBotDiscountBPs = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setMinAdminBotDiscountBPs',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerSetPayer = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setPayer',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerSetPriceFeed = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setPriceFeed',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerTransferOwnership = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'transferOwnership',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"unpause"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerUnpause = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'unpause',
-})
-
-/**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const writeNounsUsdcTokenBuyerWithdrawEth = /*#__PURE__*/ createWriteContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'withdrawETH',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyer = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerBuyEth = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'buyETH',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"pause"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerPause = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'pause',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerRenounceOwnership = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'renounceOwnership',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerSetAdmin = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setAdmin',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerSetBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createSimulateContract({
-    abi: nounsUsdcTokenBuyerAbi,
-    address: nounsUsdcTokenBuyerAddress,
-    functionName: 'setBaselinePaymentTokenAmount',
-  })
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerSetBotDiscountBPs = /*#__PURE__*/ createSimulateContract({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  functionName: 'setBotDiscountBPs',
-})
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createSimulateContract({
-    abi: nounsUsdcTokenBuyerAbi,
-    address: nounsUsdcTokenBuyerAddress,
-    functionName: 'setMaxAdminBaselinePaymentTokenAmount',
-  })
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
- * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
- */
-export const simulateNounsUsdcTokenBuyerSetMaxAdminBotDiscountBPs =
-  /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerSetMaxAdminBotDiscountBPs =
+  /*#__PURE__*/ createUseWriteContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'setMaxAdminBotDiscountBPs',
-  })
+  });
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
-  /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseWriteContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'setMinAdminBaselinePaymentTokenAmount',
-  })
+  });
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerSetMinAdminBotDiscountBPs =
-  /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerSetMinAdminBotDiscountBPs =
+  /*#__PURE__*/ createUseWriteContract({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     functionName: 'setMinAdminBotDiscountBPs',
-  })
+  });
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerSetPayer = /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerSetPayer = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'setPayer',
-})
+});
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerSetPriceFeed = /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerSetPriceFeed = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'setPriceFeed',
-})
+});
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerTransferOwnership = /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerTransferOwnership = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'transferOwnership',
-})
+});
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"unpause"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"unpause"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerUnpause = /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerUnpause = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'unpause',
-})
+});
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const simulateNounsUsdcTokenBuyerWithdrawEth = /*#__PURE__*/ createSimulateContract({
+export const useWriteNounsUsdcTokenBuyerWithdrawEth = /*#__PURE__*/ createUseWriteContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   functionName: 'withdrawETH',
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useSimulateNounsUsdcTokenBuyer = /*#__PURE__*/ createUseSimulateContract({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"AdminSet"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"buyETH"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerAdminSetEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useSimulateNounsUsdcTokenBuyerBuyEth = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'buyETH',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"pause"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerPause = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'pause',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"renounceOwnership"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'renounceOwnership',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setAdmin"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetAdmin = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'setAdmin',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBaselinePaymentTokenAmount"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setBaselinePaymentTokenAmount',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setBotDiscountBPs"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetBotDiscountBPs =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setBotDiscountBPs',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBaselinePaymentTokenAmount"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetMaxAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setMaxAdminBaselinePaymentTokenAmount',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMaxAdminBotDiscountBPs"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetMaxAdminBotDiscountBPs =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setMaxAdminBotDiscountBPs',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBaselinePaymentTokenAmount"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetMinAdminBaselinePaymentTokenAmount =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setMinAdminBaselinePaymentTokenAmount',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setMinAdminBotDiscountBPs"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetMinAdminBotDiscountBPs =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'setMinAdminBotDiscountBPs',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPayer"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetPayer = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'setPayer',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"setPriceFeed"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerSetPriceFeed = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'setPriceFeed',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"transferOwnership"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    functionName: 'transferOwnership',
+  });
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"unpause"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerUnpause = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'unpause',
+});
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `functionName` set to `"withdrawETH"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useSimulateNounsUsdcTokenBuyerWithdrawEth = /*#__PURE__*/ createUseSimulateContract({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+  functionName: 'withdrawETH',
+});
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useWatchNounsUsdcTokenBuyerEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: nounsUsdcTokenBuyerAbi,
+  address: nounsUsdcTokenBuyerAddress,
+});
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"AdminSet"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
+ * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
+ */
+export const useWatchNounsUsdcTokenBuyerAdminSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   eventName: 'AdminSet',
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"BaselinePaymentTokenAmountSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"BaselinePaymentTokenAmountSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerBaselinePaymentTokenAmountSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerBaselinePaymentTokenAmountSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'BaselinePaymentTokenAmountSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"BotDiscountBPsSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"BotDiscountBPsSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerBotDiscountBPsSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerBotDiscountBPsSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'BotDiscountBPsSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"ETHWithdrawn"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"ETHWithdrawn"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerEthWithdrawnEvent = /*#__PURE__*/ createWatchContractEvent({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  eventName: 'ETHWithdrawn',
-})
+export const useWatchNounsUsdcTokenBuyerEthWithdrawnEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    eventName: 'ETHWithdrawn',
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBaselinePaymentTokenAmountSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBaselinePaymentTokenAmountSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerMaxAdminBaselinePaymentTokenAmountSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerMaxAdminBaselinePaymentTokenAmountSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'MaxAdminBaselinePaymentTokenAmountSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBotDiscountBPsSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MaxAdminBotDiscountBPsSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerMaxAdminBotDiscountBPsSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerMaxAdminBotDiscountBPsSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'MaxAdminBotDiscountBPsSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MinAdminBaselinePaymentTokenAmountSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MinAdminBaselinePaymentTokenAmountSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerMinAdminBaselinePaymentTokenAmountSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerMinAdminBaselinePaymentTokenAmountSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'MinAdminBaselinePaymentTokenAmountSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MinAdminBotDiscountBPsSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"MinAdminBotDiscountBPsSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerMinAdminBotDiscountBPsSetEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerMinAdminBotDiscountBPsSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'MinAdminBotDiscountBPsSet',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerOwnershipTransferredEvent =
-  /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
     abi: nounsUsdcTokenBuyerAbi,
     address: nounsUsdcTokenBuyerAddress,
     eventName: 'OwnershipTransferred',
-  })
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"Paused"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"Paused"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerPausedEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerPausedEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   eventName: 'Paused',
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"PayerSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"PayerSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerPayerSetEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerPayerSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   eventName: 'PayerSet',
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"PriceFeedSet"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"PriceFeedSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerPriceFeedSetEvent = /*#__PURE__*/ createWatchContractEvent({
-  abi: nounsUsdcTokenBuyerAbi,
-  address: nounsUsdcTokenBuyerAddress,
-  eventName: 'PriceFeedSet',
-})
+export const useWatchNounsUsdcTokenBuyerPriceFeedSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nounsUsdcTokenBuyerAbi,
+    address: nounsUsdcTokenBuyerAddress,
+    eventName: 'PriceFeedSet',
+  });
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"SoldETH"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"SoldETH"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerSoldEthEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerSoldEthEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   eventName: 'SoldETH',
-})
+});
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"Unpaused"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nounsUsdcTokenBuyerAbi}__ and `eventName` set to `"Unpaused"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x821176470cFeF1dB78F1e2dbae136f73c36ddd48)
  */
-export const watchNounsUsdcTokenBuyerUnpausedEvent = /*#__PURE__*/ createWatchContractEvent({
+export const useWatchNounsUsdcTokenBuyerUnpausedEvent = /*#__PURE__*/ createUseWatchContractEvent({
   abi: nounsUsdcTokenBuyerAbi,
   address: nounsUsdcTokenBuyerAddress,
   eventName: 'Unpaused',
-})
+});

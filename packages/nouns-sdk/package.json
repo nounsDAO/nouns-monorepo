@@ -10,9 +10,13 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./react": {
-      "import": "./dist/react/index.mjs",
-      "require": "./dist/react/index.js"
+    "./react/*": {
+      "import": "./dist/react/*.mjs",
+      "require": "./dist/react/*.js"
+    },
+    "./*": {
+      "import": "./dist/actions/*.mjs",
+      "require": "./dist/actions/*.js"
     }
   },
   "main": "dist/index.js",

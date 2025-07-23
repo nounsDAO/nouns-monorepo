@@ -1,7 +1,14 @@
 import { defineConfig } from 'tsup';
+import { contractConfigs } from './wagmi.config';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/react/index.ts'],
+  entry: [
+    'src/index.ts',
+    ...contractConfigs.flatMap(({ fileName }) => [
+      `src/actions/${fileName}.ts`,
+      `src/react/${fileName}.ts`,
+    ]),
+  ],
   format: ['esm', 'cjs'],
   dts: true,
   clean: true,
