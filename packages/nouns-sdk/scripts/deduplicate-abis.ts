@@ -9,6 +9,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -50,14 +51,22 @@ export type ${typeName} = typeof ${varName};`,
 }
 
 function main(): void {
-  const filePaths = process.argv.slice(2);
+  const patterns = process.argv.slice(2);
 
-  if (filePaths.length === 0) {
-    console.error('Usage: tsx deduplicate-abis.ts <file1> [file2] ...');
+  if (patterns.length === 0) {
+    console.error('Usage: tsx deduplicate-abis.ts <pattern1> [pattern2] ...');
     process.exit(1);
   }
 
-  for (const file of filePaths) {
+  // Expand all glob patterns
+  const allFiles = patterns.flatMap(pattern => globSync(pattern));
+
+  if (allFiles.length === 0) {
+    console.log('No files found matching the provided patterns');
+    return;
+  }
+
+  for (const file of allFiles) {
     processFile(file);
   }
 

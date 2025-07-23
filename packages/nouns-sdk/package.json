@@ -26,7 +26,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup && tsx scripts/deduplicate-abis.ts dist/actions/*.d.{ts,mts} dist/react/*.d.{ts,mts}",
+    "build": "tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
     "clean": "rimraf dist",
     "codegen": "wagmi generate",
     "lint": "eslint",
