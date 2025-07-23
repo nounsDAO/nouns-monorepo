@@ -2,7 +2,11 @@
   "compilerOptions": {
     /* → Basic ESM setup */
     "module": "ESNext",
-    "target": "ES2020",
+    "target": "ES2021",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
 
     /* → Tell TS how to resolve “./foo” imports */
     "moduleResolution": "node",

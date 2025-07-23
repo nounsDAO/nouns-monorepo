@@ -10,7 +10,7 @@ export default defineConfig({
       js: format === 'esm' ? '.mjs' : '.js',
     };
   },
-  target: 'es2020',
+  target: 'es2021',
   sourcemap: true,
   treeshake: true,
   splitting: false,
