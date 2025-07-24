@@ -1,14 +1,23 @@
 {
   "name": "@nouns/sdk",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
-  "homepage": "https://nouns.wtf",
+  "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
+  "repository": "github:nounsDAO/nouns-monorepo",
   "license": "GPL-3.0",
   "author": "Nounders",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./react/*": {
+      "import": "./dist/react/*.mjs",
+      "require": "./dist/react/*.js"
+    },
+    "./*": {
+      "import": "./dist/actions/*.mjs",
+      "require": "./dist/actions/*.js"
     }
   },
   "main": "dist/index.js",
@@ -18,25 +27,32 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
     "clean": "rimraf dist",
+    "codegen": "wagmi generate",
     "lint": "eslint",
     "test": "vitest run"
   },
-  "dependencies": {
-    "@ethersproject/providers": "^5.8.0",
-    "@nouns/contracts": "workspace:*",
-    "ethers": "^5.8.0"
-  },
   "devDependencies": {
     "@types/pngjs": "^6.0.1",
+    "@wagmi/cli": "^2.3.1",
+    "@wagmi/core": "^2.17.3",
+    "dotenv": "^16.5.0",
     "glob": "^11.0.2",
     "pngjs": "^6.0.0",
     "terser": "^5.43.1",
     "tsup": "^8.5.0",
-    "vitest": "^3.2.4"
+    "tsx": "^4.20.3",
+    "vitest": "^3.2.4",
+    "wagmi": "^2.15.6"
   },
   "peerDependencies": {
-    "ethers": ">=5.0.0"
+    "@wagmi/core": "^2.0.0",
+    "wagmi": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "wagmi": {
+      "optional": true
+    }
   }
 }

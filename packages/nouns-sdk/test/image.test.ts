@@ -1,11 +1,11 @@
 import { join } from 'path';
 
 import { glob } from 'glob';
-import { expect, describe, it, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { buildSVG, RGBAColor } from '../src';
 import { Image } from '../src/image/image';
-import { decodeImage } from '../src/image/svg-builder';
+import { buildSVG, decodeImage } from '../src/image/svg-builder';
+import { RGBAColor } from '../src/image/types';
 
 import { Image as Image1 } from './image';
 import { readPngImage } from './lib';
