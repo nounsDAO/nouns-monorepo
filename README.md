@@ -15,7 +15,7 @@ The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contrac
 
 ### nouns-sdk
 
-The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [nouns sdk](packages/nouns-sdk) includes methods and react hooks for interacting with all the Nouns contracts, as well as image encoding and SVG building utilities.
 
 ### nouns-subgraph
 
