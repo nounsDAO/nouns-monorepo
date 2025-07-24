@@ -9,6 +9,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'fs';
+
 import { globSync } from 'glob';
 
 function capitalize(str: string): string {
