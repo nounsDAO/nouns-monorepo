@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2022-07-24
+
 ### Added
 - modules with Wagmi cli generated actions and React hooks for current contracts:
     - actions:
@@ -49,5 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [Unreleased]: https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk
+
+[1.0.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e0b43054/packages/nouns-sdk
 
 [0.4.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e75b03a5/packages/nouns-sdk
