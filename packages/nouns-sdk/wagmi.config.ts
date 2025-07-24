@@ -1,7 +1,7 @@
 import { defineConfig } from '@wagmi/cli';
 import { actions, etherscan, react } from '@wagmi/cli/plugins';
 import 'dotenv/config';
-import { mainnet, sepolia } from 'wagmi/chains';
+import { mainnet, sepolia } from '@wagmi/core/chains';
 
 export const contractConfigs = [
   {
@@ -102,7 +102,7 @@ export default defineConfig(() =>
           ],
           tryFetchProxyImplementation: true,
         }),
-        actions(),
+        actions({overridePackageName: "@wagmi/core"}),
       ],
     },
     {
