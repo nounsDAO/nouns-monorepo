@@ -51,8 +51,7 @@
     "@tanstack/react-query": "^5.80.10",
     "@tanstack/react-virtual": "^3.13.10",
     "@testing-library/jest-dom": "^6.6.3",
-    "@wagmi/connectors": "^5.8.4",
-    "@wagmi/core": "^2.17.2",
+    "@wagmi/core": "catalog:",
     "abitype": "^1.0.8",
     "axios": "^0.30.0",
     "bad-words": "^3.0.4",
@@ -96,7 +95,7 @@
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.41.0",
     "viem": "^2.30.6",
-    "wagmi": "^2.15.4",
+    "wagmi": "catalog:",
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
@@ -129,7 +128,7 @@
     "@types/redux-logger": "^3.0.13",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^3.2.4",
-    "@wagmi/cli": "^2.3.1",
+    "@wagmi/cli": "catalog:",
     "autoprefixer": "^10.4.21",
     "dotenv": "^16.5.0",
     "globals": "^16.1.0",

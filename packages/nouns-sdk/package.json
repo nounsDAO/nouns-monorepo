@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@types/pngjs": "^6.0.1",
-    "@wagmi/cli": "^2.3.1",
-    "@wagmi/core": "^2.17.3",
+    "@wagmi/cli": "catalog:",
+    "@wagmi/core": "catalog:",
     "dotenv": "^16.5.0",
     "glob": "^11.0.2",
     "pngjs": "^6.0.0",
@@ -44,7 +44,7 @@
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
     "vitest": "^3.2.4",
-    "wagmi": "^2.15.6"
+    "wagmi": "catalog:"
   },
   "peerDependencies": {
     "@wagmi/core": "^2.0.0",
