@@ -13,7 +13,7 @@
     "moduleResolution": "node",
 
     /* → If you have your sources under src/, helps TS know where to look */
-    "rootDir": "./",
+    "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
       /* → only needed if you use `import x from "foo"` aliases */
@@ -27,6 +27,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src", "scripts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
