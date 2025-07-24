@@ -12,7 +12,7 @@
     "moduleResolution": "node",
 
     /* → If you have your sources under src/, helps TS know where to look */
-    "rootDir": "src",
+    "rootDir": "./",
     "baseUrl": "./",
     "paths": {
       /* → only needed if you use `import x from "foo"` aliases */
