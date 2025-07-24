@@ -2,7 +2,8 @@
   "name": "@nouns/sdk",
   "version": "1.0.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
-  "homepage": "https://nouns.wtf",
+  "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
+  "repository": "github:nounsDAO/nouns-monorepo",
   "license": "GPL-3.0",
   "author": "Nounders",
   "exports": {
