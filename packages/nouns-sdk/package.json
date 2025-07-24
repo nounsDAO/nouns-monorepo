@@ -1,6 +1,6 @@
 {
   "name": "@nouns/sdk",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
@@ -32,19 +32,26 @@
     "lint": "eslint",
     "test": "vitest run"
   },
-  "dependencies": {
-    "@ethersproject/providers": "^5.8.0",
-    "wagmi": "^2.15.6"
-  },
   "devDependencies": {
     "@types/pngjs": "^6.0.1",
     "@wagmi/cli": "^2.3.1",
+    "@wagmi/core": "^2.17.3",
     "dotenv": "^16.5.0",
     "glob": "^11.0.2",
     "pngjs": "^6.0.0",
     "terser": "^5.43.1",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wagmi": "^2.15.6"
+  },
+  "peerDependencies": {
+    "@wagmi/core": "^2.0.0",
+    "wagmi": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "wagmi": {
+      "optional": true
+    }
   }
 }
