@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPageMap } from 'nextra/page-map';
+
 import config from '@/config';
 
 interface PageMapItem {
@@ -52,7 +53,7 @@ function generateMarkdownFromPageMap(pageMap: PageMapItem[], baseUrl = ''): stri
       } else {
         markdown += `- [${title}](${fullUrl})\n`;
       }
-      
+
       // Add newline after standalone pages to separate from following sections
       markdown += '\n';
     }

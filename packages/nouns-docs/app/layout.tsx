@@ -1,17 +1,19 @@
+import { ReactNode } from 'react';
+
+import { Head } from 'nextra/components';
+import { getPageMap } from 'nextra/page-map';
+import { Footer, Layout, Navbar } from 'nextra-theme-docs';
+import 'nextra-theme-docs/style.css';
+
+import { AskAI } from '@/components/ask-ai';
+import config from '@/config';
 import Noggles from '@/public/images/general/logo.svg?react';
 import DiscordIcon from '@/public/images/socials/discord.svg?react';
 import FarcasterIcon from '@/public/images/socials/farcaster.svg?react';
 import GitHubIcon from '@/public/images/socials/github.svg?react';
 import XIcon from '@/public/images/socials/x.svg?react';
-import { Footer, Layout, Navbar } from 'nextra-theme-docs';
-import 'nextra-theme-docs/style.css';
-import { Head } from 'nextra/components';
-import { getPageMap } from 'nextra/page-map';
 
-import { AskAI } from '@/components/ask-ai';
 import '../globals.css';
-import { ReactNode } from 'react';
-import config from '@/config';
 
 export const metadata = {
   title: 'Nouns DAO Docs',

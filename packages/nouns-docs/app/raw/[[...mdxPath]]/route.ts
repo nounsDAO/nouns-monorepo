@@ -1,7 +1,8 @@
 import { readFile } from 'fs/promises';
+import { join, resolve } from 'path';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { generateStaticParamsFor } from 'nextra/pages';
-import { join, resolve } from 'path';
 
 export async function generateStaticParams(): Promise<{ mdxPath: string[] }[]> {
   const nextraParams = await generateStaticParamsFor('mdxPath')();
