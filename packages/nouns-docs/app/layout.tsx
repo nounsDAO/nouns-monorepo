@@ -11,11 +11,14 @@ import { getPageMap } from 'nextra/page-map';
 import { AskAI } from '@/components/ask-ai';
 import '../globals.css';
 import { ReactNode } from 'react';
+import config from '@/config';
 
 export const metadata = {
   title: 'Nouns DAO Docs',
   description: 'Documentation for Nouns DAO',
 };
+
+const llmsTxtUri = config.baseUri + '/llms.txt';
 
 const navbar = (
   <Navbar
@@ -24,7 +27,9 @@ const navbar = (
         <Noggles className="inline-block w-[100px] align-top" /> Docs
       </span>
     }
-  />
+  >
+    <AskAI markdownUri={llmsTxtUri} />
+  </Navbar>
 );
 const footer = (
   <Footer>
