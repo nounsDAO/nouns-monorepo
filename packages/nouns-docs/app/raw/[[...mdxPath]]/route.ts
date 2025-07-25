@@ -12,7 +12,7 @@ export async function generateStaticParams(): Promise<{ mdxPath: string[] }[]> {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ mdxPath: string[] }> }
+  { params }: { params: Promise<{ mdxPath: string[] }> },
 ) {
   try {
     const { mdxPath } = await params;
@@ -48,8 +48,8 @@ export async function GET(
         'Cache-Control': 'public, max-age=3600',
       },
     });
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error) {
+    if ((error as { code?: string }).code === 'ENOENT') {
       return new NextResponse('File not found', { status: 404 });
     }
 
