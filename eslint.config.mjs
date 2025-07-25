@@ -18,7 +18,6 @@ import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import importPlugin from 'eslint-plugin-import';
 import linguiPlugin from 'eslint-plugin-lingui';
 import prettierPlugin from 'eslint-plugin-prettier';
-import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
@@ -71,7 +70,6 @@ export default defineConfig([
       import: importPlugin,
       lingui: linguiPlugin,
       prettier: prettierPlugin,
-      sonarjs: sonarjsPlugin,
       turbo: turboPlugin,
       unicorn: unicornPlugin,
       'unused-imports': unusedImportsPlugin,
@@ -83,7 +81,6 @@ export default defineConfig([
         'plugin:@typescript-eslint/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
-        'plugin:sonarjs/recommended-legacy',
         'plugin:prettier/recommended',
         'prettier',
       ),
