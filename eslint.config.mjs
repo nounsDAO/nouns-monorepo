@@ -161,6 +161,20 @@ export default defineConfig([
     },
   },
 
+  // nouns-docs specific configuration
+  {
+    files: ['**/packages/nouns-docs/**/*.{ts,tsx}'],
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-docs/tsconfig.json',
+        },
+      },
+    },
+  },
+
   // Additional React-specific rules only for the webapp package
   {
     files: ['**/packages/nouns-webapp/**/*.{ts,tsx}'],

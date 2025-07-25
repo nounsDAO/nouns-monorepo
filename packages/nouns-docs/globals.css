@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@import "nextra-theme-docs/style.css";
+
+@layer utilities {
+  .flowchart {
+    @apply m-8;
+  }
+
+  .border-border {
+    @apply border-gray-300 dark:border-neutral-700;
+  }
+
+  .divide-divide {
+    @apply divide-gray-300 dark:divide-neutral-700;
+  }
+
+  .border-foreground {
+    @apply text-gray-900 dark:text-gray-400;
+  }
+
+  .text-muted {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+}

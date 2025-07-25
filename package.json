@@ -79,6 +79,7 @@
       "json5": ">=1.0.2",
       "lodash": ">=4.17.21",
       "nanoid": ">=3.3.8 <4",
+      "nextra>@theguild/remark-mermaid": "file:./packages/nouns-docs/lib/remark-mermaid-stub",
       "node-gettext": ">=3.0.0",
       "nth-check": ">=2.0.1",
       "postcss": ">=8.4.31",
