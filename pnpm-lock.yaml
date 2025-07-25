@@ -138,7 +138,7 @@ importers:
         specifier: ^21.5.1
         version: 21.6.0(@types/express@4.17.23)(@types/node@22.15.32)(bufferutil@4.0.9)(encoding@0.1.13)(idb-keyval@6.2.1)(picomatch@4.0.2)(rollup@4.42.0)(utf-8-validate@5.0.10)
       prettier:
-        specifier: ^3.5.3
+        specifier: ^3.6.2
         version: 3.6.2
       prettier-plugin-packagejson:
         specifier: ^2.5.14
@@ -398,9 +398,6 @@ importers:
       postcss:
         specifier: '>=8.4.31'
         version: 8.5.6
-      prettier:
-        specifier: ^3.6.0
-        version: 3.6.2
       rehype-mermaid:
         specifier: ^3.0.0
         version: 3.0.0(playwright@1.54.1)
@@ -19194,7 +19191,7 @@ snapshots:
 
   '@import-maps/resolve@1.0.1': {}
 
-  '@inkjs/ui@2.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))':
+  '@inkjs/ui@2.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(utf-8-validate@5.0.10))':
     dependencies:
       chalk: 5.4.1
       cli-spinners: 3.2.0
@@ -29435,7 +29432,7 @@ snapshots:
       blacklist: 1.1.4
       prop-types: 15.8.1
 
-  ink-spinner@5.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1):
+  ink-spinner@5.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(utf-8-validate@5.0.10))(react@18.3.1):
     dependencies:
       cli-spinners: 2.9.2
       ink: 4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10)
@@ -30625,7 +30622,7 @@ snapshots:
       '@babel/types': 7.27.6
       '@datocms/cma-client-node': 4.0.1
       '@gitbeaker/rest': 39.34.3
-      '@inkjs/ui': 2.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))
+      '@inkjs/ui': 2.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(utf-8-validate@5.0.10))
       '@inquirer/prompts': 7.5.3(@types/node@22.15.32)
       '@lingo.dev/_compiler': 0.1.8(@types/node@22.15.32)(@vitest/browser@3.2.4)(babel-plugin-macros@3.1.0)(jsdom@25.0.1(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.1)(react@18.3.1)(terser@5.43.1)
       '@lingo.dev/_react': 0.2.1(next@15.2.4(@babel/core@7.27.4)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -30656,7 +30653,7 @@ snapshots:
       ini: 5.0.0
       ink: 4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10)
       ink-progress-bar: 3.0.0
-      ink-spinner: 5.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)
+      ink-spinner: 5.0.0(ink@4.4.1(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(utf-8-validate@5.0.10))(react@18.3.1)
       inquirer: 12.6.3(@types/node@22.15.32)
       interactive-commander: 0.5.194(@types/node@22.15.32)
       is-url: 1.2.4
