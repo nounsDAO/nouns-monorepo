@@ -167,6 +167,15 @@ export default defineConfig([
   // Additional React-specific rules only for the webapp package
   {
     files: ['**/packages/nouns-webapp/**/*.{ts,tsx}'],
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-webapp/tsconfig.json',
+        },
+      },
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
