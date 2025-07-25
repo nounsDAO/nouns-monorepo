@@ -1,13 +1,15 @@
 'use client';
 
-import config from '@/config';
-import ClaudeLogo from '@/public/images/ai/claude.svg?react';
-import ChatGPTLogo from '@/public/images/ai/openai.svg?react';
+import { FC, useCallback, useState } from 'react';
+
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon, ClipboardCheckIcon, CopyIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from 'nextra/components';
-import { FC, useCallback, useState } from 'react';
+
+import config from '@/config';
+import ClaudeLogo from '@/public/images/ai/claude.svg?react';
+import ChatGPTLogo from '@/public/images/ai/openai.svg?react';
 
 export interface AskAIProps {
   markdownUri?: string;

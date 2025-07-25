@@ -1,4 +1,4 @@
-import { Component, FC, HTMLAttributes } from 'react';
+import { Component } from 'react';
 
 import { useMDXComponents as getThemeComponents } from 'nextra-theme-docs';
 

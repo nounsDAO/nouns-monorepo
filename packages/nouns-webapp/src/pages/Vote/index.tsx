@@ -76,7 +76,7 @@ const getUpdatableCountdownCopy = (
 ) => {
   const timestamp = Date.now();
   const endDate =
-    proposal && timestamp && currentBlock
+    proposal !== undefined && currentBlock !== undefined
       ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.updatePeriodEndBlock - BigInt(currentBlock)),
           'seconds',
@@ -86,13 +86,12 @@ const getUpdatableCountdownCopy = (
   return (
     <>
       {dayjs(endDate)
-        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en)
         .fromNow(true)}
     </>
   );
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const VotePage = () => {
   const { id } = useParams<{ id: string }>();
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
@@ -135,7 +134,7 @@ const VotePage = () => {
   const timestamp = Date.now();
   const { data: currentBlock } = useBlockNumber();
   const startDate =
-    proposal && timestamp && currentBlock
+    proposal !== undefined && currentBlock !== undefined
       ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.startBlock - BigInt(currentBlock)),
           'seconds',
@@ -143,13 +142,16 @@ const VotePage = () => {
       : undefined;
 
   const endBlock =
-    currentBlock && proposal?.endBlock && isObjectionPeriod && currentBlock > proposal?.endBlock
+    currentBlock !== undefined &&
+    proposal?.endBlock !== undefined &&
+    isObjectionPeriod &&
+    currentBlock > proposal?.endBlock
       ? proposal?.objectionPeriodEndBlock
       : proposal?.endBlock;
   const endDate =
-    proposal && timestamp && currentBlock
+    proposal !== undefined && currentBlock !== undefined && endBlock !== undefined
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * Number(endBlock! - BigInt(currentBlock)),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(endBlock - BigInt(currentBlock)),
           'seconds',
         )
       : undefined;
@@ -159,30 +161,42 @@ const VotePage = () => {
   const totalVotes = proposal
     ? proposal.forCount + proposal.againstCount + proposal.abstainCount
     : undefined;
-  const forPercentage = proposal && totalVotes ? (proposal.forCount * 100) / totalVotes : 0;
-  const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
-  const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
+  const forPercentage =
+    proposal !== undefined && totalVotes !== undefined && totalVotes > 0
+      ? (proposal.forCount * 100) / totalVotes
+      : 0;
+  const againstPercentage =
+    proposal !== undefined && totalVotes !== undefined && totalVotes > 0
+      ? (proposal.againstCount * 100) / totalVotes
+      : 0;
+  const abstainPercentage =
+    proposal !== undefined && totalVotes !== undefined && totalVotes > 0
+      ? (proposal.abstainCount * 100) / totalVotes
+      : 0;
 
   // Use user votes as of the current or proposal snapshot block
   const currentOrSnapshotBlock = useMemo(
     () =>
       Math.min(
         Number(proposal?.voteSnapshotBlock) ?? 0,
-        currentBlock ? Number(currentBlock - 1n) : 0,
+        currentBlock !== undefined ? Number(currentBlock - 1n) : 0,
       ) || undefined,
     [currentBlock, proposal?.voteSnapshotBlock],
   );
   const userVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock);
 
   // Get user votes as of current block to use in vote signals
-  const userVotesNow = useUserVotes() || 0;
+  const userVotesNow = useUserVotes() ?? 0;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore Type instantiation is excessively deep and possibly infinite.
   const { data: currentQuorum } = useReadNounsGovernorQuorumVotes({
-    args: [proposal && proposal.id ? BigInt(proposal.id) : 0n],
+    args: [proposal !== undefined && proposal.id !== undefined ? BigInt(proposal.id) : 0n],
     query: {
-      enabled: dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
+      enabled:
+        dqInfo !== undefined && dqInfo.proposal !== undefined
+          ? dqInfo.proposal.quorumCoefficient === '0'
+          : true,
     },
   });
 
@@ -208,13 +222,13 @@ const VotePage = () => {
     signers &&
     signers.includes(account?.toLowerCase())
   );
-  const hasManyVersions = proposalVersions && proposalVersions.length > 1;
+  const hasManyVersions = proposalVersions !== undefined && proposalVersions.length > 1;
   const isProposer = () => proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isUpdateable = () => {
     if (!isDaoGteV3) return false;
     return !!(
-      proposal &&
-      currentBlock &&
+      proposal !== undefined &&
+      currentBlock !== undefined &&
       isProposalUpdatable(proposal.status, proposal.updatePeriodEndBlock, currentBlock)
     );
   };
@@ -248,25 +262,27 @@ const VotePage = () => {
   };
 
   const startOrEndTimeCopy = () => {
-    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+    if (startDate?.isBefore(now) === true && endDate?.isAfter(now) === true) {
       return <Trans>Ends</Trans>;
     }
-    if (endDate?.isBefore(now)) {
+    if (endDate?.isBefore(now) === true) {
       return <Trans>Ended</Trans>;
     }
     return <Trans>Starts</Trans>;
   };
 
   const startOrEndTimeTime = () => {
-    if (!startDate?.isBefore(now)) {
+    if (startDate?.isBefore(now) !== true) {
       return startDate;
     }
     return endDate;
   };
   const objectionEnd = () => {
-    return proposal && timestamp && currentBlock
+    return proposal !== undefined &&
+      currentBlock !== undefined &&
+      proposal.objectionPeriodEndBlock !== undefined
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.objectionPeriodEndBlock! - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * Number(proposal.objectionPeriodEndBlock - currentBlock),
           'seconds',
         )
       : undefined;
@@ -294,7 +310,6 @@ const VotePage = () => {
         }
       };
     }
-    // eslint-disable-next-line sonarjs/function-return-type
     return () => {
       if (proposal?.id) {
         if (proposal?.onTimelockV1) {
@@ -401,7 +416,7 @@ const VotePage = () => {
     BigInt(proposal?.voteSnapshotBlock ?? 0),
   );
   const { data: delegateSnapshot } = useQuery<Delegates>(voteSnapshotQuery, {
-    skip: !voters?.votes?.length,
+    skip: (voters?.votes?.length ?? 0) === 0,
     variables: voteSnapshotVariables,
   });
 
@@ -434,11 +449,13 @@ const VotePage = () => {
   useEffect(() => {
     if (
       isDaoGteV3 &&
-      proposal &&
-      currentBlock &&
-      proposal?.objectionPeriodEndBlock > 0 &&
-      currentBlock > proposal?.endBlock &&
-      currentBlock <= proposal?.objectionPeriodEndBlock
+      proposal !== undefined &&
+      currentBlock !== undefined &&
+      proposal?.objectionPeriodEndBlock !== undefined &&
+      proposal.objectionPeriodEndBlock > 0 &&
+      proposal?.endBlock !== undefined &&
+      currentBlock > proposal.endBlock &&
+      currentBlock <= proposal.objectionPeriodEndBlock
     ) {
       setIsObjectionPeriod(true);
     } else {
@@ -459,7 +476,7 @@ const VotePage = () => {
     }
   }, [proposal?.status, isForkActive, setForkPeriodMessage, setIsExecutable]);
 
-  if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
+  if (!proposal || loading || !data || loadingDQInfo || dqInfo === undefined) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />
@@ -496,18 +513,22 @@ const VotePage = () => {
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
         proposalId={proposal?.id}
-        availableVotes={userVotes || 0}
+        availableVotes={userVotes ?? 0}
         isObjectionPeriod={isObjectionPeriod}
       />
       <Col lg={isUpdateable() ? 12 : 10} className={classes.wrapper}>
-        {proposal && (
+        {proposal !== undefined && (
           <ProposalHeader
             proposal={proposal}
             proposalVersions={proposalVersions}
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => setShowVoteModal(true)}
-            versionNumber={hasManyVersions ? BigInt(proposalVersions?.length) : undefined}
+            versionNumber={
+              hasManyVersions && proposalVersions !== undefined
+                ? BigInt(proposalVersions.length)
+                : undefined
+            }
             isObjectionPeriod={isObjectionPeriod}
           />
         )}
@@ -515,7 +536,7 @@ const VotePage = () => {
       <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
-            .filter(txn => txn?.functionSig?.includes('createStream'))
+            .filter(txn => txn?.functionSig?.includes('createStream') === true)
             .map(txn => {
               const parsedCallData = parseStreamCreationCallData(txn.callData);
               if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
@@ -557,7 +578,7 @@ const VotePage = () => {
             })}
         <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
           <Col className="d-grid gap-4">
-            {userVotes && !hasVoted && isObjectionPeriod ? (
+            {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div className={classes.objectionWrapper}>
                 <div className={classes.objection}>
                   <div className={classes.objectionHeader}>
@@ -570,6 +591,7 @@ const VotePage = () => {
                     </p>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setShowVoteModal(true)}
                     className={clsx(
                       classes.destructiveTransitionStateButton,
@@ -736,16 +758,20 @@ const VotePage = () => {
                     </h3>
                   </div>
                 </div>
-                {isNonNullish(currentBlock) && proposal?.objectionPeriodEndBlock > 0n && (
-                  <div className={classes.objectionPeriodActive}>
-                    <p>
-                      <strong>
-                        <Trans>Objection period triggered</Trans>
-                      </strong>
-                    </p>
-                    {currentBlock < proposal?.endBlock && <p>{objectionNoteCopy}</p>}
-                  </div>
-                )}
+                {isNonNullish(currentBlock) &&
+                  proposal?.objectionPeriodEndBlock !== undefined &&
+                  proposal.objectionPeriodEndBlock > 0n && (
+                    <div className={classes.objectionPeriodActive}>
+                      <p>
+                        <strong>
+                          <Trans>Objection period triggered</Trans>
+                        </strong>
+                      </p>
+                      {currentBlock !== undefined &&
+                        proposal?.endBlock !== undefined &&
+                        currentBlock < proposal.endBlock && <p>{objectionNoteCopy}</p>}
+                    </div>
+                  )}
               </Card.Body>
             </Card>
           </Col>
@@ -780,7 +806,7 @@ const VotePage = () => {
               />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
-              {proposalVersions && (
+              {proposalVersions !== undefined && (
                 <VoteSignals
                   feedback={proposalFeedback}
                   proposalId={proposal.id}
