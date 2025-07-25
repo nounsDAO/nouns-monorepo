@@ -1,6 +1,13 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "nextra-theme-docs/style.css";
+@import 'nextra-theme-docs/style.css';
+@import 'remark-github-blockquote-alert/alert.css';
+
+@layer base {
+  .markdown-alert {
+    @apply mt-4;
+  }
+}
 
 @layer utilities {
   .flowchart {

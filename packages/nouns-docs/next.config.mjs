@@ -1,5 +1,6 @@
-import nextra from "nextra";
-import rehypeMermaid from "rehype-mermaid";
+import nextra from 'nextra';
+import rehypeMermaid from 'rehype-mermaid';
+import githubAlerts from 'remark-github-blockquote-alert';
 
 const withNextra = nextra(
   /** @type {import('nextra').NextraConfig} */
@@ -7,6 +8,7 @@ const withNextra = nextra(
     search: true,
     defaultShowCopyCode: true,
     mdxOptions: {
+      remarkPlugins: [githubAlerts],
       rehypePlugins: [
         [
           /**
@@ -14,13 +16,13 @@ const withNextra = nextra(
            * on the client side instead of at build time, takes precedence over this one.
            * It is disabled by overriding the dependency via the monorepo root package.json
            * pnpm.overrides field, replacing it with the stub package ./lib/remark-mermaid-stub
-          */
+           */
           rehypeMermaid,
           /** @type {import('rehype-mermaid').RehypeMermaidOptions} */
           {
-            strategy: "inline-svg",
+            strategy: 'inline-svg',
             mermaidConfig: {
-              theme: "dark",
+              theme: 'dark',
             },
           },
         ],
@@ -35,16 +37,14 @@ export default withNextra({
   async rewrites() {
     return [
       {
-        source: "/:path*.txt",
-        destination: "/raw/:path*",
+        source: '/:path*.txt',
+        destination: '/raw/:path*',
       },
     ];
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.(".svg"),
-    );
+    const fileLoaderRule = config.module.rules.find(rule => rule.test?.test?.('.svg'));
 
     config.module.rules.push(
       // Convert *.svg?react imports to React components
@@ -52,7 +52,7 @@ export default withNextra({
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: /react/, // *.svg?react
-        use: ["@svgr/webpack"],
+        use: ['@svgr/webpack'],
       },
     );
 
