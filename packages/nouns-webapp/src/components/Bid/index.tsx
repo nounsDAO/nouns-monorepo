@@ -42,7 +42,7 @@ const minBidEth = (minBid: bigint): string => {
   return (Math.ceil(ethNum * 100) / 100).toFixed(2);
 };
 
-const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
+const currentBid = (bidInputRef: React.RefObject<HTMLInputElement | null>) => {
   if (!bidInputRef.current || !bidInputRef.current.value) {
     return 0n;
   }

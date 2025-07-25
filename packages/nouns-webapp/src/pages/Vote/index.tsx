@@ -1,6 +1,6 @@
 import type { Address } from '@/utils/types';
 
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
 import { SearchIcon } from '@heroicons/react/solid';
@@ -15,7 +15,6 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
-import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 import { isNonNullish } from 'remeda';
