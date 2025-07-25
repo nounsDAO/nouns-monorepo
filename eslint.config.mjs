@@ -130,8 +130,6 @@ export default defineConfig([
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
-      // SonarJS plugin rules
-      'sonarjs/todo-tag': 'warn',
       // Unicorn plugin rules
       'unicorn/better-regex': 'error',
       'unicorn/no-nested-ternary': 'error',
