@@ -524,7 +524,7 @@ export function useFormattedProposalCreatedLogs(skip: boolean, fromBlockOverride
   const chainId = defaultChain.id;
 
   const proposalCreatedEvent = parseAbiItem(
-    'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
+    'event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, string[] signatures, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)',
   );
 
   // pick the right starting block
