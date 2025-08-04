@@ -1,0 +1,47 @@
+---
+title: Fork Mechanism
+description:
+---
+
+
+# Nouns DAO Fork Mechanism
+
+The Nouns Fork feature, introduced in the V3 governance upgrade, provides a formal mechanism for groups of token holders to exit and form a new DAO. It is designed as a minority protection tool, allowing token holders to fork the DAO and take a proportional share of assets.   
+
+> [!IMPORTANT]
+> As of [proposal 662](https://nouns.wtf/vote/662) the fork was disabled by setting the threshold to 100% of the total supply as a compliance requirement for the establishment of the Nouns DUNA. A new [Stream-based minority protection mechanism](https://nouns.wtf/vote/653) was proposed but has not been implemented
+
+
+## 🔍 What Is a Fork?
+
+- Forking allows a subset of holders to exit the current DAO together.
+- When the fork threshold is reached, a new DAO is created.
+- Assets including treasury funds, ETH, ERC-20 tokens, and forking Nouns are transferred proportionally to participants.  
+
+## How Forking Works
+
+### Escrow Period
+- Any holder may deposit Nouns into a fork escrow contract.
+- Escrowing holders may include a proposal ID and a short reason for forking.
+- Withdrawals are permitted during the escrow period, up until finalization.
+- Tokens in escrow cannot be used to vote or propose.
+- If the forking threadshold is met (% of total supply of Nouns holders escrow their Nouns to fork), the fork can be initiated
+
+### Forking Period
+- This period lasts several days
+- During this time, no original DAO proposals may be executed, preventing race conditions.  
+- Additional holders may still deposit to join the fork.
+- Once initiated, the fork cannot be canceled.
+
+### New DAO Creation
+- The fork is executed and a new Nouns DAO instance is deployed.
+- Participating holders receive new tokens with the same IDs and art as their original Nouns.  
+- Treasury assets are transferred proportionally.
+- Governance in the new DAO defaults to V1 style: no dynamic quorum, no voting gas refunds, and no vetoer is set.
+- Simple ragequit is enabled, allowing individual token holders to leave at any time.  
+
+## References
+
+- [History of Nouns Forks](https://nouns.wtf/fork)
+- [Nouns DAO Fork Proposal](https://nouns.wtf/vote/354)
+- [Verbs post on Forks](https://mirror.xyz/verbsteam.eth/iN0FKOn_oYVBzlJkwPwK2mhzaeL8K2-W80u82F7fHj8)
