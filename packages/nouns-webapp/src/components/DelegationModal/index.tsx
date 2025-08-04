@@ -32,7 +32,7 @@ const DelegationModalOverlay: React.FC<DelegationModalOverlayProps> = props => {
         </button>
       </div>
 
-      <div className={cn(classes.modal, 'flex h-fit !max-h-fit flex-col gap-2')}>
+      <div className={cn(classes.modal, 'flex h-auto !max-h-fit flex-col gap-2')}>
         {isChangingDelegation ? (
           <ChangeDelegatePanel onDismiss={onDismiss} delegateTo={delegateTo} />
         ) : (
