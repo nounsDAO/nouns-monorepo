@@ -25,7 +25,6 @@
     "remark-github-blockquote-alert": "^2.0.0"
   },
   "devDependencies": {
-    "@sparticuz/chromium": "^138.0.2",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "catalog:",
