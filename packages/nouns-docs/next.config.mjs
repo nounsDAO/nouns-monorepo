@@ -1,6 +1,7 @@
 import nextra from 'nextra';
 import rehypeMermaid from 'rehype-mermaid';
 import githubAlerts from 'remark-github-blockquote-alert';
+import chromium from '@sparticuz/chromium';
 
 const withNextra = nextra(
   /** @type {import('nextra').NextraConfig} */
@@ -21,6 +22,10 @@ const withNextra = nextra(
           /** @type {import('rehype-mermaid').RehypeMermaidOptions} */
           {
             strategy: 'inline-svg',
+            launchOptions: {
+              executablePath:
+                process.env.VERCEL === '1' ? await chromium.executablePath() : undefined,
+            },
             mermaidConfig: {
               theme: 'dark',
             },
