@@ -40,6 +40,8 @@ jobs:
             packages/**/.turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
       - name: Install deps
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm install --frozen-lockfile
       - name: Build packages
         run: pnpm build
@@ -71,6 +73,8 @@ jobs:
             packages/**/.turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
       - name: Install deps
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm install --frozen-lockfile
       - name: Run tests
         run: pnpm test
@@ -101,6 +105,8 @@ jobs:
             packages/**/.turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
       - name: Install deps
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm install --frozen-lockfile
       - name: Build packages
         run: pnpm build
@@ -139,6 +145,8 @@ jobs:
             packages/**/.turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
       - name: Install deps
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm install --frozen-lockfile
       - name: Build packages
         run: pnpm build

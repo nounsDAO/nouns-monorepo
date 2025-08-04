@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "strict": true,
     /* → Basic ESM setup */
     "module": "ESNext",
@@ -20,7 +21,8 @@
     },
 
     /* → We let tsup generate declarations, so turn these off */
-    "declaration": false,
+    "outDir": "dist",
+    "declaration": true,
     "emitDeclarationOnly": false,
 
     "resolveJsonModule": true,

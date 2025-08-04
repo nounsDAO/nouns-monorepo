@@ -10,7 +10,11 @@ export default defineConfig({
     ]),
   ],
   format: ['esm', 'cjs'],
-  dts: true,
+  dts: {
+    compilerOptions: {
+      composite: false // https://github.com/egoist/tsup/issues/571#issuecomment-2457920686
+    }
+  },
   clean: true,
   outExtension({ format }) {
     return {

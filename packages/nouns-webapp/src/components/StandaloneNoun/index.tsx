@@ -106,7 +106,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName={nounClasses.circularNounWrapper}
-        className={border ? nounClasses.circleWithBorder : nounClasses.circular}
+        className={border === true ? nounClasses.circleWithBorder : nounClasses.circular}
       />
     </Link>
   );
@@ -182,5 +182,4 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
   return shouldLinkToProfile ? nounWithLink : noun;
 };
 
-// eslint-disable-next-line sonarjs/deprecation
 export default StandaloneNoun;
