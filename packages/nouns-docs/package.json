@@ -8,7 +8,7 @@
     "build": "next build",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "dev": "next dev",
-    "postinstall": "playwright install",
+    "postinstall": "playwright install --only-shell chromium",
     "start": "next start"
   },
   "dependencies": {

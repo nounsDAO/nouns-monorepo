@@ -21,6 +21,14 @@ const withNextra = nextra(
           /** @type {import('rehype-mermaid').RehypeMermaidOptions} */
           {
             strategy: 'inline-svg',
+            launchOptions: {
+              executablePath:
+                process.env.VERCEL === '1' 
+                  // on vercel build, use specialized chromium build that works on their environment
+                  // it will be installed via the installCommand defined on vercel.json 
+                  ? await (await import('@sparticuz/chromium')).default.executablePath() 
+                  : undefined,
+            },
             mermaidConfig: {
               theme: 'dark',
             },
