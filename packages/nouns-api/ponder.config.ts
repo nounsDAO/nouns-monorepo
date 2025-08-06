@@ -1,11 +1,13 @@
 import { createConfig, factory } from 'ponder';
 import { getAbiItem } from 'viem';
+import dotenv from 'dotenv';
 
 import { NounsAuctionHouseV2Abi } from './abis/NounsAuctionHouseV2Abi';
 import { NounsDAOV4Abi } from './abis/NounsDAOV4Abi';
 import { NounsTokenAbi } from './abis/NounsTokenAbi';
 import { streamAbi } from './abis/StreamAbi';
 import { streamFactoryAbi } from './abis/StreamFactoryAbi';
+dotenv.config();
 
 export default createConfig({
   chains: {

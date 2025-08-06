@@ -18,7 +18,8 @@
     "viem": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "dotenv": "catalog:"
   },
   "engines": {
     "node": ">=18.14"

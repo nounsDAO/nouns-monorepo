@@ -13,3 +13,4 @@ catalog:
   '@types/node': '^22.15.3'
   'lucide': ^0.525.0
   'lucide-react': ^0.525.0
+  'dotenv': ^16.5.0
