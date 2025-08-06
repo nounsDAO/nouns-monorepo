@@ -18,7 +18,7 @@
     "viem": "^2.21.3"
   },
   "devDependencies": {
-    "@types/node": "^20.9.0",
+    "@types/node": "catalog:",
     "eslint": "^9.26.0",
     "eslint-config-ponder": "^0.10.26",
     "typescript": "^5.2.2"
