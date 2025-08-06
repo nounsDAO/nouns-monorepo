@@ -278,6 +278,35 @@ export default defineConfig([
     },
   },
 
+  // nouns-api specific configuration (Ponder)
+  {
+    files: ['**/packages/nouns-api/**/*.{ts,tsx}'],
+    extends: [...compat.extends('ponder')],
+    languageOptions: {
+      parserOptions: {
+        project: ['packages/nouns-api/tsconfig.json'],
+      },
+    },
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-api/tsconfig.json',
+        },
+      },
+    },
+    rules: {
+      // Disable import/no-unresolved for Ponder virtual modules
+      'import/no-unresolved': [
+        'error',
+        {
+          ignore: ['^ponder:'],
+        },
+      ],
+    },
+  },
+
   // Global ignores
   globalIgnores(['**/*.d.ts']),
 ]);

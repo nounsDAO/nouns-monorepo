@@ -18,10 +18,7 @@
     "viem": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "eslint": "^9.26.0",
-    "eslint-config-ponder": "^0.10.26",
-    "typescript": "^5.2.2"
+    "@types/node": "catalog:"
   },
   "engines": {
     "node": ">=18.14"
