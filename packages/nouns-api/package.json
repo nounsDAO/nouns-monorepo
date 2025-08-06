@@ -4,14 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "ponder dev",
-    "start": "ponder start",
-    "db": "ponder db",
     "codegen": "ponder codegen",
+    "db": "ponder db",
+    "dev": "ponder dev",
     "lint": "eslint .",
+    "start": "ponder start",
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@nouns/sdk": "workspace:*",
     "hono": "^4.5.0",
     "ponder": "^0.11.23",
     "viem": "^2.21.3"
