@@ -1,6 +1,5 @@
-
-import { ponder } from "ponder:registry";
-import { noun } from "ponder:schema";
+import { ponder } from 'ponder:registry';
+import { noun } from 'ponder:schema';
 
 // ponder.on("NounsToken:Approval", async ({ event, context }) => {
 //   console.log(event.args);
@@ -18,7 +17,7 @@ import { noun } from "ponder:schema";
 //   console.log(event.args);
 // });
 
-ponder.on("NounsToken:NounCreated", async ({ event, context }) => {
+ponder.on('NounsToken:NounCreated', async ({ event, context }) => {
   await context.db.insert(noun).values({
     id: event.args.tokenId,
     head: event.args.seed.head,
@@ -28,5 +27,5 @@ ponder.on("NounsToken:NounCreated", async ({ event, context }) => {
     createdAt: new Date(Number(event.block.timestamp)),
     createdAtBlock: event.block.number,
     createdAtTransaction: event.transaction.hash,
-  })
-})
+  });
+});
