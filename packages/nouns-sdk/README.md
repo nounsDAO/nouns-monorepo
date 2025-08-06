@@ -15,7 +15,7 @@ This sdk uses [Wagmi CLI](https://wagmi.sh/cli/getting-started) to generate type
 - [NounsToken](https://etherscan.io/address/0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03#code): The NFT
 - [NounsAuctionHouse](https://etherscan.io/address/0x830bd73e4184cef73443c15111a1df14e495c706#code): The auction contract
 - [NounsDescriptor](https://etherscan.io/address/0x33a9c445fb4fb21f2c030a6b2d3e2f12d017bfac#code): The NFT Descriptor (onchain artwork + metadata)
-- [NounsStreamFactory](https://etherscan.io/address/0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff#code): A utility contract for streaming payments
+- [NounsStreamFactory](https://etherscan.io/address/0x0fd206FC7A7dBcD5661157eDCb1FFDD0D02A61ff#code): A utility contract for streaming payments.
 - [NounsUSDCPayer](https://etherscan.io/address/0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D#code): Contract used to hold and disperse USDC payments for the DAO
 - [NounsUSDCTokenBuyer](https://etherscan.io/address/0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5#code): Contract used to buy USDC tokens for the treasury
 
@@ -31,6 +31,7 @@ They're generated from the contract ABIs and include type-safe methods for all o
 Actions are framework-agnostic named wrappers around wagmi's methods that supply the abi, address and functionName parameters, so all you have to provide is the wagmi config and the call args.
 
 The actions for each contract are available as a separate import:
+
 - `@nouns/sdk/governor`
 - `@nouns/sdk/legacy-treasury`
 - `@nouns/sdk/treasury`
@@ -39,16 +40,17 @@ The actions for each contract are available as a separate import:
 - `@nouns/sdk/auction-house`
 - `@nouns/sdk/descriptor`
 - `@nouns/sdk/stream-factory`
+- `@nouns/sdk/stream`
 - `@nouns/sdk/usdc-payer`
 - `@nouns/sdk/usdc-token-buyer`
-
 
 Every read function is available as a wrapper around wagmi's [readContract](https://wagmi.sh/core/api/actions/readContract#readcontract) in the format: `read<ContractName><FunctionName>(wagmiConfig, args)`
 
 e.g.:
+
 ```ts
-import { createConfig, http } from "@wagmi/core";
-import { mainnet } from "@wagmi/core/chains";
+import { createConfig, http } from '@wagmi/core';
+import { mainnet } from '@wagmi/core/chains';
 import { readNounsAuctionHouseAuction } from '@nouns/sdk/auction-house';
 
 const config = createConfig({
@@ -58,7 +60,7 @@ const config = createConfig({
   },
 });
 
-const currentAuction = await readNounsAuctionHouseAuction(config, {})
+const currentAuction = await readNounsAuctionHouseAuction(config, {});
 // {
 //     nounId: 1558n;
 //     amount: 500000000000000000n;
@@ -75,10 +77,14 @@ Write functions are available both as wrappers around [writeContract](https://wa
 - `simulate<ContractName><FunctionName>(wagmiConfig, args)`
 
 e.g.:
+
 ```ts
-import { createConfig, http } from "@wagmi/core";
-import { mainnet } from "@wagmi/core/chains";
-import { simulateNounsAuctionHouseCreateBid, writeNounsAuctionHouseCreateBid } from '@nouns/sdk/auctionHouse';
+import { createConfig, http } from '@wagmi/core';
+import { mainnet } from '@wagmi/core/chains';
+import {
+  simulateNounsAuctionHouseCreateBid,
+  writeNounsAuctionHouseCreateBid,
+} from '@nouns/sdk/auctionHouse';
 
 const config = createConfig({
   chains: [mainnet],
@@ -104,9 +110,10 @@ const txHash = await writeNounsAuctionHouseCreateBid(config, {
 Contract events can be watched using the [watchContractEvent](https://wagmi.sh/core/api/actions/watchContractEvent#watchcontractevent) wrappers: `watch<ContractName><EventName>Event(wagmiConfig, args)`
 
 e.g.:
+
 ```ts
-import { createConfig, http } from "@wagmi/core";
-import { mainnet } from "@wagmi/core/chains";
+import { createConfig, http } from '@wagmi/core';
+import { mainnet } from '@wagmi/core/chains';
 import { watchNounsAuctionHouseAuctionBidEvent } from '@nouns/sdk/auction-house';
 
 const config = createConfig({
@@ -118,8 +125,8 @@ const config = createConfig({
 
 const unwatch = watchNounsAuctionHouseAuctionBidEvent(config, {
   onLogs(logs) {
-   logs.forEach((log) => {
-      console.log("Auction bid event:", log.args);
+    logs.forEach(log => {
+      console.log('Auction bid event:', log.args);
       // {
       //   extended: false,
       //   sender: "0xa0Cf2260CA43252A3620e80A5CFE40968f042634",
@@ -128,7 +135,7 @@ const unwatch = watchNounsAuctionHouseAuctionBidEvent(config, {
       // }
     });
   },
-})
+});
 
 unwatch(); //unsubscribe
 ```
@@ -142,8 +149,8 @@ Every read/write/simulate/watch action also has a corresponding wagmi react hook
 - `useSimulate<ContractName><FunctionName>(params)`
 - `useWatch<ContractName><EventName>Event(params)`
 
-
 The hooks for each contract are available as a separate import:
+
 - `@nouns/sdk/react/governor`
 - `@nouns/sdk/react/legacy-treasury`
 - `@nouns/sdk/react/treasury`
@@ -152,6 +159,7 @@ The hooks for each contract are available as a separate import:
 - `@nouns/sdk/react/auction-house`
 - `@nouns/sdk/react/descriptor`
 - `@nouns/sdk/react/stream-factory`
+- `@nouns/sdk/react/stream`
 - `@nouns/sdk/react/usdc-payer`
 - `@nouns/sdk/react/usdc-token-buyer`
 
