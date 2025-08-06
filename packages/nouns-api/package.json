@@ -8,6 +8,8 @@
     "db": "ponder db",
     "dev": "ponder dev",
     "lint": "eslint .",
+    "ponder:push-snapshot": "tar -czf snapshot.tgz .ponder && gh release upload snapshot snapshot.tgz --clobber",
+    "ponder:restore-snapshot": "rm -rf .ponder && curl -sL https://github.com/nounsDAO/nouns-monorepo/releases/download/snapshot/snapshot.tgz | tar -xzf -",
     "start": "ponder start",
     "typecheck": "tsc"
   },
