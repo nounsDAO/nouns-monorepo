@@ -14,7 +14,7 @@
   "dependencies": {
     "@nouns/sdk": "workspace:*",
     "hono": "^4.5.0",
-    "ponder": "^0.11.23",
+    "ponder": "^0.12.0",
     "viem": "^2.21.3"
   },
   "devDependencies": {
