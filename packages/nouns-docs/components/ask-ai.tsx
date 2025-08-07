@@ -53,7 +53,7 @@ export const AskAI: FC<AskAIProps> = ({ markdownUri }) => {
         }
       >
         <ChatGPTLogo className="-m-1 size-6 align-middle" />{' '}
-        <span className="hidden sm:inline-block">Ask ChatGPT</span>
+        <span className="xs:inline-block hidden">Ask ChatGPT</span>
       </a>
       <Menu>
         <MenuButton
