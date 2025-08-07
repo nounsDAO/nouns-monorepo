@@ -3,6 +3,10 @@
 @import 'nextra-theme-docs/style.css';
 @import 'remark-github-blockquote-alert/alert.css';
 
+@theme {
+  --breakpoint-xs: 28rem;
+}
+
 @layer base {
   .markdown-alert {
     @apply mt-4;
