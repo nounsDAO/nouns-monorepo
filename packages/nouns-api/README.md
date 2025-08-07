@@ -13,7 +13,7 @@ pnpm i
 Create a .env file and fill in with your Ethereum node endpoints:
 
 ```env
-#.env
+# .env
 # At least one of them should be provided.
 PONDER_RPC_URL_1="https://<json-rpc-url>"
 # A websockets endpoint offers better performance.
@@ -31,6 +31,25 @@ Run dev server
 ```bash
 pnpm dev
 ```
+
+## Sepolia
+
+to run on sepolia, add on .env:
+
+```env
+# .env
+PONDER_CHAIN=sepolia
+PONDER_RPC_URL_11155111="https://<json-rpc-url>"
+PONDER_WS_URL_11155111="wss://<websockets-url>"
+```
+
+Then start the dev server
+
+```bash
+pnpm dev
+```
+
+`pnpm ponder:restore-snapshot` also speeds up the sepolia historical sync
 
 ## Deploying
 
