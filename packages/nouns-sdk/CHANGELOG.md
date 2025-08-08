@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] 2025-08-08
+
 ### Added
 
 - Stream actions (`@nouns/sdk/stream`) and react hooks (`@nouns/sdk/react/stream`) to be paired up with the `stream-factory` ones
 
-## [1.0.0] - 2022-07-24
+## [1.0.0] - 2025-07-24
 
 ### Added
 
@@ -58,5 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Started maintaining a changelog from this version onward.
 
 [Unreleased]: https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk
+[1.1.0]: https://github.com/nounsDAO/nouns-monorepo/tree/967341a4b/packages/nouns-sdk
 [1.0.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e0b43054/packages/nouns-sdk
 [0.4.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e75b03a5/packages/nouns-sdk
