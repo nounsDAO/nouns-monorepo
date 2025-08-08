@@ -1,6 +1,6 @@
 {
   "name": "@nouns/sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
   "repository": "github:nounsDAO/nouns-monorepo",
@@ -37,7 +37,7 @@
     "@types/pngjs": "^6.0.1",
     "@wagmi/cli": "catalog:",
     "@wagmi/core": "catalog:",
-    "dotenv": "^16.5.0",
+    "dotenv": "catalog:",
     "glob": "^11.0.2",
     "pngjs": "^6.0.0",
     "terser": "^5.43.1",

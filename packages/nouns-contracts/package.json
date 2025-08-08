@@ -70,7 +70,7 @@
     "@types/prompt": "^1.1.0",
     "base64-sol": "^1.0.1",
     "chai": "^4.5.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "catalog:",
     "ethereum-waffle": "^3.4.4",
     "hardhat": "^2.24.0",
     "hardhat-abi-exporter": "^2.9.0",

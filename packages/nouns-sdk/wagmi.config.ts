@@ -1,9 +1,10 @@
-import { defineConfig } from '@wagmi/cli';
+import { Config, defineConfig } from '@wagmi/cli';
 import { actions, etherscan, react } from '@wagmi/cli/plugins';
 import 'dotenv/config';
 import { mainnet, sepolia } from '@wagmi/core/chains';
+import { streamAbi } from './src/abis/StreamAbi';
 
-export const contractConfigs = [
+const etherscanContractConfigs = [
   {
     name: 'NounsGovernor',
     fileName: 'governor',
@@ -86,8 +87,18 @@ export const contractConfigs = [
   },
 ];
 
-export default defineConfig(() =>
-  contractConfigs.flatMap(({ name, fileName, address }) => [
+const staticContractConfigs = [
+  {
+    name: 'NounsStream',
+    fileName: 'stream',
+    abi: streamAbi,
+  },
+];
+
+export const contractConfigs = [...etherscanContractConfigs, ...staticContractConfigs];
+
+export default defineConfig(() => [
+  ...etherscanContractConfigs.flatMap(({ name, fileName, address }) => [
     {
       out: `src/actions/${fileName}.ts`,
       plugins: [
@@ -102,7 +113,7 @@ export default defineConfig(() =>
           ],
           tryFetchProxyImplementation: true,
         }),
-        actions({overridePackageName: "@wagmi/core"}),
+        actions({ overridePackageName: '@wagmi/core' }),
       ],
     },
     {
@@ -123,4 +134,26 @@ export default defineConfig(() =>
       ],
     },
   ]),
-);
+  ...staticContractConfigs.flatMap(({ name, fileName, abi }) => [
+    {
+      out: `src/actions/${fileName}.ts`,
+      contracts: [
+        {
+          abi,
+          name,
+        },
+      ],
+      plugins: [actions({ overridePackageName: '@wagmi/core' })],
+    },
+    {
+      out: `src/react/${fileName}.ts`,
+      contracts: [
+        {
+          abi,
+          name,
+        },
+      ],
+      plugins: [react()],
+    },
+  ]),
+]);

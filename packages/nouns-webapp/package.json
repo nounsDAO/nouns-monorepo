@@ -94,7 +94,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.41.0",
-    "viem": "^2.30.6",
+    "viem": "catalog:",
     "wagmi": "catalog:",
     "web-vitals": "^1.0.1"
   },
@@ -130,7 +130,7 @@
     "@vitest/browser": "^3.2.4",
     "@wagmi/cli": "catalog:",
     "autoprefixer": "^10.4.21",
-    "dotenv": "^16.5.0",
+    "dotenv": "catalog:",
     "globals": "^16.1.0",
     "graphql-scalars": "^1.24.2",
     "is-ci": "^4.1.0",
