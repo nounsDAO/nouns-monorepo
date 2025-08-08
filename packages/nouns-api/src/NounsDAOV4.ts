@@ -28,5 +28,5 @@ ponder.on('NounsDAOV4:ProposalExecuted', async ({ event, context }) => {
   await context.db.sql
     .update(stream)
     .set({ proposalId: event.args.id })
-    .where(eq(stream.createdAtBlock, event.block.number));
+    .where(eq(stream.createdAtTransaction, event.transaction.hash));
 });
