@@ -52,7 +52,8 @@ export const AskAI: FC<AskAIProps> = ({ markdownUri }) => {
           'border-border flex items-center justify-center gap-1.5 rounded-l-full border px-2 text-xs !no-underline'
         }
       >
-        <ChatGPTLogo className="-m-1 size-6 align-middle" /> Ask ChatGPT
+        <ChatGPTLogo className="-m-1 size-6 align-middle" />{' '}
+        <span className="xs:inline-block hidden">Ask ChatGPT</span>
       </a>
       <Menu>
         <MenuButton

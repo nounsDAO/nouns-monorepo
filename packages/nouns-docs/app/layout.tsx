@@ -25,8 +25,8 @@ const llmsTxtUri = config.baseUri + '/llms.txt';
 const navbar = (
   <Navbar
     logo={
-      <span className="text-4xl font-bold">
-        <Noggles className="inline-block w-[100px] align-top" /> Docs
+      <span className="xs:text-4xl shrink whitespace-nowrap text-3xl font-bold">
+        <Noggles className="inline-block w-auto max-w-[100px] align-top" /> Docs
       </span>
     }
   >
@@ -82,7 +82,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Layout
           navbar={navbar}
           pageMap={await getPageMap()}
-          docsRepositoryBase="https://github.com/nounsDAO/docs/tree/main"
+          docsRepositoryBase="https://github.com/nounsDAO/nouns-monorepo/edit/master/packages/nouns-docs/"
           footer={footer}
           toc={{
             extraContent: <AskAI />,
