@@ -1,5 +1,5 @@
 import { ponder } from 'ponder:registry';
-import { stream } from 'ponder:schema';
+import { stream, StreamStatus } from 'ponder:schema';
 
 ponder.on('Stream:StreamCancelled', async ({ event, context }) => {
   await context.db.update(stream, { streamAddress: event.log.address }).set({
@@ -9,14 +9,22 @@ ponder.on('Stream:StreamCancelled', async ({ event, context }) => {
 
 ponder.on('Stream:TokensWithdrawn', async ({ event, context }) => {
   await context.db.update(stream, { streamAddress: event.log.address }).set(stream => {
-    const status = (() => {
-      if (stream.status === 'cancelled') return 'cancelled';
-      return stream.tokenAmount - stream.withdrawnAmount > 0n ? 'active' : 'concluded';
-    })();
-
     return {
-      status,
+      status: updatedStreamStatus(stream),
       withdrawnAmount: stream.withdrawnAmount + event.args.amount,
     };
   });
 });
+
+const updatedStreamStatus = ({
+  status,
+  tokenAmount,
+  withdrawnAmount,
+}: {
+  status: StreamStatus;
+  tokenAmount: bigint;
+  withdrawnAmount: bigint;
+}) => {
+  if (status === 'cancelled') return 'cancelled';
+  return tokenAmount - withdrawnAmount > 0n ? 'active' : 'concluded';
+};
