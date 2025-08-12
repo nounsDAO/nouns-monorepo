@@ -27,7 +27,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
+    "build": "NODE_OPTIONS='--max-old-space-size=8192' tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
     "clean": "rimraf dist",
     "codegen": "wagmi generate && prettier -w src/**/*.gen.ts",
     "lint": "eslint",
