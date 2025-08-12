@@ -29,7 +29,7 @@
   "scripts": {
     "build": "tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
     "clean": "rimraf dist",
-    "codegen": "wagmi generate",
+    "codegen": "wagmi generate && prettier -w src/**/*.gen.ts",
     "lint": "eslint",
     "test": "vitest run"
   },
