@@ -95,6 +95,98 @@ const staticContractConfigs = [
   },
 ];
 
+const erc20BalanceOfAbi = [
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];
+
+const treasuryAssetsConfigs = [
+  {
+    name: 'USDC',
+    filename: 'usdc',
+    address: {
+      [mainnet.id]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      [sepolia.id]: '0xEbCC972B6B3eB15C0592BE1871838963d0B94278',
+    },
+    abi: erc20BalanceOfAbi,
+  },
+  {
+    name: 'WETH',
+    filename: 'weth',
+    address: {
+      [mainnet.id]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      [sepolia.id]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
+    },
+    abi: erc20BalanceOfAbi,
+  },
+  {
+    name: 'stETH',
+    filename: 'steth',
+    address: {
+      [mainnet.id]: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+      [sepolia.id]: '0x3e3FE7dBc6B4C189E7128855dD526361c49b40Af',
+    },
+    abi: erc20BalanceOfAbi,
+  },
+  {
+    name: 'wstETH',
+    filename: 'wsteth',
+    address: {
+      [mainnet.id]: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0',
+      [sepolia.id]: '0xB82381A3fBD3FaFA77B3a7bE693342618240067b',
+    },
+    abi: erc20BalanceOfAbi,
+  },
+  {
+    name: 'mETH',
+    filename: 'meth',
+    address: {
+      [mainnet.id]: '0xd5F7838F5C461fefF7FE49ea5ebaF7728bB0ADfa',
+      [sepolia.id]: '0x072d71b257ECa6B60b5333626F6a55ea1B0c451c',
+    },
+    abi: erc20BalanceOfAbi,
+  },
+  {
+    name: 'mETHStaking',
+    filename: 'meth-staking',
+    address: {
+      [mainnet.id]: '0xe3cBd06D7dadB3F4e6557bAb7EdD924CD1489E8f',
+      [sepolia.id]: '0xCAfD88816f07d4FFF671D0aAc5E4c1E29875AB2D',
+    },
+    abi: [
+      {
+        inputs: [{ internalType: 'uint256', name: 'mETHAmount', type: 'uint256' }],
+        name: 'mETHToETH',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
+  },
+  {
+    name: 'ETHToUSDPriceOracle',
+    filename: 'eth-usd-price-oracle',
+    address: {
+      [mainnet.id]: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
+      [sepolia.id]: '0x694AA1769357215DE4FAC081bf1f309aDC325306',
+    },
+    abi: [
+      {
+        inputs: [],
+        name: 'latestAnswer',
+        outputs: [{ internalType: 'int256', name: '', type: 'int256' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
+  },
+];
+
 export const contractConfigs = [...etherscanContractConfigs, ...staticContractConfigs];
 
 export default defineConfig(() => [
@@ -147,6 +239,28 @@ export default defineConfig(() => [
     },
     {
       out: `src/react/${fileName}.ts`,
+      contracts: [
+        {
+          abi,
+          name,
+        },
+      ],
+      plugins: [react()],
+    },
+  ]),
+  ...treasuryAssetsConfigs.flatMap(({ name, filename, abi }) => [
+    {
+      out: `src/actions/treasury-assets/${filename}.gen.ts`,
+      contracts: [
+        {
+          abi,
+          name,
+        },
+      ],
+      plugins: [actions({ overridePackageName: '@wagmi/core' })],
+    },
+    {
+      out: `src/react/treasury-assets/${filename}.gen.ts`,
       contracts: [
         {
           abi,
