@@ -192,7 +192,7 @@ export const contractConfigs = [...etherscanContractConfigs, ...staticContractCo
 export default defineConfig(() => [
   ...etherscanContractConfigs.flatMap(({ name, fileName, address }) => [
     {
-      out: `src/actions/${fileName}.ts`,
+      out: `src/actions/${fileName}.gen.ts`,
       plugins: [
         etherscan({
           apiKey: process.env.VITE_ETHERSCAN_API_KEY!,
@@ -209,7 +209,7 @@ export default defineConfig(() => [
       ],
     },
     {
-      out: `src/react/${fileName}.ts`,
+      out: `src/react/${fileName}.gen.ts`,
       plugins: [
         etherscan({
           apiKey: process.env.VITE_ETHERSCAN_API_KEY!,
@@ -228,7 +228,7 @@ export default defineConfig(() => [
   ]),
   ...staticContractConfigs.flatMap(({ name, fileName, abi }) => [
     {
-      out: `src/actions/${fileName}.ts`,
+      out: `src/actions/${fileName}.gen.ts`,
       contracts: [
         {
           abi,
@@ -238,7 +238,7 @@ export default defineConfig(() => [
       plugins: [actions({ overridePackageName: '@wagmi/core' })],
     },
     {
-      out: `src/react/${fileName}.ts`,
+      out: `src/react/${fileName}.gen.ts`,
       contracts: [
         {
           abi,
