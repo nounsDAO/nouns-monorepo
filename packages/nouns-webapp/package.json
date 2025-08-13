@@ -130,6 +130,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^3.2.4",
     "@wagmi/cli": "catalog:",
+    "assert": "^2.1.0",
     "autoprefixer": "^10.4.21",
     "browserify-zlib": "^0.2.0",
     "crypto-browserify": "^3.12.1",
