@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
-import { Fork } from '../../wrappers/nounsDao';
+import { Fork } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
 
@@ -43,4 +45,8 @@ const ForkCycleEvent = ({ forkDetails }: Props) => {
   );
 };
 
-export default ForkCycleEvent;
+export { ForkCycleEvent };
+
+// Prevent Next.js from treating this as a real page during prerender
+const ForkDeployEventPage = () => null;
+export default ForkDeployEventPage;
