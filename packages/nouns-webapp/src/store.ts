@@ -30,14 +30,14 @@ export const store = configureStore({
     });
     // Enable logger in development and when explicitly enabled
     if (
-      import.meta.env.MODE !== 'production' &&
-      import.meta.env.VITE_ENABLE_REDUX_LOGGER === 'true'
+      process.env.NODE_ENV !== 'production' &&
+      process.env.NEXT_PUBLIC_ENABLE_REDUX_LOGGER === 'true'
     ) {
       return middleware.concat(loggerMiddleware);
     }
     return middleware;
   },
-  devTools: import.meta.env.MODE !== 'production',
+  devTools: process.env.NODE_ENV !== 'production',
   preloadedState: undefined,
 });
 

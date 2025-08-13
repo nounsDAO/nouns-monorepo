@@ -15,19 +15,19 @@ const activeChain =
 
 const transports = {
   [mainnet.id]: fallback([
-    ...(import.meta.env.VITE_MAINNET_WSRPC !== undefined
-      ? [webSocket(import.meta.env.VITE_MAINNET_WSRPC)]
+    ...(process.env.NEXT_PUBLIC_MAINNET_WSRPC !== undefined
+      ? [webSocket(process.env.NEXT_PUBLIC_MAINNET_WSRPC)]
       : []),
-    ...(import.meta.env.VITE_MAINNET_JSONRPC !== undefined
-      ? [http(import.meta.env.VITE_MAINNET_JSONRPC)]
+    ...(process.env.NEXT_PUBLIC_MAINNET_JSONRPC !== undefined
+      ? [http(process.env.NEXT_PUBLIC_MAINNET_JSONRPC)]
       : []),
   ]),
   [sepolia.id]: fallback([
-    ...(import.meta.env.VITE_SEPOLIA_WSRPC !== undefined
-      ? [webSocket(import.meta.env.VITE_SEPOLIA_WSRPC)]
+    ...(process.env.NEXT_PUBLIC_SEPOLIA_WSRPC !== undefined
+      ? [webSocket(process.env.NEXT_PUBLIC_SEPOLIA_WSRPC)]
       : []),
-    ...(import.meta.env.VITE_SEPOLIA_JSONRPC !== undefined
-      ? [http(import.meta.env.VITE_SEPOLIA_JSONRPC)]
+    ...(process.env.NEXT_PUBLIC_SEPOLIA_JSONRPC !== undefined
+      ? [http(process.env.NEXT_PUBLIC_SEPOLIA_JSONRPC)]
       : []),
   ]),
 };
