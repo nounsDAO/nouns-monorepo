@@ -47,10 +47,14 @@ const DelegationModalOverlay: React.FC<DelegationModalOverlayProps> = props => {
 };
 
 const DelegationModal: React.FC<{
+  // Avoid SSR errors when document is not available
   onDismiss: () => void;
   delegateTo?: string;
 }> = props => {
   const { onDismiss, delegateTo } = props;
+
+  if (typeof document === 'undefined') return null;
+
   return (
     <>
       {ReactDOM.createPortal(
