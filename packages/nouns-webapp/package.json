@@ -106,6 +106,7 @@
     "@graphql-codegen/typescript-operations": "^4.6.0",
     "@lingui/babel-plugin-lingui-macro": "^5.3.1",
     "@lingui/cli": "5.3.2",
+    "@next/third-parties": "^15.1.6",
     "@parcel/watcher": "^2.5.1",
     "@svgr/plugin-jsx": "^8.1.0",
     "@testing-library/dom": "^10.4.0",
