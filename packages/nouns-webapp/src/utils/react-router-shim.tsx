@@ -4,7 +4,6 @@
 'use client';
 
 import React, { PropsWithChildren, useEffect } from 'react';
-
 import NextLink from 'next/link';
 import { useParams as useNextParams, useRouter, useSearchParams } from 'next/navigation';
 
