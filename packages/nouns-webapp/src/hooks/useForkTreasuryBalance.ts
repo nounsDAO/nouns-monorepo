@@ -15,10 +15,11 @@ function useForkTreasuryBalance(treasuryContractAddress?: Address): bigint {
   });
 
   // @ts-expect-error - Type instantiation too deep
-  const { data: stEthBalanceData } = useReadStEthBalanceOf({
+  const stEthRes: any = (useReadStEthBalanceOf as any)({
     args: treasuryContractAddress ? [treasuryContractAddress] : undefined,
     query: { enabled: !!treasuryContractAddress },
   });
+  const stEthBalanceData = (stEthRes as any)?.data as bigint | undefined;
 
   // Use nullish coalescing to provide a default value of 0n for undefined balances
   const ethBalance = ethBalanceData?.value ?? 0n;
