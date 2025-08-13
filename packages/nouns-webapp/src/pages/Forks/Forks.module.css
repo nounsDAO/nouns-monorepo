@@ -28,15 +28,15 @@
   font-weight: bold;
 }
 
-p {
+.description {
   padding-top: 1rem;
 }
-p a {
+.description a {
   color: #14161b;
   font-family: 'PT Root UI';
   font-weight: bold;
 }
-p a:hover {
+.description a:hover {
   text-decoration: none;
 }
 
