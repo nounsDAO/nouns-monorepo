@@ -246,13 +246,14 @@ export default defineConfig(() => [
       plugins: [react()],
     },
   ]),
-  ...treasuryAssetsConfigs.flatMap(({ name, filename, abi }) => [
+  ...treasuryAssetsConfigs.flatMap(({ name, filename, abi, address }) => [
     {
       out: `src/actions/treasury-assets/${filename}.gen.ts`,
       contracts: [
         {
           abi,
           name,
+          address,
         },
       ],
       plugins: [actions({ overridePackageName: '@wagmi/core' })],
@@ -263,6 +264,7 @@ export default defineConfig(() => [
         {
           abi,
           name,
+          address,
         },
       ],
       plugins: [react()],
