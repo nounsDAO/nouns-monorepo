@@ -129,7 +129,7 @@
     "browserify-zlib": "^0.2.0",
     "crypto-browserify": "^3.12.1",
     "dotenv": "catalog:",
-    "globals": "^16.1.0",
+    "globals": "^16.3.0",
     "graphql-scalars": "^1.24.2",
     "https-browserify": "^1.0.0",
     "is-ci": "^4.1.0",
