@@ -37,7 +37,7 @@
     "eslint-plugin-vitest": "^0.5.4",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.0",
+    "lint-staged": "^16.1.5",
     "netlify-cli": "^21.5.1",
     "pino-pretty": "^13.1.1",
     "prettier": "^3.6.2",
