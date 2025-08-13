@@ -11,9 +11,10 @@ interface MinBidProps {
 }
 
 const MinBid: React.FC<MinBidProps> = ({ minBid, onClick }) => {
+  const imgSrc = typeof nounPointerImg === 'string' ? nounPointerImg : (nounPointerImg as any).src;
   return (
     <div className={classes.minBidWrapper} onClick={onClick}>
-      <img src={nounPointerImg} alt="Pointer noun" />
+      <img src={imgSrc} alt="Pointer noun" />
       <h3 className={classes.minBid}>
         You must bid at least {!!minBid && <TruncatedAmount amount={minBid} />}
       </h3>
