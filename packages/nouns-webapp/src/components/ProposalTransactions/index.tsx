@@ -104,7 +104,7 @@ const ProposalTransactions = ({
               className={classes.removeTransactionButton}
               onClick={() => onRemoveProposalTransaction(i)}
             >
-              <img src={xIcon} alt="Remove Transaction" />
+              <img src={xIcon.src} alt="Remove Transaction" />
             </button>
           </div>
         </OverlayTrigger>
