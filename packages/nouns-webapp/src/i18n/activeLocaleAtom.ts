@@ -38,10 +38,23 @@ export const activeLocaleAtom = withAtomEffect(
   },
 );
 
+// Create a safe storage that only works in browser environment
+const createSafeStorage = () => {
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    return localStorage;
+  }
+  // Return a mock storage for SSR
+  return {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+  };
+};
+
 const activeLocaleStorageAtom = atomWithStorage<string | undefined>(
   'lang',
   undefined,
-  createJSONStorage(() => localStorage),
+  createJSONStorage(() => createSafeStorage()),
   {
     getOnInit: true,
   },
