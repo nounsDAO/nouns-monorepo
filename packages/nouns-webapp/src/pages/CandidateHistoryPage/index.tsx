@@ -1,3 +1,4 @@
+'use client';
 import advanced from 'dayjs/plugin/advancedFormat';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';

@@ -1,3 +1,5 @@
+'use client';
+
 import type { Address } from '@/utils/types';
 
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';

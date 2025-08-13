@@ -1,3 +1,5 @@
+'use client';
+
 import { useBreakpointValues } from '@/hooks/useBreakpointValues';
 
 export const CalendarPage = () => {

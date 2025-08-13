@@ -1,3 +1,4 @@
+'use client';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';

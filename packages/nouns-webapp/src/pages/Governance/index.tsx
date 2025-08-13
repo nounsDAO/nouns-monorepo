@@ -1,3 +1,5 @@
+'use client';
+
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import {

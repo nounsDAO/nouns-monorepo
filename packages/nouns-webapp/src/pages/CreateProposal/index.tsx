@@ -1,3 +1,5 @@
+'use client';
+
 import type { Hex } from '@/utils/types';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';

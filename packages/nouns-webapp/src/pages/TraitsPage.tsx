@@ -1,3 +1,5 @@
+'use client';
+
 import type { INounSeed } from '@/wrappers/nounToken';
 import type { EncodedImage } from '@nouns/sdk';
 

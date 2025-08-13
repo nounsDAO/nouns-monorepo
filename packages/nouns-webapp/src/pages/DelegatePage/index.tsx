@@ -1,3 +1,5 @@
+'use client';
+
 import { useLocation, useNavigate } from 'react-router';
 
 import DelegationModal from '@/components/DelegationModal';
