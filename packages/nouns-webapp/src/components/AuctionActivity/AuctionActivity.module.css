@@ -12,15 +12,15 @@
   margin-bottom: 0rem;
 }
 
-h1 {
+.heading1 {
   font-size: 3rem;
 }
 
-h2 {
+.heading2 {
   font-size: 2.5rem;
 }
 
-h4 {
+.heading4 {
   font-size: 1rem;
   font-weight: 400;
 }
@@ -35,7 +35,7 @@ h4 {
   color: var(--brand-black);
 }
 
-.modalTitleWrapper h1 {
+.modalTitleWrapper .modalHeading {
   font-size: xx-large;
   margin-left: 2rem;
 }
@@ -59,20 +59,20 @@ h4 {
   padding-left: 0rem;
 }
 
-.section h4 {
+.section .sectionHeading4 {
   font-family: 'PT Root UI';
   font-size: 17px;
   line-height: 25px;
 }
 
-.section h2 {
+.section .sectionHeading2 {
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 32px;
 }
 
 @media (max-width: 992px) {
-  h1 {
+  .heading1 {
     padding-top: 12px;
   }
 
