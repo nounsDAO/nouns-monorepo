@@ -84,7 +84,7 @@ export const Noun: FC<NounProps> = ({
     }
   }, [svg, loadingNounFallback, shouldShowFallback, fallbackStartTime, minFallbackDuration]);
 
-  if (shouldShowFallback) return <img {...props} src={loadingNoun} />;
+  if (shouldShowFallback) return <img {...props} src={loadingNoun.src} />;
 
   return (
     <img
