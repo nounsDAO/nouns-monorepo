@@ -7,7 +7,7 @@
     "prebuild": "is-ci && exit 0 || (wagmi generate && graphql-codegen-esm --config codegen.config.ts)",
     "build": "next build",
     "check": "tsc --noEmit --skipLibCheck",
-    "clean": "rimraf dist .netlify",
+    "clean": "rimraf .next out .netlify",
     "dev": "next dev --turbo --verbose",
     "dev:sepolia": "NEXT_PUBLIC_MODE=sepolia next dev",
     "graphql-codegen": "graphql-codegen-esm --config codegen.config.ts",
