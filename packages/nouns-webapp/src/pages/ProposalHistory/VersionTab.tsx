@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { Link } from 'react-router';
 
 import classes from './Vote.module.css';
-import { useBlockNumber } from 'wagmi';
 
 type Props = {
   isActive: boolean;
@@ -20,14 +19,12 @@ type Props = {
 
 const VersionTab = (props: Props) => {
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
-  const { data: currentBlock } = useBlockNumber();
 
   useEffect(() => {
-    if (currentBlock) {
-      const date = new Date(+props.createdAt * 1000);
-      setUpdatedTimestamp(date);
-    }
-  }, [currentBlock, props.createdAt]);
+    // Compute once from props; no dependency on wagmi hooks to avoid SSR provider issues
+    const date = new Date(+props.createdAt * 1000);
+    setUpdatedTimestamp(date);
+  }, [props.createdAt]);
 
   const versionLink = props.isCandidate
     ? `/candidates/${props.id}/history/${props.versionNumber}`
