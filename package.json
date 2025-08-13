@@ -46,7 +46,7 @@
     "rimraf": "^6.0.1",
     "turbo": "^2.5.3",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.34.1"
+    "typescript-eslint": "^8.39.1"
   },
   "packageManager": "pnpm@10.14.0",
   "engines": {
