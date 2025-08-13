@@ -2,7 +2,7 @@
 
 import { useBreakpointValues } from '@/hooks/useBreakpointValues';
 
-export const CalendarPage = () => {
+const CalendarPage = () => {
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const mode =
     useBreakpointValues({
@@ -35,3 +35,5 @@ export const CalendarPage = () => {
     </div>
   );
 };
+
+export default CalendarPage;
