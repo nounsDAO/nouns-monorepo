@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
-
 import React from 'react';
-
 import { Providers } from './providers';
 
 // Global CSS imports should live in the root layout

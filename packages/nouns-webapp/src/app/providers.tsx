@@ -1,26 +1,25 @@
 'use client';
 
-import type { Address } from '@/utils/types';
-
 import React, { useEffect } from 'react';
+import type { Address } from '@/utils/types';
 
 import { ApolloProvider } from '@apollo/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { Provider as ReduxProvider } from 'react-redux';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider, useAccount } from 'wagmi';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { CustomConnectkitProvider } from '@/components/CustomConnectkitProvider';
 import { Footer } from '@/components/Footer';
 import NavBar from '@/components/NavBar';
 import NetworkAlert from '@/components/NetworkAlert';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
 import config, { CHAIN_ID } from '@/config';
 import {
   nounsAuctionHouseAddress,
