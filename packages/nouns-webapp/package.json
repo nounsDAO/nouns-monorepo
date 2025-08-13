@@ -127,7 +127,6 @@
     "@types/react-redux": "^7.1.34",
     "@types/react-transition-group": "^4.4.5",
     "@types/redux-logger": "^3.0.13",
-    "@vitejs/plugin-react": "^4.3.4",
     "@wagmi/cli": "catalog:",
     "assert": "^2.1.0",
     "autoprefixer": "^10.4.21",
