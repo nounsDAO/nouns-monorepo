@@ -26,18 +26,13 @@ export default defineConfig({
     'actions/usdc-token-buyer': 'src/actions/usdc-token-buyer.gen.ts',
     'react/usdc-token-buyer': 'src/react/usdc-token-buyer.gen.ts',
   },
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   dts: {
     compilerOptions: {
       composite: false, // https://github.com/egoist/tsup/issues/571#issuecomment-2457920686
     },
   },
   clean: true,
-  outExtension({ format }) {
-    return {
-      js: format === 'esm' ? '.mjs' : '.js',
-    };
-  },
   target: 'es2021',
   sourcemap: true,
   treeshake: true,
