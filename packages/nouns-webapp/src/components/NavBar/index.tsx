@@ -7,7 +7,8 @@ import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
 import clsx from 'clsx';
 import { ConnectKitButton } from 'connectkit';
 import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { formatEther } from 'viem';
 
 import NogglesIcon from '@/assets/icons/Noggles.svg?react';
@@ -36,7 +37,7 @@ const NavBar = () => {
   const isDaoGteV3 = useIsDaoGteV3();
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const location = useLocation();
+  const pathname = usePathname();
   const treasuryBalance = useReadNounsTreasuryBalancesInEth({
     query: {
       select: data => {
@@ -48,10 +49,11 @@ const NavBar = () => {
   const daoEtherscanLink = buildEtherscanAddressLink(nounsTreasuryAddress[chainId]);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
+  const safePathname = pathname ?? '';
   const useStateBg =
-    location.pathname === '/' ||
-    location.pathname.includes('/noun/') ||
-    location.pathname.includes('/auction/');
+    safePathname === '/' ||
+    safePathname.includes('/noun/') ||
+    safePathname.includes('/auction/');
 
   const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
 
@@ -101,12 +103,14 @@ const NavBar = () => {
       >
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
-            <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
-            </Navbar.Brand>
+            <Link href="/" className={classes.navBarBrand}>
+              <Navbar.Brand>
+                <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
+              </Navbar.Brand>
+            </Link>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+                <img className={classes.testnetImg} src={testnetNoun.src} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
             )}
@@ -133,7 +137,7 @@ const NavBar = () => {
           />
           <Navbar.Collapse className="justify-content-end z-10">
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
-              <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+              <Nav.Link as={Link} href="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={isDaoGteV3 ? <Trans>Proposals</Trans> : <Trans>DAO</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faFile} />}
@@ -145,7 +149,7 @@ const NavBar = () => {
                   {config.featureToggles.candidates && (
                     <Nav.Link
                       as={Link}
-                      to="/vote#candidates"
+                      href="/vote#candidates"
                       className={classes.nounsNavLink}
                       onClick={closeNav}
                     >
@@ -163,7 +167,7 @@ const NavBar = () => {
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
-                <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+                <Nav.Link as={Link} href="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                   <NavBarButton
                     buttonText={<Trans>DAO</Trans>}
                     buttonIcon={<FontAwesomeIcon icon={faUsers} />}
@@ -175,7 +179,7 @@ const NavBar = () => {
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}
-                to="/playground"
+                href="/playground"
                 className={classes.nounsNavLink}
                 onClick={closeNav}
               >
@@ -187,7 +191,7 @@ const NavBar = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/nouns"
+                href="/nouns"
                 className={clsx(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
@@ -199,7 +203,7 @@ const NavBar = () => {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/traits"
+                href="/traits"
                 className={clsx(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
