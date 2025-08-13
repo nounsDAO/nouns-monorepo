@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prebuild": "is-ci && exit 0 || (wagmi generate && graphql-codegen-esm --config codegen.config.ts)",
-    "build": "tsc -b && vite build",
+    "build": "next build",
     "check": "tsc --noEmit --skipLibCheck",
     "clean": "rimraf dist .netlify",
     "dev": "vite",
