@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 
 import { XIcon } from '@heroicons/react/solid';
@@ -87,6 +89,9 @@ const SolidColorBackgroundModal: React.FC<{
   show: boolean;
 }> = props => {
   const { onDismiss, content, show } = props;
+
+  // Avoid rendering on the server where document/window are not available
+  if (typeof document === 'undefined') return null;
 
   return (
     <>
