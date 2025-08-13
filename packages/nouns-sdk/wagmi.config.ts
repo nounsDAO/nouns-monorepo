@@ -187,8 +187,6 @@ const treasuryAssetsConfigs = [
   },
 ];
 
-export const contractConfigs = [...etherscanContractConfigs, ...staticContractConfigs];
-
 export default defineConfig(() => [
   ...etherscanContractConfigs.flatMap(({ name, fileName, address }) => [
     {
