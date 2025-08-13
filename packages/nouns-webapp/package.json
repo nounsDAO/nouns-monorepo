@@ -16,7 +16,7 @@
     "i18n:compile": "lingui compile",
     "i18n:extract": "lingui extract",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "preview": "vite preview",
+    "start": "next start",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
