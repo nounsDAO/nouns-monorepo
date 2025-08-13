@@ -151,7 +151,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tailwindcss": "^3.4.17",
-    "terser": "^5.43.1",
     "typescript-eslint": "^8.34.1",
     "url": "^0.11.4",
     "webpack": "^5.101.0"
