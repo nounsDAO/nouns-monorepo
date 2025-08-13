@@ -131,6 +131,7 @@
     "@vitest/browser": "^3.2.4",
     "@wagmi/cli": "catalog:",
     "autoprefixer": "^10.4.21",
+    "browserify-zlib": "^0.2.0",
     "crypto-browserify": "^3.12.1",
     "dotenv": "catalog:",
     "globals": "^16.1.0",
