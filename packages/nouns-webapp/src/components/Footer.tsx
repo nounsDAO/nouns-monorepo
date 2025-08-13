@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Link } from 'react-router';
+import Link from 'next/link';
 
 import DiscordIcon from '@/assets/icons/socials/discord.svg?react';
 import FarcasterIcon from '@/assets/icons/socials/farcaster.svg?react';
@@ -82,7 +82,7 @@ export const Footer = () => {
               className="text-black transition-opacity hover:opacity-70"
               key={alt}
               aria-label={alt}
-              to={url}
+              href={url}
               target="_blank"
               rel="noreferrer"
             >
@@ -98,8 +98,7 @@ export const Footer = () => {
                 {items.map(({ label, url }) => (
                   <li key={label}>
                     <Link
-                      reloadDocument
-                      to={url}
+                      href={url}
                       target={url.startsWith('/') ? undefined : '_blank'}
                       className="font-medium text-black no-underline hover:text-red-500"
                     >
