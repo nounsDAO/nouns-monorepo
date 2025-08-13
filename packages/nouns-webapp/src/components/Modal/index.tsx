@@ -20,7 +20,7 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({ content, onDismiss, title }
   return (
     <div className={classes.modal}>
       <button className={classes.closeButton} onClick={onDismiss}>
-        <img src={xIcon} alt="Button to close modal" />
+        <img src={typeof xIcon === 'string' ? xIcon : (xIcon as any).src} alt="Button to close modal" />
       </button>
       <h3>{title}</h3>
       <div className={classes.content}>{content}</div>
