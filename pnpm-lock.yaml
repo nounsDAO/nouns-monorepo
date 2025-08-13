@@ -6,6 +6,12 @@ settings:
 
 catalogs:
   default:
+    '@tanstack/query-core':
+      specifier: ^5.80.10
+      version: 5.81.5
+    '@tanstack/react-query':
+      specifier: ^5.80.10
+      version: 5.81.5
     '@types/react':
       specifier: ^19.1.0
       version: 19.1.8
@@ -444,6 +450,9 @@ importers:
 
   packages/nouns-sdk:
     devDependencies:
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.81.5(react@19.1.0)
       '@types/pngjs':
         specifier: ^6.0.1
         version: 6.0.5
@@ -559,10 +568,10 @@ importers:
         specifier: ^2.8.2
         version: 2.8.2(react-redux@7.2.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@tanstack/query-core':
-        specifier: ^5.80.10
+        specifier: 'catalog:'
         version: 5.81.5
       '@tanstack/react-query':
-        specifier: ^5.80.10
+        specifier: 'catalog:'
         version: 5.81.5(react@19.1.0)
       '@tanstack/react-virtual':
         specifier: ^3.13.10

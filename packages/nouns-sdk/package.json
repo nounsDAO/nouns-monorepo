@@ -212,6 +212,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
+    "@tanstack/react-query": "catalog:",
     "@types/pngjs": "^6.0.1",
     "@wagmi/cli": "catalog:",
     "@wagmi/core": "catalog:",
@@ -225,10 +226,14 @@
     "wagmi": "catalog:"
   },
   "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
     "@wagmi/core": "^2.0.0",
     "wagmi": "^2.0.0"
   },
   "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
     "wagmi": {
       "optional": true
     }
