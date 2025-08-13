@@ -11,13 +11,22 @@ import { filter } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
+import dynamic from 'next/dynamic';
 
-import EditProposalButton from '@/components/EditProposalButton/index';
-import ProposalActionModal from '@/components/ProposalActionsModal';
-import ProposalEditor from '@/components/ProposalEditor';
-import ProposalTransactions from '@/components/ProposalTransactions';
+// Dynamically import components that may reference browser APIs to avoid SSR evaluation
+const EditProposalButton = dynamic(() => import('@/components/EditProposalButton/index'), {
+  ssr: false,
+});
+const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+  ssr: false,
+});
+const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+  ssr: false,
+});
+const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
+
 import { nounsTokenBuyerAddress } from '@/contracts';
-import Section from '@/layout/Section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
@@ -359,4 +368,4 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   );
 };
 
-export default EditCandidatePage;
+export default dynamic(() => Promise.resolve(EditCandidatePage), { ssr: false });
