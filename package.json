@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "^8.34.1",
     "eslint": "^9.27.0",
     "eslint-config-ponder": "^0.10.26",
-    "eslint-config-prettier": "^10.1.5",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-import-x": "^4.11.1",
