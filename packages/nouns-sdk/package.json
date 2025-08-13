@@ -5,7 +5,10 @@
   "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
   "repository": "github:nounsDAO/nouns-monorepo",
   "license": "GPL-3.0",
-  "author": "Nounders",
+  "contributors": [
+    "Nounders",
+    "volky.eth"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
