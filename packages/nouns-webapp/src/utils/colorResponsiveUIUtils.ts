@@ -1,6 +1,6 @@
-import { useLocation } from 'react-router';
+import { useLocation } from '@/utils/react-router-shim';
 
-import { useAppSelector } from '../hooks';
+import { useAppSelector } from '@/hooks';
 
 export const shouldUseStateBg = (location: { pathname: string }) => {
   return (
