@@ -7,16 +7,24 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { withStepProgress } from 'react-stepz';
+import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 
-import CreateCandidateButton from '@/components/CreateCandidateButton';
-import ProposalActionModal from '@/components/ProposalActionsModal';
-import ProposalEditor from '@/components/ProposalEditor';
-import ProposalTransactions from '@/components/ProposalTransactions';
+// Dynamically import components to avoid SSR evaluation issues
+const CreateCandidateButton = dynamic(() => import('@/components/CreateCandidateButton'), {
+  ssr: false,
+});
+const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+  ssr: false,
+});
+const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+  ssr: false,
+});
+const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
+
 import { nounsTokenBuyerAddress } from '@/contracts';
-import Section from '@/layout/Section';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -270,4 +278,7 @@ const CreateCandidatePage = () => {
   );
 };
 
-export default withStepProgress(CreateCandidatePage);
+export default dynamic(async () => {
+  const mod = await import('react-stepz');
+  return mod.withStepProgress(CreateCandidatePage);
+}, { ssr: false });
