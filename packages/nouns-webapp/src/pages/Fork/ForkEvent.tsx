@@ -17,11 +17,11 @@ import {
 import classes from './Fork.module.css';
 
 type Props = {
-  event: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
-  isOnlyEvent: boolean;
+  event?: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
+  isOnlyEvent?: boolean;
 };
 
-const ForkEvent = ({ event, isOnlyEvent }: Props) => {
+const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
   const [actionLabel, setActionLabel] = useState('');
   const [nounCount, setNounCount] = useState('');
   const [nounsInEvent, setNounsInEvent] = useState<ReactNode[]>([]);
@@ -143,8 +143,16 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   );
 
   useEffect(() => {
-    handleEventTypes(event);
+    if (event) handleEventTypes(event);
   }, [event, handleEventTypes]);
+
+  const proposalIds =
+    event && (event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin')
+      ? event.proposalIDs
+      : [];
+  const proposalsTitles = useProposalTitles(proposalIds);
+
+  if (!event) return null;
 
   const isCycleEvent =
     event.eventType === 'ForkStarted' ||
@@ -154,9 +162,6 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   const dateTime =
     event.createdAt !== null &&
     dayjs(Number(event.createdAt) * 1000).format('MMMM D, YYYY, h:mm A');
-  const proposalsTitles = useProposalTitles(
-    event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin' ? event.proposalIDs : [],
-  );
   const proposalsList = proposalsTitles?.map((proposal, i) => {
     return (
       <li key={i}>
@@ -211,4 +216,8 @@ const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   );
 };
 
-export default ForkEvent;
+export { ForkEvent };
+
+// Prevent Next.js from treating this as a real page during prerender
+const ForkEventPage = () => null;
+export default ForkEventPage;
