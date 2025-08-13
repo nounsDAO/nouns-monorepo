@@ -10,18 +10,26 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { withStepProgress } from 'react-stepz';
 import { filter } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
+import dynamic from 'next/dynamic';
 
-import CreateProposalButton from '@/components/CreateProposalButton';
-import ProposalActionModal from '@/components/ProposalActionsModal';
-import ProposalEditor from '@/components/ProposalEditor';
-import ProposalTransactions from '@/components/ProposalTransactions';
+// Dynamically import components to avoid SSR evaluation issues
+const CreateProposalButton = dynamic(() => import('@/components/CreateProposalButton'), {
+  ssr: false,
+});
+const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+  ssr: false,
+});
+const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+  ssr: false,
+});
+const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
+
 import config from '@/config';
 import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
-import Section from '@/layout/Section';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
@@ -361,4 +369,7 @@ const CreateProposalPage = () => {
   );
 };
 
-export default withStepProgress(CreateProposalPage);
+export default dynamic(async () => {
+  const mod = await import('react-stepz');
+  return mod.withStepProgress(CreateProposalPage);
+}, { ssr: false });
