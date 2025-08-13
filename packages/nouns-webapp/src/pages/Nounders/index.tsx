@@ -77,7 +77,7 @@ const NoundersPage = () => {
         {bios.map((bio, index) => (
           <div key={`bio-${index}`} className="mb-4 text-center">
             <div className="flex flex-col items-center">
-              <img src={bio.image} alt={bio.name} className="mb-2 w-1/2 max-w-20 rounded-full" />
+              <img src={typeof bio.image === 'string' ? (bio.image as any) : (bio.image as any).src} alt={bio.name} className="mb-2 w-1/2 max-w-20 rounded-full" />
               <h4 className="text-base font-medium">
                 {bio.handle && (
                   <a

@@ -10,7 +10,7 @@ const NotFoundPage = () => {
   return (
     <Section fullWidth={false}>
       <Col lg={4}>
-        <Image src={_404img} fluid />
+        <Image src={typeof _404img === 'string' ? _404img : (_404img as any).src} fluid />
       </Col>
       <Col lg={8}>
         <h1 className={classes.heading}>
