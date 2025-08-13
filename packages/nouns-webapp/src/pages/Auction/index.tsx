@@ -1,6 +1,9 @@
+'use client';
+
 import React, { useEffect } from 'react';
 
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from '@/utils/react-router-shim';
+import { useRouter } from 'next/navigation';
 import { isNumber } from 'remeda';
 
 import Auction from '@/components/Auction';
@@ -20,7 +23,7 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
   const onDisplayAuctionNounId = Number(onDisplayAuction?.nounId);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (!lastAuctionNounId) return;
@@ -35,14 +38,14 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
       Number(auctionId) > lastAuctionNounId ||
       Number(auctionId) < 0
     ) {
-      navigate(nounPath(lastAuctionNounId));
+      router.push(nounPath(lastAuctionNounId));
       return;
     }
 
     if (Number(auctionId) !== onDisplayAuctionNounId) {
       dispatch(setOnDisplayAuctionNounId(Number(auctionId)));
     }
-  }, [auctionId, lastAuctionNounId, dispatch, navigate, onDisplayAuctionNounId]);
+  }, [auctionId, lastAuctionNounId, dispatch, router, onDisplayAuctionNounId]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
   const backgroundColor = isCoolBackground
