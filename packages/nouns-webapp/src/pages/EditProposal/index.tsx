@@ -10,13 +10,22 @@ import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
+import dynamic from 'next/dynamic';
 
-import EditProposalButton from '@/components/EditProposalButton/index';
-import ProposalActionModal from '@/components/ProposalActionsModal';
-import ProposalEditor from '@/components/ProposalEditor';
-import ProposalTransactions from '@/components/ProposalTransactions';
+// Dynamically import components to avoid SSR evaluation issues
+const EditProposalButton = dynamic(() => import('@/components/EditProposalButton/index'), {
+  ssr: false,
+});
+const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+  ssr: false,
+});
+const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+  ssr: false,
+});
+const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
+
 import { nounsTokenBuyerAddress } from '@/contracts';
-import Section from '@/layout/Section';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -531,4 +540,4 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   );
 };
 
-export default EditProposalPage;
+export default dynamic(() => Promise.resolve(EditProposalPage), { ssr: false });
