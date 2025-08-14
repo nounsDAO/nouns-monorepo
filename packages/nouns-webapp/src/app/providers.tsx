@@ -16,7 +16,6 @@ import { usePublicClient, WagmiProvider, useAccount } from 'wagmi';
 
 import { CustomConnectkitProvider } from '@/components/custom-connectkit-provider';
 import { Footer } from '@/components/footer';
-import NavBar from '@/components/nav-bar';
 import NetworkAlert from '@/components/network-alert';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
@@ -31,7 +30,7 @@ import {
   useWatchNounsAuctionHouseAuctionSettledEvent,
 } from '@/contracts';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { LanguageProvider } from '@/i18n/LanguageProvider';
+import { LanguageProvider } from '@/i18n/language-provider';
 import { setActiveAccount } from '@/state/slices/account';
 import {
   appendBid,
@@ -50,6 +49,8 @@ import { execute } from '@/subgraphs/execute';
 import { nounPath } from '@/utils/history';
 import { defaultChain, config as wagmiConfig } from '@/wagmi';
 import { clientFactory, latestAuctionsQuery } from '@/wrappers/subgraph';
+
+import NavBar from '@/components/nav-bar';
 
 const queryClient = new QueryClient();
 const client = clientFactory(config.app.subgraphApiUri);

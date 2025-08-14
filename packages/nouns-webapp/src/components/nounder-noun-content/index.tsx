@@ -17,7 +17,7 @@ import nounContentClasses from './nounder-noun-content.module.css';
 
 import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
 import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
-import bidBtnClasses from '@/components/bid-historyBt./bid-history-btn.module.css';
+import bidBtnClasses from '@/components/bid-history-btn/bid-history-btn.module.css';
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;
@@ -76,7 +76,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
               onPrevAuctionClick={onPrevAuctionClick}
             />
             <AuctionActivityDateHeadline startTime={mintTimestamp} />
-          ./auction-title-and-nav-wrapper>
+          </AuctionTitleAndNavWrapper>
           <Col lg={12}>
             <AuctionActivityNounTitle nounId={nounId} />
           </Col>

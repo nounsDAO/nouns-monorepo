@@ -13,8 +13,8 @@ import AuctionTimer from '@/components/auction-timer';
 import AuctionTitleAndNavWrapper from '@/components/auction-title-and-nav-wrapper';
 import Bid from '@/components/bid';
 import BidHistory from '@/components/bid-history';
-import BidHistoryBtn from '@/components/bid-historyBtn';
-import BidHistoryModal from '@/components/bid-historyModal';
+import BidHistoryBtn from '@/components/bid-history-btn';
+import BidHistoryModal from '@/components/bid-history-modal';
 import CurrentBid from '@/components/current-bid';
 import Holder from '@/components/holder';
 import NounInfoCard from '@/components/noun-info-card';
@@ -114,7 +114,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 />
               )}
               <AuctionActivityDateHeadline startTime={BigInt(auction.startTime)} />
-            ./auction-title-and-nav-wrapper>
+            </AuctionTitleAndNavWrapper>
             <Col lg={12}>
               <AuctionActivityNounTitle isCool={isCool} nounId={BigInt(auction.nounId)} />
             </Col>

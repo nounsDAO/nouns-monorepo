@@ -51,9 +51,7 @@ const NavBar = () => {
 
   const safePathname = pathname ?? '';
   const useStateBg =
-    safePathname === '/' ||
-    safePathname.includes('/noun/') ||
-    safePathname.includes('/auction/');
+    safePathname === '/' || safePathname.includes('/noun/') || safePathname.includes('/auction/');
 
   const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
 
@@ -90,7 +88,7 @@ const NavBar = () => {
         <Trans>Proposals</Trans>
       </Dropdown.Item>
       {candidatesNavItem}
-    ./nav-dropdown>
+    </NavDropdown>
   );
 
   return (
@@ -103,7 +101,7 @@ const NavBar = () => {
       >
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
-            <Link href="/" className={classes.navBarBrand}>
+            <Link href="/packages/nouns-webapp/public" className={classes.navBarBrand}>
               <Navbar.Brand>
                 <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
               </Navbar.Brand>
@@ -167,7 +165,12 @@ const NavBar = () => {
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
-                <Nav.Link as={Link} href="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+                <Nav.Link
+                  as={Link}
+                  href="/vote"
+                  className={classes.nounsNavLink}
+                  onClick={closeNav}
+                >
                   <NavBarButton
                     buttonText={<Trans>DAO</Trans>}
                     buttonIcon={<FontAwesomeIcon icon={faUsers} />}
@@ -256,7 +259,7 @@ const NavBar = () => {
                 >
                   Playground
                 </Dropdown.Item>
-              ./nav-dropdown>
+              </NavDropdown>
             </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
             <ConnectKitButton.Custom>

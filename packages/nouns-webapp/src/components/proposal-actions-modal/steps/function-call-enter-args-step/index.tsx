@@ -88,7 +88,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
     <div>
       <ModalTitle>
         <Trans>Add Function Call Arguments</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       {invalidArgument && (
         <div className={classes.invalid}>
