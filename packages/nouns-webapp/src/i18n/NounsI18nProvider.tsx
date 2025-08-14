@@ -5,24 +5,17 @@ import { I18nProvider } from '@lingui/react';
 
 import { DEFAULT_LOCALE, SupportedLocale } from './locales';
 
+// Per latest Lingui docs: import .po and load+activate directly
 export async function dynamicActivate(locale: SupportedLocale) {
   try {
-    // Use a standard import without the loader syntax
-    const catalog = await import(`../locales/${locale}.po`);
-
-    // Check if catalog loaded successfully
-    if (catalog && (catalog.messages || catalog.default)) {
-      // Load the messages into i18n
-      i18n.load(locale, catalog.messages || catalog.default);
-    } else {
-      console.error(`Catalog loaded but no messages found for ${locale}`);
-    }
+    const { messages } = await import(`../locales/${locale}.po`);
+    // Prefer the modern API that both loads and activates in one call
+    i18n.loadAndActivate({ locale, messages });
   } catch (error) {
     console.error(`Failed to load messages for ${locale}:`, error);
+    // Fallback to just activating the locale to avoid crashing the app
+    i18n.activate(locale);
   }
-
-  // Activate the locale
-  i18n.activate(locale);
 }
 
 interface ProviderProps {
@@ -43,7 +36,7 @@ export function NounsI18nProvider({ locale, onActivate, children }: Readonly<Pro
 
   // Initialize the locale immediately if it is DEFAULT_LOCALE, so that keys are shown while the translation messages load.
   // This renders the translation _keys_, not the translation _messages_, which is only acceptable while loading the DEFAULT_LOCALE,
-  // as [there are no "default" messages](https://github.com/lingui/js-lingui/issues/388#issuecomment-497779030).
+  // as [there are no "default" messages"](https://github.com/lingui/js-lingui/issues/388#issuecomment-497779030).
   // See https://github.com/lingui/js-lingui/issues/1194#issuecomment-1068488619.
   if (i18n.locale == undefined && locale === DEFAULT_LOCALE) {
     i18n.load(DEFAULT_LOCALE, {});
