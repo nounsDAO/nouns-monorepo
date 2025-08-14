@@ -1,3 +1,5 @@
+'use client';
+
 import { Trans } from '@lingui/react/macro';
 
 import pfp4156 from '../../assets/nounder-pfps/4156.png';
