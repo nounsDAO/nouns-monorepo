@@ -11,7 +11,7 @@ import { useAuctionBids } from '@/wrappers/onDisplayAuction';
 
 import classes from './bid-history-modal.module.css';
 
-import BidHistoryModalRow from '@/components/bid-history-modalRow';
+import BidHistoryModalRow from '@/components/bid-history-modal-row';
 
 interface BackdropProps {
   onDismiss: () => void;

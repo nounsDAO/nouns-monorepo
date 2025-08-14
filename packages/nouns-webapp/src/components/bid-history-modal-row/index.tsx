@@ -13,7 +13,7 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { Address, Bid } from '@/utils/types';
 
-import classes from './bid-history-modalRow.module.css';
+import classes from './bid-history-modal-row.module.css';
 
 import auctionActivityClasses from '@/components/auction-activity/bid-history.module.css';
 
