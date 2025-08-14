@@ -48,7 +48,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
     <div>
       <ModalTitle>
         <Trans>Add Transfer Funds Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <BrandDropdown
         label={'Currency'}

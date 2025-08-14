@@ -72,7 +72,7 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
     <div>
       <ModalTitle>
         <Trans>Review Function Call Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <div className={classes.row}>
         <div>

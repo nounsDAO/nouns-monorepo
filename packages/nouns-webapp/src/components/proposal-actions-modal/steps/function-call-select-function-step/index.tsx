@@ -138,7 +138,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     <div>
       <ModalTitle>
         <Trans>Add Function Call Arguments</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <BrandTextEntry
         label={'Contract Address'}

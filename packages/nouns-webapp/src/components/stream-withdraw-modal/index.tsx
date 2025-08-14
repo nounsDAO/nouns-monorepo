@@ -83,7 +83,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
       <>
         <ModalTitle>
           <Trans>Withdraw from Stream</Trans>
-        ./modal-title>
+        </ModalTitle>
         <div className={classes.center}>
           {(withdrawTokensState.status === 'Mining' ||
             !withdrawableBalance ||
@@ -127,7 +127,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
     <>
       <ModalTitle>
         <Trans>Withdraw from Stream</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <ModalLabel>
         <Trans>Available to withdraw</Trans>

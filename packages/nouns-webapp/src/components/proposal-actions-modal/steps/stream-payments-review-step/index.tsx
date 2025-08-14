@@ -55,7 +55,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
       />
       <ModalTitle>
         <Trans>Review Streaming Payment Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <ModalLabel>
         <Trans>Stream</Trans>

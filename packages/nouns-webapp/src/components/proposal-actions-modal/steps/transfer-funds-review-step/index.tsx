@@ -86,7 +86,7 @@ const TransferFundsReviewStep: React.FC<FinalProposalActionStepProps> = props =>
     <div>
       <ModalTitle>
         <Trans>Review Transfer Funds Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <span className={classes.label}>Pay</span>
       <div className={classes.text}>

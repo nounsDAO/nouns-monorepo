@@ -33,7 +33,7 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
     <div>
       <ModalTitle>
         <Trans>Add Proposal Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <ModalSubTitle>
         <Trans>

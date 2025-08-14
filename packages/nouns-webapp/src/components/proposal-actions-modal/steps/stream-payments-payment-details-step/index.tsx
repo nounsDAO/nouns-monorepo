@@ -45,7 +45,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
     <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <ModalSubTitle>
         <Trans>At this time only USDC and WETH streams are supported</Trans>

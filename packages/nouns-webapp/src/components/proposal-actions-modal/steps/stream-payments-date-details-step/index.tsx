@@ -27,7 +27,7 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
     <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
-      ./modal-title>
+      </ModalTitle>
 
       <ModalSubTitle>
         <Trans>
