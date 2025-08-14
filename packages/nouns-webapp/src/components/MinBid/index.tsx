@@ -11,7 +11,8 @@ interface MinBidProps {
 }
 
 const MinBid: React.FC<MinBidProps> = ({ minBid, onClick }) => {
-  const imgSrc = typeof nounPointerImg === 'string' ? nounPointerImg : (nounPointerImg as any).src;
+  const imgSrc =
+    typeof nounPointerImg === 'string' ? nounPointerImg : (nounPointerImg as { src: string }).src;
   return (
     <div className={classes.minBidWrapper} onClick={onClick}>
       <img src={imgSrc} alt="Pointer noun" />
