@@ -3,7 +3,7 @@
  */
 import { ReactNode, useCallback } from 'react';
 
-import { useActiveLocale } from '../hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/useActivateLocale';
 
 import { SupportedLocale } from './locales';
 import { dynamicActivate, NounsI18nProvider } from './NounsI18nProvider';
