@@ -12,7 +12,7 @@ import { useAccount } from 'wagmi';
 import { Spinner } from '@/components/spinner';
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
-import VoteSignalGroup from './vote-signalGroup';
+import VoteSignalGroup from './vote-signal-group';
 
 type VoteSignalsProps = {
   proposalId?: string;
