@@ -1,4 +1,4 @@
-import NounsPage from '@/pages/NounsPage';
+import NounsPage from '@/components/NounsPage';
 
 export default function Nouns() {
   return <NounsPage />;

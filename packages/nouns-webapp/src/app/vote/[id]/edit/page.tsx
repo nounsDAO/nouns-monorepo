@@ -1,4 +1,4 @@
-import EditProposalPage from '@/pages/EditProposal';
+import EditProposalPage from '@/components/EditProposalPage';
 
 export default function VoteEdit() {
   return <EditProposalPage match={{ params: { id: ':id' } }} />;

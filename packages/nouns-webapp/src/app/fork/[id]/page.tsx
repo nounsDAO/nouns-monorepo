@@ -1,4 +1,4 @@
-import ForkPage from '@/pages/Fork';
+import ForkPage from '@/components/ForkPage';
 
 export default function ForkId() {
   return <ForkPage />;
