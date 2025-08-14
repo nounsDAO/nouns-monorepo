@@ -8,7 +8,7 @@ import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableS
 
 import classes from './delegate-grouped-noun-image-vote-table.module.css';
 
-import VoteCardPager from '@/components/vote-cardPager';
+import VoteCardPager from '@/components/vote-card-pager';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
