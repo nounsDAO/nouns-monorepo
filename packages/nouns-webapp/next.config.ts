@@ -7,12 +7,13 @@ const nextConfig: NextConfig = {
     // Enable webpack 5 features
     esmExternals: true,
 
-    // Enable server components
+    // Enable server components and SWC plugins
     swcPlugins: [
       [
         "@lingui/swc-plugin",
         {
-          // Additional Configuration
+          // Additional Configuration for Lingui SWC plugin
+          rootMode: "upward",
         },
       ],
     ],
@@ -28,14 +29,6 @@ const nextConfig: NextConfig = {
 
   // Webpack configuration
   webpack: (config, { isServer }) => {
-    // Lingui loader for .po files
-    // config.module.rules.push({
-    //   test: /\.po$/,
-    //   use: {
-    //     loader: '@lingui/loader',
-    //   },
-    // });
-
     // SVGR support for SVG imports
     config.module.rules.push({
       test: /\.svg$/,
@@ -108,6 +101,22 @@ const nextConfig: NextConfig = {
       : [ignoreFn];
 
     return config;
+  },
+
+  // Compiler configuration (SWC-specific)
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
+
+    // Enable SWC relay plugin if you're using Relay
+    // relay: {
+    //   src: './src',
+    //   artifactDirectory: './src/__generated__',
+    //   language: 'typescript',
+    // },
+
+    // Enable styled-components support if needed
+    // styledComponents: true,
   },
 
   // TypeScript configuration
