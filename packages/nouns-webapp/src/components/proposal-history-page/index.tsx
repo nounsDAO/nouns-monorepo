@@ -21,7 +21,7 @@ import ProposalContent from '@/components/proposal-content';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 
-import VersionTab from './VersionTab';
+import VersionTab from './version-tab';
 
 import remarkBreaks from 'remark-breaks';
 

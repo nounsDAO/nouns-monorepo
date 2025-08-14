@@ -21,13 +21,14 @@ import {
 } from '@/wrappers/nounsData';
 import { Link, useParams } from 'react-router';
 
-import ProposalContent from '../../components/proposal-content';
-import classes from '../proposal-history/vote.module.css';
-import VersionTab from '../ProposalHistory/VersionTab';
-
-import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
-import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
+import ProposalContent from '@/components/proposal-content';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
+import classes from '@/components/proposal-history-page/vote.module.css';
+
+import VersionTab from '@/components/proposal-history-page/version-tab';
+
+import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
+import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
