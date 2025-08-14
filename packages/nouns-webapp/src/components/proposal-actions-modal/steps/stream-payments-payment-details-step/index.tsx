@@ -65,7 +65,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
       >
         <option value="USDC">USDC</option>
         <option value="WETH">WETH</option>
-      ./brand-dropdown>
+      </BrandDropdown>
 
       <BrandNumericEntry
         label={'Amount'}

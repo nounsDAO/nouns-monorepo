@@ -174,7 +174,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
                 {(item as AbiFunction).name}
               </option>
             ))}
-      ./brand-dropdown>
+      </BrandDropdown>
 
       <ABIUpload
         abiFileName={abiFileName}

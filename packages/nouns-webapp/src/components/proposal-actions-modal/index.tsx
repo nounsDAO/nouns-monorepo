@@ -2,10 +2,9 @@ import type { Abi } from 'viem';
 
 import React, { SetStateAction, useState } from 'react';
 
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { Address } from '@/utils/types';
 import { ProposalTransaction } from '@/wrappers/nounsDao';
-
-import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 
 import FunctionCallEnterArgsStep from './steps/function-call-enter-args-step';
 import FunctionCallReviewStep from './steps/function-call-review-step';
@@ -178,7 +177,7 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.STREAM_PAYMENT_REVIEW:
       return (
         <StreamPaymentsReviewStep
-          onNextBtnClick={e => {
+          onNextBtnClick={(e: ProposalTransaction) => {
             if (e && typeof e !== 'object') {
               return;
             }

@@ -59,7 +59,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         <option value="USDC">USDC</option>
         <option value="ETH">ETH</option>
         <option value="STETH">Lido Staked ETH</option>
-      ./brand-dropdown>
+      </BrandDropdown>
 
       <BrandNumericEntry
         label={'Amount'}
