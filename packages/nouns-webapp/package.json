@@ -8,7 +8,7 @@
     "build": "next build",
     "check": "tsc --noEmit --skipLibCheck",
     "clean": "rimraf .next out .netlify",
-    "dev": "next dev --turbo --verbose",
+    "dev": "next dev",
     "dev:sepolia": "NEXT_PUBLIC_MODE=sepolia next dev",
     "graphql-codegen": "graphql-codegen-esm --config codegen.config.ts",
     "graphql-codegen:watch": "graphql-codegen-esm --config codegen.config.ts --watch",
