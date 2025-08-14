@@ -36,7 +36,7 @@ dayjs.extend(timezone);
 dayjs.extend(advanced);
 
 const ProposalHistory = () => {
-  const { id, versionNumber } = useParams<{ id: string; versionNumber?: string }>();
+  const { id, version: versionNumber } = useParams<{ id: string; version?: string }>();
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
   const [showToast, setShowToast] = useState(true);
