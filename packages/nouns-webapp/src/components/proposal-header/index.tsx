@@ -12,11 +12,11 @@ import HoverCard from '@/components/hover-card';
 import { transactionIconLink } from '@/components/proposal-content';
 import ProposalStatus from '@/components/proposal-status';
 import ShortAddress from '@/components/short-address';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
-import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
+import { useBlockTimestamp } from '@/hooks/use-block-timestamp';
 import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { isMobileScreen } from '@/utils/isMobile';
+import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import {
   Proposal,

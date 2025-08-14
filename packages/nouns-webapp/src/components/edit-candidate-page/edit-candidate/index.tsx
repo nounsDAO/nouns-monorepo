@@ -26,8 +26,8 @@ const ProposalTransactions = dynamic(() => import('@/components/proposal-transac
 const Section = dynamic(() => import('@/components/section'), { ssr: false });
 
 import { nounsTokenBuyerAddress } from '@/contracts';
-import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
+import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {

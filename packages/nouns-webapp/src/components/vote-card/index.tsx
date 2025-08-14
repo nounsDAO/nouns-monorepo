@@ -7,10 +7,10 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
 import VoteProgressBar from '@/components/vote-progress-bar';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { cn } from '@/lib/utils';
-import { ensCacheKey } from '@/utils/ensLookup';
-import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
+import { ensCacheKey } from '@/utils/ens-lookup';
+import { lookupNNSOrENS } from '@/utils/lookup-nns-or-ens';
 import { Address } from '@/utils/types';
 import { Proposal } from '@/wrappers/nounsDao';
 

@@ -16,9 +16,9 @@ import { SupportedCurrency } from '@/components/proposal-actions-modal/steps/tra
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import StartOrEndTime from '@/components/start-or-end-time';
 import { usdcAddress } from '@/contracts';
-import { countDecimals } from '@/utils/numberUtils';
-import { formatTokenAmount } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
-import { contract2humanUSDCFormat } from '@/utils/usdcUtils';
+import { countDecimals } from '@/utils/number-utils';
+import { formatTokenAmount } from '@/utils/streaming-payment-utils/streaming-payment-utils';
+import { contract2humanUSDCFormat } from '@/utils/usdc-utils';
 import { defaultChain } from '@/wagmi';
 import {
   useElapsedTime,

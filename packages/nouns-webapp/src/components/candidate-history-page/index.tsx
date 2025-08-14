@@ -14,7 +14,7 @@ import remarkBreaks from 'remark-breaks';
 
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import Section from '@/components/section';
-import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import {
   ProposalCandidateVersionContent,
   useCandidateProposalVersions,

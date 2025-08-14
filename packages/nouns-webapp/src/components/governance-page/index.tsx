@@ -12,7 +12,7 @@ import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
 import Section from '@/components/section';
-import { useTreasuryBalance, useTreasuryUSDValue } from '@/hooks/useTreasuryBalance';
+import { useTreasuryBalance, useTreasuryUSDValue } from '@/hooks/use-treasury-balance';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 
 import classes from './governance.module.css';

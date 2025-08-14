@@ -2,7 +2,7 @@ import type { Address } from '@/utils/types';
 
 import React from 'react';
 
-import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { useReverseENSLookUp } from '@/utils/ens-lookup';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 
 interface EnsOrLongAddressProps {

@@ -30,7 +30,7 @@ const Section = dynamic(() => import('@/components/section'), { ssr: false });
 import config from '@/config';
 import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';
 import {
   ProposalState,

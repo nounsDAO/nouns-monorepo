@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/hooks';
-import { compareBids } from '@/utils/compareBids';
-import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounderNoun';
+import { compareBids } from '@/utils/compare-bids';
+import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounder-noun';
 import { Address, Bid, BidEvent } from '@/utils/types';
 
 import { Auction } from './nounsAuction';

@@ -16,8 +16,8 @@ import {
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
-} from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
-import { human2ContractUSDCFormat } from '@/utils/usdcUtils';
+} from '@/utils/streaming-payment-utils/streaming-payment-utils';
+import { human2ContractUSDCFormat } from '@/utils/usdc-utils';
 import { defaultChain } from '@/wagmi';
 
 interface UseStreamPaymentTransactionsProps {

@@ -7,8 +7,8 @@ import clsx from 'clsx';
 
 import _trophy from '@/assets/icons/trophy.svg';
 import TruncatedAmount from '@/components/truncated-amount';
-import { shortENS, formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
-import { useReverseENSLookUp } from '@/utils/ensLookup';
+import { shortENS, formatShortAddress } from '@/utils/address-and-ens-display-utils';
+import { useReverseENSLookUp } from '@/utils/ens-lookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { Address, Bid } from '@/utils/types';

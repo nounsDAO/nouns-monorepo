@@ -1,6 +1,6 @@
 'use client';
 
-import { useBreakpointValues } from '@/hooks/useBreakpointValues';
+import { useBreakpointValues } from '@/hooks/use-breakpoint-values';
 
 const CalendarPage = () => {
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;

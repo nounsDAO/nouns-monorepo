@@ -5,7 +5,7 @@ import { usePublicClient } from 'wagmi';
 import { cache, cacheKey, CHAIN_ID } from '@/config';
 
 import { Address } from '@/utils/types';
-import { lookupNNSOrENS } from './lookupNNSOrENS';
+import { lookupNNSOrENS } from './lookup-nns-or-ens';
 
 export const ensCacheKey = (address: string) => {
   return cacheKey(cache.ens, CHAIN_ID, address);

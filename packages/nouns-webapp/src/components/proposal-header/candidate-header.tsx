@@ -9,10 +9,10 @@ import ByLineHoverCard from '@/components/by-line-hover-card';
 import HoverCard from '@/components/hover-card';
 import { transactionIconLink } from '@/components/proposal-content';
 import ShortAddress from '@/components/short-address';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { isMobileScreen } from '@/utils/isMobile';
+import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 

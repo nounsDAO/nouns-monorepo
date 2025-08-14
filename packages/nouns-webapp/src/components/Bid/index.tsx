@@ -12,7 +12,7 @@ import {
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
 } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Auction } from '@/wrappers/nounsAuction';
 
 import classes from './bid.module.css';

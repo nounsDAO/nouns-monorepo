@@ -15,7 +15,7 @@ import {
   buildEtherscanHoldingsLink,
   buildEtherscanTxLink,
 } from '@/utils/etherscan';
-import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 

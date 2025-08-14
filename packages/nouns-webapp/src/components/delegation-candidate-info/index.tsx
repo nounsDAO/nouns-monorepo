@@ -6,8 +6,8 @@ import { blo } from 'blo';
 import BrandSpinner from '@/components/brand-spinner';
 import DelegationCandidateVoteCountInfo from '@/components/delegation-candidate-vote-count-info';
 import ShortAddress from '@/components/short-address';
-import { formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
-import { usePickByState } from '@/utils/pickByState';
+import { formatShortAddress } from '@/utils/address-and-ens-display-utils';
+import { usePickByState } from '@/utils/pick-by-state';
 import { Address } from '@/utils/types';
 import { useAccountVotes } from '@/wrappers/nounToken';
 

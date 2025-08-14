@@ -3,7 +3,7 @@
  */
 import { ReactNode } from 'react';
 
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 
 import { NounsI18nProvider } from './nouns-i18n-provider';
 

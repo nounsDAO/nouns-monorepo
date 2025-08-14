@@ -11,7 +11,7 @@ import LanguageSelectionModal from '@/components/language-selection-modal';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
-import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
 import classes from './nav-local-switcher.module.css';
 

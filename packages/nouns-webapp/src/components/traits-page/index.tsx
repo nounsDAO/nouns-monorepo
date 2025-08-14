@@ -21,8 +21,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { traitCategory } from '@/lib/traitCategory';
-import { traitName } from '@/lib/traitName';
+import { traitCategory } from '@/lib/trait-category';
+import { traitName } from '@/lib/trait-name';
 import { svg2png } from '@/utils/svg2png';
 
 interface TraitItem {

@@ -19,12 +19,12 @@ import DelegationModal from '@/components/delegation-modal';
 import ProposalStatus from '@/components/proposal-status';
 import config from '@/config';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/components/section';
 import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
-import { isMobileScreen } from '@/utils/isMobile';
+import { isMobileScreen } from '@/utils/is-mobile';
 import { isProposalUpdatable } from '@/utils/proposals';
 import {
   PartialProposal,

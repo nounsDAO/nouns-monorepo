@@ -1,7 +1,7 @@
 import React from 'react';
 
 import LegacyNoun from '@/components/legacy-noun';
-import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
+import { getGrayBackgroundSVG } from '@/utils/gray-background-svg';
 
 import classes from './gray-circle.module.css';
 

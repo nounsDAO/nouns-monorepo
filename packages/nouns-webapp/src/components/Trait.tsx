@@ -4,7 +4,7 @@ import { ImageData } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
 import { useQuery } from '@tanstack/react-query';
 
-import { traitCategory } from '@/lib/traitCategory';
+import { traitCategory } from '@/lib/trait-category';
 import { INounSeed } from '@/wrappers/nounToken';
 
 export interface TraitProps extends HTMLAttributes<HTMLImageElement> {

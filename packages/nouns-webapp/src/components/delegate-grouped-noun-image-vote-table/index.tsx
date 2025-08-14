@@ -4,7 +4,7 @@ import DelegateHoverCard from '@/components/delegate-hover-card';
 import { GrayCircle } from '@/components/gray-circle';
 import HoverCard from '@/components/hover-card';
 import TightStackedCircleNouns from '@/components/tight-stacked-circle-nouns';
-import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
+import { pseudoRandomPredictableShuffle } from '@/utils/pseudo-random-predictable-shuffle';
 
 import classes from './delegate-grouped-noun-image-vote-table.module.css';
 

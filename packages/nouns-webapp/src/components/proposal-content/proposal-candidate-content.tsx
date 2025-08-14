@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
-import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { ProposalCandidate } from '@/wrappers/nounsData';
 
 import classes from './proposal-content.module.css';

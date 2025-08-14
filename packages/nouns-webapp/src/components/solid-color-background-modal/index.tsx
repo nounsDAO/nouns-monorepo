@@ -11,7 +11,7 @@ import {
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
 } from '@/utils/css-transition-utils';
-import { isMobileScreen } from '@/utils/isMobile';
+import { isMobileScreen } from '@/utils/is-mobile';
 
 import classes from './solid-color-background-modal.module.css';
 

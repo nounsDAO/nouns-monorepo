@@ -9,9 +9,9 @@ import { useAccount, useEnsAddress } from 'wagmi';
 import BrandSpinner from '@/components/brand-spinner';
 import DelegationCandidateInfo from '@/components/delegation-candidate-info';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
-import { usePickByState } from '@/utils/pickByState';
+import { usePickByState } from '@/utils/pick-by-state';
 import { Address } from '@/utils/types';
 import { useProposalThreshold } from '@/wrappers/nounsDao';
 import {

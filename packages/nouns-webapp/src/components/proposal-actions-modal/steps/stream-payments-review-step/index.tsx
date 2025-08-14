@@ -12,12 +12,12 @@ import ModalTextPrimary from '@/components/modal-text-primary';
 import ModalTitle from '@/components/modal-title';
 import ShortAddress from '@/components/short-address';
 import { nounsGovernorAddress } from '@/contracts';
-import useStreamPaymentTransactions from '@/hooks/useStreamPaymentTransactions';
+import useStreamPaymentTransactions from '@/hooks/use-stream-payment-transactions';
 import {
   formatTokenAmount,
   getTokenAddressForCurrency,
   usePredictStreamAddress,
-} from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+} from '@/utils/streaming-payment-utils/streaming-payment-utils';
 import { unixToDateString } from '@/utils/timeUtils';
 import { defaultChain } from '@/wagmi';
 

@@ -64,7 +64,7 @@ import {
   useWriteNounsGovernorUpdateProposalTransactions,
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
-import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { useBlockTimestamp } from '@/hooks/use-block-timestamp';
 import { defaultChain } from '@/wagmi';
 
 import {

@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 
 import { ConnectKitProvider } from 'connectkit';
 
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { SupportedLocale } from '@/i18n/locales';
 
 export const CustomConnectkitProvider: FC<PropsWithChildren> = ({ children }) => {

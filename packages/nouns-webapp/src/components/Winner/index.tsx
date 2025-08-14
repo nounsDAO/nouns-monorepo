@@ -9,7 +9,7 @@ import { Col, Row } from 'react-bootstrap';
 import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
 import classes from './winner.module.css';

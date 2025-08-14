@@ -1,6 +1,6 @@
 import { useReadContract, useWriteContract } from 'wagmi';
 
-import streamABI from '@/utils/streamingPaymentUtils/stream.abi.json';
+import streamABI from '@/utils/streaming-payment-utils/stream.abi.json';
 import { Address } from '@/utils/types';
 
 const abi = streamABI;

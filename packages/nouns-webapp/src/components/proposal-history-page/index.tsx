@@ -27,7 +27,7 @@ import remarkBreaks from 'remark-breaks';
 
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import ProposalStatus from '@/components/proposal-status';
-import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 
 import { Link, useParams } from 'react-router';
 

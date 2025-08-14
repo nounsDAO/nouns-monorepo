@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
-import { usePickByState } from '@/utils/colorResponsiveUIUtils';
+import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
 import classes from './nav-dropdown.module.css';
 

@@ -33,14 +33,14 @@ import VoteModal from '@/components/vote-modal';
 import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
-import { getNounVotes } from '@/utils/getNounsVotes';
+import { getNounVotes } from '@/utils/get-nouns-votes';
 import { isProposalUpdatable } from '@/utils/proposals';
-import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
+import { parseStreamCreationCallData } from '@/utils/streaming-payment-utils/streaming-payment-utils';
 import {
   PartialProposal,
   ProposalState,

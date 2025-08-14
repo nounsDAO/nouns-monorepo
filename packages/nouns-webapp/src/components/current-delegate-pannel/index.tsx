@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import ShortAddress from '@/components/short-address';
 import { useReadNounsTokenDelegates } from '@/contracts';
-import { formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
+import { formatShortAddress } from '@/utils/address-and-ens-display-utils';
 
 import classes from './current-delegate-pannel.module.css';
 

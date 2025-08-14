@@ -12,8 +12,8 @@ import { useAccount } from 'wagmi';
 import AddNounsToForkModal from '@/components/add-nouns-to-fork-modal';
 import ForkingPeriodTimer from '@/components/forking-period-timer';
 import Section from '@/components/section';
-import useForkTreasuryBalance from '@/hooks/useForkTreasuryBalance';
-import { useScrollToLocation } from '@/hooks/useScrollToLocation';
+import useForkTreasuryBalance from '@/hooks/use-fork-treasury-balance';
+import { useScrollToLocation } from '@/hooks/use-scroll-to-location';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
 import {
