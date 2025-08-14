@@ -10,13 +10,13 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Col, Row } from 'react-bootstrap';
 
-import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
-import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
+import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
+import headerClasses from '@/components/proposal-header/proposal-header.module.css';
 import Section from '@/layout/Section';
 import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
 import classes from './Vote.module.css';
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import ProposalContent from '@/components/ProposalContent';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
+import ProposalContent from '@/components/proposal-content';
 
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
@@ -25,8 +25,8 @@ import VersionTab from './VersionTab';
 
 import remarkBreaks from 'remark-breaks';
 
-import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
-import ProposalStatus from '@/components/ProposalStatus';
+import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
+import ProposalStatus from '@/components/proposal-status';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 
 import { Link, useParams } from 'react-router';

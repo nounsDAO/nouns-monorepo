@@ -1,8 +1,8 @@
 import React from 'react';
 
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+import NavBarButton, { NavBarButtonStyle } from '../nav-bar-button';
 
-import classes from './ModalBottomButtonRow.module.css';
+import classes from './modal-bottom-button-row.module.css';
 
 export interface ModalBottomButtonRowProps {
   onPrevBtnClick: (e?: any) => void;

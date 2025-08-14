@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
-import classes from './BrandDropdown.module.css';
+import classes from './brand-dropdown.module.css';
 
 interface BrandDropdownProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;

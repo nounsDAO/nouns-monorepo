@@ -2,7 +2,7 @@ import React from 'react';
 
 import clsx from 'clsx';
 
-import classes from './BrandDatePicker.module.css';
+import classes from './brand-date-picker.module.css';
 
 interface BrandDatePickerProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

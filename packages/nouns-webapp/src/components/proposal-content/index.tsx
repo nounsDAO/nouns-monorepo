@@ -8,7 +8,7 @@ import remarkBreaks from 'remark-breaks';
 import { isAddress } from 'viem';
 
 import linkIcon from '@/assets/icons/Link.svg';
-import EnsOrLongAddress from '@/components/EnsOrLongAddress';
+import EnsOrLongAddress from '@/components/ens-or-long-address';
 import { nounsTokenAddress } from '@/contracts';
 import {
   buildEtherscanAddressLink,
@@ -19,8 +19,8 @@ import { processProposalDescriptionText } from '@/utils/processProposalDescripti
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
-import classes from './ProposalContent.module.css';
-import ProposalTransactions from './ProposalTransactions';
+import classes from './proposal-content.module.css';
+import ProposalTransactions from './proposal-transactions';
 
 interface ProposalContentProps {
   description: string;

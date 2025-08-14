@@ -2,7 +2,7 @@ import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import classes from './AuctionTitleAndNavWrapper.module.css';
+import classes from './auction-title-and-nav-wrapper.module.css';
 
 import AuctionTitleAndNavWrapper from './index';
 
@@ -12,7 +12,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div data-testid="child-element">{testText}</div>
-      </AuctionTitleAndNavWrapper>,
+      ./auction-title-and-nav-wrapper>,
     );
 
     const childElement = screen.getByTestId('child-element');
@@ -24,7 +24,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div>Test Content</div>
-      </AuctionTitleAndNavWrapper>,
+      ./auction-title-and-nav-wrapper>,
     );
 
     const container = screen.getByText('Test Content').parentElement;
@@ -35,7 +35,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div>Test Content</div>
-      </AuctionTitleAndNavWrapper>,
+      ./auction-title-and-nav-wrapper>,
     );
 
     const container = screen.getByText('Test Content').parentElement;
@@ -47,7 +47,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
       <AuctionTitleAndNavWrapper>
         <div data-testid="first-child">First Child</div>
         <div data-testid="second-child">Second Child</div>
-      </AuctionTitleAndNavWrapper>,
+      ./auction-title-and-nav-wrapper>,
     );
 
     expect(screen.getByTestId('first-child')).toBeInTheDocument();

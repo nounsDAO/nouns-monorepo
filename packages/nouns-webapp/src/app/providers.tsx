@@ -14,11 +14,11 @@ import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider, useAccount } from 'wagmi';
 
-import { CustomConnectkitProvider } from '@/components/CustomConnectkitProvider';
-import { Footer } from '@/components/Footer';
-import NavBar from '@/components/NavBar';
-import NetworkAlert from '@/components/NetworkAlert';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import { CustomConnectkitProvider } from '@/components/custom-connectkit-provider';
+import { Footer } from '@/components/footer';
+import NavBar from '@/components/nav-bar';
+import NetworkAlert from '@/components/network-alert';
+import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import config, { CHAIN_ID } from '@/config';

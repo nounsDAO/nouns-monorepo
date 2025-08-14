@@ -9,7 +9,7 @@ import { FormControl } from 'react-bootstrap';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
-import { Spinner } from '@/components/Spinner';
+import { Spinner } from '@/components/spinner';
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
 
 import VoteSignalGroup from './VoteSignalGroup';

@@ -1,4 +1,4 @@
-import classes from './NavBarItem.module.css';
+import classes from './nav-bar-item.module.css';
 
 const NavBarItem: React.FC<{
   children: React.ReactNode;

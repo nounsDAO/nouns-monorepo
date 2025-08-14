@@ -6,9 +6,9 @@ import { Collapse, FormControl } from 'react-bootstrap';
 import { isAddress } from 'viem';
 import { useAccount, useEnsAddress } from 'wagmi';
 
-import BrandSpinner from '@/components/BrandSpinner';
-import DelegationCandidateInfo from '@/components/DelegationCandidateInfo';
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import BrandSpinner from '@/components/brand-spinner';
+import DelegationCandidateInfo from '@/components/delegation-candidate-info';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePickByState } from '@/utils/pickByState';
@@ -21,9 +21,9 @@ import {
   useUserDelegatee,
 } from '@/wrappers/nounToken';
 
-import classes from './ChangeDelegatePanel.module.css';
+import classes from './change-delegate-panel.module.css';
 
-import currentDelegatePannelClasses from '@/components/CurrentDelegatePannel/CurrentDelegatePannel.module.css';
+import currentDelegatePannelClasses from '@/components/current-delegate-pannel/current-delegate-pannel.module.css';
 
 interface ChangeDelegatePanelProps {
   onDismiss: () => void;

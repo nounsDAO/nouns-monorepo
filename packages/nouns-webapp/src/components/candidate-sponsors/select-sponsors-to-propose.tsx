@@ -6,13 +6,13 @@ import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import link from '@/assets/icons/Link.svg';
-import ShortAddress from '@/components/ShortAddress';
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import ShortAddress from '@/components/short-address';
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePropose } from '@/wrappers/nounsDao';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nounsData';
 
-import classes from './SelectSponsorsToPropose.module.css';
+import classes from './select-sponsors-to-propose.module.css';
 import { Address, Hex } from '@/utils/types';
 
 type Props = {

@@ -3,13 +3,13 @@ import React, { HTMLAttributes, useState } from 'react';
 import clsx from 'clsx';
 import { Dropdown } from 'react-bootstrap';
 
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 
-import classes from './NavDropdown.module.css';
+import classes from './nav-dropdown.module.css';
 
-import navDropdownClasses from '@/components/NavBar/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;

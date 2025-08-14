@@ -2,7 +2,7 @@ import React from 'react';
 
 import clsx from 'clsx';
 
-import classes from './BrandTextEntry.module.css';
+import classes from './brand-text-entry.module.css';
 
 interface BrandTextEntryProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

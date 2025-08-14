@@ -9,8 +9,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 
-import AddNounsToForkModal from '@/components/AddNounsToForkModal';
-import ForkingPeriodTimer from '@/components/ForkingPeriodTimer';
+import AddNounsToForkModal from '@/components/add-nouns-to-fork-modal';
+import ForkingPeriodTimer from '@/components/forking-period-timer';
 import useForkTreasuryBalance from '@/hooks/useForkTreasuryBalance';
 import { useScrollToLocation } from '@/hooks/useScrollToLocation';
 import Section from '@/layout/Section';
@@ -28,7 +28,7 @@ import {
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import NotFoundPage from '../NotFound';
+import NotFoundPage from '../not-found';
 
 import DeployForkButton from './DeployForkButton';
 import classes from './Fork.module.css';

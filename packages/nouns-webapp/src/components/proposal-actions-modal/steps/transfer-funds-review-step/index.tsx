@@ -3,9 +3,9 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { encodeFunctionData, parseAbi, parseEther } from 'viem';
 
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalTitle from '@/components/ModalTitle';
-import ShortAddress from '@/components/ShortAddress';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalTitle from '@/components/modal-title';
+import ShortAddress from '@/components/short-address';
 import { nounsPayerAbi, stEthAddress, nounsPayerAddress } from '@/contracts';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -13,7 +13,7 @@ import { defaultChain } from '@/wagmi';
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 
-import classes from './TransferFundsReviewStep.module.css';
+import classes from './transfer-funds-review-step.module.css';
 
 type ProposalAction = {
   address: Address;
@@ -86,7 +86,7 @@ const TransferFundsReviewStep: React.FC<FinalProposalActionStepProps> = props =>
     <div>
       <ModalTitle>
         <Trans>Review Transfer Funds Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <span className={classes.label}>Pay</span>
       <div className={classes.text}>

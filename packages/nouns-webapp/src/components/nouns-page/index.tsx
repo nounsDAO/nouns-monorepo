@@ -8,8 +8,8 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { motion } from 'motion/react';
 import { range } from 'remeda';
 
-import { Noun } from '@/components/Noun';
-import { Trait } from '@/components/Trait';
+import { Noun } from '@/components/noun';
+import { Trait } from '@/components/trait';
 import { Button } from '@/components/ui/button';
 import {
   Select,

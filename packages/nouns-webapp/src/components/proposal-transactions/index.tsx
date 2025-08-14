@@ -5,7 +5,7 @@ import xIcon from '@/assets/x-icon.png';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { ProposalTransaction } from '@/wrappers/nounsDao';
 
-import classes from './ProposalTransactions.module.css';
+import classes from './proposal-transactions.module.css';
 
 interface ProposalTransactionsProps {
   className?: string;

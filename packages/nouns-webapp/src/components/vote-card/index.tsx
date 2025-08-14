@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Card, Col, Row } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
-import VoteProgressBar from '@/components/VoteProgressBar';
+import VoteProgressBar from '@/components/vote-progress-bar';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { cn } from '@/lib/utils';
 import { ensCacheKey } from '@/utils/ensLookup';
@@ -14,11 +14,11 @@ import { lookupNNSOrENS } from '@/utils/lookupNNSOrENS';
 import { Address } from '@/utils/types';
 import { Proposal } from '@/wrappers/nounsDao';
 
-import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
+import DelegateGroupedNounImageVoteTable from '../delegate-grouped-noun-image-vote-table';
 
-import classes from './VoteCard.module.css';
+import classes from './vote-card.module.css';
 
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 export enum VoteCardVariant {
   FOR,

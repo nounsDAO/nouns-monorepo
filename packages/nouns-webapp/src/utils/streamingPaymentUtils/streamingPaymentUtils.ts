@@ -1,6 +1,6 @@
 import { parseEther, zeroAddress } from 'viem';
 
-import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import { SupportedCurrency } from '@/components/proposal-actions-modal/steps/transfer-funds-details-step';
 import {
   stEthAddress,
   usdcAddress,

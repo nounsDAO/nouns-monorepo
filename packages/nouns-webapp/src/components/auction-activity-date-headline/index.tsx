@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 
 import { useAppSelector } from '@/hooks';
 
-import classes from './AuctionActivityDateHeadline.module.css';
+import classes from './auction-activity-date-headline.module.css';
 
 dayjs.extend(utc);
 

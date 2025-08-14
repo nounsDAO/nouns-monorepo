@@ -12,14 +12,14 @@ import { toast } from 'sonner';
 import { formatEther } from 'viem';
 
 // Dynamically import components to avoid SSR evaluation issues
-const CreateCandidateButton = dynamic(() => import('@/components/CreateCandidateButton'), {
+const CreateCandidateButton = dynamic(() => import('@/components/create-candidate-button'), {
   ssr: false,
 });
-const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+const ProposalActionModal = dynamic(() => import('@/components/proposal-actions-modal'), {
   ssr: false,
 });
-const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
-const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+const ProposalEditor = dynamic(() => import('@/components/proposal-editor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/proposal-transactions'), {
   ssr: false,
 });
 const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
@@ -32,9 +32,9 @@ import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
-import classes from '../CreateProposal/CreateProposal.module.css';
+import classes from '../create-proposal/create-proposal.module.css';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

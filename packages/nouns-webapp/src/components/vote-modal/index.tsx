@@ -5,12 +5,12 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { cn } from '@/lib/utils';
 import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
 
-import classes from './VoteModal.module.css';
+import classes from './vote-modal.module.css';
 
 interface VoteModalProps {
   show: boolean;

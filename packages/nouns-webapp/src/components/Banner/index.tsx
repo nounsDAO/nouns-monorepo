@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 
 import calendar_noun from '@/assets/calendar_noun.png';
-import LegacyNoun from '@/components/LegacyNoun';
+import LegacyNoun from '@/components/legacy-noun';
 import Section from '@/layout/Section';
 
 import classes from './Banner.module.css';

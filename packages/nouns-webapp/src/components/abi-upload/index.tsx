@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import classes from './ABIUpload.module.css';
+import classes from './abi-upload.module.css';
 
 interface ABIUploadProps {
   abiFileName?: string;

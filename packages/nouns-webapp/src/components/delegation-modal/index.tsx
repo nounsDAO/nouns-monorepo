@@ -5,10 +5,10 @@ import ReactDOM from 'react-dom';
 
 import { cn } from '@/lib/utils';
 
-import ChangeDelegatePanel from '../ChangeDelegatePanel';
-import CurrentDelegatePannel from '../CurrentDelegatePannel';
+import ChangeDelegatePanel from '../change-delegate-panel';
+import CurrentDelegatePannel from '../current-delegate-pannel';
 
-import classes from './DelegationModal.module.css';
+import classes from './delegation-modal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;

@@ -1,4 +1,4 @@
-import NoundersPage from '@/components/NoundersPage';
+import NoundersPage from '@/components/nounders-page';
 
 export default function Nounders() {
   return <NoundersPage />;

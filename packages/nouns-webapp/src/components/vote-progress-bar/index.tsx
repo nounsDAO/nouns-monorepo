@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 
-import { VoteCardVariant } from '../VoteCard';
+import { VoteCardVariant } from '../vote-card';
 
-import classes from './VoteProgressBar.module.css';
+import classes from './vote-progress-bar.module.css';
 
 const VoteProgressBar: React.FC<{
   variant: VoteCardVariant;

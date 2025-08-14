@@ -3,7 +3,7 @@ import React from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 
-import classes from './VoteCardPager.module.css';
+import classes from './vote-cardPager.module.css';
 
 interface VoteCardPagerProps {
   onRightArrowClick: () => void;

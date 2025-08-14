@@ -1,4 +1,4 @@
-import DelegatePage from '@/components/DelegatePage';
+import DelegatePage from '@/components/delegate-page';
 
 export default function Delegate() {
   return <DelegatePage />;

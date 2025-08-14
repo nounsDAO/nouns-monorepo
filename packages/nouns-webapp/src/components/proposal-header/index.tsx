@@ -7,11 +7,11 @@ import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { useBlockNumber } from 'wagmi';
 
-import ByLineHoverCard from '@/components/ByLineHoverCard';
-import HoverCard from '@/components/HoverCard';
-import { transactionIconLink } from '@/components/ProposalContent';
-import ProposalStatus from '@/components/ProposalStatus';
-import ShortAddress from '@/components/ShortAddress';
+import ByLineHoverCard from '@/components/by-line-hover-card';
+import HoverCard from '@/components/hover-card';
+import { transactionIconLink } from '@/components/proposal-content';
+import ProposalStatus from '@/components/proposal-status';
+import ShortAddress from '@/components/short-address';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
 import { Locales } from '@/i18n/locales';
@@ -27,9 +27,9 @@ import {
 } from '@/wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
-import classes from './ProposalHeader.module.css';
+import classes from './proposal-header.module.css';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 
 interface ProposalHeaderProps {
   title?: string;

@@ -1,4 +1,4 @@
-import CreateProposalPage from '@/components/CreateProposalPage';
+import CreateProposalPage from '@/components/create-proposal-page';
 
 export default function CreateProposal() {
   return <CreateProposalPage />;

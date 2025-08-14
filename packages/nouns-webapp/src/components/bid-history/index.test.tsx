@@ -17,7 +17,7 @@ vi.mock('@/wrappers/onDisplayAuction', () => ({
   useAuctionBids: vi.fn(),
 }));
 
-vi.mock('@/components/BidHistoryItem', () => ({
+vi.mock('@/components/bid-historyItem', () => ({
   BidHistoryItem: ({
     bid,
     isCool,

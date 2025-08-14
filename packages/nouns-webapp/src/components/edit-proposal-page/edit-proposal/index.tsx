@@ -13,14 +13,14 @@ import { useAccount } from 'wagmi';
 import dynamic from 'next/dynamic';
 
 // Dynamically import components to avoid SSR evaluation issues
-const EditProposalButton = dynamic(() => import('@/components/EditProposalButton/index'), {
+const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button/index'), {
   ssr: false,
 });
-const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+const ProposalActionModal = dynamic(() => import('@/components/proposal-actions-modal'), {
   ssr: false,
 });
-const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
-const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+const ProposalEditor = dynamic(() => import('@/components/proposal-editor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/proposal-transactions'), {
   ssr: false,
 });
 const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
@@ -41,8 +41,8 @@ import {
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
-import classes from '@/pages/CreateProposal/CreateProposal.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
+import classes from '@/components/create-proposal-page/create-proposal.module.css';
 
 interface EditProposalProps {
   match: {

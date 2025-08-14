@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { useAtom } from 'jotai/react';
 
-import Modal from '@/components/Modal';
+import Modal from '@/components/modal';
 import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 
-import classes from './LanguageSelectionModal.module.css';
+import classes from './language-selection-modal.module.css';
 
 interface LanguageSelectionModalProps {
   onDismiss: () => void;

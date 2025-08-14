@@ -12,9 +12,9 @@ import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '@/w
 import { ProposalCandidate } from '@/wrappers/nounsData';
 import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/nounToken';
 
-import classes from './CandidateSponsors.module.css';
+import classes from './candidate-sponsors.module.css';
 import OriginalSignature from './OriginalSignature';
-import SelectSponsorsToPropose from './SelectSponsorsToPropose';
+import SelectSponsorsToPropose from './select-sponsors-to-propose';
 import Signature from './Signature';
 import SignatureForm from './SignatureForm';
 import SubmitUpdateProposal from './SubmitUpdateProposal';

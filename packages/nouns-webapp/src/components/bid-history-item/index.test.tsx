@@ -12,7 +12,7 @@ vi.mock('@/assets/icons/Link.svg?react', () => ({
   default: () => <div data-testid="link-icon">Link Icon</div>,
 }));
 
-vi.mock('@/components/ShortAddress', () => ({
+vi.mock('@/components/short-address', () => ({
   default: ({ address, avatar }: { address: string; avatar?: boolean }) => (
     <div data-testid="short-address">
       Short: {address} {avatar ? '(with avatar)' : ''}
@@ -20,7 +20,7 @@ vi.mock('@/components/ShortAddress', () => ({
   ),
 }));
 
-vi.mock('@/components/TruncatedAmount', () => ({
+vi.mock('@/components/truncated-amount', () => ({
   default: ({ amount }: { amount: bigint }) => (
     <div data-testid="truncated-amount">Amount: {amount.toString()}</div>
   ),

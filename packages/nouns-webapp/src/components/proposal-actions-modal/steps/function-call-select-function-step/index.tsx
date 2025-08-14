@@ -6,11 +6,11 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
-import ABIUpload from '@/components/ABIUpload';
-import BrandDropdown from '@/components/BrandDropdown';
-import BrandTextEntry from '@/components/BrandTextEntry';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalTitle from '@/components/ModalTitle';
+import ABIUpload from '@/components/abi-upload';
+import BrandDropdown from '@/components/brand-dropdown';
+import BrandTextEntry from '@/components/brand-text-entry';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalTitle from '@/components/modal-title';
 import { buildEtherscanApiQuery } from '@/utils/etherscan';
 
 import { ProposalActionModalStepProps } from '../..';
@@ -138,7 +138,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     <div>
       <ModalTitle>
         <Trans>Add Function Call Arguments</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <BrandTextEntry
         label={'Contract Address'}
@@ -174,7 +174,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
                 {(item as AbiFunction).name}
               </option>
             ))}
-      </BrandDropdown>
+      ./brand-dropdown>
 
       <ABIUpload
         abiFileName={abiFileName}

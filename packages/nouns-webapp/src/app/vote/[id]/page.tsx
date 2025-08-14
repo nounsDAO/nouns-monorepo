@@ -1,4 +1,4 @@
-import VotePage from '@/components/Vote';
+import VotePage from '@/components/vote';
 
 export default function Vote() {
   return <VotePage />;

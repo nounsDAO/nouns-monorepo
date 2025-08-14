@@ -7,8 +7,8 @@ import remarkBreaks from 'remark-breaks';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { ProposalCandidate } from '@/wrappers/nounsData';
 
-import classes from './ProposalContent.module.css';
-import ProposalTransactions from './ProposalTransactions';
+import classes from './proposal-content.module.css';
+import ProposalTransactions from './proposal-transactions';
 
 interface ProposalCandidateContentProps {
   proposal?: ProposalCandidate;

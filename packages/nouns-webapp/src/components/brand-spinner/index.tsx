@@ -1,4 +1,4 @@
-import classes from './BrandSpinner.module.css';
+import classes from './brand-spinner.module.css';
 
 const BrandSpinner = () => {
   return (

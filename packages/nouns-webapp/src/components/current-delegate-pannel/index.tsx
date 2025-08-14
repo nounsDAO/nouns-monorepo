@@ -3,12 +3,12 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { useAccount } from 'wagmi';
 
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
-import ShortAddress from '@/components/ShortAddress';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
+import ShortAddress from '@/components/short-address';
 import { useReadNounsTokenDelegates } from '@/contracts';
 import { formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
 
-import classes from './CurrentDelegatePannel.module.css';
+import classes from './current-delegate-pannel.module.css';
 
 interface CurrentDelegatePannelProps {
   onPrimaryBtnClick: (e: React.MouseEvent<HTMLElement>) => void;

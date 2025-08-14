@@ -5,15 +5,15 @@ import React, { useEffect, useRef } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import ReactDOM from 'react-dom';
 
-import NounsTransition from '@/components/NounsTransition';
+import NounsTransition from '@/components/nouns-transition';
 import {
   basicFadeInOut,
   desktopModalSlideInFromTopAndGrow,
   mobileModalSlideInFromBottm,
-} from '@/utils/cssTransitionUtils';
+} from '@/utils/css-transition-utils';
 import { isMobileScreen } from '@/utils/isMobile';
 
-import classes from './SolidColorBackgroundModal.module.css';
+import classes from './solid-color-background-modal.module.css';
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);

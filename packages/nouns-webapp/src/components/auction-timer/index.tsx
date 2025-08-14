@@ -10,7 +10,7 @@ import { Col, Row } from 'react-bootstrap';
 import { useAppSelector } from '@/hooks';
 import { Auction } from '@/wrappers/nounsAuction';
 
-import classes from './AuctionTimer.module.css';
+import classes from './auction-timer.module.css';
 
 dayjs.extend(duration);
 

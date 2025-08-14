@@ -3,8 +3,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 
 import LinkIcon from '@/assets/icons/Link.svg?react';
-import ShortAddress from '@/components/ShortAddress';
-import TruncatedAmount from '@/components/TruncatedAmount';
+import ShortAddress from '@/components/short-address';
+import TruncatedAmount from '@/components/truncated-amount';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Bid } from '@/utils/types';
 

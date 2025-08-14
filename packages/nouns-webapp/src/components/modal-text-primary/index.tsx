@@ -1,4 +1,4 @@
-import classes from './ModalTextPrimary.module.css';
+import classes from './modal-text-primary.module.css';
 
 interface ModalTextPrimaryProps {
   children?: React.ReactNode;

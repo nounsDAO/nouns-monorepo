@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { DownloadIcon } from 'lucide-react';
 import ReactDOM from 'react-dom';
 
-import LegacyNoun from '@/components/LegacyNoun';
-import { Backdrop } from '@/components/Modal';
+import LegacyNoun from '@/components/legacy-noun';
+import { Backdrop } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { svg2png } from '@/utils/svg2png';
 
-import classes from './NounModal.module.css';
+import classes from './noun-modal.module.css';
 
 const downloadNounPNG = (png: string) => {
   const downloadEl = document.createElement('a');

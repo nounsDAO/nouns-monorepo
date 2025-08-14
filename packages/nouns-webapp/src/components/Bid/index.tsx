@@ -5,7 +5,7 @@ import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
 import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
 
-import SettleManuallyBtn from '@/components/SettleManuallyBtn';
+import SettleManuallyBtn from '@/components/settle-manually-btn';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
   useWriteNounsAuctionHouseCreateBid,
@@ -17,7 +17,7 @@ import { Auction } from '@/wrappers/nounsAuction';
 
 import classes from './Bid.module.css';
 
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 const computeMinimumNextBid = (
   currentBid: bigint,

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import classes from './NavBarLink.module.css';
+import classes from './nav-bar-link.module.css';
 
 const NavBarLink: React.FC<{
   children: React.ReactNode;

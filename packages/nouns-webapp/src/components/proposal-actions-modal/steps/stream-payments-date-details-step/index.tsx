@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
-import BrandDatePicker from '@/components/BrandDatePicker';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalSubTitle from '@/components/ModalSubtitle';
-import ModalTitle from '@/components/ModalTitle';
+import BrandDatePicker from '@/components/brand-date-picker';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalSubTitle from '@/components/modal-subtitle';
+import ModalTitle from '@/components/modal-title';
 import { currentUnixEpoch, toUnixEpoch } from '@/utils/timeUtils';
 
 import { ProposalActionModalStepProps } from '../..';
@@ -27,7 +27,7 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
     <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <ModalSubTitle>
         <Trans>

@@ -4,7 +4,7 @@ import { Image } from 'react-bootstrap';
 
 import { useAppSelector } from '@/hooks';
 
-import classes from './NounInfoRowButton.module.css';
+import classes from './noun-info-row-button.module.css';
 
 interface NounInfoRowButtonProps {
   iconImgSource: string;

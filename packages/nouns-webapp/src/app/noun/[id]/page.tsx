@@ -1,4 +1,4 @@
-import AuctionPage from '@/components/AuctionPage';
+import AuctionPage from '@/components/auction-page';
 
 export default function Noun() {
   return <AuctionPage />;

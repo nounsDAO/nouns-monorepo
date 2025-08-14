@@ -5,10 +5,10 @@ import clsx from 'clsx';
 import { Link } from 'react-router';
 import { useBlockNumber } from 'wagmi';
 
-import ByLineHoverCard from '@/components/ByLineHoverCard';
-import HoverCard from '@/components/HoverCard';
-import { transactionIconLink } from '@/components/ProposalContent';
-import ShortAddress from '@/components/ShortAddress';
+import ByLineHoverCard from '@/components/by-line-hover-card';
+import HoverCard from '@/components/hover-card';
+import { transactionIconLink } from '@/components/proposal-content';
+import ShortAddress from '@/components/short-address';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
@@ -16,9 +16,9 @@ import { isMobileScreen } from '@/utils/isMobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
-import classes from './ProposalHeader.module.css';
+import classes from './proposal-header.module.css';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 
 interface CandidateHeaderProps {
   title: string;

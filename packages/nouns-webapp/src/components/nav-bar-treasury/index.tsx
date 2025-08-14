@@ -4,9 +4,9 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 
-import { NavBarButtonStyle } from '../NavBarButton';
+import { NavBarButtonStyle } from '../nav-bar-button';
 
-import classes from './NavBarTreasury.module.css';
+import classes from './nav-bar-treasury.module.css';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;

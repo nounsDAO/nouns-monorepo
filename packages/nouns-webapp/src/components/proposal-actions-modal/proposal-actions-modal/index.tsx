@@ -5,17 +5,17 @@ import React, { SetStateAction, useState } from 'react';
 import { Address } from '@/utils/types';
 import { ProposalTransaction } from '@/wrappers/nounsDao';
 
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import SolidColorBackgroundModal from '../solid-color-background-modal';
 
-import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
-import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
+import FunctionCallEnterArgsStep from './step./function-call-enter-args-step';
+import FunctionCallReviewStep from './step./function-call-review-step';
 import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
 import SelectProposalActionStep from './steps/SelectProposalActionStep';
 import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
 import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
-import StreamPaymentsReviewStep from './steps/StreamPaymentsReviewStep';
+import StreamPaymentsReviewStep from './step./stream-payments-review-step';
 import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
-import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
+import TransferFundsReviewStep from './step./transfer-funds-review-step';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,

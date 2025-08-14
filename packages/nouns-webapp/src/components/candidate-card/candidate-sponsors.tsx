@@ -7,7 +7,7 @@ import { CandidateSignature } from '@/wrappers/nounsData';
 import { delegateNounsAtBlockQuery, Delegates } from '@/wrappers/subgraph';
 
 import CandidateSponsorImage from './CandidateSponsorImage';
-import classes from './CandidateSponsors.module.css';
+import classes from './candidate-sponsors.module.css';
 
 type CandidateSponsorsProps = {
   signers: CandidateSignature[];

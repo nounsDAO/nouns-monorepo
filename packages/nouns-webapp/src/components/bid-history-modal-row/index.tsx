@@ -6,16 +6,16 @@ import { blo } from 'blo';
 import clsx from 'clsx';
 
 import _trophy from '@/assets/icons/trophy.svg';
-import TruncatedAmount from '@/components/TruncatedAmount';
+import TruncatedAmount from '@/components/truncated-amount';
 import { shortENS, formatShortAddress } from '@/utils/addressAndENSDisplayUtils';
 import { useReverseENSLookUp } from '@/utils/ensLookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
 import { Address, Bid } from '@/utils/types';
 
-import classes from './BidHistoryModalRow.module.css';
+import classes from './bid-history-modalRow.module.css';
 
-import auctionActivityClasses from '@/components/AuctionActivity/BidHistory.module.css';
+import auctionActivityClasses from '@/components/auction-activity/bid-history.module.css';
 
 interface BidHistoryModalRowProps {
   bid: Bid;

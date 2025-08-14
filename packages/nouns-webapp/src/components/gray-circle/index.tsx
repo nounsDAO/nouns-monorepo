@@ -1,11 +1,11 @@
 import React from 'react';
 
-import LegacyNoun from '@/components/LegacyNoun';
+import LegacyNoun from '@/components/legacy-noun';
 import { getGrayBackgroundSVG } from '@/utils/grayBackgroundSVG';
 
-import classes from './GrayCircle.module.css';
+import classes from './gray-circle.module.css';
 
-import nounClasses from '@/components/LegacyNoun/Noun.module.css';
+import nounClasses from '@/components/legacy-noun/noun.module.css';
 
 interface GrayCircleProps {
   isDelegateView?: boolean;

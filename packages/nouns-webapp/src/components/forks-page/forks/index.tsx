@@ -6,7 +6,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 
-import ForkStatus from '@/components/ForkStatus';
+import ForkStatus from '@/components/fork-status';
 import Section from '@/layout/Section';
 import { Fork, ForkState, useForks } from '@/wrappers/nounsDao';
 import { Link } from 'react-router';

@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { CHAIN_ID } from '@/config';
 import { Auction } from '@/wrappers/nounsAuction';
 
-import classes from './SettleManuallyBtn.module.css';
+import classes from './settle-manually-btn.module.css';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;

@@ -19,10 +19,10 @@ import {
 } from 'react-bootstrap';
 
 import InfoIcon from '@/assets/icons/Info.svg';
-import Noun from '@/components/LegacyNoun';
-import Link from '@/components/Link';
+import Noun from '@/components/legacy-noun';
+import Link from '@/components/link';
 
-import NounModal from './NounModal';
+import NounModal from './noun-modal';
 import classes from './Playground.module.css';
 
 interface Trait {

@@ -5,12 +5,12 @@ import React, { useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { isAddress } from 'viem';
 
-import BrandDropdown from '@/components/BrandDropdown';
-import BrandNumericEntry from '@/components/BrandNumericEntry';
-import BrandTextEntry from '@/components/BrandTextEntry';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalSubTitle from '@/components/ModalSubtitle';
-import ModalTitle from '@/components/ModalTitle';
+import BrandDropdown from '@/components/brand-dropdown';
+import BrandNumericEntry from '@/components/brand-numeric-entry';
+import BrandTextEntry from '@/components/brand-text-entry';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalSubTitle from '@/components/modal-subtitle';
+import ModalTitle from '@/components/modal-title';
 
 import { ProposalActionModalStepProps } from '../..';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
@@ -45,7 +45,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
     <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <ModalSubTitle>
         <Trans>At this time only USDC and WETH streams are supported</Trans>
@@ -65,7 +65,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
       >
         <option value="USDC">USDC</option>
         <option value="WETH">WETH</option>
-      </BrandDropdown>
+      ./brand-dropdown>
 
       <BrandNumericEntry
         label={'Amount'}

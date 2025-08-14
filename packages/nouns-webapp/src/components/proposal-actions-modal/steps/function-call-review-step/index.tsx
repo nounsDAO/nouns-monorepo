@@ -7,14 +7,14 @@ import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
 import { encodeAbiParameters, getAbiItem, parseEther, toFunctionSignature } from 'viem';
 
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalTitle from '@/components/ModalTitle';
-import ShortAddress from '@/components/ShortAddress';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalTitle from '@/components/modal-title';
+import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 
-import classes from './FunctionCallReviewStep.module.css';
+import classes from './function-call-review-step.module.css';
 
 /**
  * @internal
@@ -72,7 +72,7 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
     <div>
       <ModalTitle>
         <Trans>Review Function Call Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <div className={classes.row}>
         <div>

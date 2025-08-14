@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from './ModalSubtitle.module.css';
+import classes from './modal-subtitle.module.css';
 
 interface ModalSubTitleProps {
   children: React.ReactNode;

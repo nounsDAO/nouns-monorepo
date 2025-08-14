@@ -23,7 +23,7 @@ import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
 
-import classes from './CandidateSponsors.module.css';
+import classes from './candidate-sponsors.module.css';
 
 const createProposalTypes = {
   Proposal: [

@@ -7,16 +7,16 @@ import clsx from 'clsx';
 import { useAtom } from 'jotai/react';
 import { Dropdown } from 'react-bootstrap';
 
-import LanguageSelectionModal from '@/components/LanguageSelectionModal';
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
+import LanguageSelectionModal from '@/components/language-selection-modal';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 
-import classes from './NavLocalSwitcher.module.css';
+import classes from './nav-local-switcher.module.css';
 
-import navDropdownClasses from '@/components/NavBar/NavBarDropdown.module.css';
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
+import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;

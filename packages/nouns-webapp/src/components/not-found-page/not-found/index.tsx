@@ -4,7 +4,7 @@ import { Col, Image } from 'react-bootstrap';
 import _404img from '../../assets/404noun.png';
 import Section from '../../layout/Section';
 
-import classes from './NotFound.module.css';
+import classes from './not-found.module.css';
 
 const NotFoundPage = () => {
   return (

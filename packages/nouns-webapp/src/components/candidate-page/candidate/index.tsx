@@ -14,10 +14,10 @@ import { first, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
 
-import CandidateSponsors from '@/components/CandidateSponsors';
-import ProposalCandidateContent from '@/components/ProposalContent/ProposalCandidateContent';
-import CandidateHeader from '@/components/ProposalHeader/CandidateHeader';
-import VoteSignals from '@/components/VoteSignals/VoteSignals';
+import CandidateSponsors from '@/components/candidate-sponsors';
+import ProposalCandidateContent from '@/components/proposal-content/proposal-candidate-content';
+import CandidateHeader from '@/components/proposal-header/candidate-header';
+import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useAppSelector } from '@/hooks';
 import Section from '@/layout/Section';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';

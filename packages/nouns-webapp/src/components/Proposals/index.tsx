@@ -14,9 +14,9 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
-import CandidateCard from '@/components/CandidateCard';
-import DelegationModal from '@/components/DelegationModal';
-import ProposalStatus from '@/components/ProposalStatus';
+import CandidateCard from '@/components/candidate-card';
+import DelegationModal from '@/components/delegation-modal';
+import ProposalStatus from '@/components/proposal-status';
 import config from '@/config';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
@@ -37,7 +37,7 @@ import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
 
 import classes from './Proposals.module.css';
 
-import proposalStatusClasses from '@/components/ProposalStatus/ProposalStatus.module.css';
+import proposalStatusClasses from '@/components/proposal-status/proposal-status.module.css';
 
 dayjs.extend(relativeTime);
 
@@ -323,7 +323,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                         <div
                           className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
                         >
-                          <ProposalStatus status={p.status}></ProposalStatus>
+                          <ProposalStatus status={p.status}>./proposal-status>
                         </div>
                       </div>
 

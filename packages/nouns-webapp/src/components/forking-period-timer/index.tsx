@@ -8,7 +8,7 @@ import duration from 'dayjs/plugin/duration';
 
 import { useAppSelector } from '@/hooks';
 
-import classes from './AuctionTimer.module.css';
+import classes from './auction-timer.module.css';
 
 dayjs.extend(duration);
 

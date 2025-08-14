@@ -1,4 +1,4 @@
-import type { ProposalActionModalStepProps } from '@/components/ProposalActionsModal';
+import type { ProposalActionModalStepProps } from '@/components/proposal-actions-modal';
 import type { Abi, AbiFunction } from 'viem';
 import { encodeFunctionData, getAbiItem } from 'viem';
 
@@ -10,10 +10,10 @@ import { Col, FormControl, FormGroup, InputGroup, Row } from 'react-bootstrap';
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalTitle from '@/components/ModalTitle';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalTitle from '@/components/modal-title';
 
-import classes from './FunctionCallEnterArgsStep.module.css';
+import classes from './function-call-enter-args-step.module.css';
 
 const parseArguments = (abi: Abi | undefined, func: string, args: string[]) => {
   return args.map((a, i) => {
@@ -88,7 +88,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
     <div>
       <ModalTitle>
         <Trans>Add Function Call Arguments</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       {invalidArgument && (
         <div className={classes.invalid}>

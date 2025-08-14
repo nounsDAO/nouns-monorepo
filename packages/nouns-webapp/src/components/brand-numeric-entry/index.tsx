@@ -3,7 +3,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { NumericFormat, OnValueChange } from 'react-number-format';
 
-import classes from './BrandNumericEntry.module.css';
+import classes from './brand-numeric-entry.module.css';
 
 interface BrandNumericEntryProps {
   onValueChange?: OnValueChange;

@@ -4,10 +4,10 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
-import ShortAddress from '@/components/ShortAddress';
+import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
-import classes from './CandidateSponsors.module.css';
+import classes from './candidate-sponsors.module.css';
 
 type OriginalSignatureProps = {
   voteCount: number;

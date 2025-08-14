@@ -4,8 +4,8 @@ import { Trans } from '@lingui/react/macro';
 
 import _AddressIcon from '@/assets/icons/Address.svg';
 import _BidsIcon from '@/assets/icons/Bids.svg';
-import NounInfoRowButton from '@/components/NounInfoRowButton';
-import NounInfoRowHolder from '@/components/NounInfoRowHolder';
+import NounInfoRowButton from '@/components/noun-info-row-button';
+import NounInfoRowHolder from '@/components/noun-info-row-holder';
 import { nounsTokenAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { buildEtherscanTokenLink } from '@/utils/etherscan';

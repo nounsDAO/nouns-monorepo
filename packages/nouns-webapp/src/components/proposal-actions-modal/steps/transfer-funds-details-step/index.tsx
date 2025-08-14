@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { isAddress } from 'viem';
 
-import BrandDropdown from '@/components/BrandDropdown';
-import BrandNumericEntry from '@/components/BrandNumericEntry';
-import BrandTextEntry from '@/components/BrandTextEntry';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalTitle from '@/components/ModalTitle';
+import BrandDropdown from '@/components/brand-dropdown';
+import BrandNumericEntry from '@/components/brand-numeric-entry';
+import BrandTextEntry from '@/components/brand-text-entry';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalTitle from '@/components/modal-title';
 import { Address } from '@/utils/types';
 
 import { ProposalActionModalStepProps } from '../..';
@@ -48,7 +48,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
     <div>
       <ModalTitle>
         <Trans>Add Transfer Funds Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <BrandDropdown
         label={'Currency'}
@@ -59,7 +59,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         <option value="USDC">USDC</option>
         <option value="ETH">ETH</option>
         <option value="STETH">Lido Staked ETH</option>
-      </BrandDropdown>
+      ./brand-dropdown>
 
       <BrandNumericEntry
         label={'Amount'}

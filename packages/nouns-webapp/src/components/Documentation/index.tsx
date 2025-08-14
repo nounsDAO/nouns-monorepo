@@ -2,7 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
-import Link from '@/components/Link';
+import Link from '@/components/link';
 import {
   useReadNounsDescriptorAccessoryCount,
   useReadNounsDescriptorBackgroundCount,

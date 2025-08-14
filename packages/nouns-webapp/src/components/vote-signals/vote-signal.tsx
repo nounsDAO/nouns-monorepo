@@ -3,7 +3,7 @@ import React from 'react';
 import { blo } from 'blo';
 import { useEnsName } from 'wagmi';
 
-import ShortAddress from '@/components/ShortAddress';
+import ShortAddress from '@/components/short-address';
 import { Address } from '@/utils/types';
 
 type VoteSignalProps = {

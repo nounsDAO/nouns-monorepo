@@ -13,9 +13,9 @@ import {
   useUpdateProposalBySigs,
 } from '@/wrappers/nounsData';
 
-import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import SolidColorBackgroundModal from '../solid-color-background-modal';
 
-import classes from './SelectSponsorsToPropose.module.css';
+import classes from './select-sponsors-to-propose.module.css';
 
 type Props = {
   isModalOpen: boolean;

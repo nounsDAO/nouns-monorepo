@@ -2,8 +2,8 @@ import type { Address } from '@/utils/types';
 
 import { encodeFunctionData, parseEther } from 'viem';
 
-import { ProposalActionModalState } from '@/components/ProposalActionsModal';
-import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
+import { ProposalActionModalState } from '@/components/proposal-actions-modal';
+import { SupportedCurrency } from '@/components/proposal-actions-modal/steps/transfer-funds-details-step';
 import {
   nounsPayerAbi,
   nounsPayerAddress,

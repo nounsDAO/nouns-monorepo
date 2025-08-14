@@ -13,14 +13,14 @@ import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 // Dynamically import components that may reference browser APIs to avoid SSR evaluation
-const EditProposalButton = dynamic(() => import('@/components/EditProposalButton/index'), {
+const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button/index'), {
   ssr: false,
 });
-const ProposalActionModal = dynamic(() => import('@/components/ProposalActionsModal'), {
+const ProposalActionModal = dynamic(() => import('@/components/proposal-actions-modal'), {
   ssr: false,
 });
-const ProposalEditor = dynamic(() => import('@/components/ProposalEditor'), { ssr: false });
-const ProposalTransactions = dynamic(() => import('@/components/ProposalTransactions'), {
+const ProposalEditor = dynamic(() => import('@/components/proposal-editor'), { ssr: false });
+const ProposalTransactions = dynamic(() => import('@/components/proposal-transactions'), {
   ssr: false,
 });
 const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
@@ -38,9 +38,9 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import classes from '../CreateProposal/CreateProposal.module.css';
+import classes from '../create-proposal/create-proposal.module.css';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 
 interface EditCandidateProps {
   match: {

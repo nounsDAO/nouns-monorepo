@@ -1,4 +1,4 @@
-import type { FinalProposalActionStepProps } from '@/components/ProposalActionsModal';
+import type { FinalProposalActionStepProps } from '@/components/proposal-actions-modal';
 import type { ProposalTransaction } from '@/wrappers/nounsDao';
 
 import React from 'react';
@@ -6,11 +6,11 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import ReactTooltip from 'react-tooltip';
 
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalLabel from '@/components/ModalLabel';
-import ModalTextPrimary from '@/components/ModalTextPrimary';
-import ModalTitle from '@/components/ModalTitle';
-import ShortAddress from '@/components/ShortAddress';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalLabel from '@/components/modal-label';
+import ModalTextPrimary from '@/components/modal-text-primary';
+import ModalTitle from '@/components/modal-title';
+import ShortAddress from '@/components/short-address';
 import { nounsGovernorAddress } from '@/contracts';
 import useStreamPaymentTransactions from '@/hooks/useStreamPaymentTransactions';
 import {
@@ -21,7 +21,7 @@ import {
 import { unixToDateString } from '@/utils/timeUtils';
 import { defaultChain } from '@/wagmi';
 
-import classes from './StreamPaymentsReviewStep.module.css';
+import classes from './stream-payments-review-step.module.css';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
@@ -55,36 +55,36 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
       />
       <ModalTitle>
         <Trans>Review Streaming Payment Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <ModalLabel>
         <Trans>Stream</Trans>
-      </ModalLabel>
+      ./modal-label>
 
       <ModalTextPrimary>
         {Intl.NumberFormat(undefined, { maximumFractionDigits: 18 }).format(Number(state.amount))}{' '}
         {state.TransferFundsCurrency}
-      </ModalTextPrimary>
+      ./modal-text-primary>
 
       <ModalLabel>
         <Trans>To</Trans>
-      </ModalLabel>
+      ./modal-label>
       <ModalTextPrimary>
         <span data-for="address-tooltip" data-tip="address">
           <ShortAddress address={state.address} />
         </span>
-      </ModalTextPrimary>
+      ./modal-text-primary>
 
       <ModalLabel>
         <Trans>Starting on</Trans>
-      </ModalLabel>
-      <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}</ModalTextPrimary>
+      ./modal-label>
+      <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}./modal-text-primary>
 
       <ModalLabel>
         <Trans>Ending on</Trans>
-      </ModalLabel>
+      ./modal-label>
 
-      <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}</ModalTextPrimary>
+      <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}./modal-text-primary>
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}

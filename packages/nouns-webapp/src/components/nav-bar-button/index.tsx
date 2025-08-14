@@ -4,9 +4,9 @@ import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
-import navDropdownClasses from '../NavBar/NavBarDropdown.module.css';
+import navDropdownClasses from '../nav-bar/nav-bar-dropdown.module.css';
 
-import classes from './NavBarButton.module.css';
+import classes from './nav-bar-button.module.css';
 
 export enum NavBarButtonStyle {
   COOL_INFO,

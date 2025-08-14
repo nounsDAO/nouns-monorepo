@@ -4,12 +4,12 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { formatUnits } from 'viem';
 
-import ShortAddress from '@/components/ShortAddress';
+import ShortAddress from '@/components/short-address';
 import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
-import classes from './ProposalContent.module.css';
+import classes from './proposal-content.module.css';
 
 import { linkIfAddress } from '.';
 

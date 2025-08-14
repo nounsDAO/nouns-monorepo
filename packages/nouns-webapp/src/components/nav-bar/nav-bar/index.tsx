@@ -14,11 +14,11 @@ import { formatEther } from 'viem';
 import NogglesIcon from '@/assets/icons/Noggles.svg?react';
 import NogglesLogo from '@/assets/noggles.svg?react';
 import testnetNoun from '@/assets/testnet-noun.png';
-import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
-import NavBarTreasury from '@/components/NavBarTreasury';
-import NavDropdown from '@/components/NavDropdown';
-import NavLocaleSwitcher from '@/components/NavLocaleSwitcher';
-import ShortAddress from '@/components/ShortAddress';
+import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
+import NavBarTreasury from '@/components/nav-bar-treasury';
+import NavDropdown from '@/components/nav-dropdown';
+import NavLocaleSwitcher from '@/components/nav-locale-switcher';
+import ShortAddress from '@/components/short-address';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
@@ -28,9 +28,9 @@ import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
 import classes from './NavBar.module.css';
-import navDropdownClasses from './NavBarDropdown.module.css';
+import navDropdownClasses from './nav-bar-dropdown.module.css';
 
-import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
+import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 const NavBar = () => {
   const chainId = defaultChain.id;
@@ -90,7 +90,7 @@ const NavBar = () => {
         <Trans>Proposals</Trans>
       </Dropdown.Item>
       {candidatesNavItem}
-    </NavDropdown>
+    ./nav-dropdown>
   );
 
   return (
@@ -256,7 +256,7 @@ const NavBar = () => {
                 >
                   Playground
                 </Dropdown.Item>
-              </NavDropdown>
+              ./nav-dropdown>
             </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
             <ConnectKitButton.Custom>

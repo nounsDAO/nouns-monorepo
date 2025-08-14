@@ -3,11 +3,11 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 
-import AuctionActivity from '@/components/AuctionActivity';
-import { LoadingNoun } from '@/components/LegacyNoun';
-import NounderNounContent from '@/components/NounderNounContent';
+import AuctionActivity from '@/components/auction-activity';
+import { LoadingNoun } from '@/components/legacy-noun';
+import NounderNounContent from '@/components/nounder-noun-content';
 // eslint-disable-next-line sonarjs/deprecation
-import { StandaloneNounWithSeed } from '@/components/StandaloneNoun';
+import { StandaloneNounWithSeed } from '@/components/standalone-noun';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setStateBackgroundColor } from '@/state/slices/application';
 import { RootState } from '@/store';

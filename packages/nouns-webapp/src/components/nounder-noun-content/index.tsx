@@ -4,20 +4,20 @@ import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
-import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
-import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
-import AuctionNavigation from '@/components/AuctionNavigation';
-import AuctionTitleAndNavWrapper from '@/components/AuctionTitleAndNavWrapper';
-import CurrentBid, { BID_N_A } from '@/components/CurrentBid';
-import Winner from '@/components/Winner';
+import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
+import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';
+import AuctionActivityWrapper from '@/components/auction-activity-wrapper';
+import AuctionNavigation from '@/components/auction-navigation';
+import AuctionTitleAndNavWrapper from '@/components/auction-title-and-nav-wrapper';
+import CurrentBid, { BID_N_A } from '@/components/current-bid';
+import Winner from '@/components/winner';
 import { useAppSelector } from '@/hooks';
 
-import nounContentClasses from './NounderNounContent.module.css';
+import nounContentClasses from './nounder-noun-content.module.css';
 
-import auctionActivityClasses from '@/components/AuctionActivity/AuctionActivity.module.css';
-import auctionBidClasses from '@/components/AuctionActivity/BidHistory.module.css';
-import bidBtnClasses from '@/components/BidHistoryBtn/BidHistoryBtn.module.css';
+import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
+import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
+import bidBtnClasses from '@/components/bid-historyBt./bid-history-btn.module.css';
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;
@@ -76,7 +76,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
               onPrevAuctionClick={onPrevAuctionClick}
             />
             <AuctionActivityDateHeadline startTime={mintTimestamp} />
-          </AuctionTitleAndNavWrapper>
+          ./auction-title-and-nav-wrapper>
           <Col lg={12}>
             <AuctionActivityNounTitle nounId={nounId} />
           </Col>

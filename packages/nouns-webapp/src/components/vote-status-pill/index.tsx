@@ -1,4 +1,4 @@
-import classes from './VoteStatusPill.module.css';
+import classes from './vote-status-pill.module.css';
 
 interface VoteStatusPillProps {
   status: string;

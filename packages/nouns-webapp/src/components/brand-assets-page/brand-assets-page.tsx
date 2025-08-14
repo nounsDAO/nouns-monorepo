@@ -8,8 +8,8 @@ import React from 'react';
 import { DownloadIcon } from 'lucide-react';
 
 import CCZero from '@/assets/cczero-badge.svg?react';
-import playgroundNouns from '@/components/BrandAssetsPage/playground-nouns.webp';
-import traitsImage from '@/components/BrandAssetsPage/traits.webp';
+import playgroundNouns from '@/components/brand-assets-page/playground-nouns.webp';
+import traitsImage from '@/components/brand-assets-page/traits.webp';
 import { Link } from 'react-router';
 
 interface AssetCardProps {

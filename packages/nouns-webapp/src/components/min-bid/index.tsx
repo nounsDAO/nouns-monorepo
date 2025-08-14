@@ -1,9 +1,9 @@
 import React from 'react';
 
 import nounPointerImg from '@/assets/noun-pointer.png';
-import TruncatedAmount from '@/components/TruncatedAmount';
+import TruncatedAmount from '@/components/truncated-amount';
 
-import classes from './MinBid.module.css';
+import classes from './min-bid.module.css';
 
 interface MinBidProps {
   minBid: bigint;

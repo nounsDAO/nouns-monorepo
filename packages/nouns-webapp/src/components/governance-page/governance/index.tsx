@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 import { formatEther, formatUnits } from 'viem';
 
-import Proposals from '@/components/Proposals';
+import Proposals from '@/components/proposals';
 import Section from '@/layout/Section';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 

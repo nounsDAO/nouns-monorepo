@@ -9,12 +9,12 @@ import clsx from 'clsx';
 import { FormControl, FormSelect, FormText, InputGroup, Spinner } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nounsDao';
 import { useIsApprovedForAll, useSetApprovalForAll } from '@/wrappers/nounToken';
 
-import classes from './AddNounsToForkModal.module.css';
+import classes from './add-nouns-to-fork-modal.module.css';
 
 type AddNounsToForkModalProps = {
   setIsModalOpen: (isOpen: boolean) => void;

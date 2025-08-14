@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from './ModalTitle.module.css';
+import classes from './modal-title.module.css';
 
 interface ModalTitleProps {
   children: React.ReactNode;

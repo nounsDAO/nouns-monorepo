@@ -7,14 +7,14 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { formatUnits } from 'viem';
 
-import BrandNumericEntry from '@/components/BrandNumericEntry';
-import BrandSpinner from '@/components/BrandSpinner';
-import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
-import ModalLabel from '@/components/ModalLabel';
-import ModalTitle from '@/components/ModalTitle';
-import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
-import StartOrEndTime from '@/components/StartOrEndTime';
+import BrandNumericEntry from '@/components/brand-numeric-entry';
+import BrandSpinner from '@/components/brand-spinner';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalLabel from '@/components/modal-label';
+import ModalTitle from '@/components/modal-title';
+import { SupportedCurrency } from '@/components/proposal-actions-modal/steps/transfer-funds-details-step';
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
+import StartOrEndTime from '@/components/start-or-end-time';
 import { usdcAddress } from '@/contracts';
 import { countDecimals } from '@/utils/numberUtils';
 import { formatTokenAmount } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
@@ -26,7 +26,7 @@ import {
   useWithdrawTokens,
 } from '@/wrappers/nounsStream';
 
-import classes from './StreamWithdrawModal.module.css';
+import classes from './stream-withdraw-modal.module.css';
 
 dayjs.extend(relativeTime);
 
@@ -83,7 +83,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
       <>
         <ModalTitle>
           <Trans>Withdraw from Stream</Trans>
-        </ModalTitle>
+        ./modal-title>
         <div className={classes.center}>
           {(withdrawTokensState.status === 'Mining' ||
             !withdrawableBalance ||
@@ -127,11 +127,11 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
     <>
       <ModalTitle>
         <Trans>Withdraw from Stream</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <ModalLabel>
         <Trans>Available to withdraw</Trans>
-      </ModalLabel>
+      ./modal-label>
       <h1 className={classes.bold}>
         {isUSDC
           ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? ''))
@@ -143,10 +143,10 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
 
       <ModalLabel>
         <Trans>Streamed so far</Trans>
-      </ModalLabel>
+      ./modal-label>
       <h1 className={classes.bold}>{percentStreamedSoFar.toFixed(numDecimalPlaces)}%</h1>
 
-      <ModalLabel>Total stream value</ModalLabel>
+      <ModalLabel>Total stream value./modal-label>
 
       <h1 className={classes.bold}>
         {isUSDC

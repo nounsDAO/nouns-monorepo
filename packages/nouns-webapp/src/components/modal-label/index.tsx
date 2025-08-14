@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from './ModalLabel.module.css';
+import classes from './modal-label.module.css';
 
 interface ModalLabelProps {
   children?: React.ReactNode;

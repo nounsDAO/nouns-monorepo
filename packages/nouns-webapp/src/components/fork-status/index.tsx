@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { ForkState } from '@/wrappers/nounsDao';
 
-import classes from './ForkStatus.module.css';
+import classes from './fork-status.module.css';
 
 const statusVariant = (status: ForkState | undefined) => {
   switch (status) {

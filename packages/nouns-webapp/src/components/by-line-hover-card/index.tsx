@@ -6,13 +6,13 @@ import { Trans } from '@lingui/react/macro';
 import { Spinner } from 'react-bootstrap';
 import { map } from 'remeda';
 
-import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
-import ShortAddress from '@/components/ShortAddress';
+import HorizontalStackedNouns from '@/components/horizontal-stacked-nouns';
+import ShortAddress from '@/components/short-address';
 import { Delegate, Maybe } from '@/subgraphs/graphql';
 import { Address } from '@/utils/types';
 import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
 
-import classes from './ByLineHoverCard.module.css';
+import classes from './by-line-hover-card.module.css';
 
 interface ByLineHoverCardProps {
   proposerAddress: string;

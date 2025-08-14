@@ -5,11 +5,11 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { Spinner } from 'react-bootstrap';
 
-import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
-import ShortAddress from '@/components/ShortAddress';
+import HorizontalStackedNouns from '@/components/horizontal-stacked-nouns';
+import ShortAddress from '@/components/short-address';
 import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
-import classes from './DelegateHoverCard.module.css';
+import classes from './delegate-hover-card.module.css';
 
 interface DelegateHoverCardProps {
   delegateId: string;

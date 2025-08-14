@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLinkIcon } from 'lucide-react';
 
-import ShortAddress from '@/components/ShortAddress';
+import ShortAddress from '@/components/short-address';
 import { nounsAuctionHouseAddress } from '@/contracts';
 import { cn } from '@/lib/utils';
 import { execute } from '@/subgraphs/execute';

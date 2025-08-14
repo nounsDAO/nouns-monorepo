@@ -1,6 +1,6 @@
 'use client';
 
-import DelegationModal from '@/components/DelegationModal';
+import DelegationModal from '@/components/delegation-modal';
 import { getAddressFromQueryParams } from '@/utils/getAddressFromQueryParams';
 import { useLocation, useNavigate } from 'react-router';
 

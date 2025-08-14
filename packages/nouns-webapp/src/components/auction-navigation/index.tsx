@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks';
 import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
 
-import classes from './AuctionNavigation.module.css';
+import classes from './auction-navigation.module.css';
 
 interface AuctionNavigationProps {
   isFirstAuction: boolean;

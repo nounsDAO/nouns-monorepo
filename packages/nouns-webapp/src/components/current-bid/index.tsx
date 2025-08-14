@@ -4,10 +4,10 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 
-import TruncatedAmount from '@/components/TruncatedAmount';
+import TruncatedAmount from '@/components/truncated-amount';
 import { useAppSelector } from '@/hooks';
 
-import classes from './CurrentBid.module.css';
+import classes from './current-bid.module.css';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that

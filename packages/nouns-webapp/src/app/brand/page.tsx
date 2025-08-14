@@ -1,4 +1,4 @@
-import BrandAssetsPage from '@/components/BrandAssetsPage/BrandAssetsPage';
+import BrandAssetsPage from '@/components/brand-assets-page/brand-assets-page';
 
 export default function Brand() {
   return <BrandAssetsPage />;

@@ -5,20 +5,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
 
-import AuctionActivityDateHeadline from '@/components/AuctionActivityDateHeadline';
-import AuctionActivityNounTitle from '@/components/AuctionActivityNounTitle';
-import AuctionActivityWrapper from '@/components/AuctionActivityWrapper';
-import AuctionNavigation from '@/components/AuctionNavigation';
-import AuctionTimer from '@/components/AuctionTimer';
-import AuctionTitleAndNavWrapper from '@/components/AuctionTitleAndNavWrapper';
-import Bid from '@/components/Bid';
-import BidHistory from '@/components/BidHistory';
-import BidHistoryBtn from '@/components/BidHistoryBtn';
-import BidHistoryModal from '@/components/BidHistoryModal';
-import CurrentBid from '@/components/CurrentBid';
-import Holder from '@/components/Holder';
-import NounInfoCard from '@/components/NounInfoCard';
-import Winner from '@/components/Winner';
+import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
+import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';
+import AuctionActivityWrapper from '@/components/auction-activity-wrapper';
+import AuctionNavigation from '@/components/auction-navigation';
+import AuctionTimer from '@/components/auction-timer';
+import AuctionTitleAndNavWrapper from '@/components/auction-title-and-nav-wrapper';
+import Bid from '@/components/bid';
+import BidHistory from '@/components/bid-history';
+import BidHistoryBtn from '@/components/bid-historyBtn';
+import BidHistoryModal from '@/components/bid-historyModal';
+import CurrentBid from '@/components/current-bid';
+import Holder from '@/components/holder';
+import NounInfoCard from '@/components/noun-info-card';
+import Winner from '@/components/winner';
 import { nounsAuctionHouseAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { RootState } from '@/store';
@@ -114,7 +114,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 />
               )}
               <AuctionActivityDateHeadline startTime={BigInt(auction.startTime)} />
-            </AuctionTitleAndNavWrapper>
+            ./auction-title-and-nav-wrapper>
             <Col lg={12}>
               <AuctionActivityNounTitle isCool={isCool} nounId={BigInt(auction.nounId)} />
             </Col>

@@ -6,13 +6,13 @@ import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import LegacyNoun from '@/components/LegacyNoun';
+import LegacyNoun from '@/components/legacy-noun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
 
-import classes from './StandaloneNoun.module.css';
+import classes from './standalone-noun.module.css';
 
-import nounClasses from '@/components/LegacyNoun/Noun.module.css';
+import nounClasses from '@/components/legacy-noun/noun.module.css';
 
 interface StandaloneNounProps {
   nounId: bigint;

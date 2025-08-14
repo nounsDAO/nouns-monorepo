@@ -7,7 +7,7 @@ import { isNumber } from 'remeda';
 
 import Auction from '@/components/auction';
 import Documentation from '@/components/documentation';
-import NounsIntroSection from '@/components/NounsIntroSection';
+import NounsIntroSection from '@/components/nouns-intro-section';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { nounPath } from '@/utils/history';

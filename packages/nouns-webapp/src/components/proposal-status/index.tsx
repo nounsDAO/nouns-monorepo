@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { ProposalState } from '@/wrappers/nounsDao';
 
-import classes from './ProposalStatus.module.css';
+import classes from './proposal-status.module.css';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {

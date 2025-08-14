@@ -5,7 +5,7 @@ import { FormControl, FormText, InputGroup } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
-import classes from './ProposalEditor.module.css';
+import classes from './proposal-editor.module.css';
 
 const ProposalEditor = ({
   title,

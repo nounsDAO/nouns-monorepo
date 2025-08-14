@@ -7,10 +7,10 @@ import {
   ProposalActionModalStepProps,
   ProposalActionType,
 } from '../..';
-import BrandDropdown from '../../../BrandDropdown';
-import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
-import ModalSubTitle from '../../../ModalSubtitle';
-import ModalTitle from '../../../ModalTitle';
+import BrandDropdown from '../../../brand-dropdown';
+import ModalBottomButtonRow from '../../../modal-bottom-button-row';
+import ModalSubTitle from '../../../modal-subtitle';
+import ModalTitle from '../../../modal-title';
 
 const proposalActionTypeToProposalActionCreationStep = (actionTypeString: string) => {
   if (actionTypeString === ProposalActionType.LUMP_SUM.toString()) {
@@ -33,7 +33,7 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
     <div>
       <ModalTitle>
         <Trans>Add Proposal Action</Trans>
-      </ModalTitle>
+      ./modal-title>
 
       <ModalSubTitle>
         <Trans>
@@ -71,7 +71,7 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <option value={'Transfer Funds'}>Transfer Funds</option>
         <option value={'Stream Funds'}>Stream Funds</option>
         <option value={'Function Call'}>Function Call</option>
-      </BrandDropdown>
+      ./brand-dropdown>
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Close</Trans>}

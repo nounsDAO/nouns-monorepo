@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
 
-import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
+import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nounsDao';
