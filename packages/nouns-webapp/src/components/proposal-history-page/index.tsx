@@ -60,13 +60,14 @@ const ProposalHistory = () => {
     }
   }, [showToast]);
 
-  const highlightSyntax = (str: string) => {
+  const highlightSyntax = (markdownText: string) => {
     return (
       <ReactMarkdown
         className={clsx(editorClasses.markdown, editorClasses.diffs)}
-        children={str}
         remarkPlugins={[remarkBreaks]}
-      />
+      >
+        {markdownText}
+      </ReactMarkdown>
     );
   };
   const headerDiffs = (str: string) => {
