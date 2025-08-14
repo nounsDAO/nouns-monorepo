@@ -14,12 +14,13 @@ function useForkTreasuryBalance(treasuryContractAddress?: Address): bigint {
     address: treasuryContractAddress,
   });
 
-  // @ts-expect-error - Type instantiation too deep
-  const stEthRes: any = (useReadStEthBalanceOf as any)({
+  // The generated contract hook has a broad return type; cast the shape we use
+  // to avoid `any` while keeping runtime behavior unchanged.
+  // @ts-expect-error - Return type from a contract call needs manual casting
+  const { data: stEthBalanceData } = useReadStEthBalanceOf({
     args: treasuryContractAddress ? [treasuryContractAddress] : undefined,
-    query: { enabled: !!treasuryContractAddress },
-  });
-  const stEthBalanceData = (stEthRes as any)?.data as bigint | undefined;
+    query: { enabled: Boolean(treasuryContractAddress) },
+  }) as { data: bigint | undefined };
 
   // Use nullish coalescing to provide a default value of 0n for undefined balances
   const ethBalance = ethBalanceData?.value ?? 0n;
