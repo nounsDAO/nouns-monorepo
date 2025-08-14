@@ -1,0 +1,83 @@
+.wrapper {
+  margin-left: 0.5rem;
+  margin-top: 2px;
+  padding-left: 1.5rem;
+}
+
+.youCopy {
+  margin-top: 0.25rem;
+}
+
+.holderCopy {
+  min-width: 250px;
+}
+
+.section h4 {
+  font-family: 'PT Root UI';
+  font-size: 18px;
+  line-height: 27px;
+}
+
+.section h2 {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.leftCol {
+  font-family: 'PT Root UI';
+}
+
+.leftCol h4 {
+  font-weight: bold;
+}
+
+.link,
+.link:hover,
+.link:active {
+  color: black;
+  text-decoration: none;
+  display: flex;
+  cursor: pointer;
+}
+
+.holderContent {
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .section h4 {
+    font-size: 18px;
+  }
+
+  .section h2 {
+    font-size: 23px;
+  }
+
+  .section {
+    justify-content: space-between;
+  }
+
+  .wrapper {
+    margin-top: 0px;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .leftCol {
+    padding-left: 0.5rem;
+  }
+
+  .holderContent {
+    margin-right: 0.5rem;
+  }
+
+  .wrapper {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

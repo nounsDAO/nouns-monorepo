@@ -1,0 +1,301 @@
+.votePage a {
+  color: var(--brand-dark-red);
+}
+
+.proposal {
+  margin-top: 1em;
+  background-color: white;
+}
+
+.backArrow {
+  height: 1rem;
+}
+
+.votingButton {
+  margin-top: 1rem;
+}
+
+.voteCountCard {
+  margin-top: 1rem;
+}
+
+.proposalId {
+  margin: 1rem 0;
+}
+
+.voteCountCard p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.section {
+  word-wrap: break-word;
+}
+
+.section h5 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-family: 'Londrina Solid';
+}
+
+.voterIneligibleAlert {
+  margin: 1rem 0 0 0;
+}
+
+.blockRestrictionAlert {
+  margin: 1rem 0 0 0;
+}
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button {
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  background-color: #faf4f8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+}
+
+.transitionStateButton {
+  /* height: 50px; */
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  padding: 10px 16px;
+  background-color: #000;
+  color: hsl(0, 0%, 100%);
+}
+
+.transitionStateButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.transitionStateButtonSection {
+  border-top: 0px;
+}
+
+.destructiveTransitionStateButton {
+  color: var(--brand-gray-dark-text);
+}
+
+.destructiveTransitionStateButton:hover {
+  background-color: var(--brand-color-red);
+  cursor: pointer;
+  color: #fff;
+}
+
+.destructiveTransitionStateButton > div {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spinner {
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--brand-gray-light-text);
+  max-width: 30px;
+}
+
+/* Info section stuff */
+.voteInfoCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.voteMetadataRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.voteMetadataRow h1 {
+  font-size: 20px;
+  color: var(--brand-gray-light-text);
+  font-family: 'Londrina Solid';
+}
+
+.voteMetadataRow span {
+  font-size: 14px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+}
+
+.voteMetadataRow h3 {
+  font-size: 18px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.voteMetadataRowTitle {
+  margin-top: 0.5rem;
+  width: max-content;
+}
+
+.voteMetadataTime {
+  min-width: fit-content;
+  text-align: right;
+}
+.objectionPeriodActive {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  color: var(--brand-gray-light-text);
+}
+.objectionPeriodActive p {
+  margin: 0 0 0.25rem;
+  padding: 0;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.snapshotBlock {
+  text-align: right;
+}
+
+.thresholdInfo {
+  text-align: right;
+}
+
+.toggleDelegateVoteView {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  opacity: 0.5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: ease-in-out 125ms;
+  width: fit-content;
+  margin-left: 0.1rem;
+}
+
+.toggleDelegateVoteView:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .toggleDelegateVoteView {
+    display: none;
+  }
+}
+
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
+.dqIcon {
+  opacity: 0.5;
+  margin-left: 0.25rem;
+  margin-bottom: 0.25rem;
+  height: 18px;
+  width: 18px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.boldedLabel {
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  margin-bottom: 0.5rem;
+}
+
+.sidebar > div {
+  @media (min-width: 993px) {
+    height: 100%;
+  }
+}
+
+.proposerOptionsWrapper,
+.objectionWrapper {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 5px 15px;
+  @media (max-width: 992px) {
+    text-align: center;
+    padding: 10px 10px;
+  }
+}
+
+.proposerOptions,
+.objection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}
+
+.objection strong {
+  color: #000;
+}
+
+.proposerOptions p,
+.objection p {
+  @media (max-width: 992px) {
+    padding-top: 0;
+    margin: 0 0 5px;
+  }
+}
+
+.proposerOptionsHeader,
+.objectionHeader {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  display: block;
+  font-weight: bold;
+}
+
+a.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.primaryButton:hover {
+  opacity: 0.75;
+}
+
+.v3ProposalWrapper {
+  margin-top: 2rem;
+}
+
+.voteAgainst {
+  background-color: var(--brand-color-red);
+  color: #fff;
+}
+
+.voteAgainst:hover {
+  opacity: 0.7;
+}
+
+.awaitingStateChangeButton {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px;
+}
+.awaitingStateChangeButton p {
+  text-align: center;
+  font-size: 12px;
+  color: var(--brand-gray-light-text);
+  margin: 0;
+  padding: 0;
+}

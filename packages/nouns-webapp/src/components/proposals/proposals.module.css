@@ -1,0 +1,404 @@
+.proposals {
+  display: flex;
+  flex-direction: column;
+}
+
+.proposals > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.sectionWrapper {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.headerWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+}
+
+.tab {
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-family: 'Londrina Solid';
+  padding: 10px 14px 6px;
+  font-size: 32px;
+  line-height: 1;
+  color: #000;
+}
+
+.activeTab {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #fff;
+  padding: 10px 14px 10px;
+  position: relative;
+  top: 2px;
+}
+
+.heading {
+  font-family: 'Londrina Solid';
+  font-size: 40px;
+  margin: 0 !important;
+  width: auto;
+}
+
+.generateBtn {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-color-green) !important;
+}
+
+.generateBtnDisabled {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+}
+.generateBtnDisabled:focus,
+.generateBtnDisabled:hover,
+.generateBtnDisabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.proposalLink {
+  padding: 1rem;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e3e8;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #f4f4f8;
+  font-size: 22px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 1rem;
+}
+
+.proposalInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.proposalLink:hover {
+  background: white;
+  color: inherit !important;
+  cursor: pointer;
+}
+
+.markdown h1 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.markdown h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.markdown h3 {
+  font-size: 1.3rem;
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
+.nullStateCopy {
+  margin-top: 0.9rem;
+  margin-right: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+  @media (max-width: 992px) {
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.mobileCountdownWrapper {
+  display: none;
+}
+
+.desktopCountdownWrapper {
+  display: flex;
+}
+
+.nounInWalletBtnWrapper {
+  display: flex;
+  padding-top: 0.8rem;
+}
+
+.alert {
+  width: 100%;
+}
+
+.proposalsList {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 992px) {
+  .headerWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .desktopCountdownWrapper {
+    display: none;
+  }
+
+  .mobileCountdownWrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .nullStateCopy {
+    margin-top: 0;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .proposalTitle {
+    max-width: 65%;
+    overflow-wrap: break-word;
+  }
+
+  .nounInWalletBtnWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .headerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .forceFlexRow {
+    flex-direction: row;
+  }
+
+  .heading {
+    width: 100%;
+  }
+
+  .nullStateSubmitProposalBtnWrapper {
+    text-align: right;
+  }
+}
+
+.nullBtnWrapper {
+  min-width: 10rem;
+}
+
+.proposalId {
+  color: #8c8d92;
+  margin-right: 0.5rem;
+}
+
+.proposalTitle {
+  width: 80%;
+}
+
+.proposalStatusWrapper {
+  margin-left: 0.5rem;
+  min-width: max-content;
+}
+
+.submitProposalButtonWrapper {
+  text-align: right;
+}
+
+.nullStateSubmitProposalBtnWrapper {
+  text-align: right;
+}
+
+.votePillWrapper {
+  max-width: 5rem;
+}
+
+.countdownPill {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: #00000080;
+  width: fit-content;
+  margin-left: -0.5rem;
+}
+
+.countdownPillContentWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.countdownPillClock {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.countdownPillText {
+  margin-left: 0.25rem;
+}
+
+.delegateBtnWrapper {
+  padding-left: 0.5rem;
+}
+
+.changeDelegateBtn {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(95, 95, 95);
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+}
+
+.changeDelegateBtn:focus,
+.changeDelegateBtn:hover {
+  background-color: #e2e3e8;
+  color: black;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.changeDelegateBtn:active {
+  background-color: #e2e3e8 !important;
+}
+
+.candidatesSidebar {
+  font-family: 'PT Root UI';
+}
+
+.candidatesSidebar h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.candidatesSidebar h5 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+.candidatesSidebar p {
+  margin: 0;
+  padding: 0;
+  color: var(--brand-gray-light-text);
+}
+.candidatesSidebar .button {
+  display: block;
+  background-color: black;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: white;
+  padding: 1rem 1rem;
+  line-height: 1;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+.candidatesSidebar .button.disabled {
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+  pointer-events: none;
+}
+
+.candidatesSidebar .button:focus,
+.candidatesSidebar .button:hover {
+  background-color: black;
+  color: #e2e3e8;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.candidatesSidebar .button.disabled:focus,
+.candidatesSidebar .button.disabled:hover,
+.candidatesSidebar .button.disabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.dataStatus {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
