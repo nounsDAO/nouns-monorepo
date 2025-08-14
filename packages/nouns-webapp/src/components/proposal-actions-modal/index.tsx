@@ -9,12 +9,12 @@ import SolidColorBackgroundModal from '@/components/solid-color-background-modal
 
 import FunctionCallEnterArgsStep from './steps/function-call-enter-args-step';
 import FunctionCallReviewStep from './steps/function-call-review-step';
-import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
-import SelectProposalActionStep from './steps/SelectProposalActionStep';
-import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
-import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
+import FunctionCallSelectFunctionStep from './steps/function-call-select-function-step';
+import SelectProposalActionStep from './steps/select-proposal-action-step';
+import StreamPaymentDateDetailsStep from './steps/stream-payments-date-details-step';
+import StreamPaymentsPaymentDetailsStep from './steps/stream-payments-payment-details-step';
 import StreamPaymentsReviewStep from './steps/stream-payments-review-step';
-import TransferFundsDetailsStep, { SupportedCurrency } from './ste../transfer-funds-details-step';
+import TransferFundsDetailsStep, { SupportedCurrency } from './steps/transfer-funds-details-step';
 import TransferFundsReviewStep from './steps/transfer-funds-review-step';
 
 export enum ProposalActionCreationStep {
