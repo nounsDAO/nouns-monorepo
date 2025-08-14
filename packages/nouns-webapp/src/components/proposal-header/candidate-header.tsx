@@ -18,7 +18,7 @@ import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 
 import classes from './proposal-header.module.css';
 
-import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
+import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 
 interface CandidateHeaderProps {
   title: string;

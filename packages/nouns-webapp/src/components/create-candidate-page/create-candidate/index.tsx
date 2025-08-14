@@ -34,7 +34,7 @@ import { Link } from 'react-router';
 
 import classes from '../create-proposal/create-proposal.module.css';
 
-import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
+import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 
 const CreateCandidatePage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

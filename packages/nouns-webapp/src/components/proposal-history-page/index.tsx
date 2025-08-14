@@ -15,7 +15,7 @@ import headerClasses from '@/components/proposal-header/proposal-header.module.c
 import Section from '@/components/section';
 import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
 import classes from './vote.module.css';
-import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
+import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 import ProposalContent from '@/components/proposal-content';
 
 import ReactDiffViewer from 'react-diff-viewer';
