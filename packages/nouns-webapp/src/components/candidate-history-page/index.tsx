@@ -22,8 +22,8 @@ import {
 import { Link, useParams } from 'react-router';
 
 import ProposalContent from '../../components/proposal-content';
-import VersionTab from '../ProposalHistory/VersionTab';
 import classes from '../proposal-history/vote.module.css';
+import VersionTab from '../ProposalHistory/VersionTab';
 
 import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';

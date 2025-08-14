@@ -1,3 +1,5 @@
+import type { StaticImageData } from 'next/image';
+
 import React from 'react';
 
 import Image from 'react-bootstrap/Image';
@@ -5,7 +7,6 @@ import Image from 'react-bootstrap/Image';
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 
 import classes from './Noun.module.css';
-import type { StaticImageData } from 'next/image';
 
 export const LoadingNoun = () => {
   return (

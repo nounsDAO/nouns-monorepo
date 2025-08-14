@@ -6,11 +6,10 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
-import dynamic from 'next/dynamic';
 
 // Dynamically import components to avoid SSR evaluation issues
 const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button/index'), {
@@ -40,9 +39,10 @@ import {
 } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
+import { Link, useParams } from 'react-router';
 
-import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 import classes from '@/components/create-proposal-page/create-proposal.module.css';
+import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';
 
 interface EditProposalProps {
   match: {

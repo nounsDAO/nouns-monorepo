@@ -4,13 +4,14 @@ import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import ReactDOM from 'react-dom';
 
-import BidHistoryModalRow from '@/components/bid-historyModalRow';
 import { StandaloneNounRoundedCorners } from '@/components/standalone-noun';
 import { Bid } from '@/utils/types';
 import { Auction } from '@/wrappers/nounsAuction';
 import { useAuctionBids } from '@/wrappers/onDisplayAuction';
 
 import classes from './bid-history-modal.module.css';
+
+import BidHistoryModalRow from '@/components/bid-historyModalRow';
 
 interface BackdropProps {
   onDismiss: () => void;

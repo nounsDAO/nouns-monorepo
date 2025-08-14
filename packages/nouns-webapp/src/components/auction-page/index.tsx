@@ -11,8 +11,8 @@ import NounsIntroSection from '@/components/nouns-intro-section';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { nounPath } from '@/utils/history';
-import { useParams } from 'react-router';
 import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
+import { useParams } from 'react-router';
 
 type AuctionPageProps = object;
 

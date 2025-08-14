@@ -3,7 +3,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { FormControl } from 'react-bootstrap';
-import { Link } from 'react-router';
 
 import link from '@/assets/icons/Link.svg';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
@@ -12,6 +11,7 @@ import {
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '@/wrappers/nounsData';
+import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';
 

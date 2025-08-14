@@ -3,6 +3,7 @@ import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
 import Link from '@/components/link';
+import Section from '@/components/section';
 import {
   useReadNounsDescriptorAccessoryCount,
   useReadNounsDescriptorBackgroundCount,
@@ -10,7 +11,6 @@ import {
   useReadNounsDescriptorHeadCount,
   useReadNounsDescriptorGlassesCount,
 } from '@/contracts';
-import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 
 import classes from './Documentation.module.css';

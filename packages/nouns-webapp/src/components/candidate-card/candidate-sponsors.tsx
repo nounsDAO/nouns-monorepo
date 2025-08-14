@@ -6,8 +6,8 @@ import clsx from 'clsx';
 import { CandidateSignature } from '@/wrappers/nounsData';
 import { delegateNounsAtBlockQuery, Delegates } from '@/wrappers/subgraph';
 
-import CandidateSponsorImage from './CandidateSponsorImage';
 import classes from './candidate-sponsors.module.css';
+import CandidateSponsorImage from './CandidateSponsorImage';
 
 type CandidateSponsorsProps = {
   signers: CandidateSignature[];

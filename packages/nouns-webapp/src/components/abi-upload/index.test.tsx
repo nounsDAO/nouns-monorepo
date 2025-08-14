@@ -40,7 +40,7 @@ describe('ABIUpload Component', () => {
       />,
     );
 
-    const input = screen.getByLabelText(/ABI/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/abi/i) as HTMLInputElement;
     expect(input).toHaveAttribute('type', 'file');
     expect(input).toHaveAttribute('accept', 'application/JSON');
     expect(input).toBeValid();
@@ -58,7 +58,7 @@ describe('ABIUpload Component', () => {
       />,
     );
 
-    const input = screen.getByLabelText(/ABI/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/abi/i) as HTMLInputElement;
     fireEvent.change(input, {
       target: { files: [new File(['content'], 'test.json', { type: 'application/json' })] },
     });

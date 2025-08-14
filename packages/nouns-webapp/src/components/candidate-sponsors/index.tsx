@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
-import { Link } from 'react-router';
 import { useAccount } from 'wagmi';
 
 import { Proposal, ProposalState, useActivePendingUpdatableProposers } from '@/wrappers/nounsDao';
 import { ProposalCandidate } from '@/wrappers/nounsData';
 import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from './candidate-sponsors.module.css';
 import OriginalSignature from './OriginalSignature';

@@ -17,9 +17,9 @@ import { useAccount, useBlockNumber } from 'wagmi';
 import CandidateSponsors from '@/components/candidate-sponsors';
 import ProposalCandidateContent from '@/components/proposal-content/proposal-candidate-content';
 import CandidateHeader from '@/components/proposal-header/candidate-header';
+import Section from '@/components/section';
 import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useAppSelector } from '@/hooks';
-import Section from '@/components/section';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,

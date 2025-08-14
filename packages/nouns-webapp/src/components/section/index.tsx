@@ -2,7 +2,7 @@ import { CSSProperties } from 'react';
 
 import { Container, Row } from 'react-bootstrap';
 
-import classes from './Section.module.css';
+import classes from './section.module.css';
 
 const Section: React.FC<{
   fullWidth: boolean;

@@ -5,9 +5,8 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Alert, Button, Col } from 'react-bootstrap';
-import { Link } from 'react-router';
 import dynamic from 'next/dynamic';
+import { Alert, Button, Col } from 'react-bootstrap';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 
@@ -31,6 +30,7 @@ import { defaultChain } from '@/wagmi';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from '../create-proposal/create-proposal.module.css';
 

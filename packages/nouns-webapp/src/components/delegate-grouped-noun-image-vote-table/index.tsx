@@ -4,10 +4,11 @@ import DelegateHoverCard from '@/components/delegate-hover-card';
 import { GrayCircle } from '@/components/gray-circle';
 import HoverCard from '@/components/hover-card';
 import TightStackedCircleNouns from '@/components/tight-stacked-circle-nouns';
-import VoteCardPager from '@/components/vote-cardPager';
 import { pseudoRandomPredictableShuffle } from '@/utils/pseudoRandomPredictableShuffle';
 
 import classes from './delegate-grouped-noun-image-vote-table.module.css';
+
+import VoteCardPager from '@/components/vote-cardPager';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:

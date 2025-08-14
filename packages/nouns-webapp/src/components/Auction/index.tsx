@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
 
 import AuctionActivity from '@/components/auction-activity';
 import { LoadingNoun } from '@/components/legacy-noun';
@@ -16,6 +15,7 @@ import { beige, grey } from '@/utils/nounBgColors';
 import { isNounderNoun } from '@/utils/nounderNoun';
 import { Auction as IAuction } from '@/wrappers/nounsAuction';
 import { INounSeed } from '@/wrappers/nounToken';
+import { useNavigate } from 'react-router';
 
 import classes from './Auction.module.css';
 
