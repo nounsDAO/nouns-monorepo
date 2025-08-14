@@ -17,7 +17,7 @@ export default function Error({
           {error.message}
         </p>
       ) : null}
-      <div className="mt-4 d-flex gap-2">
+      <div className="d-flex mt-4 gap-2">
         <button className="btn btn-primary" onClick={() => reset()}>
           Try again
         </button>
