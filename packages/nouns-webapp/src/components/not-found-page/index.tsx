@@ -1,8 +1,8 @@
 import { Trans } from '@lingui/react/macro';
 import { Col, Image } from 'react-bootstrap';
 
-import _404img from '../../assets/404noun.png';
-import Section from '../../layout/Section';
+import _404img from '@/assets/404noun.png';
+import Section from '@/components/section';
 
 import classes from './not-found.module.css';
 
