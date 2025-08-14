@@ -19,8 +19,11 @@ interface ModalOverlayProps {
 const ModalOverlay: React.FC<ModalOverlayProps> = ({ content, onDismiss, title }) => {
   return (
     <div className={classes.modal}>
-      <button className={classes.closeButton} onClick={onDismiss}>
-        <img src={typeof xIcon === 'string' ? xIcon : (xIcon as any).src} alt="Button to close modal" />
+      <button className={classes.closeButton} onClick={onDismiss} type="button">
+        <img
+          src={typeof xIcon === 'string' ? xIcon : (xIcon as { src: string }).src}
+          alt="Button to close modal"
+        />
       </button>
       <h3>{title}</h3>
       <div className={classes.content}>{content}</div>
