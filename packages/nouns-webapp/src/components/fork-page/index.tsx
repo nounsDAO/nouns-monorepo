@@ -33,6 +33,7 @@ import DeployForkButton from './deploy-fork-button';
 import ForkEvent from './fork-event';
 import classes from './fork.module.css';
 import WithdrawNounsButton from './withdraw-nouns-button';
+import { map } from 'remeda';
 
 const now = new Date();
 
@@ -438,25 +439,24 @@ const ForkPage = () => {
                       </p>
                     </div>
                   )}
-                {escrowEvents.data != null &&
-                  escrowEvents.data.map(event => {
-                    if (event?.eventType === 'ForkingEnded') {
-                      if (
-                        event.createdAt != null &&
-                        forkDetails.data.forkingPeriodEndTimestamp != null &&
-                        now.getTime() / 1000 < +forkDetails.data.forkingPeriodEndTimestamp
-                      ) {
-                        return null;
-                      }
+                {map(escrowEvents.data, event => {
+                  if (event?.eventType === 'ForkingEnded') {
+                    if (
+                      event.createdAt != null &&
+                      forkDetails.data.forkingPeriodEndTimestamp != null &&
+                      now.getTime() / 1000 < +forkDetails.data.forkingPeriodEndTimestamp
+                    ) {
+                      return null;
                     }
-                    return (
-                      <ForkEvent
-                        key={event.id}
-                        event={event}
-                        isOnlyEvent={escrowEvents.data.length <= 1}
-                      />
-                    );
-                  })}
+                  }
+                  return (
+                    <ForkEvent
+                      key={event.id}
+                      event={event}
+                      isOnlyEvent={escrowEvents.data.length <= 1}
+                    />
+                  );
+                })}
               </Col>
             </Row>
           </Container>
