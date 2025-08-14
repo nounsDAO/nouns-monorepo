@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
   experimental: {
     // Enable webpack 5 features
     esmExternals: true,
+
+    // Enable server components
+    swcPlugins: [
+      [
+        "@lingui/swc-plugin",
+        {
+          // Additional Configuration
+        },
+      ],
+    ],
   },
 
   // Output configuration
@@ -19,12 +29,12 @@ const nextConfig: NextConfig = {
   // Webpack configuration
   webpack: (config, { isServer }) => {
     // Lingui loader for .po files
-    config.module.rules.push({
-      test: /\.po$/,
-      use: {
-        loader: '@lingui/loader',
-      },
-    });
+    // config.module.rules.push({
+    //   test: /\.po$/,
+    //   use: {
+    //     loader: '@lingui/loader',
+    //   },
+    // });
 
     // SVGR support for SVG imports
     config.module.rules.push({
