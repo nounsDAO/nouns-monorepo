@@ -131,7 +131,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
 
       <ModalLabel>
         <Trans>Available to withdraw</Trans>
-      ./modal-label>
+      </ModalLabel>
       <h1 className={classes.bold}>
         {isUSDC
           ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? ''))
@@ -143,10 +143,10 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
 
       <ModalLabel>
         <Trans>Streamed so far</Trans>
-      ./modal-label>
+      </ModalLabel>
       <h1 className={classes.bold}>{percentStreamedSoFar.toFixed(numDecimalPlaces)}%</h1>
 
-      <ModalLabel>Total stream value./modal-label>
+      <ModalLabel>Total stream value</ModalLabel>
 
       <h1 className={classes.bold}>
         {isUSDC

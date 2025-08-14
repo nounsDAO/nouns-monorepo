@@ -59,32 +59,32 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
 
       <ModalLabel>
         <Trans>Stream</Trans>
-      ./modal-label>
+      </ModalLabel>
 
       <ModalTextPrimary>
         {Intl.NumberFormat(undefined, { maximumFractionDigits: 18 }).format(Number(state.amount))}{' '}
         {state.TransferFundsCurrency}
-      ./modal-text-primary>
+      </ModalTextPrimary>
 
       <ModalLabel>
         <Trans>To</Trans>
-      ./modal-label>
+      </ModalLabel>
       <ModalTextPrimary>
         <span data-for="address-tooltip" data-tip="address">
           <ShortAddress address={state.address} />
         </span>
-      ./modal-text-primary>
+      </ModalTextPrimary>
 
       <ModalLabel>
         <Trans>Starting on</Trans>
-      ./modal-label>
-      <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}./modal-text-primary>
+      </ModalLabel>
+      <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}</ModalTextPrimary>
 
       <ModalLabel>
         <Trans>Ending on</Trans>
-      ./modal-label>
+      </ModalLabel>
 
-      <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}./modal-text-primary>
+      <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}</ModalTextPrimary>
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}
