@@ -14,7 +14,7 @@ import {
 } from '@/wrappers/nounsDao';
 import { Link } from 'react-router';
 
-import classes from './Fork.module.css';
+import classes from './fork.module.css';
 
 type Props = {
   event?: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;

@@ -11,6 +11,7 @@ import { useAccount } from 'wagmi';
 
 import AddNounsToForkModal from '@/components/add-nouns-to-fork-modal';
 import ForkingPeriodTimer from '@/components/forking-period-timer';
+import NotFoundPage from '@/components/not-found-page';
 import Section from '@/components/section';
 import useForkTreasuryBalance from '@/hooks/use-fork-treasury-balance';
 import { useScrollToLocation } from '@/hooks/use-scroll-to-location';
@@ -28,11 +29,9 @@ import {
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import NotFoundPage from '@/components/not-found-page';
-
 import DeployForkButton from './deploy-fork-button';
-import classes from './Fork.module.css';
 import ForkEvent from './fork-event';
+import classes from './fork.module.css';
 import WithdrawNounsButton from './withdraw-nouns-button';
 
 const now = new Date();
