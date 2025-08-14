@@ -6,19 +6,24 @@ import AuctionNavigation from './index';
 
 // Mock the hooks used in the component
 vi.mock('@/hooks', () => ({
-  useAppSelector: () => '#d5d7e1', // Mock isCool to be true
+  // Simulate Redux selector by calling the provided selector with a fake state
+  useAppSelector: (selector: (state: any) => any) =>
+    selector({
+      application: { stateBackgroundColor: '#d5d7e1' },
+      onDisplayAuction: { lastAuctionNounId: 5 },
+    }),
 }));
 
-vi.mock('react-router', () => ({
-  useNavigate: () => vi.fn(),
+// Next.js router mock (component uses next/navigation)
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('../../wrappers/onDisplayAuction', () => ({
+vi.mock('@/wrappers/onDisplayAuction', () => ({
   __esModule: true,
   default: () => ({
-    nounId: {
-      toNumber: () => 5,
-    },
+    // Component casts this with Number(), so return a primitive
+    nounId: 5,
   }),
 }));
 
