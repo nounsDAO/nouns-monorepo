@@ -50,7 +50,6 @@
     "@tanstack/query-core": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-virtual": "^3.13.10",
-    "@testing-library/jest-dom": "^6.6.3",
     "@wagmi/core": "catalog:",
     "abitype": "^1.0.8",
     "axios": "^0.30.0",
