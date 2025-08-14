@@ -278,7 +278,10 @@ const CreateCandidatePage = () => {
   );
 };
 
-export default dynamic(async () => {
-  const mod = await import('react-stepz');
-  return mod.withStepProgress(CreateCandidatePage);
-}, { ssr: false });
+export default dynamic(
+  async () => {
+    const mod = await import('react-stepz');
+    return mod.withStepProgress(CreateCandidatePage);
+  },
+  { ssr: false },
+);
