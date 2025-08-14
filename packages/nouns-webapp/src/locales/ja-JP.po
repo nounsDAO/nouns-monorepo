@@ -285,8 +285,8 @@ msgid "The Threshold (minimum number of For votes required to pass a proposal) i
 msgstr "閾値（提案を通過させるために必要な賛成票の最小数）は、提案が受けた反対票の数に基づいて設定されます。これは、提案に反対するNounsの割合に応じて線形に増加し、最小閾値と最大閾値の間で変動します。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Go to playground"
-msgstr "プレイグラウンドに行く"
+#~ msgid "Go to playground"
+#~ msgstr "プレイグラウンドに行く"
 
 #: src/components/Bid/index.tsx
 msgid "or more"
@@ -823,8 +823,8 @@ msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Download the individual traits that compose Nouns"
-msgstr "名詞を構成する個々の特性をダウンロード"
+#~ msgid "Download the individual traits that compose Nouns"
+#~ msgstr "名詞を構成する個々の特性をダウンロード"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
@@ -847,16 +847,16 @@ msgid "Forks"
 msgstr "フォーク"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Explore traits"
-msgstr "特性を探索"
+#~ msgid "Explore traits"
+#~ msgstr "特性を探索"
 
 #: src/components/Footer.tsx
 msgid "Token"
 msgstr "トークン"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-msgstr "プレイグラウンドで生成されたロゴ、特性、およびすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
+#~ msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+#~ msgstr "プレイグラウンドで生成されたロゴ、特性、およびすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -879,7 +879,6 @@ msgstr "提案の拒否権は、Nouns DAOの財務に対する「51%攻撃」の
 msgid "ended {0}"
 msgstr "終了しました {0}"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 #: src/components/Footer.tsx
 msgid "Brand Assets"
 msgstr "ブランド資産"
@@ -940,8 +939,8 @@ msgid "This proposal was created by candidate signatures. Editing the proposal w
 msgstr "この提案は候補者の署名によって作成されました。提案を編集すると、新しい提案候補が作成され、元の署名者がオンチェーン提案を更新するために再署名する必要があります。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
-msgstr "さまざまな形式での象徴的なノグルを含む公式のNouns DAOブランド資産をダウンロードしてください。"
+#~ msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+#~ msgstr "さまざまな形式での象徴的なノグルを含む公式のNouns DAOブランド資産をダウンロードしてください。"
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
@@ -1090,8 +1089,8 @@ msgid "Settlement of one auction kicks off the next."
 msgstr "オークションの決済が１つ終わる度に次が始まります。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Black monochrome Noggles"
-msgstr "黒の単色ノグル"
+#~ msgid "Black monochrome Noggles"
+#~ msgstr "黒の単色ノグル"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
@@ -1307,8 +1306,8 @@ msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs 
 msgstr "DUNAモデルを採用することで、Nouns DAOは分散型自治と法的確実性のバランスを求めるDAOにとって先駆的な例を示し、分散ガバナンスイノベーションの最前線におけるその地位をさらに強固なものにしています。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Logo"
-msgstr "ロゴ"
+#~ msgid "Logo"
+#~ msgstr "ロゴ"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
@@ -1322,7 +1321,6 @@ msgid "Back"
 msgstr "戻る"
 
 #: src/pages/TraitsPage.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "ライセンス"
 
@@ -1359,8 +1357,8 @@ msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rar
 msgstr "Nounsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "White monochrome Noggles"
-msgstr "白の単色ノグル"
+#~ msgid "White monochrome Noggles"
+#~ msgstr "白の単色ノグル"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
@@ -1380,8 +1378,8 @@ msgid "Select signatures to submit with your proposal. The total number of signa
 msgstr "提案と共に提出する署名を選択してください。署名の総数は提案の閾値{0}を超える必要があります。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Nouns & Traits"
-msgstr "名詞と特性"
+#~ msgid "Nouns & Traits"
+#~ msgstr "名詞と特性"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploy Fork"
@@ -1513,8 +1511,8 @@ msgid "Add Streaming Payment Action"
 msgstr "ストリーミング支払いアクションを追加"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Generate endless Nouns assembled from the onchain artwork"
-msgstr "オンチェーンアートワークから組み立てられた無限の名詞を生成する"
+#~ msgid "Generate endless Nouns assembled from the onchain artwork"
+#~ msgstr "オンチェーンアートワークから組み立てられた無限の名詞を生成する"
 
 #: src/pages/Vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1619,8 +1617,8 @@ msgid "Tip"
 msgstr "ヒント"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Colored Noggles"
-msgstr "カラーノグル"
+#~ msgid "Colored Noggles"
+#~ msgstr "カラーノグル"
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"

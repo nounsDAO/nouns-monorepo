@@ -280,8 +280,8 @@ msgid "The Threshold (minimum number of For votes required to pass a proposal) i
 msgstr "门槛（通过提案所需的最少支持票数）取决于提案的反对票数。它会随反对比例线性增加，介于最小门槛与最大门槛之间。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Go to playground"
-msgstr "前往游乐场"
+#~ msgid "Go to playground"
+#~ msgstr "前往游乐场"
 
 #: src/components/Bid/index.tsx
 msgid "or more"
@@ -818,8 +818,8 @@ msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "使用<0>{numVotesForProp}</0>个 Nouns 进行投票"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Download the individual traits that compose Nouns"
-msgstr "下载构成名词的各个特征"
+#~ msgid "Download the individual traits that compose Nouns"
+#~ msgstr "下载构成名词的各个特征"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
@@ -842,16 +842,16 @@ msgid "Forks"
 msgstr "分叉"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Explore traits"
-msgstr "探索特征"
+#~ msgid "Explore traits"
+#~ msgstr "探索特征"
 
 #: src/components/Footer.tsx
 msgid "Token"
 msgstr "令牌"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-msgstr "在游乐场生成的标志、特征和每个名词都是<0>CC0</0>（Creative Commons Zero），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
+#~ msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+#~ msgstr "在游乐场生成的标志、特征和每个名词都是<0>CC0</0>（Creative Commons Zero），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -874,7 +874,6 @@ msgstr "提案否决权最初被设想为解决 Nouns DAO 资金库“51% 攻击
 msgid "ended {0}"
 msgstr "{0}结束"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 #: src/components/Footer.tsx
 msgid "Brand Assets"
 msgstr "品牌资产"
@@ -935,8 +934,8 @@ msgid "This proposal was created by candidate signatures. Editing the proposal w
 msgstr "此候选提案最初是通过（一组）签名来创建的。若编辑此提案将会生成一份新的候选提案，需要原签署人重新签名，才能更新链上的提案"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
-msgstr "下载官方 Nouns DAO 品牌资产，包括我们标志性的眼镜，提供多种格式。"
+#~ msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+#~ msgstr "下载官方 Nouns DAO 品牌资产，包括我们标志性的眼镜，提供多种格式。"
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
@@ -1085,8 +1084,8 @@ msgid "Settlement of one auction kicks off the next."
 msgstr "一次拍卖结算后，下一次拍卖随即开始。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Black monochrome Noggles"
-msgstr "黑色单色眼镜"
+#~ msgid "Black monochrome Noggles"
+#~ msgstr "黑色单色眼镜"
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Delegate Update Failed"
@@ -1302,8 +1301,8 @@ msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs 
 msgstr "通过采用DUNA模式，Nouns DAO为寻求在去中心化自治与法律确定性之间取得平衡的DAO们树立了先锋榜样，进一步巩固了其在去中心化治理创新前沿的地位。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Logo"
-msgstr "标志"
+#~ msgid "Logo"
+#~ msgstr "标志"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
@@ -1317,7 +1316,6 @@ msgid "Back"
 msgstr "返回"
 
 #: src/pages/TraitsPage.tsx
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "License"
 msgstr "许可证"
 
@@ -1354,8 +1352,8 @@ msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rar
 msgstr "属性稀缺性没有明确规则；所有 Nouns 同等稀有。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "White monochrome Noggles"
-msgstr "白色单色眼镜"
+#~ msgid "White monochrome Noggles"
+#~ msgstr "白色单色眼镜"
 
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
@@ -1375,8 +1373,8 @@ msgid "Select signatures to submit with your proposal. The total number of signa
 msgstr "选择要与您的提案一起提交的签名。签名总数必须大于提案阈值 {0}。"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Nouns & Traits"
-msgstr "Nouns 和特征"
+#~ msgid "Nouns & Traits"
+#~ msgstr "Nouns 和特征"
 
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploy Fork"
@@ -1508,8 +1506,8 @@ msgid "Add Streaming Payment Action"
 msgstr "添加流支付操作"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Generate endless Nouns assembled from the onchain artwork"
-msgstr "从链上艺术作品中生成无尽的名词"
+#~ msgid "Generate endless Nouns assembled from the onchain artwork"
+#~ msgstr "从链上艺术作品中生成无尽的名词"
 
 #: src/pages/Vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1614,8 +1612,8 @@ msgid "Tip"
 msgstr "提示"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
-msgid "Colored Noggles"
-msgstr "彩色眼镜"
+#~ msgid "Colored Noggles"
+#~ msgstr "彩色眼镜"
 
 #: src/components/ForkStatus/index.tsx
 msgid "Forking"
