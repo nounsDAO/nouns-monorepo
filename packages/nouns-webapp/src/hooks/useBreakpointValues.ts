@@ -8,7 +8,7 @@ import tailwindConfig from '../../tailwind.config';
 
 // Get the fully-merged Tailwind config with all defaults
 const fullConfig = resolveConfig(tailwindConfig);
-const screens = fullConfig.theme?.screens || {};
+const screens = fullConfig.theme?.screens ?? {};
 
 // Convert screen values to numbers (remove 'px' suffix)
 const breakpoints = Object.entries(screens).reduce(
