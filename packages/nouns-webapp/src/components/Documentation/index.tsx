@@ -13,7 +13,7 @@ import {
 } from '@/contracts';
 import { cn } from '@/lib/utils';
 
-import classes from './Documentation.module.css';
+import classes from './documentation.module.css';
 
 interface DocumentationProps {
   backgroundColor?: string;

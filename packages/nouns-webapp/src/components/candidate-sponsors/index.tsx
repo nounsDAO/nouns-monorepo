@@ -13,11 +13,11 @@ import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/nounToken
 import { Link } from 'react-router';
 
 import classes from './candidate-sponsors.module.css';
-import OriginalSignature from './OriginalSignature';
+import OriginalSignature from './original-signature';
 import SelectSponsorsToPropose from './select-sponsors-to-propose';
-import Signature from './Signature';
-import SignatureForm from './SignatureForm';
-import SubmitUpdateProposal from './SubmitUpdateProposal';
+import Signature from './signature';
+import SignatureForm from './signature-form';
+import SubmitUpdateProposal from './submit-update-proposal';
 
 interface CandidateSponsorsProps {
   candidate: ProposalCandidate;

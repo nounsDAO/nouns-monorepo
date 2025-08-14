@@ -35,7 +35,7 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import classes from './Candidate.module.css';
+import classes from './candidate.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

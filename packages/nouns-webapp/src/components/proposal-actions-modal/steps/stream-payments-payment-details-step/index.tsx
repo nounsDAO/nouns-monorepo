@@ -13,7 +13,7 @@ import ModalSubTitle from '@/components/modal-subtitle';
 import ModalTitle from '@/components/modal-title';
 
 import { ProposalActionModalStepProps } from '../..';
-import { SupportedCurrency } from '../TransferFundsDetailsStep';
+import { SupportedCurrency } from '../transfer-funds-details-step';
 
 const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;

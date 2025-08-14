@@ -12,7 +12,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
-import classes from './Winner.module.css';
+import classes from './winner.module.css';
 
 interface WinnerProps {
   winner: Address;

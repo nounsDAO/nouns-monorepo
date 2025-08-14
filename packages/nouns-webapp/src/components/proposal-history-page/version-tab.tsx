@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 import { Link } from 'react-router';
 
-import classes from './Vote.module.css';
+import classes from './vote.module.css';
 
 type Props = {
   isActive: boolean;

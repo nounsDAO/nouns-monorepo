@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { VoteSignalDetail } from '@/wrappers/nounsData';
 
-import VoteSignal from './VoteSignal';
+import VoteSignal from './vote-signal';
 
 type Props = {
   voteSignals: VoteSignalDetail[];

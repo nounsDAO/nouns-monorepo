@@ -27,7 +27,7 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
-import classes from './NavBar.module.css';
+import classes from './nav-bar.module.css';
 import navDropdownClasses from './nav-bar-dropdown.module.css';
 
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';

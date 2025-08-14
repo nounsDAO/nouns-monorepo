@@ -11,7 +11,7 @@ import Section from '@/components/section';
 import { Fork, ForkState, useForks } from '@/wrappers/nounsDao';
 import { Link } from 'react-router';
 
-import classes from './Forks.module.css';
+import classes from './forks.module.css';
 
 type Props = {};
 

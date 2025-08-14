@@ -17,7 +17,7 @@ import { Auction as IAuction } from '@/wrappers/nounsAuction';
 import { INounSeed } from '@/wrappers/nounToken';
 import { useNavigate } from 'react-router';
 
-import classes from './Auction.module.css';
+import classes from './auction.module.css';
 
 interface AuctionProps {
   auction?: IAuction;

@@ -6,7 +6,7 @@ import Image from 'react-bootstrap/Image';
 
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 
-import classes from './Noun.module.css';
+import classes from './noun.module.css';
 
 export const LoadingNoun = () => {
   return (

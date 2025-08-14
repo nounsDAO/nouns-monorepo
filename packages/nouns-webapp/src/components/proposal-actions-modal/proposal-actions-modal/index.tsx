@@ -14,7 +14,7 @@ import SelectProposalActionStep from './steps/SelectProposalActionStep';
 import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
 import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
 import StreamPaymentsReviewStep from './step./stream-payments-review-step';
-import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
+import TransferFundsDetailsStep, { SupportedCurrency } from './ste../transfer-funds-details-step';
 import TransferFundsReviewStep from './step./transfer-funds-review-step';
 
 export enum ProposalActionCreationStep {

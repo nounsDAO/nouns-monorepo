@@ -9,7 +9,7 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nounsDao';
 
-import classes from './Fork.module.css';
+import classes from './fork.module.css';
 
 type Props = {
   isDeployModalOpen: boolean;

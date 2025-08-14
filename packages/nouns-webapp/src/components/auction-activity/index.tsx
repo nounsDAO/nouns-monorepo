@@ -26,8 +26,8 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { Auction } from '@/wrappers/nounsAuction';
 
-import classes from './AuctionActivity.module.css';
-import bidHistoryClasses from './BidHistory.module.css';
+import classes from './auction-activity.module.css';
+import bidHistoryClasses from './bid-history.module.css';
 
 const openEtherscanBidHistory = () => {
   const chainId = defaultChain.id;

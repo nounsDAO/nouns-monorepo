@@ -11,7 +11,7 @@ import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import { SupportedCurrency } from '../TransferFundsDetailsStep';
+import { SupportedCurrency } from '../transfer-funds-details-step';
 
 import classes from './transfer-funds-review-step.module.css';
 

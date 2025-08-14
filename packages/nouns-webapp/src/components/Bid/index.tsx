@@ -15,7 +15,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { Auction } from '@/wrappers/nounsAuction';
 
-import classes from './Bid.module.css';
+import classes from './bid.module.css';
 
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 

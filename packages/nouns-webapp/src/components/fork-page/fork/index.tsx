@@ -30,10 +30,10 @@ import { Link, useParams } from 'react-router';
 
 import NotFoundPage from '../not-found';
 
-import DeployForkButton from './DeployForkButton';
-import classes from './Fork.module.css';
-import ForkEvent from './ForkEvent';
-import WithdrawNounsButton from './WithdrawNounsButton';
+import DeployForkButton from './deploy-fork-button';
+import classes from './fork.module.css';
+import ForkEvent from './fork-event';
+import WithdrawNounsButton from './withdraw-nouns-button';
 
 const now = new Date();
 

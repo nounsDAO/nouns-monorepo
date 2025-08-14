@@ -65,7 +65,7 @@ import {
 } from '@/wrappers/subgraph';
 import { Link, useParams } from 'react-router';
 
-import classes from './Vote.module.css';
+import classes from './vote.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

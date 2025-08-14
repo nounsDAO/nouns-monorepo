@@ -5,7 +5,7 @@ import calendar_noun from '@/assets/calendar_noun.png';
 import LegacyNoun from '@/components/legacy-noun';
 import Section from '@/components/section';
 
-import classes from './Banner.module.css';
+import classes from './banner.module.css';
 
 const Banner = () => {
   return (

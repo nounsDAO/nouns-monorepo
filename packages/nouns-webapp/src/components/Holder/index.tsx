@@ -11,7 +11,7 @@ import { useAppSelector } from '@/hooks';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { nounQuery } from '@/wrappers/subgraph';
 
-import classes from './Holder.module.css';
+import classes from './holder.module.css';
 
 interface HolderProps {
   nounId: bigint;

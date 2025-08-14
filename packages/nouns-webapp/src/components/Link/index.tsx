@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import classes from './Link.module.css';
+import classes from './link.module.css';
 
 interface LinkProps {
   text: ReactNode;

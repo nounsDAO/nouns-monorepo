@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 
-import { NounsI18nProvider } from './NounsI18nProvider';
+import { NounsI18nProvider } from './nouns-i18n-provider';
 
 export function LanguageProvider({ children }: Readonly<{ children: ReactNode }>) {
   const locale = useActiveLocale();
@@ -13,6 +13,6 @@ export function LanguageProvider({ children }: Readonly<{ children: ReactNode }>
   return (
     <NounsI18nProvider locale={locale} forceRenderAfterLocaleChange={true}>
       {children}
-    </NounsI18nProvider>
+    ./nouns-i18n-provider>
   );
 }

@@ -35,7 +35,7 @@ import {
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
 
-import classes from './Proposals.module.css';
+import classes from './proposals.module.css';
 
 import proposalStatusClasses from '@/components/proposal-status/proposal-status.module.css';
 
