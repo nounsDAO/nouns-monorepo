@@ -7,7 +7,12 @@ import AuctionNavigation from './index';
 // Mock the hooks used in the component
 vi.mock('@/hooks', () => ({
   // Simulate Redux selector by calling the provided selector with a fake state
-  useAppSelector: (selector: (state: any) => any) =>
+  useAppSelector: (
+    selector: (state: {
+      application: { stateBackgroundColor: string };
+      onDisplayAuction: { lastAuctionNounId: number };
+    }) => unknown,
+  ) =>
     selector({
       application: { stateBackgroundColor: '#d5d7e1' },
       onDisplayAuction: { lastAuctionNounId: 5 },
