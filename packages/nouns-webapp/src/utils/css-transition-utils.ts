@@ -1,4 +1,4 @@
-import { TransitionStyles } from '../components/nouns-transition';
+import { TransitionStyles } from '@/components/nouns-transition';
 
 export const basicFadeInOut = {
   enteringStyle: { opacity: 1 },
