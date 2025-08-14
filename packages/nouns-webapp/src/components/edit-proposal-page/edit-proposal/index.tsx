@@ -23,7 +23,7 @@ const ProposalEditor = dynamic(() => import('@/components/proposal-editor'), { s
 const ProposalTransactions = dynamic(() => import('@/components/proposal-transactions'), {
   ssr: false,
 });
-const Section = dynamic(() => import('@/layout/Section'), { ssr: false });
+const Section = dynamic(() => import('@/components/section'), { ssr: false });
 
 import { nounsTokenBuyerAddress } from '@/contracts';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';

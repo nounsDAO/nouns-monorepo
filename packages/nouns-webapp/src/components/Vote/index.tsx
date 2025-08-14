@@ -35,7 +35,7 @@ import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { getNounVotes } from '@/utils/getNounsVotes';

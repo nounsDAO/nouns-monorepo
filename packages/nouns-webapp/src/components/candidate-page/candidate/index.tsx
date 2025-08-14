@@ -19,7 +19,7 @@ import ProposalCandidateContent from '@/components/proposal-content/proposal-can
 import CandidateHeader from '@/components/proposal-header/candidate-header';
 import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useAppSelector } from '@/hooks';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import {
   ProposalState,

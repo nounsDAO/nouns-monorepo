@@ -10,7 +10,7 @@ import {
   useReadNounsDescriptorHeadCount,
   useReadNounsDescriptorGlassesCount,
 } from '@/contracts';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 
 import classes from './Documentation.module.css';

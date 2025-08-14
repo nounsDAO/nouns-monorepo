@@ -11,7 +11,7 @@ import { Col, Row } from 'react-bootstrap';
 import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 
 import classes from './Governance.module.css';

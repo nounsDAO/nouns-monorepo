@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 
 import ForkStatus from '@/components/fork-status';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { Fork, ForkState, useForks } from '@/wrappers/nounsDao';
 import { Link } from 'react-router';
 

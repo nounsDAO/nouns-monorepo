@@ -13,7 +13,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import {
   ProposalCandidateVersionContent,

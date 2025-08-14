@@ -12,7 +12,7 @@ import { Col, Row } from 'react-bootstrap';
 
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
 import classes from './Vote.module.css';
 import navBarButtonClasses from '@/components/nav-bar-butto./nav-bar-button.module.css';

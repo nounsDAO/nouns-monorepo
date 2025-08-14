@@ -13,7 +13,7 @@ import AddNounsToForkModal from '@/components/add-nouns-to-fork-modal';
 import ForkingPeriodTimer from '@/components/forking-period-timer';
 import useForkTreasuryBalance from '@/hooks/useForkTreasuryBalance';
 import { useScrollToLocation } from '@/hooks/useScrollToLocation';
-import Section from '@/layout/Section';
+import Section from '@/components/section';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
 import {
