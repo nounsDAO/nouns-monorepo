@@ -136,6 +136,7 @@
     "is-ci": "^4.1.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^26.1.0",
     "lingo.dev": "^0.93.8",
     "next": "^15.1.6",
     "os-browserify": "^0.3.0",
