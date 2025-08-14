@@ -54,6 +54,12 @@ const nextConfig: NextConfig = {
       ],
     });
 
+    // Load gettext .po files using Lingui loader (per latest docs)
+    config.module.rules.push({
+      test: /\.po$/i,
+      use: [{ loader: '@lingui/loader' }],
+    });
+
     // Node.js polyfills for client-side
     if (!isServer) {
       config.resolve.fallback = {
