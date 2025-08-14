@@ -1,15 +1,19 @@
-export default {
+import { formatter } from '@lingui/format-po';
+import type { LinguiConfig } from '@lingui/conf';
+
+const linguiConfig: LinguiConfig = {
   catalogs: [
     {
       path: '<rootDir>/src/locales/{locale}',
       include: ['<rootDir>/src'],
+      exclude: ['**/node_modules/**', '**/.next/**', '**/out/**'],
     },
   ],
   compileNamespace: 'cjs',
   fallbackLocales: {
     pseudo: 'en-US',
   },
-  format: 'po',
+  format: formatter({ lineNumbers: false }),
   formatOptions: {
     lineNumbers: false,
   },
@@ -20,3 +24,5 @@ export default {
   sourceLocale: 'en-US',
   pseudoLocale: 'pseudo',
 };
+
+export default linguiConfig;
