@@ -32,7 +32,7 @@ export const Noun: FC<NounProps> = ({
     query: {
       enabled: nounId !== undefined && !providedSeed,
       select: data => {
-        if (!data) return null;
+        if (data === undefined) return null;
         return {
           background: Number(data[0]),
           body: Number(data[1]),
@@ -52,16 +52,21 @@ export const Noun: FC<NounProps> = ({
       const { parts, background } = getNounData(seed!);
       return buildSVG(parts, ImageData.palette, background);
     },
-    enabled: !!seed,
+    enabled: seed !== undefined,
   });
 
   // Handle fallback timing logic
   useEffect(() => {
-    if (!svg && loadingNounFallback && !shouldShowFallback && !fallbackStartTime) {
+    if (
+      svg === undefined &&
+      loadingNounFallback === true &&
+      shouldShowFallback === false &&
+      fallbackStartTime === null
+    ) {
       // Start showing fallback and record start time
       setShouldShowFallback(true);
       setFallbackStartTime(Date.now());
-    } else if (svg && shouldShowFallback && fallbackStartTime) {
+    } else if (svg !== undefined && shouldShowFallback === true && fallbackStartTime !== null) {
       // SVG is ready, check if minimum duration has passed
       const elapsed = Date.now() - fallbackStartTime;
       if (elapsed >= minFallbackDuration) {
@@ -77,7 +82,7 @@ export const Noun: FC<NounProps> = ({
         }, remainingTime);
         return () => clearTimeout(timeoutId);
       }
-    } else if (!loadingNounFallback && shouldShowFallback) {
+    } else if (loadingNounFallback === false && shouldShowFallback === true) {
       // Fallback disabled, reset state
       setShouldShowFallback(false);
       setFallbackStartTime(null);
