@@ -15,10 +15,10 @@ export function useBlockTimestamp(blockNumber?: bigint): number | undefined {
 
   useEffect(() => {
     async function updateBlockTimestamp() {
-      if (!blockNumber) return;
+      if (blockNumber === undefined) return;
       try {
         const block = await publicClient.getBlock({
-          blockNumber: BigInt(blockNumber),
+          blockNumber,
         });
         setBlockTimestamp(Number(block.timestamp) || undefined);
       } catch (error) {
