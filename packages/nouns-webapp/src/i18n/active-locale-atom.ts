@@ -4,7 +4,7 @@ import { atom } from 'jotai/vanilla';
 import { withAtomEffect } from 'jotai-effect';
 
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
-import { dynamicActivate } from '@/i18./nouns-i18n-provider';
+import { dynamicActivate } from '@/i18n/nouns-i18n-provider';
 
 export const pickSupportedLocale = (candidates: string[]): SupportedLocale => {
   const SUPPORTED_BASES = SUPPORTED_LOCALES.map(locale => locale.split('-')[0]);

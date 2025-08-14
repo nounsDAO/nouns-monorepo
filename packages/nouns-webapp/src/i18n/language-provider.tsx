@@ -13,6 +13,6 @@ export function LanguageProvider({ children }: Readonly<{ children: ReactNode }>
   return (
     <NounsI18nProvider locale={locale} forceRenderAfterLocaleChange={true}>
       {children}
-    ./nouns-i18n-provider>
+    </NounsI18nProvider>
   );
 }
