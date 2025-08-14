@@ -12,7 +12,6 @@ import { Col, Row } from 'react-bootstrap';
 
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
-import Section from '@/components/section';
 import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
 import classes from './vote.module.css';
 import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
@@ -27,6 +26,7 @@ import remarkBreaks from 'remark-breaks';
 
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import ProposalStatus from '@/components/proposal-status';
+import Section from '@/components/section';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 
 import { Link, useParams } from 'react-router';
