@@ -15,7 +15,7 @@ import Section from '@/components/section';
 import { useTreasuryBalance, useTreasuryUSDValue } from '@/hooks/useTreasuryBalance';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 
-import classes from './Governance.module.css';
+import classes from './governance.module.css';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();

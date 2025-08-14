@@ -23,7 +23,7 @@ import Noun from '@/components/legacy-noun';
 import Link from '@/components/link';
 
 import NounModal from './noun-modal';
-import classes from './Playground.module.css';
+import classes from './playground.module.css';
 
 interface Trait {
   title: string;

@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 // Dynamically import components to avoid SSR evaluation issues
-const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button/index'), {
+const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button'), {
   ssr: false,
 });
 const ProposalActionModal = dynamic(() => import('@/components/proposal-actions-modal'), {
