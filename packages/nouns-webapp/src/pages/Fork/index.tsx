@@ -6,7 +6,6 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -27,6 +26,7 @@ import {
   useNumTokensInForkEscrow,
 } from '@/wrappers/nounsDao';
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
+import { Link, useParams } from 'react-router';
 
 import NotFoundPage from '../NotFound';
 

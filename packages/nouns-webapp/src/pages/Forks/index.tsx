@@ -5,11 +5,11 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router';
 
 import ForkStatus from '@/components/ForkStatus';
 import Section from '@/layout/Section';
 import { Fork, ForkState, useForks } from '@/wrappers/nounsDao';
+import { Link } from 'react-router';
 
 import classes from './Forks.module.css';
 

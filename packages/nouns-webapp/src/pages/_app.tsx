@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+
 import React from 'react';
 
 // Global styles for the Pages Router

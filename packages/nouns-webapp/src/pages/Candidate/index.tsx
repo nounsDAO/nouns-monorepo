@@ -10,7 +10,6 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
 import { first, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
@@ -34,6 +33,7 @@ import {
   useCandidateProposal,
 } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
+import { Link, useParams } from 'react-router';
 
 import classes from './Candidate.module.css';
 

@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 
-import { useParams } from '@/utils/react-router-shim';
 import { useRouter } from 'next/navigation';
 import { isNumber } from 'remeda';
 
@@ -12,6 +11,7 @@ import NounsIntroSection from '@/components/NounsIntroSection';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { nounPath } from '@/utils/history';
+import { useParams } from '@/utils/react-router-shim';
 import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
 
 type AuctionPageProps = object;

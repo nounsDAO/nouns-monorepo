@@ -5,13 +5,12 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
 import { filter } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
-import dynamic from 'next/dynamic';
 
 // Dynamically import components that may reference browser APIs to avoid SSR evaluation
 const EditProposalButton = dynamic(() => import('@/components/EditProposalButton/index'), {
@@ -37,6 +36,7 @@ import {
   useUpdateProposalCandidate,
 } from '@/wrappers/nounsData';
 import { useUserVotes } from '@/wrappers/nounToken';
+import { Link, useParams } from 'react-router';
 
 import classes from '../CreateProposal/CreateProposal.module.css';
 

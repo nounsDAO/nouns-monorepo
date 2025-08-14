@@ -3,7 +3,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { Link } from 'react-router';
 
 import ShortAddress from '@/components/ShortAddress';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
@@ -13,6 +12,7 @@ import {
   ForkCycleEvent,
   useProposalTitles,
 } from '@/wrappers/nounsDao';
+import { Link } from 'react-router';
 
 import classes from './Fork.module.css';
 

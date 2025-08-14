@@ -8,12 +8,11 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
-import { Link } from 'react-router';
 import { filter } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
-import dynamic from 'next/dynamic';
 
 // Dynamically import components to avoid SSR evaluation issues
 const CreateProposalButton = dynamic(() => import('@/components/CreateProposalButton'), {
@@ -44,6 +43,7 @@ import {
   useProposeOnTimelockV1,
 } from '@/wrappers/nounsDao';
 import { useUserVotes } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from './CreateProposal.module.css';
 
@@ -369,7 +369,10 @@ const CreateProposalPage = () => {
   );
 };
 
-export default dynamic(async () => {
-  const mod = await import('react-stepz');
-  return mod.withStepProgress(CreateProposalPage);
-}, { ssr: false });
+export default dynamic(
+  async () => {
+    const mod = await import('react-stepz');
+    return mod.withStepProgress(CreateProposalPage);
+  },
+  { ssr: false },
+);

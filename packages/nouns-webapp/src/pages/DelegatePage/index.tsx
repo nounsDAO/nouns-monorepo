@@ -1,9 +1,8 @@
 'use client';
 
-import { useLocation, useNavigate } from 'react-router';
-
 import DelegationModal from '@/components/DelegationModal';
 import { getAddressFromQueryParams } from '@/utils/getAddressFromQueryParams';
+import { useLocation, useNavigate } from 'react-router';
 
 const DelegatePage = () => {
   const { search } = useLocation();

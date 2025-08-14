@@ -17,7 +17,6 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
 import ReactTooltip from 'react-tooltip';
 import { isNonNullish } from 'remeda';
 import { toast } from 'sonner';
@@ -64,6 +63,7 @@ import {
   proposalVotesQuery,
   propUsingDynamicQuorum,
 } from '@/wrappers/subgraph';
+import { Link, useParams } from 'react-router';
 
 import classes from './Vote.module.css';
 

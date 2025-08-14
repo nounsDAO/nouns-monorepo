@@ -1,15 +1,16 @@
-"use client";
+'use client';
+
+import type { StaticImageData } from 'next/image';
 
 import React from 'react';
-import type { StaticImageData } from 'next/image';
 
 // i18n macros/components removed for build stability
 import { DownloadIcon } from 'lucide-react';
-import { Link } from '@/utils/react-router-shim';
 
 import CCZero from '@/assets/cczero-badge.svg?react';
 import playgroundNouns from '@/pages/BrandAssets/playground-nouns.webp';
 import traitsImage from '@/pages/BrandAssets/traits.webp';
+import { Link } from '@/utils/react-router-shim';
 
 interface AssetCardProps {
   title: string;
@@ -93,7 +94,6 @@ const SectionCard: React.FC<{
 };
 
 const BrandAssetsPage = () => {
-
   const assets = [
     {
       title: 'Colored Noggles',
@@ -170,8 +170,8 @@ const BrandAssetsPage = () => {
               >
                 CC0
               </a>{' '}
-              (Creative Commons Zero), meaning they are in the public domain and free to use for
-              any purpose without restriction.
+              (Creative Commons Zero), meaning they are in the public domain and free to use for any
+              purpose without restriction.
             </p>
             <CCZero className="mt-6 h-16" />
           </div>

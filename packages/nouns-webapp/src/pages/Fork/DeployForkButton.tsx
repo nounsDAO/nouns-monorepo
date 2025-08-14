@@ -6,10 +6,10 @@ import { Spinner } from 'react-bootstrap';
 
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
+import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
-import { Hash } from '@/utils/types';
 
 type Props = {
   isDeployModalOpen: boolean;
@@ -76,7 +76,6 @@ function DeployForkButton(props: Props) {
           setIsWaiting(false);
           break;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [props],
   );

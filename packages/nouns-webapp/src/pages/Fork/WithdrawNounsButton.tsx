@@ -2,13 +2,13 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
+import { map } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useWithdrawFromForkEscrow } from '@/wrappers/nounsDao';
 
 import classes from './Fork.module.css';
-import { map } from 'remeda';
 
 type Props = {
   tokenIds: number[];

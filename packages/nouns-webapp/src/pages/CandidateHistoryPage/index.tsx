@@ -1,30 +1,33 @@
 'use client';
-import advanced from 'dayjs/plugin/advancedFormat';
 import { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import ProposalContent from '../../components/ProposalContent';
-import ReactDiffViewer from 'react-diff-viewer';
-import ReactMarkdown from 'react-markdown';
+
 import { Trans } from '@lingui/react/macro';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
+import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Col, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router';
+import ReactDiffViewer from 'react-diff-viewer';
+import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
-import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
-import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
-import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
 import Section from '@/layout/Section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import {
   ProposalCandidateVersionContent,
   useCandidateProposalVersions,
 } from '@/wrappers/nounsData';
+import { Link, useParams } from 'react-router';
+
+import ProposalContent from '../../components/ProposalContent';
 import VersionTab from '../ProposalHistory/VersionTab';
 import classes from '../ProposalHistory/Vote.module.css';
+
+import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
+import editorClasses from '@/components/ProposalEditor/ProposalEditor.module.css';
+import headerClasses from '@/components/ProposalHeader/ProposalHeader.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
