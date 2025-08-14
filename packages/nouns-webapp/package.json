@@ -50,6 +50,7 @@
     "@tanstack/query-core": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-virtual": "^3.13.10",
+    "@vitejs/plugin-react": "^5.0.0",
     "@wagmi/core": "catalog:",
     "abitype": "^1.0.8",
     "axios": "^0.30.0",
