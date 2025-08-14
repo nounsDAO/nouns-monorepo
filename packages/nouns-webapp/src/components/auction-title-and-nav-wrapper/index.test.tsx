@@ -12,7 +12,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div data-testid="child-element">{testText}</div>
-      ./auction-title-and-nav-wrapper>,
+      </AuctionTitleAndNavWrapper>,
     );
 
     const childElement = screen.getByTestId('child-element');
@@ -24,7 +24,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div>Test Content</div>
-      ./auction-title-and-nav-wrapper>,
+      </AuctionTitleAndNavWrapper>,
     );
 
     const container = screen.getByText('Test Content').parentElement;
@@ -35,7 +35,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
     render(
       <AuctionTitleAndNavWrapper>
         <div>Test Content</div>
-      ./auction-title-and-nav-wrapper>,
+      </AuctionTitleAndNavWrapper>,
     );
 
     const container = screen.getByText('Test Content').parentElement;
@@ -47,7 +47,7 @@ describe('AuctionTitleAndNavWrapper Component', () => {
       <AuctionTitleAndNavWrapper>
         <div data-testid="first-child">First Child</div>
         <div data-testid="second-child">Second Child</div>
-      ./auction-title-and-nav-wrapper>,
+      </AuctionTitleAndNavWrapper>,
     );
 
     expect(screen.getByTestId('first-child')).toBeInTheDocument();

@@ -6,7 +6,7 @@ import { Trans } from '@lingui/react/macro';
 import { useAtom } from 'jotai/react';
 
 import Modal from '@/components/modal';
-import { activeLocaleAtom } from '@/i18n/activeLocaleAtom';
+import { activeLocaleAtom } from '@/i18n/active-locale-atom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 
 import classes from './language-selection-modal.module.css';

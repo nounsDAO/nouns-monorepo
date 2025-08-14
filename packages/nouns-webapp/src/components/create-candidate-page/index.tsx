@@ -32,7 +32,7 @@ import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrapper
 import { useUserVotes } from '@/wrappers/nounToken';
 import { Link } from 'react-router';
 
-import classes from '../create-proposal/create-proposal.module.css';
+import classes from '@/components/create-proposal-page/create-proposal.module.css';
 
 import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 

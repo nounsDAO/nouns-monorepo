@@ -28,10 +28,10 @@ import {
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import NotFoundPage from '../not-found';
+import NotFoundPage from '@/components/not-found-page';
 
 import DeployForkButton from './deploy-fork-button';
-import classes from './fork.module.css';
+import classes from './Fork.module.css';
 import ForkEvent from './fork-event';
 import WithdrawNounsButton from './withdraw-nouns-button';
 

@@ -4,7 +4,7 @@ dayjs.extend(relativeTime);
 
 import { Fork } from '@/wrappers/nounsDao';
 
-import classes from './fork.module.css';
+import classes from './Fork.module.css';
 
 type Props = {
   forkDetails: Fork;

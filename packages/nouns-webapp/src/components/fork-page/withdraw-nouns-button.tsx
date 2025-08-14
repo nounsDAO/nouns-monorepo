@@ -8,7 +8,7 @@ import SolidColorBackgroundModal from '@/components/solid-color-background-modal
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useWithdrawFromForkEscrow } from '@/wrappers/nounsDao';
 
-import classes from './fork.module.css';
+import classes from './Fork.module.css';
 
 type Props = {
   tokenIds: number[];

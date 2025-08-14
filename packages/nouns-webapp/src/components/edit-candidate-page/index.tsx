@@ -13,7 +13,7 @@ import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 // Dynamically import components that may reference browser APIs to avoid SSR evaluation
-const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button/index'), {
+const EditProposalButton = dynamic(() => import('@/components/edit-proposal-button'), {
   ssr: false,
 });
 const ProposalActionModal = dynamic(() => import('@/components/proposal-actions-modal'), {
@@ -38,7 +38,7 @@ import {
 import { useUserVotes } from '@/wrappers/nounToken';
 import { Link, useParams } from 'react-router';
 
-import classes from '../create-proposal/create-proposal.module.css';
+import classes from '@/components/create-proposal-page/create-proposal.module.css';
 
 import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 

@@ -323,7 +323,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                         <div
                           className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
                         >
-                          <ProposalStatus status={p.status}>./proposal-status>
+                          <ProposalStatus status={p.status}></ProposalStatus>
                         </div>
                       </div>
 
