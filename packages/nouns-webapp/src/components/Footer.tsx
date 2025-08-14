@@ -1,4 +1,5 @@
-import { Trans, useLingui } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import Link from 'next/link';
 
 import DiscordIcon from '@/assets/icons/socials/discord.svg?react';
@@ -17,7 +18,6 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 
 export const Footer = () => {
-  const { t } = useLingui();
   const categories: { category: string; items: { label: string; url: string }[] }[] = [
     {
       category: 'Nouns DAO',
