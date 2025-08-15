@@ -1,11 +1,11 @@
 import ReactDiffViewer from 'react-diff-viewer';
+import { Hex } from 'viem';
 
+import { Address } from '@/utils/types';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
 import classes from './proposal-content.module.css';
 import ProposalTransaction from './proposal-transaction';
-import { Address } from '@/utils/types';
-import { Hex } from 'viem';
 
 type Props = {
   oldTransactions: ProposalDetail[];

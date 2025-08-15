@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Link } from 'react-router';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -15,6 +14,7 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';
 

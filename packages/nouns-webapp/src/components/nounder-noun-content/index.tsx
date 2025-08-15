@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
 import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';
@@ -12,6 +11,7 @@ import AuctionTitleAndNavWrapper from '@/components/auction-title-and-nav-wrappe
 import CurrentBid, { BID_N_A } from '@/components/current-bid';
 import Winner from '@/components/winner';
 import { useAppSelector } from '@/hooks';
+import { Link } from 'react-router';
 
 import nounContentClasses from './nounder-noun-content.module.css';
 

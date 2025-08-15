@@ -9,27 +9,24 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { Col, Row } from 'react-bootstrap';
-
-import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
-import headerClasses from '@/components/proposal-header/proposal-header.module.css';
-import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
-import classes from './vote.module.css';
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
-import ProposalContent from '@/components/proposal-content';
-
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
-
-import VersionTab from './version-tab';
-
 import remarkBreaks from 'remark-breaks';
 
+import ProposalContent from '@/components/proposal-content';
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import ProposalStatus from '@/components/proposal-status';
 import Section from '@/components/section';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
-
+import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
 import { Link, useParams } from 'react-router';
+
+import VersionTab from './version-tab';
+import classes from './vote.module.css';
+
+import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
+import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
+import headerClasses from '@/components/proposal-header/proposal-header.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

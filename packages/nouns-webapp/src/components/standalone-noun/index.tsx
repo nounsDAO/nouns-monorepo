@@ -4,11 +4,11 @@ import { getNounData, ImageData as data } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
 import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router';
 
 import LegacyNoun from '@/components/legacy-noun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
 import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from './standalone-noun.module.css';
 
