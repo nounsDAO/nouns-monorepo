@@ -15,7 +15,7 @@ vi.mock('@/assets/icons/Link.svg?react', () => ({
 vi.mock('@/components/short-address', () => ({
   default: ({ address, avatar }: { address: string; avatar?: boolean }) => (
     <div data-testid="short-address">
-      Short: {address} {avatar ? '(with avatar)' : ''}
+      Short: {address} {avatar === true ? '(with avatar)' : ''}
     </div>
   ),
 }));

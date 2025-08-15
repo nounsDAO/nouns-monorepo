@@ -63,7 +63,7 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const currentAuctionActivityContent = currentAuction && lastNounId && (
+  const currentAuctionActivityContent = currentAuction && lastNounId != null && (
     <AuctionActivity
       auction={currentAuction}
       isFirstAuction={currentAuction.nounId === 0n}
@@ -73,7 +73,7 @@ const Auction: React.FC<AuctionProps> = props => {
       displayGraphDepComps={true}
     />
   );
-  const nounderNounContent = currentAuction && lastNounId && (
+  const nounderNounContent = currentAuction && lastNounId != null && (
     <NounderNounContent
       mintTimestamp={BigInt(currentAuction.startTime)}
       nounId={BigInt(currentAuction.nounId)}

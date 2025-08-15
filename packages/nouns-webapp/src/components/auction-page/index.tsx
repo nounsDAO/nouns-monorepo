@@ -26,7 +26,8 @@ const AuctionPage: React.FC<AuctionPageProps> = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!lastAuctionNounId) return;
+    // Ensure we only early-return when lastAuctionNounId is nullish, not when it's 0
+    if (lastAuctionNounId == null) return;
     if (auctionId === undefined) {
       if (onDisplayAuctionNounId === Number(lastAuctionNounId)) return;
       dispatch(setOnDisplayAuctionNounId(Number(lastAuctionNounId)));

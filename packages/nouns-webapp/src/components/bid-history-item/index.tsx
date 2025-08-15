@@ -24,7 +24,7 @@ export const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ bid, classes, is
   const isMobile = window.innerWidth < 992;
 
   return (
-    <li className={isCool ? classes.bidRowCool : classes.bidRowWarm}>
+    <li className={isCool === true ? classes.bidRowCool : classes.bidRowWarm}>
       <div className={classes.bidItem}>
         <div className={classes.leftSectionWrapper}>
           <div className={classes.bidder}>
