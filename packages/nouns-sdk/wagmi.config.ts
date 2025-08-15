@@ -152,6 +152,23 @@ const treasuryAssetsConfigs = [
     abi: erc20BalanceOfAbi,
   },
   {
+    name: 'rETH',
+    filename: 'reth',
+    address: {
+      [mainnet.id]: '0xae78736cd615f374d3085123a210448e74fc6393',
+    },
+    abi: [
+      ...erc20BalanceOfAbi,
+      {
+        inputs: [],
+        name: 'getExchangeRate',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
+  },
+  {
     name: 'mETHStaking',
     filename: 'meth-staking',
     address: {
