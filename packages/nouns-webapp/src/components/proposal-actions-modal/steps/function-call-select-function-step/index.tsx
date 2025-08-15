@@ -1,10 +1,10 @@
 import type { Address } from '@/utils/types';
 import type { AbiFunction } from 'viem';
-import { Abi, isAddress } from 'viem';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import { Abi, isAddress } from 'viem';
 
 import ABIUpload from '@/components/abi-upload';
 import BrandDropdown from '@/components/brand-dropdown';
