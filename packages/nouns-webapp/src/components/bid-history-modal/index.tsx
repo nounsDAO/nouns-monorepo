@@ -4,14 +4,13 @@ import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import ReactDOM from 'react-dom';
 
+import BidHistoryModalRow from '@/components/bid-history-modal-row';
 import { StandaloneNounRoundedCorners } from '@/components/standalone-noun';
 import { Bid } from '@/utils/types';
 import { Auction } from '@/wrappers/nounsAuction';
 import { useAuctionBids } from '@/wrappers/onDisplayAuction';
 
 import classes from './bid-history-modal.module.css';
-
-import BidHistoryModalRow from '@/components/bid-history-modal-row';
 
 interface BackdropProps {
   onDismiss: () => void;
@@ -32,7 +31,7 @@ const BidHistoryModalOverlay: React.FC<BidHistoryModalOverlayProps> = ({ auction
   return (
     <>
       <div className={classes.closeBtnWrapper}>
-        <button onClick={onDismiss} className={classes.closeBtn}>
+        <button type="button" onClick={onDismiss} className={classes.closeBtn}>
           <XIcon className={classes.icon} />
         </button>
       </div>
@@ -41,21 +40,27 @@ const BidHistoryModalOverlay: React.FC<BidHistoryModalOverlayProps> = ({ auction
         <div className={classes.content}>
           <div className={classes.header}>
             <div className={classes.nounWrapper}>
-              <StandaloneNounRoundedCorners nounId={BigInt(auction && auction.nounId)} />
+              <StandaloneNounRoundedCorners nounId={BigInt(auction.nounId)} />
             </div>
 
             <div className={classes.title}>
               <h2>
                 <Trans>Bids for</Trans>
               </h2>
-              <h1>Noun {auction && auction.nounId.toString()}</h1>
+              <h1>Noun {auction.nounId.toString()}</h1>
             </div>
           </div>
           <div className={classes.bidWrapper}>
-            {bids && bids.length > 0 ? (
+            {(bids?.length ?? 0) > 0 ? (
               <ul>
-                {bids?.map((bid: Bid, i: number) => {
-                  return <BidHistoryModalRow key={i} index={i} bid={bid} />;
+                {bids?.map((bid: Bid) => {
+                  return (
+                    <BidHistoryModalRow
+                      key={bid.transactionHash}
+                      index={bid.transactionIndex}
+                      bid={bid}
+                    />
+                  );
                 })}
               </ul>
             ) : (
