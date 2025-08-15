@@ -293,9 +293,7 @@ const DynamicQuorumInfoModal: React.FC<{
 }> = props => {
   const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
-  const { query, variables } = adjustedNounSupplyAtPropSnapshot(
-    proposal && proposal.id ? proposal.id : '0',
-  );
+  const { query, variables } = adjustedNounSupplyAtPropSnapshot(proposal?.id ?? '0');
   const { data, loading, error } = useQuery(query, { variables });
 
   const dynamicQuorumProps = useDynamicQuorumProps(BigInt(proposal.startBlock));
@@ -325,8 +323,8 @@ const DynamicQuorumInfoModal: React.FC<{
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
           quorumCoefficent={
-            dynamicQuorumProps?.quorumCoefficient
-              ? dynamicQuorumProps?.quorumCoefficient / scalingFactor
+            dynamicQuorumProps?.quorumCoefficient != null
+              ? dynamicQuorumProps.quorumCoefficient / scalingFactor
               : 0
           }
           onDismiss={onDismiss}

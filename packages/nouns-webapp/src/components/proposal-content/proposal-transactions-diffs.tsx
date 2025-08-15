@@ -15,7 +15,7 @@ type Props = {
 
 export default function ProposalTransactions({ oldTransactions, newTransactions }: Props) {
   const buildTxObject = (tx: ProposalDetail) => {
-    if (!tx) {
+    if (tx == null) {
       return {
         target: '' as Address,
         functionSig: '',
@@ -42,11 +42,19 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
   });
 
   const stringifyTx = (tx: ProposalDetail) => {
-    return tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
+    const includeValue =
+      tx.value != null && Number(tx.value) !== 0 && !Number.isNaN(Number(tx.value))
+        ? String(tx.value)
+        : '';
+    return tx.target + '.' + tx.functionSig + includeValue + '(' + tx.callData + ')';
   };
 
   const isEmptyTx = (tx: ProposalDetail) => {
-    const item = tx.target + tx.functionSig + (tx.value ? tx.value : '') + tx.callData;
+    const includeValue =
+      tx.value != null && Number(tx.value) !== 0 && !Number.isNaN(Number(tx.value))
+        ? String(tx.value)
+        : '';
+    const item = tx.target + tx.functionSig + includeValue + tx.callData;
     return item === '';
   };
 
@@ -64,7 +72,7 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
             const isDiff = stringifyTx(tx.oldTx) !== stringifyTx(tx.newTx);
             if (!isDiff)
               return (
-                <div className="position-relative">
+                <div key={i} className="position-relative">
                   <div className={classes.listItemNum}>{i + 1}.</div>
                   <ProposalTransaction transaction={isEmptyTx(tx.oldTx) ? tx.newTx : tx.oldTx} />
                 </div>

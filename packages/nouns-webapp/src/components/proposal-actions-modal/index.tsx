@@ -84,7 +84,7 @@ const ModalContent: React.FC<{
           onNextBtnClick={(
             e?: React.MouseEvent | ProposalActionCreationStep | ProposalTransaction,
           ) => {
-            if (e && typeof e !== 'object') {
+            if (e !== undefined && typeof e !== 'object') {
               setStep(e);
             }
           }}
@@ -106,10 +106,10 @@ const ModalContent: React.FC<{
       return (
         <TransferFundsReviewStep
           onNextBtnClick={e => {
-            if (e && typeof e !== 'object') {
+            if (e !== undefined && typeof e !== 'object') {
               return;
             }
-            if (e && 'target' in e) {
+            if (e !== undefined && typeof e === 'object' && 'target' in e) {
               return;
             }
             onActionAdd(e as ProposalTransaction);
@@ -142,10 +142,10 @@ const ModalContent: React.FC<{
       return (
         <FunctionCallReviewStep
           onNextBtnClick={e => {
-            if (e && typeof e !== 'object') {
+            if (e !== undefined && typeof e !== 'object') {
               return;
             }
-            if (e && 'target' in e) {
+            if (e !== undefined && typeof e === 'object' && 'target' in e) {
               return;
             }
             onActionAdd(e as ProposalTransaction);
@@ -178,10 +178,10 @@ const ModalContent: React.FC<{
       return (
         <StreamPaymentsReviewStep
           onNextBtnClick={(e: ProposalTransaction) => {
-            if (e && typeof e !== 'object') {
+            if (e !== undefined && typeof e !== 'object') {
               return;
             }
-            if (e && 'target' in e) {
+            if (e !== undefined && typeof e === 'object' && 'target' in e) {
               return;
             }
             onActionAdd(e as ProposalTransaction);

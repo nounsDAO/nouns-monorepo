@@ -12,17 +12,16 @@ interface GrayCircleProps {
 }
 
 export const GrayCircle: React.FC<GrayCircleProps> = ({ isDelegateView }) => {
+  const isDelegate = isDelegateView === true;
   return (
-    <div className={isDelegateView ? classes.wrapper : ''}>
+    <div className={isDelegate ? classes.wrapper : ''}>
       <LegacyNoun
         imgPath={getGrayBackgroundSVG()}
         alt={''}
         wrapperClassName={
-          isDelegateView
-            ? nounClasses.delegateViewCircularNounWrapper
-            : nounClasses.circularNounWrapper
+          isDelegate ? nounClasses.delegateViewCircularNounWrapper : nounClasses.circularNounWrapper
         }
-        className={isDelegateView ? nounClasses.delegateViewCircular : nounClasses.circular}
+        className={isDelegate ? nounClasses.delegateViewCircular : nounClasses.circular}
       />
     </div>
   );

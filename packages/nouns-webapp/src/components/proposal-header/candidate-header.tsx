@@ -80,12 +80,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     </a>
   );
 
-  const subHead = <>{isUpdateToProposal ? <strong>Update</strong> : ''} Proposal Candidate</>;
+  const subHead = (
+    <>{isUpdateToProposal === true ? <strong>Update</strong> : ''} Proposal Candidate</>
+  );
   const transactionLink = transactionIconLink(createdTransactionHash);
   return (
     <>
       <div className={classes.backButtonWrapper}>
-        <Link to={props.isCandidate ? '/vote#candidates' : '/vote'}>
+        <Link to={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
           <button type="button" className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>
             ←
           </button>
@@ -108,7 +110,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
         </div>
         {!isMobile && (
           <div className="d-flex justify-content-end align-items-end">
-            {isActiveForVoting && voteButton}
+            {isActiveForVoting === true && voteButton}
           </div>
         )}
       </div>
@@ -169,7 +171,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       </p>
 
       {isMobile && (
-        <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
+        <div className={classes.mobileSubmitProposalButton}>
+          {isActiveForVoting === true && voteButton}
+        </div>
       )}
     </>
   );

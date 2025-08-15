@@ -64,24 +64,29 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
   return (
     <>
       <Row>
-        <Col className={clsx(classes.section, props.hasSidebar && classes.hasSidebar)}>
+        <Col
+          className={clsx(
+            classes.section,
+            props.hasSidebar === true ? classes.hasSidebar : undefined,
+          )}
+        >
           <h5>
             <Trans>Description</Trans>
           </h5>
-          {description && (
+          {description !== '' ? (
             <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
               {processProposalDescriptionText(description, title)}
             </ReactMarkdown>
-          )}
+          ) : null}
         </Col>
       </Row>
-      {details && (
+      {details.length > 0 ? (
         <Row>
           <Col className={classes.section}>
             <h5>
               <Trans>Proposed Transactions</Trans>
             </h5>
-            {props.proposeOnV1 && (
+            {props.proposeOnV1 === true && (
               <Alert variant="warning" className="mb-4">
                 <Trans>
                   This proposal interacts with the{' '}
@@ -94,7 +99,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <ProposalTransactions details={details} />
           </Col>
         </Row>
-      )}
+      ) : null}
     </>
   );
 };

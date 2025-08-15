@@ -18,7 +18,7 @@ type Props = {
 const VoteSignalGroup = (props: Props) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   useEffect(() => {
-    if (props.isExpanded) {
+    if (props.isExpanded === true) {
       setIsExpanded(true);
     } else {
       // expand on render if there are any vote signals (for For, Against, or Abstain)

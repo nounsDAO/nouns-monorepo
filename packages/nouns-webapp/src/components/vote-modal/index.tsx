@@ -146,7 +146,7 @@ const VoteModal = ({
       )}
       {!isVoteFailed && !isVoteSucessful && (
         <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
-          {!isObjectionPeriod && (
+          {isObjectionPeriod === false && (
             <>
               <div onClick={() => setVote(Vote.FOR)}>
                 <NavBarButton
@@ -173,7 +173,7 @@ const VoteModal = ({
               )}
             />
           </div>
-          {!isObjectionPeriod && (
+          {isObjectionPeriod === false && (
             <>
               <br />
               <div onClick={() => setVote(Vote.ABSTAIN)}>

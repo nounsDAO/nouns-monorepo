@@ -8,6 +8,7 @@ import {
 } from '@nouns/sdk/react/treasury';
 import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
@@ -50,7 +51,6 @@ const GovernancePage = () => {
       Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on proposals
       or delegate their vote to a third party. A minimum of{' '}
       <span className={classes.boldText}>
-        {nounsRequired !== undefined ? (
           <>
             {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
           </>
@@ -95,9 +95,10 @@ const GovernancePage = () => {
                   <h1 className={classes.usdBalance}>
                     {treasuryBalanceUSD !== undefined &&
                       i18n.number(Number(formatUnits(treasuryBalanceUSD, 6)), {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
+                          style: 'currency',
+                          currency: 'USD',
+                        })
+                      : null}
                   </h1>
                 </Col>
               </Row>

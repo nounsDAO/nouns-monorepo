@@ -147,7 +147,6 @@ const TraitsPage: React.FC = () => {
     loadTraits();
   }, []);
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   const downloadAllTraitsAsZip = async () => {
     if (zipLoading) return;
 
@@ -158,7 +157,7 @@ const TraitsPage: React.FC = () => {
       // Group traits by category for organized folder structure
       const traitsByCategory = traits.reduce(
         (acc, trait) => {
-          if (!acc[trait.category]) {
+          if (acc[trait.category] == null) {
             acc[trait.category] = [];
           }
           acc[trait.category].push(trait);
@@ -238,7 +237,7 @@ const TraitsPage: React.FC = () => {
   // Group traits by category
   const traitsByCategory = traits.reduce(
     (acc, trait) => {
-      if (!acc[trait.category]) {
+      if (acc[trait.category] == null) {
         acc[trait.category] = [];
       }
       acc[trait.category].push(trait);
@@ -249,7 +248,7 @@ const TraitsPage: React.FC = () => {
 
   // Define the order for categories
   const categoryOrder = ['Noggles', 'Heads', 'Accessories', 'Bodies', 'Backgrounds'];
-  const orderedCategories = categoryOrder.filter(category => traitsByCategory[category]);
+  const orderedCategories = categoryOrder.filter(category => traitsByCategory[category] != null);
 
   return (
     <div className="container mx-auto px-4 pt-8">

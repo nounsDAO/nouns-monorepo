@@ -23,7 +23,11 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
   return (
     <li className="m-0">
       {linkIfAddress(transaction.target)}.{transaction.functionSig}
-      {transaction.value ? String(transaction.value) : null}
+      {transaction.value != null &&
+      Number(transaction.value) !== 0 &&
+      !Number.isNaN(Number(transaction.value))
+        ? String(transaction.value)
+        : null}
       {transaction.functionSig ? (
         <>
           (<br />

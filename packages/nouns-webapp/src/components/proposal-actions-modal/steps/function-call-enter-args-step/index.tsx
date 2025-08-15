@@ -17,9 +17,9 @@ import classes from './function-call-enter-args-step.module.css';
 
 const parseArguments = (abi: Abi | undefined, func: string, args: string[]) => {
   return args.map((a, i) => {
-    const abiItem = abi ? (getAbiItem({ abi, name: func }) as AbiFunction) : undefined;
+    const abiItem = abi != null ? (getAbiItem({ abi, name: func }) as AbiFunction) : undefined;
     const type = abiItem?.inputs?.[i]?.type;
-    if (type === 'tuple' || type?.endsWith('[]')) {
+    if (type === 'tuple' || (type?.endsWith('[]') ?? false)) {
       return JSON.parse(a);
     }
     return a;
@@ -44,13 +44,13 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
 
   useEffect(() => {
     const argumentsValidator = (a: string[]) => {
-      if (!func || !abi) {
+      if (func === '' || !abi) {
         return true;
       }
 
       try {
         const abiItem = getAbiItem({ abi, name: func }) as AbiFunction;
-        if (!abiItem?.inputs?.length) return true;
+        if ((abiItem?.inputs?.length ?? 0) === 0) return true;
 
         // Try to encode function data to see if args are valid
         encodeFunctionData({
@@ -77,9 +77,9 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
   };
 
   const getAbiInputs = () => {
-    if (!abi || !func) return [];
+    if (abi == null || func === '') return [];
     const abiItem = getAbiItem({ abi, name: func }) as AbiFunction;
-    return abiItem?.inputs || [];
+    return abiItem?.inputs ?? [];
   };
 
   const inputs = getAbiInputs();
@@ -95,7 +95,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
           <Trans>Invalid Arguments</Trans>
         </div>
       )}
-      {inputs.length ? (
+      {inputs.length > 0 ? (
         <FormGroup as={Row}>
           {inputs.map((input, i) => (
             <React.Fragment key={i}>
@@ -121,7 +121,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Review and Add</Trans>}
-        isNextBtnDisabled={inputs.length ? !isValidForNextStage : false}
+        isNextBtnDisabled={inputs.length > 0 ? !isValidForNextStage : false}
         onNextBtnClick={() => {
           setState(x => ({
             ...x,

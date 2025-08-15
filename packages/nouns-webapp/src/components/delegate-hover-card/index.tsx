@@ -27,7 +27,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
   );
   const { data, loading, error } = useQuery(query, { variables });
 
-  if (loading || !data || data === undefined || data.delegates.length === 0) {
+  if (loading || data == null || data.delegates.length === 0) {
     return (
       <div className={classes.spinnerWrapper}>
         <div className={classes.spinner}>
@@ -52,7 +52,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
       </div>
 
       <div className={classes.address}>
-        <ShortAddress address={data ? data.delegates[0].id : ''} />
+        <ShortAddress address={data?.delegates?.[0]?.id ?? ''} />
       </div>
 
       <div className={classes.nounInfoWrapper}>

@@ -31,27 +31,37 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
   const [isValidForNextStage, setIsValidForNextStage] = useState(false);
 
   useEffect(() => {
-    if (state.abi) {
+    if (state.abi != null) {
       setABI(state.abi);
       setABIFileName('etherscan-abi-download.json');
     }
 
-    if (state.address.length > 0 && isAddress(state.address) && state.abi && !isValidForNextStage) {
+    if (
+      state.address.length > 0 &&
+      isAddress(state.address) &&
+      state.abi != null &&
+      !isValidForNextStage
+    ) {
       setIsValidForNextStage(true);
     }
   }, [isValidForNextStage, state]);
 
   useEffect(() => {
-    if (address.length > 0 && isAddress(address) && isABIUploadValid && !isValidForNextStage) {
+    if (
+      address.length > 0 &&
+      isAddress(address) &&
+      isABIUploadValid === true &&
+      !isValidForNextStage
+    ) {
       setIsValidForNextStage(true);
     }
   }, [address, isABIUploadValid, isValidForNextStage]);
 
   useEffect(() => {
-    if (abi) {
+    if (abi != null) {
       // Find first function in the ABI
       const functions = (abi as Abi).filter(
-        item => item.type === 'function' && item.name,
+        item => item.type === 'function' && Boolean(item.name),
       ) as AbiFunction[];
 
       if (functions.length > 0) {
@@ -70,10 +80,10 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
   };
 
   const validateAndSetABI = (file: File | undefined) => {
-    if (abiErrorTimeout) {
+    if (abiErrorTimeout != null) {
       clearTimeout(abiErrorTimeout);
     }
-    if (!file) {
+    if (file == null) {
       return;
     }
 
@@ -110,7 +120,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
   };
 
   const populateABIIfExists = async (address: string) => {
-    if (abiErrorTimeout) {
+    if (abiErrorTimeout != null) {
       clearTimeout(abiErrorTimeout);
     }
 
@@ -166,14 +176,15 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
         label={'Select Contract Function'}
         chevronTop={35}
       >
-        {abi &&
-          (abi as Abi)
-            .filter(item => item.type === 'function' && item.name)
-            .map(item => (
-              <option key={(item as AbiFunction).name} value={(item as AbiFunction).name}>
-                {(item as AbiFunction).name}
-              </option>
-            ))}
+        {abi != null
+          ? (abi as Abi)
+              .filter(item => item.type === 'function' && Boolean(item.name))
+              .map(item => (
+                <option key={(item as AbiFunction).name} value={(item as AbiFunction).name}>
+                  {(item as AbiFunction).name}
+                </option>
+              ))
+          : null}
       </BrandDropdown>
 
       <ABIUpload

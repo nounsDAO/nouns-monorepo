@@ -7,7 +7,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
-import { filter } from 'remeda';
+import { filter, isNullish } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
@@ -63,7 +63,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const { data: currentBlock } = useBlockNumber({ watch: true });
   const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
-  const hasVotes = availableVotes && availableVotes > 0;
+  const hasVotes = !isNullish(availableVotes) && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
   const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
@@ -85,7 +85,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         if (!transaction.calldata.startsWith('0x')) {
           transaction.calldata = `0x${transaction.calldata}`;
         }
-        if (transaction.usdcValue) {
+        if (!isNullish(transaction.usdcValue)) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
       });
@@ -219,11 +219,17 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
   // set initial values on page load
   useEffect(() => {
-    if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
+    if (
+      !isNullish(proposal) &&
+      !isNullish(candidate) &&
+      titleValue === '' &&
+      bodyValue === '' &&
+      (proposalTransactions?.length ?? 0) === 0
+    ) {
       const transactions = candidate?.version.content.details.map((txn: ProposalDetail) => {
         return {
           address: txn.target,
-          value: txn.value ? BigInt(txn.value.toString()) : BigInt(0),
+          value: isNullish(txn.value) ? 0n : BigInt(txn.value.toString()),
           calldata: txn.callData,
           signature: txn.functionSig,
         };
@@ -260,13 +266,15 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
           `# ${titleValue}\n\n${bodyValue}`, // Description
           candidate?.slug, // Slug
-          candidate?.proposalIdToUpdate ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
+          !isNullish(candidate?.proposalIdToUpdate) ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
           commitMessage,
         ],
         value: hasVotes ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),
       }, // Fee for non-nouners
     );
   };
+
+  const updateFeeText = !isNullish(updateCandidateCost) ? formatEther(updateCandidateCost) : '0';
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -344,11 +352,11 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           isCandidate={true}
         />
 
-        {!hasVotes && !!updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
-          <p className={classes.feeNotice}>
-            {updateCandidateCost ? formatEther(updateCandidateCost) : '0'} ETH fee upon submission
-          </p>
-        )}
+        {!hasVotes &&
+          !isNullish(updateCandidateCost) &&
+          Number(formatEther(updateCandidateCost)) > 0 && (
+            <p className={classes.feeNotice}>{updateFeeText} ETH fee upon submission</p>
+          )}
 
         <p className="text-center">
           <Trans>This will clear all previous sponsors and feedback votes</Trans>

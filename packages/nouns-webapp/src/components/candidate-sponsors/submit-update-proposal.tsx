@@ -123,7 +123,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         className={classes.reasonTextarea}
       />
       <div className={classes.modalActions}>
-        {!(errorMessage || isTxSuccessful) && (
+        {!(Boolean(errorMessage) || isTxSuccessful) && (
           <button
             type="button"
             className={clsx(
@@ -151,7 +151,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
           </button>
         )}
 
-        {errorMessage && (
+        {Boolean(errorMessage) && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
@@ -179,7 +179,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
                 <Link to={`/vote/${props.proposalIdToUpdate}`}>
                   Proposal {props.proposalIdToUpdate} has been updated
                 </Link>
-                {updateProposalBySigsState.transaction && (
+                {updateProposalBySigsState.transaction != null && (
                   <img src={link} width={16} alt="link symbol" />
                 )}
               </a>

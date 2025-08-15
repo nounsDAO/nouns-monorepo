@@ -10,7 +10,7 @@ import classes from './vote.module.css';
 
 type Props = {
   isActive: boolean;
-  setActiveVersion: Function;
+  setActiveVersion: (version: number) => void;
   id: string; // slug for candidate
   createdAt: number;
   versionNumber: number;
@@ -27,9 +27,10 @@ const VersionTab = (props: Props) => {
     setUpdatedTimestamp(date);
   }, [props.createdAt]);
 
-  const versionLink = props.isCandidate
-    ? `/candidates/${props.id}/history/${props.versionNumber}`
-    : `/vote/${props.id}/history/${props.versionNumber}`;
+  const versionLink =
+    props.isCandidate === true
+      ? `/candidates/${props.id}/history/${props.versionNumber}`
+      : `/vote/${props.id}/history/${props.versionNumber}`;
 
   return (
     <>
@@ -40,8 +41,8 @@ const VersionTab = (props: Props) => {
         <h4>
           <Trans>Version</Trans> {props.versionNumber}
         </h4>
-        <span>{updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
-        {props.updateMessage && props.isActive && (
+        <span>{updatedTimestamp !== null ? dayjs(updatedTimestamp).fromNow() : null}</span>
+        {props.updateMessage !== '' && props.isActive === true && (
           <div className={classes.message}>
             <h5>Commit message</h5>
             <p>{props.updateMessage}</p>

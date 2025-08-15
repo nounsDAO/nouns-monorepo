@@ -4,6 +4,7 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -64,7 +65,6 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
   );
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<bigint | null>(null);
@@ -72,20 +72,31 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const isMobile = isMobileScreen();
   const { data: currentBlock } = useBlockNumber();
   const currentOrSnapshotBlock = useMemo(() => {
-    const blockNumber = currentBlock ? Number(currentBlock) - 1 : 0;
-    return Math.min(Number(proposal?.voteSnapshotBlock || 0n), blockNumber) || undefined;
+    const blockNumber =
+      !isNullish(currentBlock) && Number.isFinite(Number(currentBlock))
+        ? Number(currentBlock) - 1
+        : 0;
+    const snapshotBlock = Number(proposal?.voteSnapshotBlock ?? 0n);
+    const minVal = Math.min(snapshotBlock, blockNumber);
+    if (!Number.isFinite(minVal) || Number.isNaN(minVal) || minVal === 0) {
+      return undefined;
+    }
+    return minVal;
   }, [currentBlock, proposal?.voteSnapshotBlock]);
   const availableVotes = useUserVotesAsOfBlock(currentOrSnapshotBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(BigInt(proposal?.id ?? 0n));
   const proposalVote = useProposalVote(BigInt(proposal?.id ?? 0n));
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
-  const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
+  const disableVoteButton =
+    isWalletConnected === false || availableVotes === 0 || hasVoted === true;
   const activeLocale = useActiveLocale();
-  const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
+  const hasManyVersions = Array.isArray(props.proposalVersions)
+    ? props.proposalVersions.length > 1
+    : false;
   const isDaoGteV3 = useIsDaoGteV3();
   useEffect(() => {
     const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
-    if (hasManyVersions && latestProposalVersion) {
+    if (hasManyVersions === true && latestProposalVersion != null) {
       setUpdatedTimestamp(latestProposalVersion?.createdAt);
     } else {
       setCreatedTimestamp(props.proposal.createdTimestamp);
@@ -174,7 +185,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </div>
         {!isMobile && (
           <div className="d-flex justify-content-end align-items-end">
-            {isActiveForVoting && !props.isObjectionPeriod && voteButton}
+            {isActiveForVoting === true && props.isObjectionPeriod !== true && voteButton}
           </div>
         )}
       </div>
@@ -184,7 +195,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <>
             <HoverCard
               hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-              tip={proposal && proposal.proposer ? proposal.proposer : ''}
+              tip={proposal?.proposer ?? ''}
               id="byLineHoverCard"
             >
               <div className={classes.proposalByLineWrapperJp}>
@@ -226,7 +237,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             <div className={classes.byLineContentWrapper}>
               <HoverCard
                 hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-                tip={proposal && proposal.proposer ? proposal.proposer : ''}
+                tip={proposal?.proposer ?? ''}
                 id="byLineHoverCard"
               >
                 <h3>{proposer}</h3>
@@ -265,14 +276,16 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             <Link to={`/vote/${proposal.id}/history/`}>
               <strong>Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}</strong>{' '}
               <span>
-                updated {updatedTimestamp ? relativeTimestamp(Number(updatedTimestamp)) : null}
+                updated{' '}
+                {updatedTimestamp !== null ? relativeTimestamp(Number(updatedTimestamp)) : null}
               </span>
             </Link>
           ) : (
             <>
               <strong>Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}</strong>{' '}
               <span>
-                created {createdTimestamp ? relativeTimestamp(Number(createdTimestamp)) : null}
+                created{' '}
+                {createdTimestamp !== null ? relativeTimestamp(Number(createdTimestamp)) : null}
               </span>
             </>
           )}
@@ -281,21 +294,22 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>
-          {isActiveForVoting && !props.isObjectionPeriod && voteButton}
+          {isActiveForVoting === true && props.isObjectionPeriod !== true && voteButton}
         </div>
       )}
 
-      {proposal && isActiveForVoting && hasVoted && (
+      {proposal != null && isActiveForVoting === true && hasVoted === true && (
         <Alert variant="success" className={classes.voterIneligibleAlert}>
           {getTranslatedVoteCopyFromString(proposalVote)}
         </Alert>
       )}
 
-      {proposal &&
-        isActiveForVoting &&
-        proposalCreationTimestamp &&
-        !!availableVotes &&
-        !hasVoted && (
+      {proposal != null &&
+        isActiveForVoting === true &&
+        proposalCreationTimestamp != null &&
+        Number.isFinite(proposalCreationTimestamp) &&
+        availableVotes > 0 &&
+        hasVoted !== true && (
           <Alert variant="success" className={classes.voterIneligibleAlert}>
             <Trans>
               Only Nouns you owned or were delegated to you before{' '}

@@ -191,7 +191,7 @@ const Playground: React.FC = () => {
     }
   };
 
-  let pendingTraitErrorTimeout: NodeJS.Timeout;
+  let pendingTraitErrorTimeout: NodeJS.Timeout | undefined;
   const setPendingTraitInvalid = () => {
     setPendingTraitValid(false);
     resetTraitFileUpload();
@@ -201,7 +201,7 @@ const Playground: React.FC = () => {
   };
 
   const validateAndSetCustomTrait = (file: File | undefined) => {
-    if (pendingTraitErrorTimeout) {
+    if (pendingTraitErrorTimeout !== undefined) {
       clearTimeout(pendingTraitErrorTimeout);
     }
     if (!file) {

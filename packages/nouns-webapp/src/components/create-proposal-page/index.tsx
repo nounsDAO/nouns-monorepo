@@ -90,7 +90,7 @@ const CreateProposalPage = () => {
           transaction.calldata = `0x${transaction.calldata}`;
         }
 
-        if (transaction.usdcValue) {
+        if (transaction.usdcValue != null) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
       });
@@ -111,7 +111,7 @@ const CreateProposalPage = () => {
 
   useEffect(() => {
     // only set this once
-    if (latestProposalId !== undefined && !previousProposalId) {
+    if (latestProposalId !== undefined && previousProposalId == null) {
       setPreviousProposalId(latestProposalId);
     }
   }, [latestProposalId, previousProposalId]);
@@ -184,7 +184,7 @@ const CreateProposalPage = () => {
   );
 
   const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
+    availableVotes != null && proposalThreshold != null && availableVotes > proposalThreshold,
   );
 
   const handleCreateProposal = async () => {

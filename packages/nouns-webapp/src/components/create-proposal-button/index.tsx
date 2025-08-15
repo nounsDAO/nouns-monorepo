@@ -26,14 +26,14 @@ const CreateProposalButton = ({
       return <Trans>You already have an active or pending proposal</Trans>;
     }
     if (!hasEnoughVote) {
-      if (proposalThreshold) {
+      if (proposalThreshold != null) {
         return (
           <Trans>
             You must have {i18n.number((proposalThreshold || 0) + 1)} votes to submit a proposal
           </Trans>
         );
       }
-      return <Trans>You don't have enough votes to submit a proposal</Trans>;
+      return <Trans>You don&apos;t have enough votes to submit a proposal</Trans>;
     }
     return <Trans>Create Proposal</Trans>;
   };

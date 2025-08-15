@@ -8,6 +8,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
@@ -82,9 +83,10 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const availableVotes = useUserVotes();
   const createCandidateCost = useGetCreateCandidateCost();
-  const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
-  );
+  const hasEnoughVote =
+    !isNullish(availableVotes) &&
+    !isNullish(proposalThreshold) &&
+    availableVotes > proposalThreshold;
   const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
     nounsTokenBuyerAddress[chainId],
@@ -120,7 +122,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
           transaction.calldata = `0x${transaction.calldata}`;
         }
 
-        if (transaction.usdcValue) {
+        if (!isNullish(transaction.usdcValue)) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
       });

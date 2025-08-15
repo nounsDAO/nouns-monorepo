@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
+import { isNullish } from 'remeda';
 import { formatUnits } from 'viem';
 
 import ShortAddress from '@/components/short-address';
@@ -27,7 +28,15 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
         return (
           <li key={i} className="m-0">
             {linkIfAddress(d.target)}.{d.functionSig}
-            {d.value ? d.value.toString() : null}
+            {(() => {
+              const v = d.value as unknown;
+              const hasNumberValue = typeof v === 'number' && !Number.isNaN(v) && v !== 0;
+              const hasBigIntValue = typeof v === 'bigint' && v !== 0n;
+              const hasStringValue = typeof v === 'string' && v !== '';
+              const hasValue =
+                !isNullish(v) && (hasNumberValue || hasBigIntValue || hasStringValue);
+              return hasValue ? String(v) : null;
+            })()}
             {d.functionSig ? (
               <>
                 (<br />

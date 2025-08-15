@@ -167,7 +167,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           signatures: props.candidate.version.content.signatures,
           calldatas: props.candidate.version.content.calldatas,
           description: props.candidate.version.content.description,
-          expiry: BigInt(expirationDate || 0),
+          expiry: BigInt(expirationDate ?? 0),
         };
 
         // Trigger the signature request
@@ -219,7 +219,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       await addSignature({
         args: [
           signature as `0x${string}`,
-          expirationDate ? BigInt(expirationDate) : BigInt(0),
+          !isNullish(expirationDate) ? BigInt(expirationDate) : 0n,
           props.candidate.proposer as `0x${string}`,
           props.candidate.slug,
           BigInt(props.proposalIdToUpdate), // proposalIdToUpdate
@@ -286,11 +286,11 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       isWaiting ||
       isLoading ||
       isTxSuccessful ||
-      errorMessage ||
+      Boolean(errorMessage) ||
       isGetSignatureWaiting ||
       isSignPending || // Using wagmi's isPending instead of custom state
       isGetSignatureTxSuccessful ||
-      getSignatureErrorMessage
+      Boolean(getSignatureErrorMessage)
     ) {
       setIsOverlayVisible(true);
     }
@@ -387,7 +387,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               {isSignPending && 'Confirming signature'}
               {isLoading && 'Submitting signature'}
             </span>
-            {(getSignatureErrorMessage || errorMessage) && (
+            {Boolean(getSignatureErrorMessage || errorMessage) && (
               <p className={clsx(classes.statusMessage, classes.errorMessage)}>
                 {getSignatureErrorMessage || errorMessage}
                 <button
@@ -412,7 +412,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                     rel="noreferrer"
                   >
                     Signature added successfully
-                    {addSignatureState.transaction && (
+                    {addSignatureState.transaction != null && (
                       <img src={link} width={16} alt="link symbol" />
                     )}
                   </a>
@@ -447,15 +447,15 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                     {isTxSuccessful && (
                       <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                     )}
-                    {(getSignatureErrorMessage || errorMessage) && (
+                    {Boolean(getSignatureErrorMessage || errorMessage) && (
                       <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                     )}
                     {!(
                       isWaiting ||
                       isLoading ||
                       isTxSuccessful ||
-                      errorMessage ||
-                      getSignatureErrorMessage
+                      Boolean(errorMessage) ||
+                      Boolean(getSignatureErrorMessage)
                     ) && <span className={classes.placeholder}></span>}
                   </strong>
                   <Trans>Submit signature</Trans>

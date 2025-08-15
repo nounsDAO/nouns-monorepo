@@ -88,11 +88,11 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     <li
       className={clsx(
         classes.sponsor,
-        cancelStatusOverlay?.show && classes.cancelOverlay,
-        props.signerHasActiveOrPendingProposal && classes.sponsorInvalid,
+        Boolean(cancelStatusOverlay?.show) && classes.cancelOverlay,
+        Boolean(props.signerHasActiveOrPendingProposal) && classes.sponsorInvalid,
       )}
     >
-      {props.signerHasActiveOrPendingProposal && (
+      {Boolean(props.signerHasActiveOrPendingProposal) && (
         <div className={classes.sponsorInvalidLabel}>
           <Trans>Signature invalid while signer has an active or pending proposal</Trans>
         </div>
@@ -111,7 +111,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               </a>
             </p>
             <p className={classes.expiration}>
-              {(props.isUpdateToProposal && !props.isParentProposalUpdatable) ||
+              {(Boolean(props.isUpdateToProposal) && !Boolean(props.isParentProposalUpdatable)) ||
               props.expirationTimestamp < timestampNow
                 ? 'Expired'
                 : 'Expires'}{' '}
@@ -156,7 +156,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             )}
           </div>
         )}
-        {props.isUpdateToProposal && !props.isAccountSigner && (
+        {Boolean(props.isUpdateToProposal) && !props.isAccountSigner && (
           <p className={classes.sigStatus}>
             <span>
               <FontAwesomeIcon icon={faCircleCheck} />
@@ -165,7 +165,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           </p>
         )}
       </div>
-      {cancelStatusOverlay?.show && (
+      {Boolean(cancelStatusOverlay?.show) && (
         <div
           className={clsx(
             classes.cancelStatusOverlay,

@@ -7,6 +7,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
 
@@ -52,7 +53,7 @@ const CreateCandidatePage = () => {
   const [isProposePending, setProposePending] = useState(false);
   const { _ } = useLingui();
 
-  const hasVotes = availableVotes && availableVotes > 0;
+  const hasVotes = (availableVotes ?? 0) > 0;
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -65,7 +66,7 @@ const CreateCandidatePage = () => {
           transaction.calldata = `0x${transaction.calldata}`;
         }
 
-        if (transaction.usdcValue) {
+        if (transaction.usdcValue != null) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
       });
@@ -220,7 +221,7 @@ const CreateCandidatePage = () => {
           <strong>
             <Trans>
               Submissions are free for Nouns voters. Non-voters can submit for a{' '}
-              {createCandidateCost ? formatEther(createCandidateCost) : '0'} ETH fee.
+              {isNullish(createCandidateCost) ? '0' : formatEther(createCandidateCost)} ETH fee.
             </Trans>
           </strong>
         </Alert>
@@ -268,7 +269,8 @@ const CreateCandidatePage = () => {
         <p className={classes.feeNotice}>
           {!hasVotes && (
             <Trans>
-              {createCandidateCost ? formatEther(createCandidateCost) : '0'} ETH fee upon submission
+              {isNullish(createCandidateCost) ? '0' : formatEther(createCandidateCost)} ETH fee upon
+              submission
             </Trans>
           )}
         </p>

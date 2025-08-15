@@ -34,12 +34,16 @@ const SettleManuallyBtn: React.FC<{
       return;
     }
 
-    // prettier-ignore
-    const timeLeft = MINS_TO_ENABLE_MANUAL_SETTLEMENT * 60 - (dayjs().unix() - (auction && Number(auction.endTime)));
+    if (auction == null) {
+      return;
+    }
 
-    setAuctionTimer(auction && timeLeft);
+    const endTimeSec = Number(auction.endTime);
+    const timeLeft = MINS_TO_ENABLE_MANUAL_SETTLEMENT * 60 - (dayjs().unix() - endTimeSec);
 
-    if (auction && timeLeft <= 0) {
+    setAuctionTimer(timeLeft);
+
+    if (timeLeft <= 0) {
       setSettleEnabled(true);
       setAuctionTimer(0);
     } else {

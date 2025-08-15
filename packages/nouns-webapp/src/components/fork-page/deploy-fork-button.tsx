@@ -3,6 +3,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Spinner } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
@@ -16,9 +17,9 @@ type Props = {
   isForkPeriodActive: boolean;
   isThresholdMet: boolean;
   isUserConnected: boolean;
-  setDataFetchPollInterval: Function;
-  refetchData: Function;
-  setIsDeployModalOpen: Function;
+  setDataFetchPollInterval: (ms: number) => void;
+  refetchData: () => void | Promise<void>;
+  setIsDeployModalOpen: (open: boolean) => void;
 };
 
 function DeployForkButton(props: Props) {
@@ -27,6 +28,8 @@ function DeployForkButton(props: Props) {
   const [isWaiting, setIsWaiting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
   const [isTxSuccessful, setIsTxSuccessful] = useState(false);
+
+  const hasErrorMessage = !isNullish(errorMessage) && errorMessage !== '';
 
   const handleExecuteForkStateChange = useCallback(
     ({ errorMessage, status }: { status: string; errorMessage?: string }) => {
@@ -51,26 +54,30 @@ function DeployForkButton(props: Props) {
           break;
         case 'Fail':
           setErrorMessage(
-            (
+            errorMessage ? (
               <>
                 {errorMessage}
                 <br />
                 <Trans>Please try again.</Trans>
               </>
-            ) || <Trans>Please try again.</Trans>,
+            ) : (
+              <Trans>Please try again.</Trans>
+            ),
           );
           setIsLoading(false);
           setIsWaiting(false);
           break;
         case 'Exception':
           setErrorMessage(
-            (
+            errorMessage ? (
               <>
                 {errorMessage}
                 <br />
                 <Trans>Please try again.</Trans>
               </>
-            ) || <Trans>Please try again.</Trans>,
+            ) : (
+              <Trans>Please try again.</Trans>
+            ),
           );
           setIsLoading(false);
           setIsWaiting(false);
@@ -95,9 +102,9 @@ function DeployForkButton(props: Props) {
       <p
         className={clsx(
           classes.transactionStatus,
-          isLoading && classes.transactionStatusLoading,
-          isTxSuccessful && classes.transactionStatusSuccess,
-          errorMessage && classes.transactionStatusError,
+          isLoading ? classes.transactionStatusLoading : undefined,
+          isTxSuccessful ? classes.transactionStatusSuccess : undefined,
+          hasErrorMessage ? classes.transactionStatusError : undefined,
         )}
       >
         {isWaiting && (
@@ -124,7 +131,7 @@ function DeployForkButton(props: Props) {
           <>
             <Trans>Success! The fork has been deployed.</Trans>
             <br />
-            {executeForkState.transaction && (
+            {!isNullish(executeForkState.transaction) ? (
               <a
                 href={`${buildEtherscanTxLink(executeForkState.transaction.hash as Hash)}`}
                 target="_blank"
@@ -132,10 +139,10 @@ function DeployForkButton(props: Props) {
               >
                 <Trans>View on Etherscan</Trans>
               </a>
-            )}
+            ) : null}
           </>
         )}
-        {errorMessage && errorMessage}
+        {hasErrorMessage ? errorMessage : null}
       </p>
     </div>
   );

@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { map } from 'remeda';
+import { map, isNullish } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
@@ -41,29 +41,39 @@ function WithdrawNounsButton(props: Props) {
           break;
         case 'Fail':
           setIsError(true);
-          setErrorMessage(
-            (
-              <>
-                {errorMessage}
-                <br />
+          {
+            const hasErr = !isNullish(errorMessage) && errorMessage !== '';
+            setErrorMessage(
+              hasErr ? (
+                <>
+                  {errorMessage}
+                  <br />
+                  <Trans>Please try again.</Trans>
+                </>
+              ) : (
                 <Trans>Please try again.</Trans>
-              </>
-            ) || <Trans>Please try again.</Trans>,
-          );
+              ),
+            );
+          }
           setIsLoading(false);
           setIsWaiting(false);
           break;
         case 'Exception':
           setIsError(true);
-          setErrorMessage(
-            (
-              <>
-                {errorMessage}
-                <br />
+          {
+            const hasErr = !isNullish(errorMessage) && errorMessage !== '';
+            setErrorMessage(
+              hasErr ? (
+                <>
+                  {errorMessage}
+                  <br />
+                  <Trans>Please try again.</Trans>
+                </>
+              ) : (
                 <Trans>Please try again.</Trans>
-              </>
-            ) || <Trans>Please try again.</Trans>,
-          );
+              ),
+            );
+          }
           setIsLoading(false);
           setIsWaiting(false);
           break;

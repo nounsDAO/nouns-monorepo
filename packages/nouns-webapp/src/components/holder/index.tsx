@@ -36,7 +36,7 @@ const Holder: React.FC<HolderProps> = props => {
     );
   }
 
-  const holder = data && data.noun.owner.id;
+  const holder = data?.noun?.owner?.id;
 
   const nonNounderNounContent = (
     <a
@@ -78,7 +78,7 @@ const Holder: React.FC<HolderProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isNounders ? nounderNounContent : nonNounderNounContent}
+            {isNounders === true ? nounderNounContent : nonNounderNounContent}
           </h2>
         </Col>
       </Row>

@@ -1,6 +1,7 @@
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import { Button, Spinner } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 
 interface EditProposalButtonProps {
   className?: string;
@@ -28,14 +29,14 @@ const EditProposalButton = ({
       return <Trans>You already have an active or pending proposal</Trans>;
     }
     if (!hasEnoughVote) {
-      if (proposalThreshold) {
+      if (!isNullish(proposalThreshold)) {
         return (
           <Trans>
-            You must have {i18n.number((proposalThreshold || 0) + 1)} votes to submit a proposal
+            You must have {i18n.number((proposalThreshold ?? 0) + 1)} votes to submit a proposal
           </Trans>
         );
       }
-      return <Trans>You don't have enough votes to submit a proposal</Trans>;
+      return <Trans>You don&apos;t have enough votes to submit a proposal</Trans>;
     }
     if (isCandidate) {
       return <Trans>Update Proposal Candidate</Trans>;

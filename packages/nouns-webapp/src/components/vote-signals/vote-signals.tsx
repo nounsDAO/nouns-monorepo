@@ -27,7 +27,6 @@ type VoteSignalsProps = {
   isFeedbackClosed?: boolean;
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 function VoteSignals({
   candidateSlug,
   feedback: feedbackList,
@@ -163,25 +162,26 @@ function VoteSignals({
         {userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()}
       </span>{' '}
       feedback{' '}
-      {userVoteSupport?.createdTimestamp &&
-        dayjs(userVoteSupport?.createdTimestamp * 1000).fromNow()}
+      {typeof userVoteSupport?.createdTimestamp === 'number' &&
+        dayjs(userVoteSupport.createdTimestamp * 1000).fromNow()}
     </Trans>
   );
-  const title = isCandidate ? (
-    <Trans>Pre-proposal feedback</Trans>
-  ) : (
-    <Trans>Pre-voting feedback</Trans>
-  );
+  const title =
+    isCandidate === true ? (
+      <Trans>Pre-proposal feedback</Trans>
+    ) : (
+      <Trans>Pre-voting feedback</Trans>
+    );
 
   return (
     <>
       {proposalId && (
-        <div className={clsx(isCandidate && 'relative top-0')}>
-          <div className={clsx('my-4', isCandidate && 'mt-8')}>
-            <h2 className={clsx('m-0 mb-2 text-base font-bold', isCandidate && 'text-xl')}>
+        <div className={clsx(isCandidate === true && 'relative top-0')}>
+          <div className={clsx('my-4', isCandidate === true && 'mt-8')}>
+            <h2 className={clsx('m-0 mb-2 text-base font-bold', isCandidate === true && 'text-xl')}>
               {title}
             </h2>
-            {!isCandidate && (
+            {isCandidate !== true && (
               <p className="m-0 p-0 text-base font-[PT_Root_UI] text-[var(--brand-gray-light-text)]">
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
@@ -194,7 +194,7 @@ function VoteSignals({
           <div
             className={clsx(
               'flex flex-col items-center justify-between overflow-hidden rounded-xl border border-[#e6e6e6]',
-              !isCandidate && 'lg:sticky lg:top-5',
+              isCandidate !== true && 'lg:sticky lg:top-5',
             )}
           >
             {!feedbackList ? (
@@ -220,7 +220,7 @@ function VoteSignals({
                     isExpanded={expandedGroup === 2}
                   />
                 </div>
-                {!isFeedbackClosed && userVotes !== undefined && userVotes > 0 && (
+                {isFeedbackClosed !== true && userVotes !== undefined && userVotes > 0 && (
                   <div
                     className={clsx(
                       'flex w-full flex-col items-center justify-center gap-2.5 border-t border-[#e6e6e6] bg-[#f4f4f8] p-5',
@@ -250,7 +250,7 @@ function VoteSignals({
                                 className={clsx(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
-                                  support && support === 1
+                                  support !== undefined && support === 1
                                     ? 'border-2 border-white outline-2 outline-black'
                                     : 'opacity-40',
                                   support === undefined && 'opacity-100',
@@ -284,7 +284,7 @@ function VoteSignals({
                                 className={clsx(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
-                                  support && support === 2
+                                  support !== undefined && support === 2
                                     ? 'border-2 border-white outline-2 outline-black'
                                     : 'opacity-40',
                                   support === undefined && 'opacity-100',
@@ -358,7 +358,7 @@ function VoteSignals({
               </>
             )}
           </div>
-          {isCandidate && (
+          {isCandidate === true && (
             <p className="m-0 mt-2 p-0 text-base text-sm font-[PT_Root_UI] leading-tight text-[var(--brand-gray-light-text)]">
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea

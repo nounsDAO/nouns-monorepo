@@ -73,7 +73,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   // Pre-fetch ENS of delegates (with 30 min TTL)
   // This makes hover cards load more smoothly
   useEffect(() => {
-    if (!delegateGroupedVoteData || !publicClient || ensCached) {
+    if (delegateGroupedVoteData == null || publicClient == null || ensCached === true) {
       return;
     }
 
