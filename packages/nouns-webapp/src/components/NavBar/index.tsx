@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
+import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
 import clsx from 'clsx';
 import { ConnectKitButton } from 'connectkit';
 import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
@@ -20,7 +21,6 @@ import ShortAddress from '@/components/ShortAddress';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-import { useTreasuryBalance } from '@/hooks/useTreasuryBalance';
 import { usePickByState } from '@/utils/colorResponsiveUIUtils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
@@ -37,7 +37,14 @@ const NavBar = () => {
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const location = useLocation();
-  const treasuryBalance = useTreasuryBalance();
+  const treasuryBalance = useReadNounsTreasuryBalancesInEth({
+    query: {
+      select: data => {
+        console.log(data);
+        return data.total;
+      },
+    },
+  }).data;
   const daoEtherscanLink = buildEtherscanAddressLink(nounsTreasuryAddress[chainId]);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -104,7 +111,7 @@ const NavBar = () => {
               </Nav.Item>
             )}
             <Nav.Item>
-              {treasuryBalance ? (
+              {treasuryBalance !== undefined ? (
                 <Nav.Link
                   href={daoEtherscanLink}
                   className={classes.nounsNavLink}

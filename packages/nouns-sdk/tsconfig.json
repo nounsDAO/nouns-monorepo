@@ -5,16 +5,13 @@
     /* → Basic ESM setup */
     "module": "ESNext",
     "target": "ES2021",
-    "lib": [
-      "ES2022",
-      "DOM"
-    ],
+    "lib": ["ES2022", "DOM"],
 
     /* → Tell TS how to resolve “./foo” imports */
     "moduleResolution": "node",
 
     /* → If you have your sources under src/, helps TS know where to look */
-    "rootDir": "./src",
+    "rootDir": "./",
     "baseUrl": "./",
     "paths": {
       /* → only needed if you use `import x from "foo"` aliases */
@@ -29,6 +26,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src", "test"],
   "exclude": ["node_modules"]
 }

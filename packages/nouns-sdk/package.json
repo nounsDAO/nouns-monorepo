@@ -1,56 +1,250 @@
 {
   "name": "@nouns/sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
   "repository": "github:nounsDAO/nouns-monorepo",
   "license": "GPL-3.0",
-  "author": "Nounders",
+  "contributors": [
+    "Nounders",
+    "volky.eth"
+  ],
+  "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
-    "./react/*": {
-      "import": "./dist/react/*.mjs",
-      "require": "./dist/react/*.js"
+    "./react/treasury": {
+      "types": "./dist/react/treasury.d.ts",
+      "import": "./dist/react/treasury.js",
+      "default": "./dist/react/treasury.js"
     },
-    "./*": {
-      "import": "./dist/actions/*.mjs",
-      "require": "./dist/actions/*.js"
+    "./react/auction-house": {
+      "types": "./dist/react/auction-house.d.ts",
+      "import": "./dist/react/auction-house.js",
+      "default": "./dist/react/auction-house.js"
+    },
+    "./react/data": {
+      "types": "./dist/react/data.d.ts",
+      "import": "./dist/react/data.js",
+      "default": "./dist/react/data.js"
+    },
+    "./react/descriptor": {
+      "types": "./dist/react/descriptor.d.ts",
+      "import": "./dist/react/descriptor.js",
+      "default": "./dist/react/descriptor.js"
+    },
+    "./react/governor": {
+      "types": "./dist/react/governor.d.ts",
+      "import": "./dist/react/governor.js",
+      "default": "./dist/react/governor.js"
+    },
+    "./react/legacy-treasury": {
+      "types": "./dist/react/legacy-treasury.d.ts",
+      "import": "./dist/react/legacy-treasury.js",
+      "default": "./dist/react/legacy-treasury.js"
+    },
+    "./react/stream-factory": {
+      "types": "./dist/react/stream-factory.d.ts",
+      "import": "./dist/react/stream-factory.js",
+      "default": "./dist/react/stream-factory.js"
+    },
+    "./react/stream": {
+      "types": "./dist/react/stream.d.ts",
+      "import": "./dist/react/stream.js",
+      "default": "./dist/react/stream.js"
+    },
+    "./react/token": {
+      "types": "./dist/react/token.d.ts",
+      "import": "./dist/react/token.js",
+      "default": "./dist/react/token.js"
+    },
+    "./react/usdc-payer": {
+      "types": "./dist/react/usdc-payer.d.ts",
+      "import": "./dist/react/usdc-payer.js",
+      "default": "./dist/react/usdc-payer.js"
+    },
+    "./react/usdc-token-buyer": {
+      "types": "./dist/react/usdc-token-buyer.d.ts",
+      "import": "./dist/react/usdc-token-buyer.js",
+      "default": "./dist/react/usdc-token-buyer.js"
+    },
+    "./treasury": {
+      "types": "./dist/actions/treasury.d.ts",
+      "import": "./dist/actions/treasury.js",
+      "default": "./dist/actions/treasury.js"
+    },
+    "./auction-house": {
+      "types": "./dist/actions/auction-house.d.ts",
+      "import": "./dist/actions/auction-house.js",
+      "default": "./dist/actions/auction-house.js"
+    },
+    "./data": {
+      "types": "./dist/actions/data.d.ts",
+      "import": "./dist/actions/data.js",
+      "default": "./dist/actions/data.js"
+    },
+    "./descriptor": {
+      "types": "./dist/actions/descriptor.d.ts",
+      "import": "./dist/actions/descriptor.js",
+      "default": "./dist/actions/descriptor.js"
+    },
+    "./governor": {
+      "types": "./dist/actions/governor.d.ts",
+      "import": "./dist/actions/governor.js",
+      "default": "./dist/actions/governor.js"
+    },
+    "./legacy-treasury": {
+      "types": "./dist/actions/legacy-treasury.d.ts",
+      "import": "./dist/actions/legacy-treasury.js",
+      "default": "./dist/actions/legacy-treasury.js"
+    },
+    "./stream-factory": {
+      "types": "./dist/actions/stream-factory.d.ts",
+      "import": "./dist/actions/stream-factory.js",
+      "default": "./dist/actions/stream-factory.js"
+    },
+    "./stream": {
+      "types": "./dist/actions/stream.d.ts",
+      "import": "./dist/actions/stream.js",
+      "default": "./dist/actions/stream.js"
+    },
+    "./token": {
+      "types": "./dist/actions/token.d.ts",
+      "import": "./dist/actions/token.js",
+      "default": "./dist/actions/token.js"
+    },
+    "./usdc-payer": {
+      "types": "./dist/actions/usdc-payer.d.ts",
+      "import": "./dist/actions/usdc-payer.js",
+      "default": "./dist/actions/usdc-payer.js"
+    },
+    "./usdc-token-buyer": {
+      "types": "./dist/actions/usdc-token-buyer.d.ts",
+      "import": "./dist/actions/usdc-token-buyer.js",
+      "default": "./dist/actions/usdc-token-buyer.js"
     }
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "react/treasury": [
+        "./dist/react/treasury.d.ts"
+      ],
+      "react/auction-house": [
+        "./dist/react/auction-house.d.ts"
+      ],
+      "react/data": [
+        "./dist/react/data.d.ts"
+      ],
+      "react/descriptor": [
+        "./dist/react/descriptor.d.ts"
+      ],
+      "react/governor": [
+        "./dist/react/governor.d.ts"
+      ],
+      "react/legacy-treasury": [
+        "./dist/react/legacy-treasury.d.ts"
+      ],
+      "react/stream-factory": [
+        "./dist/react/stream-factory.d.ts"
+      ],
+      "react/stream": [
+        "./dist/react/stream.d.ts"
+      ],
+      "react/token": [
+        "./dist/react/token.d.ts"
+      ],
+      "react/usdc-payer": [
+        "./dist/react/usdc-payer.d.ts"
+      ],
+      "react/usdc-token-buyer": [
+        "./dist/react/usdc-token-buyer.d.ts"
+      ],
+      "treasury": [
+        "./dist/actions/treasury.d.ts"
+      ],
+      "auction-house": [
+        "./dist/actions/auction-house.d.ts"
+      ],
+      "data": [
+        "./dist/actions/data.d.ts"
+      ],
+      "descriptor": [
+        "./dist/actions/descriptor.d.ts"
+      ],
+      "governor": [
+        "./dist/actions/governor.d.ts"
+      ],
+      "legacy-treasury": [
+        "./dist/actions/legacy-treasury.d.ts"
+      ],
+      "stream-factory": [
+        "./dist/actions/stream-factory.d.ts"
+      ],
+      "stream": [
+        "./dist/actions/stream.d.ts"
+      ],
+      "token": [
+        "./dist/actions/token.d.ts"
+      ],
+      "usdc-payer": [
+        "./dist/actions/usdc-payer.d.ts"
+      ],
+      "usdc-token-buyer": [
+        "./dist/actions/usdc-token-buyer.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist/**",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
+    "build": "NODE_OPTIONS='--max-old-space-size=8192' tsup && tsx scripts/deduplicate-abis.ts 'dist/actions/*.d.{ts,mts}' 'dist/react/*.d.{ts,mts}'",
     "clean": "rimraf dist",
-    "codegen": "wagmi generate",
+    "codegen": "wagmi generate && prettier -w src/**/*.gen.ts",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
+    "@pollyjs/adapter-fetch": "^6.0.7",
+    "@pollyjs/core": "^6.0.6",
+    "@pollyjs/persister-fs": "^6.0.6",
+    "@tanstack/react-query": "catalog:",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/pngjs": "^6.0.1",
+    "@types/react": "catalog:",
     "@wagmi/cli": "catalog:",
     "@wagmi/core": "catalog:",
     "dotenv": "catalog:",
     "glob": "^11.0.2",
+    "jsdom": "^26.1.0",
     "pngjs": "^6.0.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "terser": "^5.43.1",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
+    "viem": "catalog:",
     "vitest": "^3.2.4",
     "wagmi": "catalog:"
   },
   "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
     "@wagmi/core": "^2.0.0",
     "wagmi": "^2.0.0"
   },
   "peerDependenciesMeta": {
+    "@tanstack/react-query": {
+      "optional": true
+    },
     "wagmi": {
       "optional": true
     }

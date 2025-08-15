@@ -15,31 +15,39 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     concurrency:
       group: ci-pipeline-${{ github.ref }}-node-${{ matrix.node-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22.x, 24.x]
+        node-version: &node-version [22.x]
     steps:
-      - name: Checkout repo
+      - &checkout-step
+        name: Checkout repo
         uses: actions/checkout@v5
-      - name: Setup pnpm
+      - &setup-pnpm-step
+        name: Setup pnpm
         uses: pnpm/action-setup@v4
-      - name: Setup Node.js
+      - &setup-node-step
+        name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - name: Restore turbo cache
+      - &turbo-cache-step
+        name: Restore turbo cache
         uses: actions/cache@v4
         with:
           path: |
             .turbo
             packages/**/.turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
-      - name: Install deps
+      - &install-deps-step
+        name: Install deps
         env:
           NODE_OPTIONS: --max-old-space-size=4096
         run: pnpm install --frozen-lockfile
@@ -54,28 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x, 24.x]
+        node-version: *node-version
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-      - name: Restore turbo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            packages/**/.turbo
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
-      - name: Install deps
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
-        run: pnpm install --frozen-lockfile
+      - *checkout-step
+      - *setup-pnpm-step
+      - *setup-node-step
+      - *turbo-cache-step
+      - *install-deps-step
       - name: Run tests
         run: pnpm test
 
@@ -85,29 +78,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - *checkout-step
+      - *setup-pnpm-step
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: 22.x
           cache: pnpm
-      - name: Restore turbo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            packages/**/.turbo
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
-      - name: Install deps
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
-        run: pnpm install --frozen-lockfile
+      - *turbo-cache-step
+      - *install-deps-step
       - name: Build packages
         run: pnpm build
       - name: Lint changed files
@@ -115,6 +94,7 @@ jobs:
           echo "::add-matcher::.github/eslint-matcher.json"
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          git fetch origin $BASE_SHA $HEAD_SHA
           FILES=$(git diff --name-only --diff-filter=d "$BASE_SHA"..."$HEAD_SHA" -- '*.ts' '*.tsx' '*.js' '*.jsx')
           [ -z "$FILES" ] && echo 'no JS/TS changes' && exit 0
           pnpm lint $FILES
@@ -125,29 +105,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - *checkout-step
+      - *setup-pnpm-step
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: 22.x
           cache: pnpm
-      - name: Restore turbo cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .turbo
-            packages/**/.turbo
-          key: ${{ runner.os }}-turbo-${{ hashFiles('**/turbo.json') }}
-      - name: Install deps
-        env:
-          NODE_OPTIONS: --max-old-space-size=4096
-        run: pnpm install --frozen-lockfile
+      - *turbo-cache-step
+      - *install-deps-step
       - name: Build packages
         run: pnpm build
       - name: Check for missing translations
