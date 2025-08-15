@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import cx from 'clsx';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
+import { map } from 'remeda';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -30,10 +31,9 @@ import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToke
 import { Link, useParams } from 'react-router';
 
 import DeployForkButton from './deploy-fork-button';
-import ForkEvent from './fork-event';
+import ForkEventComponent from './fork-event';
 import classes from './fork.module.css';
 import WithdrawNounsButton from './withdraw-nouns-button';
-import { map } from 'remeda';
 
 const now = new Date();
 
@@ -180,7 +180,7 @@ const ForkPage = () => {
 
   if (!isPageDataLoaded) {
     return (
-      <div className={clsx(classes.spinner, classes.pageLoadingSpinner)}>
+      <div className={cx(classes.spinner, classes.pageLoadingSpinner)}>
         <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
       </div>
     );
@@ -199,14 +199,14 @@ const ForkPage = () => {
       <Section fullWidth={false} className="h-100">
         <Row>
           {isNewForkPage ? (
-            <div className={clsx(classes.pageHeader, classes.emptyState)}>
+            <div className={cx(classes.pageHeader, classes.emptyState)}>
               <Col lg={12}>
                 <header>
                   <div className={classes.status}>
                     <Link className={classes.backButton} to="/fork">
                       ←
                     </Link>
-                    <span className={clsx(classes.forkStatus)}>{forkStatusLabel}</span>
+                    <span className={cx(classes.forkStatus)}>{forkStatusLabel}</span>
                     <div className={classes.spacer} />
                   </div>
                   <h1>
@@ -226,7 +226,7 @@ const ForkPage = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
-                  className={clsx(classes.button, classes.primaryButton)}
+                  className={cx(classes.button, classes.primaryButton)}
                   disabled={userOwnedNounIds?.data?.length === 0}
                 >
                   {addNounsButtonLabel}
@@ -235,7 +235,7 @@ const ForkPage = () => {
             </div>
           ) : (
             <div
-              className={clsx(
+              className={cx(
                 classes.pageHeader,
                 (escrowEvents.data == null || isNewForkPage) && classes.emptyState,
                 isForked && classes.isForked,
@@ -246,7 +246,7 @@ const ForkPage = () => {
                   <Link className={classes.backButton} to="/fork">
                     ←
                   </Link>
-                  <span className={clsx(classes.forkStatus)}>{forkStatusLabel}</span>
+                  <span className={cx(classes.forkStatus)}>{forkStatusLabel}</span>
                   <div className={classes.spacer} />
                 </div>
                 <h1>
@@ -265,7 +265,7 @@ const ForkPage = () => {
               {!isForked && (
                 <Col
                   lg={6}
-                  className={clsx(classes.buttons, escrowEvents.data == null && classes.emptyState)}
+                  className={cx(classes.buttons, escrowEvents.data == null && classes.emptyState)}
                 >
                   {!isForkPeriodActive &&
                     userEscrowedNounIds != null &&
@@ -287,7 +287,7 @@ const ForkPage = () => {
                         setIsModalOpen(true);
                       }
                     }}
-                    className={clsx(classes.button, classes.primaryButton)}
+                    className={cx(classes.button, classes.primaryButton)}
                     disabled={userOwnedNounIds?.data?.length === 0}
                   >
                     {addNounsButtonLabel}
@@ -450,7 +450,7 @@ const ForkPage = () => {
                     }
                   }
                   return (
-                    <ForkEvent
+                    <ForkEventComponent
                       key={event.id}
                       event={event}
                       isOnlyEvent={escrowEvents.data.length <= 1}
