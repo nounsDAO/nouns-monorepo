@@ -37,7 +37,7 @@ const SelectSponsorsToPropose = (props: Props) => {
   const [selectedVoteCount, setSelectedVoteCount] = useState<number>(0);
   useEffect(() => {
     const voteCount = selectedSignatures.reduce((acc, sig) => {
-      const votes = sig.signer.voteCount || 0;
+      const votes = sig.signer.voteCount ?? 0;
       return acc + votes;
     }, 0);
     setSelectedVoteCount(voteCount);
@@ -163,61 +163,60 @@ const SelectSponsorsToPropose = (props: Props) => {
             </p>
           </div>
         )}
-        {props.signatures && !isTxSuccessful && selectedSignatures.length > 0 && (
+        {props.signatures.length > 0 && !isTxSuccessful && selectedSignatures.length > 0 && (
           <button
             type="button"
             onClick={() => {
-              if (props.signatures && selectedSignatures.length === props.signatures.length) {
+              if (selectedSignatures.length === props.signatures.length) {
                 setSelectedSignatures([]);
               } else {
-                setSelectedSignatures(props.signatures || []);
+                setSelectedSignatures(props.signatures);
               }
             }}
             disabled={isWaiting || isLoading}
           >
-            {selectedSignatures.length === props.signatures?.length ? 'Unselect' : 'Select'} all
+            {selectedSignatures.length === props.signatures.length ? 'Unselect' : 'Select'} all
           </button>
         )}
       </div>
       <div className={classes.list}>
-        {props.signatures &&
-          props.signatures.map((signature: CandidateSignature) => {
-            return (
-              <button
-                type="button"
-                key={signature.sig}
-                onClick={() => {
-                  if (selectedSignatures.includes(signature)) {
-                    setSelectedSignatures(
-                      selectedSignatures.filter(sig => sig.signer !== signature.signer),
-                    );
-                  } else {
-                    setSelectedSignatures([...selectedSignatures, signature]);
-                  }
-                }}
-                disabled={
-                  isWaiting ||
-                  isLoading ||
-                  isTxSuccessful ||
-                  signature.signer.activeOrPendingProposal === true
+        {props.signatures.map((signature: CandidateSignature) => {
+          return (
+            <button
+              type="button"
+              key={signature.sig}
+              onClick={() => {
+                if (selectedSignatures.includes(signature)) {
+                  setSelectedSignatures(
+                    selectedSignatures.filter(sig => sig.signer !== signature.signer),
+                  );
+                } else {
+                  setSelectedSignatures([...selectedSignatures, signature]);
                 }
-                className={clsx(
-                  classes.selectButton,
-                  selectedSignatures.includes(signature) && classes.selectedButton,
-                )}
-              >
-                <div>
-                  <ShortAddress address={signature.signer.id} />
-                  <p className={classes.voteCount}>
-                    {signature.signer.voteCount} vote{signature.signer.voteCount !== 1 && 's'}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
+              }}
+              disabled={
+                isWaiting ||
+                isLoading ||
+                isTxSuccessful ||
+                signature.signer.activeOrPendingProposal === true
+              }
+              className={clsx(
+                classes.selectButton,
+                selectedSignatures.includes(signature) && classes.selectedButton,
+              )}
+            >
+              <div>
+                <ShortAddress address={signature.signer.id} />
+                <p className={classes.voteCount}>
+                  {signature.signer.voteCount} vote{signature.signer.voteCount !== 1 && 's'}
+                </p>
+              </div>
+            </button>
+          );
+        })}
       </div>
       <div className={classes.modalActions}>
-        {!(errorMessage || isTxSuccessful) && (
+        {errorMessage === '' && !isTxSuccessful && (
           <button
             type="button"
             className={clsx(
@@ -254,7 +253,7 @@ const SelectSponsorsToPropose = (props: Props) => {
             </span>
           </button>
         )}
-        {errorMessage && (
+        {errorMessage !== '' && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
@@ -281,10 +280,12 @@ const SelectSponsorsToPropose = (props: Props) => {
                 rel="noreferrer"
               >
                 Your candidate is now a proposal
-                {proposeBySigsState.transaction && <img src={link} width={16} alt="link symbol" />}
+                {proposeBySigsState.transaction != null && (
+                  <img src={link} width={16} alt="link symbol" />
+                )}
               </a>
               <br />
-              {props.candidate.matchingProposalIds && props.candidate.matchingProposalIds[0] && (
+              {(props.candidate.matchingProposalIds?.length ?? 0) > 0 && (
                 <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>
                   View the proposal
                 </Link>

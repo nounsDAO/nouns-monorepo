@@ -133,7 +133,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <p>{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button className={classes.readMore} onClick={() => {}}>
+              <button type="button" className={classes.readMore} onClick={() => {}}>
                 more
               </button>
             )}
@@ -145,6 +145,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
             ) : (
               <button
+                type="button"
                 onClick={() => {
                   cancel();
                   setIsCancelSignaturePending(true);
@@ -177,6 +178,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             cancelSigState.status === 'Fail' ||
             cancelSigState.status === 'Success') && (
             <button
+              type="button"
               className={classes.closeButton}
               onClick={() => {
                 props.handleRefetchCandidateData();

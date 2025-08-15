@@ -6,6 +6,7 @@ import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 import {
   encodeAbiParameters,
   encodePacked,
@@ -145,7 +146,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           signatures: props.candidate.version.content.signatures,
           calldatas: props.candidate.version.content.calldatas,
           description: props.candidate.version.content.description,
-          expiry: BigInt(expirationDate || 0),
+          expiry: BigInt(expirationDate ?? 0),
         };
 
         // Trigger the signature request
@@ -156,7 +157,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           message: value,
         });
       } else {
-        if (!props.candidate) return;
+        if (isNullish(props.candidate)) return;
 
         // Create the value for a new proposal
         const value = {
