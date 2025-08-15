@@ -216,8 +216,5 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
   );
 };
 
+export default ForkEvent;
 export { ForkEvent };
-
-// Prevent Next.js from treating this as a real page during prerender
-const ForkEventPage = () => null;
-export default ForkEventPage;
