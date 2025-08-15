@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { blo } from 'blo';
@@ -24,35 +24,17 @@ interface DelegationCandidateInfoProps {
 const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props => {
   const { address, changeModalState, votesToAdd } = props;
 
-  const [willHaveVoteCount, setWillHaveVoteCount] = useState(0);
-
   const shortAddress = formatShortAddress(address);
 
   const votes = useAccountVotes(address);
 
   const countDelegatedNouns = votes ?? 0;
 
-  // Do this so that in the lag between the delegation happening on chain and the UI updating
-  // we don't show that we've added the delegated votes twice
-  useEffect(() => {
-    if (
-      changeModalState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-      willHaveVoteCount !== 0
-    ) {
-      setWillHaveVoteCount(0);
-      return;
-    }
-
-    if (willHaveVoteCount > 0) {
-      return;
-    }
-    if (
-      changeModalState !== ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-      willHaveVoteCount !== countDelegatedNouns + votesToAdd
-    ) {
-      setWillHaveVoteCount(countDelegatedNouns + votesToAdd);
-    }
-  }, [willHaveVoteCount, countDelegatedNouns, votesToAdd, changeModalState]);
+  // Derived value for the target vote count after delegation
+  const willHaveVoteCount =
+    changeModalState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS
+      ? 0
+      : countDelegatedNouns + votesToAdd;
 
   const changeDelegateInfo = usePickByState(
     changeModalState,

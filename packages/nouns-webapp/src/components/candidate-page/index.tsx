@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
@@ -9,8 +9,9 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+// eslint-disable-next-line no-restricted-imports
 import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
-import { first, isNonNullish } from 'remeda';
+import { first, isNullish, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -43,12 +44,8 @@ dayjs.extend(advanced);
 
 const CandidatePage = () => {
   const { id } = useParams<{ id: string }>();
-  const [isProposer, setIsProposer] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [dataFetchPollInterval, setDataFetchPollInterval] = useState<number>(0);
-  const [isSignerWithActiveOrPendingProposal, setIsSignerWithActiveOrPendingProposal] = useState<
-    boolean | undefined
-  >(undefined);
   const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const isWalletConnected = activeAccount !== undefined;
@@ -66,16 +63,34 @@ const CandidatePage = () => {
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const feedback = useCandidateFeedback(Number(id).toString(), dataFetchPollInterval);
-  const [isProposal, setIsProposal] = useState<boolean>(false);
-  const [isUpdateToProposal, setIsUpdateToProposal] = useState<boolean>(false);
   const originalProposal = useProposal(candidate?.proposalIdToUpdate ?? 0);
   const isParentProposalUpdatable = originalProposal?.status === ProposalState.UPDATABLE;
+  const isProposal = candidate?.isProposal === true;
+  const isUpdateToProposal = Number(candidate?.proposalIdToUpdate ?? 0) > 0;
+
+  const isProposer = useMemo(() => {
+    if (isNonNullish(candidate) && isNonNullish(account)) {
+      return candidate.proposer.toLowerCase() === account.toLowerCase();
+    }
+    return false;
+  }, [candidate, account]);
+
+  const isSignerWithActiveOrPendingProposal = useMemo(() => {
+    if (isNonNullish(latestProposal) && isNonNullish(account)) {
+      return checkHasActiveOrPendingProposalOrCandidate(
+        latestProposal.status,
+        latestProposal.proposer,
+        account,
+      );
+    }
+    return false;
+  }, [latestProposal, account]);
 
   useEffect(() => {
     (async () => {
-      if (!candidate) {
+      if (isNullish(candidate)) {
         await candidateRefetch();
-        if (candidateData) {
+        if (isNonNullish(candidateData)) {
           setCandidate(candidateData);
         }
       }
@@ -85,29 +100,6 @@ const CandidatePage = () => {
   const handleRefetchData = () => {
     feedback.refetch();
   };
-
-  useEffect(() => {
-    if (candidate && account) {
-      setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
-    }
-    if (candidate?.isProposal) {
-      setIsProposal(true);
-    }
-    if (candidate?.proposalIdToUpdate && +candidate?.proposalIdToUpdate > 0) {
-      setIsUpdateToProposal(true);
-    }
-  }, [candidate, account]);
-
-  useEffect(() => {
-    if (latestProposal && account) {
-      const status = checkHasActiveOrPendingProposalOrCandidate(
-        latestProposal.status,
-        latestProposal.proposer,
-        account,
-      );
-      setIsSignerWithActiveOrPendingProposal(status);
-    }
-  }, [latestProposal, account]);
 
   const { _ } = useLingui();
 
@@ -171,7 +163,7 @@ const CandidatePage = () => {
     <Section fullWidth={false} className={classes.votePage}>
       {/* notice for proposal updates */}
       {isNonNullish(candidate?.proposalIdToUpdate) &&
-        candidate?.proposalIdToUpdate > 0 &&
+        Number(candidate?.proposalIdToUpdate ?? 0) > 0 &&
         !isProposer && (
           <Alert variant="warning">
             <Trans>
@@ -184,19 +176,19 @@ const CandidatePage = () => {
             </Trans>
           </Alert>
         )}
-      {isProposal && (
+      {isProposal === true && (
         <Alert variant="success">
           <Trans>
             <strong>Note: </strong>
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
-          {primaryProposalId && (
+          {primaryProposalId != null && primaryProposalId !== 0 && (
             <Link to={`/vote/${primaryProposalId}`}>View the proposal here</Link>
           )}
         </Alert>
       )}
       <Col lg={12} className={classes.wrapper}>
-        {!candidate && (
+        {isNullish(candidate) && (
           <div
             className="d-flex justify-content-center align-items-center"
             style={{ minHeight: '100vh' }}
@@ -204,7 +196,7 @@ const CandidatePage = () => {
             <Spinner animation="border" />
           </div>
         )}
-        {candidate && (
+        {isNonNullish(candidate) && (
           <CandidateHeader
             title={candidate.version.content.title}
             id={candidate.id}
@@ -219,7 +211,7 @@ const CandidatePage = () => {
           />
         )}
       </Col>
-      {isProposer && !isProposal && (
+      {isProposer && isProposal === false && (
         <Row>
           <Col lg={12}>
             <div className={classes.editCandidate}>
@@ -257,7 +249,7 @@ const CandidatePage = () => {
         </Row>
       )}
 
-      {candidate && (
+      {isNonNullish(candidate) && (
         <Row>
           <Col lg={12}>
             <a className={classes.jump} href="#feedback">
@@ -268,30 +260,33 @@ const CandidatePage = () => {
             <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col id="feedback" lg={4} className={classes.sidebar}>
-            {!!currentBlock && !!threshold && !!userVotes && !candidate.isProposal && (
-              <CandidateSponsors
-                candidate={candidate}
-                slug={candidate.slug ?? ''}
-                id={candidate.id}
-                isProposer={isProposer}
-                handleRefetchCandidateData={() => {
-                  candidateRefetch();
-                }}
-                setDataFetchPollInterval={(interval: number | null) =>
-                  interval !== null
-                    ? setDataFetchPollInterval(interval)
-                    : setDataFetchPollInterval(0)
-                }
-                currentBlock={currentBlock - 1n}
-                requiredVotes={threshold + 1}
-                userVotes={userVotes}
-                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                latestProposal={latestProposal}
-                isUpdateToProposal={isUpdateToProposal}
-                originalProposal={originalProposal}
-                blockNumber={currentBlock}
-              />
-            )}
+            {currentBlock != null &&
+              threshold != null &&
+              userVotes != null &&
+              candidate.isProposal !== true && (
+                <CandidateSponsors
+                  candidate={candidate}
+                  slug={candidate.slug ?? ''}
+                  id={candidate.id}
+                  isProposer={isProposer}
+                  handleRefetchCandidateData={() => {
+                    candidateRefetch();
+                  }}
+                  setDataFetchPollInterval={(interval: number | null) =>
+                    interval !== null
+                      ? setDataFetchPollInterval(interval)
+                      : setDataFetchPollInterval(0)
+                  }
+                  currentBlock={currentBlock - 1n}
+                  requiredVotes={threshold + 1}
+                  userVotes={userVotes}
+                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                  latestProposal={latestProposal}
+                  isUpdateToProposal={isUpdateToProposal}
+                  originalProposal={originalProposal}
+                  blockNumber={currentBlock}
+                />
+              )}
             <VoteSignals
               proposalId={candidate.id}
               proposer={candidate.proposer}

@@ -35,27 +35,28 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
     navDropdownClasses.dropdownActive,
   );
 
-  const customDropdownToggle = React.forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-    ({ onClick }, ref) => (
-      <>
-        <div
-          ref={ref}
-          className={clsx(classes.wrapper)}
-          onClick={e => {
-            e.preventDefault();
-            onClick?.(e);
-          }}
-        >
-          <NavBarButton
-            buttonText={props.buttonText}
-            buttonIcon={props.buttonIcon}
-            buttonStyle={buttonStyle}
-            isDropdown={true}
-            isButtonUp={buttonUp}
-          />
-        </div>
-      </>
-    ),
+  const customDropdownToggle = ({
+    ref,
+    onClick,
+  }: HTMLAttributes<HTMLDivElement> & { ref?: React.RefObject<HTMLDivElement | null> }) => (
+    <>
+      <div
+        ref={ref}
+        className={clsx(classes.wrapper)}
+        onClick={e => {
+          e.preventDefault();
+          onClick?.(e);
+        }}
+      >
+        <NavBarButton
+          buttonText={props.buttonText}
+          buttonIcon={props.buttonIcon}
+          buttonStyle={buttonStyle}
+          isDropdown={true}
+          isButtonUp={buttonUp}
+        />
+      </div>
+    </>
   );
 
   customDropdownToggle.displayName = 'CustomDropdownToggle';

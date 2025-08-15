@@ -1,18 +1,21 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import cx from 'clsx';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+// eslint-disable-next-line no-restricted-imports
 import { Col, Row } from 'react-bootstrap';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
+import ProposalContent from '@/components/proposal-content';
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
+import VersionTab from '@/components/proposal-history-page/version-tab';
 import Section from '@/components/section';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import {
@@ -21,14 +24,10 @@ import {
 } from '@/wrappers/nounsData';
 import { Link, useParams } from 'react-router';
 
-import ProposalContent from '@/components/proposal-content';
-import headerClasses from '@/components/proposal-header/proposal-header.module.css';
-import classes from '@/components/proposal-history-page/vote.module.css';
-
-import VersionTab from '@/components/proposal-history-page/version-tab';
-
 import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
+import headerClasses from '@/components/proposal-header/proposal-header.module.css';
+import classes from '@/components/proposal-history-page/vote.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -38,34 +37,34 @@ const CandidateHistoryPage = () => {
   const { id, versionNumber } = useParams<{ id: string; versionNumber?: string }>();
   const proposal = useCandidateProposalVersions(Number(id).toString());
   const [isDiffsVisible, setIsDiffsVisible] = useState(false);
-  const [activeVersion, setActiveVersion] = useState(0);
+  const [activeVersionState, setActiveVersionState] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(true);
   const proposalVersions = proposal?.data?.versions.reverse();
 
-  useEffect(() => {
-    if (versionNumber) {
-      setActiveVersion(Number(versionNumber));
-    } else {
-      // if no version number in url, set active version to latest
-      setActiveVersion(proposalVersions?.length ?? 0);
-    }
-  }, [versionNumber, proposalVersions]);
+  const activeVersion = useMemo(() => {
+    if (activeVersionState !== null) return activeVersionState;
+    if (versionNumber) return Number(versionNumber);
+    return proposalVersions?.length ?? 0;
+  }, [activeVersionState, versionNumber, proposalVersions]);
 
   useEffect(() => {
-    if (showToast) {
-      setTimeout(() => {
-        setShowToast(false);
-      }, 5000);
-    }
+    if (!showToast) return;
+    const t = setTimeout(() => {
+      setShowToast(false);
+    }, 5000);
+    return () => clearTimeout(t);
   }, [showToast]);
+
+  const setActiveVersion = (v: number) => setActiveVersionState(v);
 
   const highlightSyntax = (str: string) => {
     return (
       <ReactMarkdown
-        className={clsx(editorClasses.markdown, editorClasses.diffs)}
-        children={str}
+        className={cx(editorClasses.markdown, editorClasses.diffs)}
         remarkPlugins={[remarkBreaks]}
-      />
+      >
+        {str}
+      </ReactMarkdown>
     );
   };
 
@@ -78,7 +77,10 @@ const CandidateHistoryPage = () => {
       <Col lg={12} className={classes.wrapper}>
         <div className={headerClasses.backButtonWrapper}>
           <Link to={`/candidates/${id}`}>
-            <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
+            <button
+              type="button"
+              className={cx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
+            >
               ←
             </button>
           </Link>
@@ -92,7 +94,7 @@ const CandidateHistoryPage = () => {
             </div>
           </span>
           <div className={headerClasses.proposalTitleWrapper}>
-            <div className={clsx(headerClasses.proposalTitle, classes.proposalTitle)}>
+            <div className={cx(headerClasses.proposalTitle, classes.proposalTitle)}>
               {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
                 <div className={classes.diffsWrapper}>
                   <ReactDiffViewer
@@ -117,7 +119,7 @@ const CandidateHistoryPage = () => {
           </div>
         </div>
       </Col>
-      <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={12} className={cx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
@@ -131,7 +133,7 @@ const CandidateHistoryPage = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
-                <Col className={clsx(classes.section, 'm-0 p-0')}>
+                <Col className={cx(classes.section, 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
@@ -176,24 +178,23 @@ const CandidateHistoryPage = () => {
               <div className={classes.versionsList}>
                 {proposalVersions &&
                   proposalVersions
-                    .map((version: ProposalCandidateVersionContent, i: number) => {
-                      return (
-                        <VersionTab
-                          key={i}
-                          id={Number(id).toString()}
-                          createdAt={version.createdAt}
-                          versionNumber={version.versionNumber}
-                          updateMessage={version.updateMessage}
-                          isActive={i + 1 === activeVersion ? true : false}
-                          setActiveVersion={setActiveVersion}
-                          isCandidate={true}
-                        />
-                      );
-                    })
+                    .map((version: ProposalCandidateVersionContent, i: number) => (
+                      <VersionTab
+                        key={version.versionNumber ?? i}
+                        id={Number(id).toString()}
+                        createdAt={version.createdAt}
+                        versionNumber={version.versionNumber}
+                        updateMessage={version.updateMessage}
+                        isActive={i + 1 === activeVersion}
+                        setActiveVersion={setActiveVersion}
+                        isCandidate={true}
+                      />
+                    ))
                     .reverse()}
               </div>
               {activeVersion > 1 && (
                 <button
+                  type="button"
                   className={classes.diffsLink}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}
                 >
