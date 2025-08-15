@@ -29,6 +29,7 @@ const NounsIntroSection = () => {
             src="https://www.youtube.com/embed/lOzCA7bZG_k"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
             allowFullScreen
           ></iframe>
 
@@ -52,6 +53,7 @@ const NounsIntroSection = () => {
             src="https://www.youtube.com/embed/oa79nN4gMPs"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
             allowFullScreen
           ></iframe>
 
