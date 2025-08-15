@@ -58,15 +58,13 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
     ?.filter(proposal => proposal?.id)
     ?.map((proposal, i) => {
       return (
-        proposal && (
-          <option
-            key={i}
-            value={proposal.id}
-            disabled={!!(proposal.id && selectedProposals.includes(+proposal.id))}
-          >
-            {proposal.id} - {proposal.title}
-          </option>
-        )
+        <option
+          key={i}
+          value={proposal.id}
+          disabled={Boolean(proposal.id) && selectedProposals.includes(+proposal.id)}
+        >
+          {proposal.id} - {proposal.title}
+        </option>
       );
     })
     .reverse();
@@ -315,7 +313,9 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       </div>
       <div className={classes.selectedProposals}>
         {selectedProposals.map((proposalId, i) => {
-          const prop = proposals?.find(proposal => proposal?.id && +proposal.id === proposalId);
+          const prop = proposals?.find(
+            proposal => proposal?.id != null && +proposal.id === proposalId,
+          );
           return (
             <div className={classes.selectedProposal} key={i}>
               <span>
@@ -349,13 +349,12 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </Trans>
           </p>
         </div>
-        {props.userEscrowedNouns &&
-          ownedNouns &&
-          ownedNouns?.length > props.userEscrowedNouns.length && (
+        {props.userEscrowedNouns !== undefined &&
+          ownedNouns.length > props.userEscrowedNouns.length && (
             <button
               type="button"
               onClick={() => {
-                if (approvalErrorMessage) {
+                if (Boolean(approvalErrorMessage)) {
                   clearTransactionState();
                 }
                 if (props.ownedNouns && selectedNouns.length === props.ownedNouns.length) {
@@ -371,54 +370,54 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           )}
       </div>
       <div className={classes.nounsList}>
-        {ownedNouns &&
-          ownedNouns.map((nounId: number) => {
-            return (
-              <button
-                type="button"
-                onClick={() => {
-                  if (approvalErrorMessage || errorMessage || isTxSuccessful) {
-                    clearTransactionState();
-                  }
-                  if (selectedNouns.includes(nounId)) {
-                    setSelectedNouns(selectedNouns.filter(id => id !== nounId));
-                  } else {
-                    setSelectedNouns([...selectedNouns, nounId]);
-                  }
-                }}
-                disabled={
-                  isWaiting ||
-                  isLoading ||
-                  isApprovalWaiting ||
-                  isApprovalLoading ||
-                  props.userEscrowedNouns?.includes(nounId)
+        {ownedNouns.map((nounId: number) => {
+          return (
+            <button
+              type="button"
+              onClick={() => {
+                if (Boolean(approvalErrorMessage) || Boolean(errorMessage) || isTxSuccessful) {
+                  clearTransactionState();
                 }
-                className={clsx(
-                  classes.nounButton,
-                  selectedNouns.includes(nounId) && classes.selectedNounButton,
-                  props.userEscrowedNouns?.includes(nounId) && classes.escrowedNoun,
-                )}
-                key={nounId}
-              >
-                <div>
-                  <img
-                    src={`https://noun.pics/${nounId}`}
-                    alt="noun"
-                    className={classes.nounImage}
-                  />
-                  Noun {nounId}
-                </div>
-                {props.userEscrowedNouns?.includes(nounId) && (
-                  <span className={classes.escrowedNounLabel}>
-                    {props.isForkingPeriod ? 'in fork' : 'in escrow'}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+                if (selectedNouns.includes(nounId)) {
+                  setSelectedNouns(selectedNouns.filter(id => id !== nounId));
+                } else {
+                  setSelectedNouns([...selectedNouns, nounId]);
+                }
+              }}
+              disabled={
+                isWaiting ||
+                isLoading ||
+                isApprovalWaiting ||
+                isApprovalLoading ||
+                (props.userEscrowedNouns?.includes(nounId) ?? false)
+              }
+              className={clsx(
+                classes.nounButton,
+                selectedNouns.includes(nounId) && classes.selectedNounButton,
+                (props.userEscrowedNouns?.includes(nounId) ?? false) && classes.escrowedNoun,
+              )}
+              key={nounId}
+            >
+              <div>
+                <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
+                Noun {nounId}
+              </div>
+              {(props.userEscrowedNouns?.includes(nounId) ?? false) && (
+                <span className={classes.escrowedNounLabel}>
+                  {props.isForkingPeriod ? 'in fork' : 'in escrow'}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
       <div className={classes.modalActions}>
-        {!(approvalErrorMessage || errorMessage || isTxSuccessful || isApprovalTxSuccessful) && (
+        {!(
+          Boolean(approvalErrorMessage) ||
+          Boolean(errorMessage) ||
+          isTxSuccessful ||
+          isApprovalTxSuccessful
+        ) && (
           <button
             type="button"
             className={clsx(
@@ -460,9 +459,9 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </span>
           </button>
         )}
-        {(approvalErrorMessage || errorMessage) && (
+        {(Boolean(approvalErrorMessage) || Boolean(errorMessage)) && (
           <p className={clsx(classes.statusMessage, classes.errorMessage)}>
-            {approvalErrorMessage || errorMessage}
+            {Boolean(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
             <button
               type="button"
               onClick={() => {
@@ -478,18 +477,20 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             <p className={clsx(classes.statusMessage, classes.successMessage)}>
               <a
                 href={
-                  escrowToForkState.transaction?.hash &&
-                  `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`
+                  escrowToForkState.transaction?.hash
+                    ? `${buildEtherscanTxLink(escrowToForkState.transaction.hash)}`
+                    : undefined
                 }
                 target="_blank"
                 rel="noreferrer"
               >
                 Your Nouns have been added to {props.isForkingPeriod ? 'the fork' : 'escrow'}
-                {escrowToForkState.transaction && <img src={link} width={16} alt="link symbol" />}
+                {escrowToForkState.transaction != null && (
+                  <img src={link} width={16} alt="link symbol" />
+                )}
               </a>
-              {props.userEscrowedNouns &&
-                ownedNouns &&
-                ownedNouns?.length > props.userEscrowedNouns.length && (
+              {props.userEscrowedNouns !== undefined &&
+                ownedNouns.length > props.userEscrowedNouns.length && (
                   <button
                     type="button"
                     onClick={() => {
@@ -515,7 +516,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                   {isApprovalTxSuccessful && (
                     <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                   )}
-                  {approvalErrorMessage && (
+                  {Boolean(approvalErrorMessage) && (
                     <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                   )}
                 </strong>
@@ -531,15 +532,15 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                   {isTxSuccessful && (
                     <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                   )}
-                  {(errorMessage || approvalErrorMessage) && (
+                  {(Boolean(errorMessage) || Boolean(approvalErrorMessage)) && (
                     <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                   )}
                   {!(
                     isWaiting ||
                     isLoading ||
                     isTxSuccessful ||
-                    errorMessage ||
-                    approvalErrorMessage
+                    Boolean(errorMessage) ||
+                    Boolean(approvalErrorMessage)
                   ) && <span className={classes.placeholder}></span>}
                 </strong>
                 <Trans>Add to escrow</Trans>
@@ -547,7 +548,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </ul>
           </>
         )}
-        {!isApprovedForAll && (!isApprovalWaiting || !isApprovalLoading) && (
+        {isApprovedForAll === false && (!isApprovalWaiting || !isApprovalLoading) && (
           <p className={classes.approvalNote}>You&apos;ll be asked to approve access</p>
         )}
         {selectedNouns.length > 0 && !isTxSuccessful && (
