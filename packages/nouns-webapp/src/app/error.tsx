@@ -18,10 +18,14 @@ export default function Error({
         </p>
       ) : null}
       <div className="d-flex mt-4 gap-2">
-        <button className="btn btn-primary" onClick={() => reset()}>
+        <button type="button" className="btn btn-primary" onClick={() => reset()}>
           Try again
         </button>
-        <button className="btn btn-outline-secondary" onClick={() => (window.location.href = '/')}>
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={() => (window.location.href = '/')}
+        >
           Go home
         </button>
       </div>
