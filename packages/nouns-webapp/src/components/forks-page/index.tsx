@@ -13,17 +13,17 @@ import { Link } from 'react-router';
 
 import classes from './forks.module.css';
 
-type Props = {};
-
-const ForksPage: React.FC<Props> = () => {
+const ForksPage: React.FC = () => {
   const forks = useForks();
   const now = new Date();
   const currentTime = now.getTime() / 1000;
-  const timestamp =
-    Number(forks.data?.length) > 0 &&
-    forks?.data?.[Number(forks?.data?.length) - 1].forkingPeriodEndTimestamp;
-  const isLatestForkFinished = forks?.data && timestamp && currentTime && +timestamp < currentTime;
-  const nextForkId = forks?.data && forks.data?.length;
+  const lastForkEndTs =
+    Array.isArray(forks.data) && forks.data.length > 0
+      ? Number(forks.data[forks.data.length - 1].forkingPeriodEndTimestamp)
+      : undefined;
+  const isLatestForkFinished =
+    Number.isFinite(lastForkEndTs) && (lastForkEndTs as number) < currentTime;
+  const nextForkId = Array.isArray(forks.data) ? forks.data.length : undefined;
 
   return (
     <div>
@@ -59,17 +59,16 @@ const ForksPage: React.FC<Props> = () => {
       <Section fullWidth={false} className={classes.section}>
         <Col lg={10} className={classes.wrapper}>
           <Row className={classes.forksList}>
-            {forks?.data
-              ? forks?.data
+            {Array.isArray(forks.data) && forks.data.length > 0
+              ? forks.data
                   .map((fork: Fork, i: number) => {
+                    const forkEndTs = Number(fork.forkingPeriodEndTimestamp);
                     const isForkPeriodActive =
-                      fork.forkingPeriodEndTimestamp &&
-                      currentTime &&
-                      +fork.forkingPeriodEndTimestamp > currentTime;
+                      Number.isFinite(forkEndTs) && forkEndTs > currentTime;
                     let status = ForkState.ESCROW;
                     if (isForkPeriodActive) {
                       status = ForkState.ACTIVE;
-                    } else if (fork.executed) {
+                    } else if (fork.executed === true) {
                       status = ForkState.EXECUTED;
                     }
 
@@ -88,7 +87,8 @@ const ForksPage: React.FC<Props> = () => {
               : null}
           </Row>
           <Row>
-            {(forks?.data?.length === 0 || (isLatestForkFinished && nextForkId)) && (
+            {((Array.isArray(forks.data) && forks.data.length === 0) ||
+              (isLatestForkFinished && typeof nextForkId === 'number')) && (
               <div>
                 <p className={classes.startFork}>
                   <Trans>There are no active forks.</Trans>{' '}
