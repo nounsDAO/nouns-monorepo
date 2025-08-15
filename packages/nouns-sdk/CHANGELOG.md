@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - on `@nouns/sdk/treasury` (actions):
   - `readNounsTreasuryBalancesInUsd`
   - `readNounsTreasuryBalancesInEth`
+- on `@nouns/sdk/react/treasury` (hooks):
+  - `useReadNounsTreasuryBalancesInUsd`
+  - `useReadNounsTreasuryBalancesInEth`
 
 ### Removed
 
