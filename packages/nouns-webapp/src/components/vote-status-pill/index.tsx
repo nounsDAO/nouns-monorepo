@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import classes from './vote-status-pill.module.css';
 
 interface VoteStatusPillProps {

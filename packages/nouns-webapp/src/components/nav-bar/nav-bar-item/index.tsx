@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import classes from './nav-bar-item.module.css';
 
 const NavBarItem: React.FC<{

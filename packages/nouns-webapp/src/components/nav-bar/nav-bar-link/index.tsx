@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router';
 
 import classes from './nav-bar-link.module.css';

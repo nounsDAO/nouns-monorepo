@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
@@ -23,14 +24,12 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
             <Trans>Description</Trans>
           </h5>
           {proposal?.version.content.description && (
-            <ReactMarkdown
-              className={classes.markdown}
-              children={processProposalDescriptionText(
+            <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
+              {processProposalDescriptionText(
                 proposal.version.content.description,
                 proposal.version.content.title,
               )}
-              remarkPlugins={[remarkBreaks]}
-            />
+            </ReactMarkdown>
           )}
         </Col>
       </Row>
