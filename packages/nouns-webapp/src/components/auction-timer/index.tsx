@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import cx from 'clsx';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { Col, Row } from 'react-bootstrap';
 
 import { useAppSelector } from '@/hooks';
 import { Auction } from '@/wrappers/nounsAuction';
@@ -31,11 +30,19 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
 
   // timer logic
   useEffect(() => {
-    const timeLeft = (auction && Number(auction.endTime)) - dayjs().unix();
+    if (auction == null) {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      setAuctionTimer(0);
+      return;
+    }
 
-    setAuctionTimer(auction && timeLeft);
+    const timeLeft = Number(auction.endTime) - dayjs().unix();
 
-    if (auction && timeLeft <= 0) {
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+    setAuctionTimer(timeLeft);
+
+    if (timeLeft <= 0) {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setAuctionTimer(0);
     } else {
       const timer = setTimeout(() => {
@@ -63,14 +70,14 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
   const flooredSeconds = Math.floor(timerDuration.seconds());
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  if (!auction) return null;
+  if (auction == null) return null;
 
   return (
-    <Row
-      className={clsx(classes.wrapper, classes.section)}
+    <div
+      className={cx(classes.wrapper, classes.section)}
       onClick={() => setTimerToggle(!timerToggle)}
     >
-      <Col xs={timerToggle ? 4 : 6} lg={12} className={classes.leftCol}>
+      <div className={classes.leftCol}>
         <h4
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -89,11 +96,11 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
             </>
           )}
         </h4>
-      </Col>
-      <Col xs="auto" lg={12}>
+      </div>
+      <div>
         {timerToggle ? (
           <h2
-            className={clsx(classes.timerWrapper, classes.timeLeft)}
+            className={cx(classes.timerWrapper, classes.timeLeft)}
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
@@ -130,13 +137,13 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            <div className={clsx(classes.timerSection, classes.clockSection)}>
+            <div className={cx(classes.timerSection, classes.clockSection)}>
               <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
             </div>
           </h2>
         )}
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 
