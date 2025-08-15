@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/hooks-extra/no-unnecessary-use-prefix */
 import { screen } from '@testing-library/dom';
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
