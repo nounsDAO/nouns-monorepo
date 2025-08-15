@@ -4,7 +4,6 @@ import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 import { Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -26,6 +25,7 @@ import {
   useProposalVote,
 } from '@/wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';
 

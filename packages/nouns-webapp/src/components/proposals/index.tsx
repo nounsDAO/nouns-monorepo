@@ -10,18 +10,17 @@ import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router';
 import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateCard from '@/components/candidate-card';
 import DelegationModal from '@/components/delegation-modal';
 import ProposalStatus from '@/components/proposal-status';
+import Section from '@/components/section';
 import config from '@/config';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
-import Section from '@/components/section';
 import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/is-mobile';
@@ -34,6 +33,7 @@ import {
 } from '@/wrappers/nounsDao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
 import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 import classes from './proposals.module.css';
 
