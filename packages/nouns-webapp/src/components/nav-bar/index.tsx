@@ -6,9 +6,9 @@ import { Trans } from '@lingui/react/macro';
 import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
 import clsx from 'clsx';
 import { ConnectKitButton } from 'connectkit';
-import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { formatEther } from 'viem';
 
 import NogglesIcon from '@/assets/icons/Noggles.svg?react';
@@ -28,8 +28,8 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
 
-import classes from './nav-bar.module.css';
 import navDropdownClasses from './nav-bar-dropdown.module.css';
+import classes from './nav-bar.module.css';
 
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
