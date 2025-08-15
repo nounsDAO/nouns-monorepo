@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pnpm install && pnpm build --filter=@nouns/api",
+    "watchPatterns": ["/packages/nouns-api"]
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter @nouns/api -- start --schema $RAILWAY_DEPLOYMENT_ID",
+    "healthcheckPath": "/ready",
+    "healthcheckTimeout": 10800
+  }
+}

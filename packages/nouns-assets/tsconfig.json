@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     /* → Basic ESM setup */
     "module": "ESNext",
     "target": "ES2020",

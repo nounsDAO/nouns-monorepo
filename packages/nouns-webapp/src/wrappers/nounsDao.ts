@@ -345,8 +345,6 @@ const addMissingSchemes = (descriptionText: string | undefined) => {
   if (!descriptionText) return descriptionText;
 
   // Match Markdown links: [text](url)
-  // TODO: This regex is not perfect, but it's good enough for now.
-  // eslint-disable-next-line sonarjs/slow-regex
   const markdownLinkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
 
   return descriptionText.replace(markdownLinkRegex, (match, text, url) => {
@@ -490,8 +488,6 @@ export const formatProposalTransactionDetails = (details: {
     }
 
     try {
-      // TODO: This regex is not perfect, but it's good enough for now.
-      // eslint-disable-next-line sonarjs/slow-regex
       const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
       const decoded = decodeAbiParameters(abiParams, callData);
       return {

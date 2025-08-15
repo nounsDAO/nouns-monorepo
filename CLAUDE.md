@@ -12,13 +12,14 @@ This is a monorepo for Nouns DAO, a generative avatar art collective run by cryp
 
 ## Package Structure
 
-Five main packages with interdependencies:
+Six main packages with interdependencies:
 
 1. **nouns-assets** - PNG and run-length encoded Noun image data
 2. **nouns-contracts** - Solidity smart contracts for Nouns DAO (uses Hardhat + Foundry)
 3. **nouns-sdk** - Contract addresses, ABIs, instances, and image utilities
 4. **nouns-webapp** - React frontend (Vite + Tailwind + i18n)
 5. **nouns-subgraph** - The Graph subgraph manifests
+6. **nouns-docs** - Next.js 15 documentation site with Nextra 4
 
 Build dependencies: webapp depends on assets → contracts → sdk.
 
@@ -185,6 +186,42 @@ Feature toggles in `src/config.ts`:
 - `proposeOnV1`: Legacy proposal creation
 - `candidates`: Proposal candidates system
 - `fork`: Fork-related functionality
+
+## Documentation Site (nouns-docs)
+
+Located in `packages/nouns-docs/` - Next.js 15 documentation site built with Nextra 4.
+
+### Tech Stack
+- **Next.js 15** with App Router
+- **Nextra 4** for documentation site generation
+- **nextra-theme-docs** for the documentation theme
+- **Pagefind** for search functionality
+- **Lucide Icons** for UI components
+
+### File Structure
+- `app/layout.tsx` - Root layout with Nextra theme configuration
+- `app/[[...mdxPath]]/page.tsx` - Dynamic MDX page handler using Nextra's importPage
+- `content/` - MDX documentation files (content/index.mdx is the homepage)
+- `mdx-components.js` - MDX component configuration merging theme components
+- `public/images/` - Static assets including logo and icon
+- `public/_pagefind/` - Generated search index (created during build)
+
+### Key Features
+- **Pagefind Search**: Automatically generates search index during build via postbuild script
+- **Dynamic MDX Pages**: Uses catch-all routing with generateStaticParams for MDX files
+- **Theme Configuration**: Custom navbar with logo, footer with copyright, and banner
+
+### Docs-Specific Commands
+```bash
+# From packages/nouns-docs directory
+pnpm dev       # Start development server
+pnpm build     # Build application (includes Pagefind search index generation)
+pnpm start     # Start production server
+```
+
+### Build Process
+1. `next build` generates the Next.js application
+2. `pagefind --site .next/server/app --output-path public/_pagefind` creates search index
 
 ## Local Development with Contracts
 

@@ -12,12 +12,14 @@
     "VITE_SEPOLIA_JSONRPC",
     "VITE_SEPOLIA_SUBGRAPH",
     "VITE_SEPOLIA_WSRPC",
-    "VITE_WALLET_CONNECT_V2_PROJECT_ID"
+    "VITE_WALLET_CONNECT_V2_PROJECT_ID",
+    "JSON_RPC",
+    "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
   ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": ["dist/**", "build/**", ".next/**", "!.next/cache/**"]
     },
     "test": {
       "dependsOn": ["build"],
@@ -34,11 +36,7 @@
       "outputs": []
     },
     "dev": {
-      "dependsOn": [
-        "@nouns/assets#build",
-        "@nouns/contracts#build",
-        "@nouns/sdk#build"
-      ],
+      "dependsOn": ["@nouns/assets#build", "@nouns/contracts#build", "@nouns/sdk#build"],
       "cache": false,
       "persistent": true
     }

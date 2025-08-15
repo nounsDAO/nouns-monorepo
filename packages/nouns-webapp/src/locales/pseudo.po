@@ -679,10 +679,6 @@ msgid "Creating ZIP..."
 msgstr ""
 
 #: src/components/Bid/index.tsx
-msgid "Vote for the next Noun"
-msgstr ""
-
-#: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
 msgstr ""
 
@@ -754,6 +750,10 @@ msgstr ""
 #. placeholder {1}: proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Pick the next Noun"
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1448,7 +1448,7 @@ msgstr ""
 msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
 msgstr ""
 
-#. placeholder {0}: nounsRequired ? ( <> {nounsRequired} {threshold === 0 ? nounSingular : nounPlural} </> ) : ( '...' )
+#. placeholder {0}: nounsRequired !== undefined ? ( <> {nounsRequired} {threshold === 0 ? nounSingular : nounPlural} </> ) : ( '...' )
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
 msgstr ""

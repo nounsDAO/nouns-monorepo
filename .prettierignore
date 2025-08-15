@@ -1,3 +1,5 @@
 pnpm-lock.yaml
 packages/nouns-webapp/src/contracts/*
 packages/nouns-webapp/src/subgraphs/*
+*.gen.ts
+*.mdx

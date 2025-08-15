@@ -91,13 +91,13 @@ h4 {
     padding-left: 0rem;
   }
 
-  .fomoNounsLink {
+  .nextNounLink {
     padding-left: 14px;
   }
 }
 
 @media (max-width: 400px) {
-  .fomoNounsLink {
+  .nextNounLink {
     font-size: 14px;
   }
 }
@@ -110,18 +110,18 @@ h4 {
   }
 }
 
-.fomoNounsLink {
+.nextNounLink {
   margin-top: 0rem;
   margin-bottom: 1rem;
   transition: 0.2s ease-in-out;
 }
 
-.fomoNounsLink svg {
+.nextNounLink svg {
   opacity: 0.6;
 }
 
-.fomoNounsLink a,
-.fomoNounsLink:active a {
+.nextNounLink a,
+.nextNounLink:active a {
   font-family: 'PT Root UI', sans-serif;
   font-weight: 500;
   padding-left: 0.5rem;
@@ -130,8 +130,8 @@ h4 {
   color: rgb(95, 95, 95);
 }
 
-.fomoNounsLink:hover,
-.fomoNounsLink:hover a {
+.nextNounLink:hover,
+.nextNounLink:hover a {
   text-decoration: none;
   color: black;
   opacity: 1;

@@ -1,0 +1,7 @@
+{
+  "name": "remark-mermaid-stub",
+  "description": "No-op stub to override and disable @theguild/remark-mermaid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module"
+}

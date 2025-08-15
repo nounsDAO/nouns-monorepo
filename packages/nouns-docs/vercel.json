@@ -1,0 +1,8 @@
+{
+  "installCommand": "pnpm install && pnpm add @sparticuz/chromium",
+  "build": {
+    "env": {
+      "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS": "1"
+    }
+  }
+}

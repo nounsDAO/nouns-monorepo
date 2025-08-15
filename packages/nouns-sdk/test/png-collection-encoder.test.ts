@@ -1,3 +1,7 @@
+/**
+ * @vitest-environment node
+ */
+
 import { promises as fs } from 'fs';
 import { join } from 'path';
 

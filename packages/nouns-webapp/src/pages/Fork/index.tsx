@@ -35,7 +35,6 @@ import WithdrawNounsButton from './WithdrawNounsButton';
 
 const now = new Date();
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const ForkPage = () => {
   const { id } = useParams<{ id: string }>();
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 
 import { PNG } from 'pngjs';
 
-import { PngImage } from '../image/types';
+import { PngImage } from '../../src/image/types';
 
 /**
  * Read a PNG image file and return a `PngImage` object.

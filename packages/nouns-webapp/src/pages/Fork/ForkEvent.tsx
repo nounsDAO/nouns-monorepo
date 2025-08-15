@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
@@ -24,8 +24,8 @@ type Props = {
 const ForkEvent = ({ event, isOnlyEvent }: Props) => {
   const [actionLabel, setActionLabel] = useState('');
   const [nounCount, setNounCount] = useState('');
-  const [nounsInEvent, setNounsInEvent] = useState<JSX.Element[]>([]);
-  const [ownerLink, setOwnerLink] = useState<JSX.Element>();
+  const [nounsInEvent, setNounsInEvent] = useState<ReactNode[]>([]);
+  const [ownerLink, setOwnerLink] = useState<ReactNode>();
   const handleEventTypes = useCallback(
     (event: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent) => {
       switch (event.eventType) {

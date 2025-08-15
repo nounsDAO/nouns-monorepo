@@ -1,0 +1,7 @@
+<svg viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
+    <path d="M0 50V20h30V0h60v20h10V0h60v60h-60V30H90v30H30V30H10v20H0Zm40-40v40h40V10H40Zm70 0v40h40V10h-40Z"
+        style="fill:#d53c5e" />
+    <path d="M40 50V10h20v40H40Zm70 0V10h20v40h-20Z" style="fill:#fff" />
+    <path d="M60 50V10h20v40H60Zm70 0V10h20v40h-20Z" />
+</svg>
