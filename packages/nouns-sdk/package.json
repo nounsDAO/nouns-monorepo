@@ -1,6 +1,6 @@
 {
   "name": "@nouns/sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "homepage": "https://github.com/nounsDAO/nouns-monorepo#readme",
   "repository": "github:nounsDAO/nouns-monorepo",
