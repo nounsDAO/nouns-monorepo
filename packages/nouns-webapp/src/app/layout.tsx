@@ -8,12 +8,14 @@ import { Providers } from './providers';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/index.css';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   title: 'Nouns',
   description: 'Nouns DAO web app built with Next.js 15',
   applicationName: 'Nouns',
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const viewport = {
   width: 'device-width',
   initialScale: 1,

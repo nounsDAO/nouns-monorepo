@@ -4,11 +4,13 @@ import type { Address } from '@/utils/types';
 
 import React, { useEffect } from 'react';
 
+// eslint-disable-next-line no-restricted-imports
 import { ApolloProvider } from '@apollo/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+// eslint-disable-next-line no-restricted-imports
 import { Provider as ReduxProvider } from 'react-redux';
 import { parseAbiItem } from 'viem';
 import { hardhat } from 'viem/chains';
@@ -16,6 +18,7 @@ import { usePublicClient, WagmiProvider, useAccount } from 'wagmi';
 
 import { CustomConnectkitProvider } from '@/components/custom-connectkit-provider';
 import { Footer } from '@/components/footer';
+import NavBar from '@/components/nav-bar';
 import NetworkAlert from '@/components/network-alert';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
@@ -49,8 +52,6 @@ import { execute } from '@/subgraphs/execute';
 import { nounPath } from '@/utils/history';
 import { defaultChain, config as wagmiConfig } from '@/wagmi';
 import { clientFactory, latestAuctionsQuery } from '@/wrappers/subgraph';
-
-import NavBar from '@/components/nav-bar';
 
 const queryClient = new QueryClient();
 const client = clientFactory(config.app.subgraphApiUri);
