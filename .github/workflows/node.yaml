@@ -15,6 +15,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     concurrency:
       group: ci-pipeline-${{ github.ref }}-node-${{ matrix.node-version }}
       cancel-in-progress: true
