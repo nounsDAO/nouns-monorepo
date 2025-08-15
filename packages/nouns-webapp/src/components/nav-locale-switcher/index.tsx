@@ -1,11 +1,10 @@
-import React, { HTMLAttributes, useState } from 'react';
+import React, { useState } from 'react';
 
 import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import cx from 'clsx';
 import { useAtom } from 'jotai/react';
-import { Dropdown } from 'react-bootstrap';
 
 import LanguageSelectionModal from '@/components/language-selection-modal';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
@@ -23,11 +22,102 @@ interface NavLocalSwitcherProps {
 }
 
 type CustomMenuProps = {
-  children?: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
   labeledBy?: string;
+  buttonStyleTop: string;
+  buttonStyleBottom: string;
+  activeLocale: SupportedLocale;
+  setActiveLocale: (l: SupportedLocale) => void;
 };
+
+type CustomDropdownToggleProps = {
+  buttonUp: boolean;
+  stateSelectedDropdownClass: string;
+  statePrimaryButtonClass: string;
+  onClick?: (e: React.MouseEvent) => void;
+};
+
+const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
+  buttonUp,
+  stateSelectedDropdownClass,
+  statePrimaryButtonClass,
+  onClick,
+}) => (
+  <div
+    className={cx(
+      navDropdownClasses.wrapper,
+      buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
+    )}
+    onClick={e => {
+      e.preventDefault();
+      onClick?.(e);
+    }}
+  >
+    <div className={navDropdownClasses.button}>
+      <div className={navDropdownClasses.dropdownBtnContent}>
+        <FontAwesomeIcon icon={faGlobe} />
+      </div>
+      <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
+        <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />
+      </div>
+    </div>
+  </div>
+);
+
+const CustomMenu = ({
+  ref,
+  style,
+  className,
+  labeledBy,
+  buttonStyleTop,
+  buttonStyleBottom,
+  activeLocale,
+  setActiveLocale,
+}: CustomMenuProps & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+  return (
+    <div ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
+      {SUPPORTED_LOCALES.map((locale: SupportedLocale, index: number) => {
+        let dropDownStyle;
+        let buttonStyle;
+
+        switch (index) {
+          case 0:
+            dropDownStyle = classes.dropDownTop;
+            buttonStyle = buttonStyleTop;
+            break;
+          case SUPPORTED_LOCALES.length - 1:
+            dropDownStyle = classes.dropDownBottom;
+            buttonStyle = buttonStyleBottom;
+            break;
+          default:
+            dropDownStyle = classes.dropDownInterior;
+            buttonStyle = buttonStyleBottom;
+        }
+
+        return (
+          <div
+            key={locale}
+            className={cx(
+              navDropdownClasses.button,
+              navDropdownClasses.dropdownPrimaryText,
+              buttonStyle,
+              dropDownStyle,
+              classes.desktopLanguageButton,
+            )}
+            onClick={() => setActiveLocale(locale)}
+          >
+            {LOCALE_LABEL[locale]}
+            {activeLocale === locale && <FontAwesomeIcon icon={faCheck} height={24} width={24} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+CustomDropdownToggle.displayName = 'CustomDropdownToggle';
+CustomMenu.displayName = 'CustomMenu';
 
 const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
@@ -60,86 +150,6 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     navDropdownClasses.warmInfoSelected,
   );
 
-  const customDropdownToggle = ({
-    ref,
-    onClick,
-  }: HTMLAttributes<HTMLDivElement> & { ref?: React.RefObject<HTMLDivElement | null> }) => (
-    <>
-      <div
-        ref={ref}
-        className={clsx(
-          navDropdownClasses.wrapper,
-          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
-        )}
-        onClick={e => {
-          e.preventDefault();
-          onClick?.(e);
-        }}
-      >
-        <div className={navDropdownClasses.button}>
-          <div className={navDropdownClasses.dropdownBtnContent}>
-            {<FontAwesomeIcon icon={faGlobe} />}
-          </div>
-          <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
-            <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
-          </div>
-        </div>
-      </div>
-    </>
-  );
-
-  customDropdownToggle.displayName = 'CustomDropdownToggle';
-
-  // eslint-disable-next-line @eslint-react/no-nested-component-definitions
-  const CustomMenu = ({ ref, ...props }) => {
-    return (
-      <div
-        ref={ref}
-        style={props.style}
-        className={props.className}
-        aria-labelledby={props.labeledBy}
-      >
-        {SUPPORTED_LOCALES.map((locale: SupportedLocale, index: number) => {
-          let dropDownStyle;
-          let buttonStyle;
-
-          switch (index) {
-            case 0:
-              dropDownStyle = classes.dropDownTop;
-              buttonStyle = buttonStyleTop;
-              break;
-            case SUPPORTED_LOCALES.length - 1:
-              dropDownStyle = classes.dropDownBottom;
-              buttonStyle = buttonStyleBottom;
-              break;
-            default:
-              dropDownStyle = classes.dropDownInterior;
-              buttonStyle = buttonStyleBottom;
-          }
-
-          return (
-            <div
-              key={locale}
-              className={clsx(
-                navDropdownClasses.button,
-                navDropdownClasses.dropdownPrimaryText,
-                buttonStyle,
-                dropDownStyle,
-                classes.desktopLanguageButton,
-              )}
-              onClick={() => setActiveLocale(locale)}
-            >
-              {LOCALE_LABEL[locale]}
-              {activeLocale === locale && <FontAwesomeIcon icon={faCheck} height={24} width={24} />}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  CustomMenu.displayName = 'CustomMenu';
-
   return (
     <>
       {showLanguagePickerModal && (
@@ -147,7 +157,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
+        className={cx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -157,14 +167,23 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
       </div>
 
-      <Dropdown
-        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
-        onToggle={() => setButtonUp(!buttonUp)}
-        autoClose={true}
-      >
-        <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-        <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
-      </Dropdown>
+      <div className={cx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}>
+        <CustomDropdownToggle
+          buttonUp={buttonUp}
+          stateSelectedDropdownClass={stateSelectedDropdownClass}
+          statePrimaryButtonClass={statePrimaryButtonClass}
+          onClick={() => setButtonUp(!buttonUp)}
+        />
+        {buttonUp && (
+          <CustomMenu
+            className={`${navDropdownClasses.desktopDropdown}`}
+            buttonStyleTop={buttonStyleTop}
+            buttonStyleBottom={buttonStyleBottom}
+            activeLocale={activeLocale}
+            setActiveLocale={setActiveLocale}
+          />
+        )}
+      </div>
     </>
   );
 };
