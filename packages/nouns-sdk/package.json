@@ -209,7 +209,8 @@
     "clean": "rimraf dist",
     "codegen": "wagmi generate && prettier -w src/**/*.gen.ts",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@tanstack/react-query": "catalog:",
