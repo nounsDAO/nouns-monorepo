@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] 2025-08-15
+
 ### Added
 
-- on `@nouns/sdk/treasury` (actions):
+- `@nouns/sdk/treasury` actions:
   - `readNounsTreasuryBalancesInUsd`
   - `readNounsTreasuryBalancesInEth`
-- on `@nouns/sdk/react/treasury` (hooks):
+- `@nouns/sdk/react/treasury` hooks:
   - `useReadNounsTreasuryBalancesInUsd`
   - `useReadNounsTreasuryBalancesInEth`
 
@@ -73,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Started maintaining a changelog from this version onward.
 
 [Unreleased]: https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk
+[1.2.0]: https://github.com/nounsDAO/nouns-monorepo/tree/fb183939d/packages/nouns-sdk
 [1.1.0]: https://github.com/nounsDAO/nouns-monorepo/tree/967341a4b/packages/nouns-sdk
 [1.0.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e0b43054/packages/nouns-sdk
 [0.4.0]: https://github.com/nounsDAO/nouns-monorepo/tree/6e75b03a5/packages/nouns-sdk
