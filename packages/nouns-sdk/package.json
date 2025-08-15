@@ -226,6 +226,7 @@
     "terser": "^5.43.1",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
+    "viem": "catalog:",
     "vitest": "^3.2.4",
     "wagmi": "catalog:"
   },
