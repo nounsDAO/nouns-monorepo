@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
 import { cache, cacheKey, CHAIN_ID } from '@/config';
-
 import { Address } from '@/utils/types';
+
 import { lookupNNSOrENS } from './lookup-nns-or-ens';
 
 export const ensCacheKey = (address: string) => {
