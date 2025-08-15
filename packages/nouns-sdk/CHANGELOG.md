@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- on `@nouns/sdk/treasury` (actions):
+  - `readNounsTreasuryBalancesInUsd`
+  - `readNounsTreasuryBalancesInEth`
+
 ### Removed
 
 - CJS exports. They were included by mistake, since the package depends on wagmi v2+ which is ESM only
