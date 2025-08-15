@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
+// eslint-disable-next-line no-restricted-imports
 import { Col, Row } from 'react-bootstrap';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
@@ -56,8 +57,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   const isCool = useAppSelector((state: RootState) => state.application.isCoolBackground);
 
-  const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
+  const auctionEnded =
+    auction != null ? Number(auction.endTime) - Math.floor(Date.now() / 1000) <= 0 : false;
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
   const showBidModalHandler = () => {
@@ -76,12 +78,10 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
+    if (!auction) return;
     const timeLeft = Number(auction.endTime) - Math.floor(Date.now() / 1000);
 
-    if (timeLeft <= 0) {
-      setAuctionEnded(true);
-    } else {
-      setAuctionEnded(false);
+    if (timeLeft > 0) {
       const timer = setTimeout(
         () => {
           setAuctionTimer(!auctionTimer);
@@ -95,6 +95,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     }
   }, [auctionTimer, auction]);
 
+  if (!auction) return null;
   return (
     <>
       {showBidHistoryModal && (

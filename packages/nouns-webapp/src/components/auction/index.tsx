@@ -5,7 +5,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import AuctionActivity from '@/components/auction-activity';
 import { LoadingNoun } from '@/components/legacy-noun';
 import NounderNounContent from '@/components/nounder-noun-content';
-// eslint-disable-next-line sonarjs/deprecation
 import { StandaloneNounWithSeed } from '@/components/standalone-noun';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setStateBackgroundColor } from '@/state/slices/application';
@@ -48,7 +47,6 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
-      {/* eslint-disable-next-line sonarjs/deprecation */}
       <StandaloneNounWithSeed
         nounId={BigInt(currentAuction.nounId)}
         onLoadSeed={loadedNounHandler}
