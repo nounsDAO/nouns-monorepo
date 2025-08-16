@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "is-ci && exit 0 || (wagmi generate && graphql-codegen-esm --config codegen.config.ts)",
+    "prebuild": "is-online && is-ci && exit 0 || (wagmi generate && graphql-codegen-esm --config codegen.config.ts)",
     "build": "next build",
     "check": "tsc --noEmit --skipLibCheck",
     "clean": "rimraf .next out .netlify",
