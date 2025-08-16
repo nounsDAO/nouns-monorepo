@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAppSelector } from '@/hooks';
-import useOnDisplayAuction from '@/wrappers/onDisplayAuction';
+import useOnDisplayAuction from '@/wrappers/on-display-auction';
 
 import classes from './auction-navigation.module.css';
 

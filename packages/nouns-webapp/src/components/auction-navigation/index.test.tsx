@@ -25,7 +25,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('@/wrappers/onDisplayAuction', () => ({
+vi.mock('@/wrappers/on-display-auction', () => ({
   __esModule: true,
   default: () => ({
     // Component casts this with Number(), so return a primitive

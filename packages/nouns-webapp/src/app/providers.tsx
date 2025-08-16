@@ -45,8 +45,8 @@ import {
   setAuctionSettled,
   setFullAuction,
 } from '@/state/slices/auction';
-import { setLastAuctionNounId, setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
-import { addPastAuctions } from '@/state/slices/pastAuctions';
+import { setLastAuctionNounId, setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
+import { addPastAuctions } from '@/state/slices/past-auctions';
 import { store } from '@/store';
 import { execute } from '@/subgraphs/execute';
 import { nounPath } from '@/utils/history';

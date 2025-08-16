@@ -3,7 +3,7 @@ import React from 'react';
 import { BidHistoryItem } from '@/components/bid-history-item';
 import { useAppSelector } from '@/hooks';
 import { Bid } from '@/utils/types';
-import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+import { useAuctionBids } from '@/wrappers/on-display-auction';
 
 interface BidHistoryProps {
   auctionId: string;

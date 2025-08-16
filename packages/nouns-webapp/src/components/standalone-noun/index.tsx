@@ -6,7 +6,7 @@ import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 
 import LegacyNoun from '@/components/legacy-noun';
-import { setOnDisplayAuctionNounId } from '@/state/slices/onDisplayAuction';
+import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
 import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
 import { Link } from 'react-router';
 

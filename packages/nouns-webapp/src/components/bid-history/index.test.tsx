@@ -4,7 +4,7 @@ import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+import { useAuctionBids } from '@/wrappers/on-display-auction';
 
 import BidHistory from './index';
 
@@ -13,7 +13,7 @@ vi.mock('@/hooks', () => ({
   useAppSelector: () => true, // Mock isCool to be true
 }));
 
-vi.mock('@/wrappers/onDisplayAuction', () => ({
+vi.mock('@/wrappers/on-display-auction', () => ({
   useAuctionBids: vi.fn(),
 }));
 

@@ -8,7 +8,7 @@ import BidHistoryModalRow from '@/components/bid-history-modal-row';
 import { StandaloneNounRoundedCorners } from '@/components/standalone-noun';
 import { Bid } from '@/utils/types';
 import { Auction } from '@/wrappers/nounsAuction';
-import { useAuctionBids } from '@/wrappers/onDisplayAuction';
+import { useAuctionBids } from '@/wrappers/on-display-auction';
 
 import classes from './bid-history-modal.module.css';
 
