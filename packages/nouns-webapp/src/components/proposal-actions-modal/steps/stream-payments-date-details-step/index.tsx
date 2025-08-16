@@ -6,7 +6,7 @@ import BrandDatePicker from '@/components/brand-date-picker';
 import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalSubTitle from '@/components/modal-subtitle';
 import ModalTitle from '@/components/modal-title';
-import { currentUnixEpoch, toUnixEpoch } from '@/utils/timeUtils';
+import { currentUnixEpoch, toUnixEpoch } from '@/utils/time-utils';
 
 import { ProposalActionModalStepProps } from '../..';
 

@@ -10,7 +10,7 @@ import TruncatedAmount from '@/components/truncated-amount';
 import { shortENS, formatShortAddress } from '@/utils/address-and-ens-display-utils';
 import { useReverseENSLookUp } from '@/utils/ens-lookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
-import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
+import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 import { Address, Bid } from '@/utils/types';
 
 import classes from './bid-history-modal-row.module.css';

@@ -18,7 +18,7 @@ import {
   getTokenAddressForCurrency,
   usePredictStreamAddress,
 } from '@/utils/streaming-payment-utils/streaming-payment-utils';
-import { unixToDateString } from '@/utils/timeUtils';
+import { unixToDateString } from '@/utils/time-utils';
 import { defaultChain } from '@/wagmi';
 
 import classes from './stream-payments-review-step.module.css';

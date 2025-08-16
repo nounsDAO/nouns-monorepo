@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import ShortAddress from '@/components/short-address';
-import { relativeTimestamp } from '@/utils/timeUtils';
+import { relativeTimestamp } from '@/utils/time-utils';
 import { PartialProposal } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
 

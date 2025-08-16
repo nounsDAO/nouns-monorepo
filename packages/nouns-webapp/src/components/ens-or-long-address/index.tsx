@@ -3,7 +3,7 @@ import type { Address } from '@/utils/types';
 import React from 'react';
 
 import { useReverseENSLookUp } from '@/utils/ens-lookup';
-import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
+import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 
 interface EnsOrLongAddressProps {
   address: Address;

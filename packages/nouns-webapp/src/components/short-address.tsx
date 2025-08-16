@@ -4,7 +4,7 @@ import { blo } from 'blo';
 import { useEnsAvatar, useEnsName } from 'wagmi';
 
 import { formatShortAddress } from '@/utils/address-and-ens-display-utils';
-import { containsBlockedText } from '@/utils/moderation/containsBlockedText';
+import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 import { resolveNounContractAddress } from '@/utils/resolve-nouns-contract-address';
 import { Address } from '@/utils/types';
 

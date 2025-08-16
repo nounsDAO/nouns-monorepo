@@ -17,7 +17,7 @@ import { useBlockTimestamp } from '@/hooks/use-block-timestamp';
 import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
-import { relativeTimestamp } from '@/utils/timeUtils';
+import { relativeTimestamp } from '@/utils/time-utils';
 import {
   Proposal,
   ProposalVersion,
