@@ -21,7 +21,7 @@ const onDisplayAuction = createSlice({
       state.onDisplayAuctionNounId = action.payload;
     },
     setPrevOnDisplayAuctionNounId: state => {
-      if (!state.onDisplayAuctionNounId) return;
+      if (state.onDisplayAuctionNounId === undefined) return;
       if (state.onDisplayAuctionNounId === 0) return;
       state.onDisplayAuctionNounId = state.onDisplayAuctionNounId - 1;
     },

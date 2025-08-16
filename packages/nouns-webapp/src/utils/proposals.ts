@@ -15,24 +15,24 @@ export const checkEnoughVotes = (
   availableVotes: number | undefined,
   proposalThreshold: number | undefined,
 ) => {
-  return !!(
-    availableVotes &&
-    proposalThreshold !== undefined &&
-    availableVotes > proposalThreshold
-  );
+  const hasAvailable = availableVotes !== undefined;
+  const hasThreshold = proposalThreshold !== undefined;
+  return hasAvailable && hasThreshold && availableVotes! > proposalThreshold!;
 };
 
 export const checkIsEligibleToPropose = (
   latestProposal: Proposal | undefined,
   account: string | null | undefined,
 ) => {
-  return !!(
-    latestProposal &&
-    account &&
+  const hasProposal = latestProposal !== undefined;
+  const hasAccount = account !== null && account !== undefined && account !== '';
+  return (
+    hasProposal &&
+    hasAccount &&
     (latestProposal?.status === ProposalState.ACTIVE ||
       latestProposal?.status === ProposalState.PENDING ||
       latestProposal?.status === ProposalState.UPDATABLE) &&
-    latestProposal.proposer?.toLowerCase() === account?.toLowerCase()
+    latestProposal.proposer?.toLowerCase() === account!.toLowerCase()
   );
 };
 

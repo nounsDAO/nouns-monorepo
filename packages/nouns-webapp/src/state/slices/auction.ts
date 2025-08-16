@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { isNullish } from 'remeda';
 
 import {
   Address,
@@ -29,8 +30,12 @@ export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
 });
 
 export const reduxSafeAuction = (auction: IAuction): IAuction => ({
-  amount: auction.amount ? BigInt(auction.amount).toString() : undefined,
-  bidder: auction.bidder ? (auction.bidder as Address) : undefined,
+  amount:
+    !isNullish(auction.amount) && auction.amount !== ''
+      ? BigInt(auction.amount).toString()
+      : undefined,
+  bidder:
+    !isNullish(auction.bidder) && auction.bidder !== '' ? (auction.bidder as Address) : undefined,
   startTime: BigInt(auction.startTime).toString(),
   endTime: BigInt(auction.endTime).toString(),
   nounId: BigInt(auction.nounId).toString(),
@@ -79,7 +84,10 @@ export const auctionSlice = createSlice({
       state.activeAuction = reduxSafeAuction(action.payload);
     },
     appendBid: (state, action: PayloadAction<BidEvent>) => {
-      if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
+      if (
+        !(state.activeAuction !== undefined && auctionsEqual(state.activeAuction, action.payload))
+      )
+        return;
       if (containsBid(state.bids, action.payload)) return;
       state.bids = [reduxSafeBid(action.payload), ...state.bids];
       const maxBid_ = maxBid(state.bids);
@@ -87,13 +95,19 @@ export const auctionSlice = createSlice({
       state.activeAuction.bidder = maxBid_.sender;
     },
     setAuctionSettled: (state, action: PayloadAction<AuctionSettledEvent>) => {
-      if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
+      if (
+        !(state.activeAuction !== undefined && auctionsEqual(state.activeAuction, action.payload))
+      )
+        return;
       state.activeAuction.settled = true;
       state.activeAuction.bidder = action.payload.winner;
       state.activeAuction.amount = BigInt(action.payload.amount).toString();
     },
     setAuctionExtended: (state, action: PayloadAction<AuctionExtendedEvent>) => {
-      if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
+      if (
+        !(state.activeAuction !== undefined && auctionsEqual(state.activeAuction, action.payload))
+      )
+        return;
       state.activeAuction.endTime = BigInt(action.payload.endTime).toString();
     },
   },

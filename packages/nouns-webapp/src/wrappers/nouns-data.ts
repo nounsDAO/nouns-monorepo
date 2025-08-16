@@ -183,11 +183,12 @@ const filterSigners = (
   sigsFiltered?.forEach(signature => {
     const delegateVoteCount =
       delegateSnapshot?.delegates?.find(delegate => delegate.id === signature.signer.id)
-        ?.nounsRepresented.length || 0;
+        ?.nounsRepresented.length ?? 0;
     // don't count votes from signers who have active or pending proposals
     // but include them in the list of signers to display with a note that they have an active proposal
     const parentProposalIsUpdatable =
-      proposalIdToUpdate && updatableProposalIds?.includes(proposalIdToUpdate ?? 0);
+      proposalIdToUpdate !== undefined &&
+      (updatableProposalIds?.includes(proposalIdToUpdate) ?? false);
     const activeOrPendingProposal =
       !parentProposalIsUpdatable && activePendingProposers.includes(signature.signer.id);
     if (!activeOrPendingProposal) {
@@ -246,14 +247,14 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     ?.map(candidate => candidate.latestVersion.content.contentSignatures?.map(sig => sig.signer.id))
     .flat();
   const signersDelegateSnapshot = useDelegateNounsAtBlockQuery(
-    allSigners ? deDupeSigners(allSigners) : [],
+    (allSigners?.length ?? 0) > 0 ? deDupeSigners(allSigners) : [],
     blockNumber ?? 0n,
   );
   const updatableProposalIds = useUpdatableProposalIds(blockNumber);
   const candidatesData = map(unmatchedCandidates ?? [], candidate => {
     const proposerVotes =
       proposerDelegates.data?.delegates.find(d => d.id === candidate.proposer.toLowerCase())
-        ?.nounsRepresented?.length || 0;
+        ?.nounsRepresented?.length ?? 0;
     return parseSubgraphCandidate(
       candidate,
       proposerVotes,
@@ -266,7 +267,7 @@ export const useCandidateProposals = (blockNumber?: bigint) => {
     );
   });
 
-  if (candidatesData) {
+  if ((candidatesData?.length ?? 0) > 0) {
     candidatesData.sort((a, b) => {
       return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
     });
@@ -289,7 +290,7 @@ export const useCandidateProposal = (
     variables,
   });
   const activePendingProposers = useActivePendingUpdatableProposers(blockNumber);
-  const threshold = useProposalThreshold() || 0;
+  const threshold = useProposalThreshold() ?? 0;
   const versionSignatures = data?.proposalCandidate?.latestVersion.content.contentSignatures;
   const allSigners = versionSignatures?.map(
     (sig: GraphQLProposalCandidateSignature) => sig.signer.id,
@@ -346,11 +347,9 @@ export const useCandidateProposalVersions = (id: string) => {
         versions: candidateVersions?.versions || [],
         slug: candidateVersions?.slug || '',
         proposer: (data.proposalCandidate.proposer || '') as `0x${string}`,
-        canceled: !!candidateVersions?.canceled,
-        versionsCount: candidateVersions?.versionsCount || 0,
-        lastUpdatedTimestamp: candidateVersions?.lastUpdatedTimestamp
-          ? Number(candidateVersions.lastUpdatedTimestamp)
-          : 0,
+        canceled: candidateVersions?.canceled ?? false,
+        versionsCount: candidateVersions?.versionsCount ?? 0,
+        lastUpdatedTimestamp: Number(candidateVersions?.lastUpdatedTimestamp ?? 0),
         createdTransactionHash: data.proposalCandidate.createdTransactionHash || '',
       }
     : undefined;
@@ -361,7 +360,7 @@ export const useCandidateProposalVersions = (id: string) => {
 export const useGetCreateCandidateCost = () => {
   const { data: createCandidateCost } = useReadNounsDataCreateCandidateCost();
 
-  if (!createCandidateCost) {
+  if (isNullish(createCandidateCost)) {
     return;
   }
 
@@ -371,7 +370,7 @@ export const useGetCreateCandidateCost = () => {
 export const useGetUpdateCandidateCost = () => {
   const { data: updateCandidateCost } = useReadNounsDataUpdateCandidateCost();
 
-  if (!updateCandidateCost) {
+  if (isNullish(updateCandidateCost)) {
     return;
   }
 
@@ -647,7 +646,7 @@ const parseSubgraphCandidate = (
     encodedProposalHash: latestVersion.content.encodedProposalHash as Hash,
   };
   let details;
-  if (toUpdate) {
+  if (toUpdate === true) {
     details = formatProposalTransactionDetailsToUpdate(transactionDetails);
   } else {
     details = formatProposalTransactionDetails(transactionDetails);
