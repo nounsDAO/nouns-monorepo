@@ -31,7 +31,7 @@ const LegacyNoun: React.FC<{
 
   const resolvedSrc =
     typeof imgPath === 'string'
-      ? imgPath
+      ? imgPath.trim() || (loadingNoun as StaticImageData).src
       : (imgPath as StaticImageData | undefined)?.src || (loadingNoun as StaticImageData).src;
 
   return (
