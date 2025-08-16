@@ -13,7 +13,6 @@ import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
 import Section from '@/components/section';
-import { useTreasuryBalance, useTreasuryUSDValue } from '@/hooks/use-treasury-balance';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
 
 import classes from './governance.module.css';
@@ -51,11 +50,12 @@ const GovernancePage = () => {
       Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on proposals
       or delegate their vote to a third party. A minimum of{' '}
       <span className={classes.boldText}>
+        {isNullish(nounsRequired) ? (
+          '...'
+        ) : (
           <>
             {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
           </>
-        ) : (
-          '...'
         )}
       </span>{' '}
       is required to submit proposals.
@@ -93,8 +93,8 @@ const GovernancePage = () => {
                 </Col>
                 <Col className={classes.usdTreasuryAmt}>
                   <h1 className={classes.usdBalance}>
-                    {treasuryBalanceUSD !== undefined &&
-                      i18n.number(Number(formatUnits(treasuryBalanceUSD, 6)), {
+                    {treasuryBalanceUSD !== undefined
+                      ? i18n.number(Number(formatUnits(treasuryBalanceUSD, 6)), {
                           style: 'currency',
                           currency: 'USD',
                         })

@@ -22,7 +22,6 @@ import ShortAddress from '@/components/short-address';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-import { useTreasuryBalance } from '@/hooks/use-treasury-balance';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
