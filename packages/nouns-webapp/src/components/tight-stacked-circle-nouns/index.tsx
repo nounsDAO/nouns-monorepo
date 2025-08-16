@@ -20,7 +20,15 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
       {nounIds
         .slice(0, MAX_NOUNS_PER_STACK)
         .map((nounId: number, i: number) => {
-          return <TightStackedCircleNoun nounId={nounId} index={i} square={square} shift={shift} />;
+          return (
+            <TightStackedCircleNoun
+              key={nounId}
+              nounId={nounId}
+              index={i}
+              square={square}
+              shift={shift}
+            />
+          );
         })
         .reverse()}
     </svg>
