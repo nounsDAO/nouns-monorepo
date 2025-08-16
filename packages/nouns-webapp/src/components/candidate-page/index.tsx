@@ -22,6 +22,7 @@ import Section from '@/components/section';
 import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useAppSelector } from '@/hooks';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
+import { useUserVotes } from '@/wrappers/noun-token';
 import {
   ProposalState,
   useProposal,
@@ -33,7 +34,6 @@ import {
   useCandidateFeedback,
   useCandidateProposal,
 } from '@/wrappers/nouns-data';
-import { useUserVotes } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import classes from './candidate.module.css';

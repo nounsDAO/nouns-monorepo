@@ -29,6 +29,7 @@ import { nounsTokenBuyerAddress } from '@/contracts';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
+import { useUserVotes } from '@/wrappers/noun-token';
 import {
   ProposalDetail,
   ProposalTransaction,
@@ -39,7 +40,6 @@ import {
   useUpdateProposalTransactions,
 } from '@/wrappers/nouns-dao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nouns-data';
-import { useUserVotes } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';

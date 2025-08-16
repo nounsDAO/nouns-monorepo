@@ -32,6 +32,7 @@ import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts'
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';
+import { useUserVotes } from '@/wrappers/noun-token';
 import {
   ProposalState,
   ProposalTransaction,
@@ -42,7 +43,6 @@ import {
   usePropose,
   useProposeOnTimelockV1,
 } from '@/wrappers/nouns-dao';
-import { useUserVotes } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './create-proposal.module.css';

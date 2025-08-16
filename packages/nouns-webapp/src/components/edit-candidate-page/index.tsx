@@ -29,13 +29,13 @@ import { nounsTokenBuyerAddress } from '@/contracts';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';
+import { useUserVotes } from '@/wrappers/noun-token';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nouns-dao';
 import {
   useCandidateProposal,
   useGetUpdateCandidateCost,
   useUpdateProposalCandidate,
 } from '@/wrappers/nouns-data';
-import { useUserVotes } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';

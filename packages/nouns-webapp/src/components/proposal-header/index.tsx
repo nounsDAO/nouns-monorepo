@@ -18,6 +18,7 @@ import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/time-utils';
+import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import {
   Proposal,
   ProposalVersion,
@@ -25,7 +26,6 @@ import {
   useIsDaoGteV3,
   useProposalVote,
 } from '@/wrappers/nouns-dao';
-import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';

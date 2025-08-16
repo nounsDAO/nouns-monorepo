@@ -13,13 +13,13 @@ import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePickByState } from '@/utils/pick-by-state';
 import { Address } from '@/utils/types';
-import { useProposalThreshold } from '@/wrappers/nouns-dao';
 import {
   useAccountVotes,
   useDelegateVotes,
   useNounTokenBalance,
   useUserDelegatee,
 } from '@/wrappers/noun-token';
+import { useProposalThreshold } from '@/wrappers/nouns-dao';
 
 import classes from './change-delegate-panel.module.css';
 

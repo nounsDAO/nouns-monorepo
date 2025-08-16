@@ -25,6 +25,7 @@ import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { isProposalUpdatable } from '@/utils/proposals';
+import { useNounTokenBalance, useUserVotes } from '@/wrappers/noun-token';
 import {
   PartialProposal,
   ProposalState,
@@ -32,7 +33,6 @@ import {
   useProposalThreshold,
 } from '@/wrappers/nouns-dao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nouns-data';
-import { useNounTokenBalance, useUserVotes } from '@/wrappers/noun-token';
 import { Link, useLocation, useNavigate } from 'react-router';
 
 import classes from './proposals.module.css';

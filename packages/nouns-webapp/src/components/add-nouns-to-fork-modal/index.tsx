@@ -11,8 +11,8 @@ import { map } from 'remeda';
 import link from '@/assets/icons/Link.svg';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
-import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nouns-dao';
 import { useIsApprovedForAll, useSetApprovalForAll } from '@/wrappers/noun-token';
+import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nouns-dao';
 
 import classes from './add-nouns-to-fork-modal.module.css';
 

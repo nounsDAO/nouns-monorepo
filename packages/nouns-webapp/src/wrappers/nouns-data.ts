@@ -26,6 +26,7 @@ import {
   ProposalFeedback as GraphQLProposalFeedback,
 } from '@/subgraphs/graphql';
 
+import { useDelegateNounsAtBlockQuery } from './noun-token';
 import {
   extractTitle,
   formatProposalTransactionDetails,
@@ -37,7 +38,6 @@ import {
   useProposalThreshold,
   useUpdatableProposalIds,
 } from './nouns-dao';
-import { useDelegateNounsAtBlockQuery } from './noun-token';
 import {
   candidateFeedbacksQuery,
   candidateProposalQuery,

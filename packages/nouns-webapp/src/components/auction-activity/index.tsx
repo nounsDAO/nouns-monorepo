@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { isNullish } from 'remeda';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 // eslint-disable-next-line no-restricted-imports
 import { Col, Row } from 'react-bootstrap';
+import { isNullish } from 'remeda';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
 import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';

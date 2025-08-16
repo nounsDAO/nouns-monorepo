@@ -18,6 +18,7 @@ import useForkTreasuryBalance from '@/hooks/use-fork-treasury-balance';
 import { useScrollToLocation } from '@/hooks/use-scroll-to-location';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
+import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/noun-token';
 import {
   useAdjustedTotalSupply,
   useEscrowEvents,
@@ -27,7 +28,6 @@ import {
   useForkThresholdBPS,
   useNumTokensInForkEscrow,
 } from '@/wrappers/nouns-dao';
-import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import DeployForkButton from './deploy-fork-button';

@@ -41,6 +41,7 @@ import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { getNounVotes } from '@/utils/get-nouns-votes';
 import { isProposalUpdatable } from '@/utils/proposals';
 import { parseStreamCreationCallData } from '@/utils/streaming-payment-utils/streaming-payment-utils';
+import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import {
   PartialProposal,
   ProposalState,
@@ -55,7 +56,6 @@ import {
   useQueueProposal,
 } from '@/wrappers/nouns-dao';
 import { useProposalFeedback } from '@/wrappers/nouns-data';
-import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import {
   delegateNounsAtBlockQuery,
   Delegates,
