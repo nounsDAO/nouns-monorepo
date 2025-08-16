@@ -62,11 +62,9 @@ const ProposalEditor = ({
               <hr />
             </>
           )}
-          <ReactMarkdown
-            className={classes.markdown}
-            children={proposalText}
-            remarkPlugins={[remarkBreaks]}
-          />
+          <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
+            {proposalText}
+          </ReactMarkdown>
         </div>
       )}
     </div>
