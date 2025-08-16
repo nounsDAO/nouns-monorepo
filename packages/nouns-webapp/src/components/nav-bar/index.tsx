@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-svg-icons';
