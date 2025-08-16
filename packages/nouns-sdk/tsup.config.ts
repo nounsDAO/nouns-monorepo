@@ -37,12 +37,7 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  minify: 'terser',
-  terserOptions: {
-    format: {
-      comments: false,
-    },
-  },
+  minify: false,
   loader: {
     '.json': 'json',
   },
