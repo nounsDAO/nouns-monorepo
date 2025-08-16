@@ -18,7 +18,10 @@ interface ShortAddressProps {
 }
 
 // Local error boundary to gracefully handle environments without WagmiProvider
-class ShortAddressErrorBoundary extends React.Component<{ fallback: React.ReactNode }, { hasError: boolean }> {
+class ShortAddressErrorBoundary extends React.Component<
+  { fallback: React.ReactNode },
+  { hasError: boolean }
+> {
   constructor(props: { fallback: React.ReactNode }) {
     super(props);
     this.state = { hasError: false };
@@ -35,7 +38,11 @@ class ShortAddressErrorBoundary extends React.Component<{ fallback: React.ReactN
   }
 }
 
-const EnsAwareShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, size = 24 }) => {
+const EnsAwareShortAddress: React.FC<ShortAddressProps> = ({
+  address,
+  avatar = false,
+  size = 24,
+}) => {
   const { data: ensName } = useEnsName({ address });
   const resolvedName = ensName ?? resolveNounContractAddress(address);
   const isBlocklisted = resolvedName ? containsBlockedText(resolvedName, 'en') : false;
