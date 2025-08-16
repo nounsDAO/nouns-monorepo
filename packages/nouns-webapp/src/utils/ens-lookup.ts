@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { isNullish } from 'remeda';
 
+import { isNullish } from 'remeda';
 import { usePublicClient } from 'wagmi';
 
 import { cache, cacheKey, CHAIN_ID } from '@/config';

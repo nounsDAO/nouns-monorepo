@@ -1,4 +1,5 @@
 import { isNullish } from 'remeda';
+
 import { AuctionState } from '@/state/slices/auction';
 import { Auction } from '@/wrappers/nounsAuction';
 
