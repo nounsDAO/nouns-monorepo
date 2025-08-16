@@ -23,6 +23,7 @@
     "eslint": "^9.33.0",
     "eslint-config-ponder": "^0.12.4",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-formatter-unix": "^8.40.0",
     "eslint-import-resolver-typescript": "^4.4.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-import-x": "^4.11.1",
