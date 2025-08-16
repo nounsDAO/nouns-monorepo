@@ -68,3 +68,5 @@ overrides:
   "underscore": ">=1.12.1"
   "ws": ">=7.5.10"
   "yargs-parser": ">=5.0.1"
+
+enablePrePostScripts: true
