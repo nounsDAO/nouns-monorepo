@@ -41,7 +41,7 @@ const NetworkAlert = () => {
           <ol>
             <li>Open Metamask</li>
             <li>Click the network select dropdown</li>
-            <li>Click on "{metamaskNetworkName()}"</li>
+            <li>Click on &quot;{metamaskNetworkName()}&quot;</li>
           </ol>
         </Modal.Body>
       </Modal>

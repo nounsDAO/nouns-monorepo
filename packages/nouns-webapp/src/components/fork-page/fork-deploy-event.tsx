@@ -38,7 +38,7 @@ const ForkCycleEvent = ({ forkDetails }: Props) => {
           <a href="#deploy-fork">{timestamp}</a>
         </span>
         <h3 className={classes.eventTitle}>
-          {ownerLink} {actionLabel} by "TKTK" with {nounCount} {nounLabel}
+          {ownerLink} {actionLabel} by &quot;TKTK&quot; with {nounCount} {nounLabel}
         </h3>
       </header>
     </div>
