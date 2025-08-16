@@ -4,8 +4,8 @@ packages:
 catalogMode: manual
 
 catalog:
-  '@wagmi/core': ^2.18.0
-  wagmi: ^2.18.0
+  wagmi: ^2.16.3
+  '@wagmi/core': ^2.16.3
   '@wagmi/cli': ^2.3.1
   viem: ^2.33.0
   react: ^19.1.0
@@ -37,8 +37,8 @@ onlyBuiltDependencies:
   - 'web3'
 
 overrides:
-  wagmi: 2.18.0
-  '@wagmi/core': 2.18.0
+  wagmi: 2.16.3
+  '@wagmi/core': 2.16.3
   viem: 2.33.0
 
   '@babel/traverse': '>=7.23.2'
