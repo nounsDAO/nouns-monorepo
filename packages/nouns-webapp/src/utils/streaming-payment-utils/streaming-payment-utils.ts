@@ -36,14 +36,15 @@ export const usePredictStreamAddress = ({
 };
 
 export function formatTokenAmount(amount?: number, currency?: SupportedCurrency) {
+  const hasAmount = amount !== null && amount !== undefined && !Number.isNaN(amount);
   switch (currency) {
     case SupportedCurrency.USDC:
-      return amount ? BigInt(Math.round(amount * 1_000_000)) : 0n;
+      return hasAmount ? BigInt(Math.round((amount as number) * 1_000_000)) : 0n;
     case SupportedCurrency.WETH:
     case SupportedCurrency.STETH:
-      return amount ? parseEther(amount.toString()) : 0n;
+      return hasAmount ? parseEther((amount as number).toString()) : 0n;
     default:
-      return amount ? BigInt(amount) : 0n;
+      return hasAmount ? BigInt(amount as number) : 0n;
   }
 }
 
@@ -63,7 +64,8 @@ export function getTokenAddressForCurrency(currency?: SupportedCurrency, chainId
 export function parseStreamCreationCallData(callData: string) {
   const callDataArray = callData.split(',');
 
-  if (!callDataArray || callDataArray.length < 6) {
+  // Need at least 7 items to safely access index 6 below
+  if (callDataArray.length < 7) {
     return {
       recipient: '',
       streamAddress: '',

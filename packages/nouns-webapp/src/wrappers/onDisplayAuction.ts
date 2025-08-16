@@ -1,3 +1,5 @@
+import { isNullish } from 'remeda';
+
 import { useAppSelector } from '@/hooks';
 import { compareBids } from '@/utils/compare-bids';
 import { generateEmptyNounderAuction, isNounderNoun } from '@/utils/nounder-noun';
@@ -7,8 +9,8 @@ import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
   return {
-    amount: reduxSafeAuction.amount ? BigInt(reduxSafeAuction.amount) : undefined,
-    bidder: reduxSafeAuction.bidder ? (reduxSafeAuction.bidder as Address) : undefined,
+    amount: isNullish(reduxSafeAuction.amount) ? undefined : BigInt(reduxSafeAuction.amount),
+    bidder: isNullish(reduxSafeAuction.bidder) ? undefined : (reduxSafeAuction.bidder as Address),
     startTime: BigInt(reduxSafeAuction.startTime),
     endTime: BigInt(reduxSafeAuction.endTime),
     nounId: BigInt(reduxSafeAuction.nounId),
@@ -41,9 +43,9 @@ const useOnDisplayAuction = (): Auction | undefined => {
 
   if (
     onDisplayAuctionNounId === undefined ||
-    !lastAuctionNounId ||
-    !currentAuction ||
-    !pastAuctions
+    isNullish(lastAuctionNounId) ||
+    isNullish(currentAuction) ||
+    isNullish(pastAuctions)
   ) {
     return undefined;
   }
@@ -85,8 +87,8 @@ export const useAuctionBids = (auctionNounId: bigint): Bid[] | undefined => {
   } else {
     // find bids for past auction requested
     const bidEvents: BidEvent[] | undefined = pastAuctions?.find(auction => {
-      const nounId = auction.activeAuction && BigInt(auction.activeAuction.nounId);
-      return !!nounId && nounId === auctionNounId;
+      const nounId = auction.activeAuction ? BigInt(auction.activeAuction.nounId) : undefined;
+      return !isNullish(nounId) && nounId === auctionNounId;
     })?.bids;
 
     return bidEvents ? deserializeBids(bidEvents) : undefined;
