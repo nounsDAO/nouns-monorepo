@@ -36,8 +36,8 @@ import {
   useActivePendingUpdatableProposers,
   useProposalThreshold,
   useUpdatableProposalIds,
-} from './nounsDao';
-import { useDelegateNounsAtBlockQuery } from './nounToken';
+} from './nouns-dao';
+import { useDelegateNounsAtBlockQuery } from './noun-token';
 import {
   candidateFeedbacksQuery,
   candidateProposalQuery,

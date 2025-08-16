@@ -1,6 +1,6 @@
 'use client';
 
-import type { INounSeed } from '@/wrappers/nounToken';
+import type { INounSeed } from '@/wrappers/noun-token';
 import type { EncodedImage } from '@nouns/sdk';
 
 import React, { useEffect, useState } from 'react';

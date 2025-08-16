@@ -1,5 +1,5 @@
 import type { FinalProposalActionStepProps } from '@/components/proposal-actions-modal';
-import type { ProposalTransaction } from '@/wrappers/nounsDao';
+import type { ProposalTransaction } from '@/wrappers/nouns-dao';
 
 import React from 'react';
 

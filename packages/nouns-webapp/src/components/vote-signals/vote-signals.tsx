@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 import { Spinner } from '@/components/spinner';
-import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nounsData';
+import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nouns-data';
 
 import VoteSignalGroup from './vote-signal-group';
 

@@ -13,7 +13,7 @@ import {
 } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
-import { Auction } from '@/wrappers/nounsAuction';
+import { Auction } from '@/wrappers/nouns-auction';
 
 import classes from './bid.module.css';
 

@@ -12,8 +12,8 @@ import { RootState } from '@/store';
 import { nounPath } from '@/utils/history';
 import { beige, grey } from '@/utils/noun-bg-colors';
 import { isNounderNoun } from '@/utils/nounder-noun';
-import { Auction as IAuction } from '@/wrappers/nounsAuction';
-import { INounSeed } from '@/wrappers/nounToken';
+import { Auction as IAuction } from '@/wrappers/nouns-auction';
+import { INounSeed } from '@/wrappers/noun-token';
 import { useNavigate } from 'react-router';
 
 import classes from './auction.module.css';

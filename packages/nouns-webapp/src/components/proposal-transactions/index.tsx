@@ -3,7 +3,7 @@ import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 
 import xIcon from '@/assets/x-icon.png';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { ProposalTransaction } from '@/wrappers/nounsDao';
+import { ProposalTransaction } from '@/wrappers/nouns-dao';
 
 import classes from './proposal-transactions.module.css';
 

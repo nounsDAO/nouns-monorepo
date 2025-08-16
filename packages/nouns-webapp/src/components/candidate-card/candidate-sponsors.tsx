@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 
 import cx from 'clsx';
 
-import { CandidateSignature } from '@/wrappers/nounsData';
-import { useDelegateNounsAtBlockQuery } from '@/wrappers/nounToken';
+import { CandidateSignature } from '@/wrappers/nouns-data';
+import { useDelegateNounsAtBlockQuery } from '@/wrappers/noun-token';
 
 import CandidateSponsorImage from './candidate-sponsor-image';
 import classes from './candidate-sponsors.module.css';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { LoadingNoun } from '@/components/legacy-noun';
 import { getNoun } from '@/components/standalone-noun';
-import { useNounSeed } from '@/wrappers/nounToken';
+import { useNounSeed } from '@/wrappers/noun-token';
 
 interface TightStackedCircleNounProps {
   nounId: number;

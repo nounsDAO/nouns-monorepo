@@ -24,8 +24,8 @@ import {
   useHasVotedOnProposal,
   useIsDaoGteV3,
   useProposalVote,
-} from '@/wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';

@@ -53,9 +53,9 @@ import {
   useProposal,
   useProposalVersions,
   useQueueProposal,
-} from '@/wrappers/nounsDao';
-import { useProposalFeedback } from '@/wrappers/nounsData';
-import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { useProposalFeedback } from '@/wrappers/nouns-data';
+import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import {
   delegateNounsAtBlockQuery,
   Delegates,

@@ -21,7 +21,7 @@ import { processProposalDescriptionText } from '@/utils/process-proposal-descrip
 import {
   ProposalCandidateVersionContent,
   useCandidateProposalVersions,
-} from '@/wrappers/nounsData';
+} from '@/wrappers/nouns-data';
 import { Link, useParams } from 'react-router';
 
 import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';

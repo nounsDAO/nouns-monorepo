@@ -27,7 +27,7 @@ import { useAppSelector } from '@/hooks';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
-import { useIsDaoGteV3 } from '@/wrappers/nounsDao';
+import { useIsDaoGteV3 } from '@/wrappers/nouns-dao';
 
 import navDropdownClasses from './nav-bar-dropdown.module.css';
 import classes from './nav-bar.module.css';

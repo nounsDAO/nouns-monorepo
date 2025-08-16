@@ -2,7 +2,7 @@ import ReactDiffViewer from 'react-diff-viewer';
 import { Hex } from 'viem';
 
 import { Address } from '@/utils/types';
-import { ProposalDetail } from '@/wrappers/nounsDao';
+import { ProposalDetail } from '@/wrappers/nouns-dao';
 
 import classes from './proposal-content.module.css';
 import ProposalTransaction from './proposal-transaction';

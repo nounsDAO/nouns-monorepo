@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 import ShortAddress from '@/components/short-address';
 import { relativeTimestamp } from '@/utils/timeUtils';
-import { PartialProposal } from '@/wrappers/nounsDao';
-import { ProposalCandidate } from '@/wrappers/nounsData';
+import { PartialProposal } from '@/wrappers/nouns-dao';
+import { ProposalCandidate } from '@/wrappers/nouns-data';
 
 import classes from './candidate-card.module.css';
 import CandidateSponsors from './candidate-sponsors';

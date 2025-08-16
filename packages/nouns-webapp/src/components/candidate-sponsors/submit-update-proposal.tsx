@@ -10,7 +10,7 @@ import {
   CandidateSignature,
   ProposalCandidate,
   useUpdateProposalBySigs,
-} from '@/wrappers/nounsData';
+} from '@/wrappers/nouns-data';
 import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';

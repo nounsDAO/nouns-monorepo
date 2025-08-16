@@ -30,9 +30,9 @@ import {
   ProposalState,
   useIsDaoGteV3,
   useProposalThreshold,
-} from '@/wrappers/nounsDao';
-import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nounsData';
-import { useNounTokenBalance, useUserVotes } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nouns-data';
+import { useNounTokenBalance, useUserVotes } from '@/wrappers/noun-token';
 import { Link, useLocation, useNavigate } from 'react-router';
 
 import classes from './proposals.module.css';

@@ -7,7 +7,7 @@ import { formatUnits } from 'viem';
 import ShortAddress from '@/components/short-address';
 import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
 import { defaultChain } from '@/wagmi';
-import { ProposalDetail } from '@/wrappers/nounsDao';
+import { ProposalDetail } from '@/wrappers/nouns-dao';
 
 import classes from './proposal-content.module.css';
 

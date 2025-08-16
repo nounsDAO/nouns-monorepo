@@ -17,7 +17,7 @@ import {
 } from '@/utils/etherscan';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { defaultChain } from '@/wagmi';
-import { ProposalDetail } from '@/wrappers/nounsDao';
+import { ProposalDetail } from '@/wrappers/nouns-dao';
 
 import classes from './proposal-content.module.css';
 import ProposalTransactions from './proposal-transactions';

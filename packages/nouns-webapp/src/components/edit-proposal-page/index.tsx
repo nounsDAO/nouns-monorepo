@@ -37,9 +37,9 @@ import {
   useUpdateProposal,
   useUpdateProposalDescription,
   useUpdateProposalTransactions,
-} from '@/wrappers/nounsDao';
-import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
-import { useUserVotes } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nouns-data';
+import { useUserVotes } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';

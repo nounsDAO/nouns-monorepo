@@ -8,9 +8,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { isNullish } from 'remeda';
 import { useAccount } from 'wagmi';
 
-import { Proposal, ProposalState } from '@/wrappers/nounsDao';
-import { ProposalCandidate } from '@/wrappers/nounsData';
-import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/nounToken';
+import { Proposal, ProposalState } from '@/wrappers/nouns-dao';
+import { ProposalCandidate } from '@/wrappers/nouns-data';
+import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './candidate-sponsors.module.css';

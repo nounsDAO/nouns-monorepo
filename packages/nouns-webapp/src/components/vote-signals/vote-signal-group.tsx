@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { VoteSignalDetail } from '@/wrappers/nounsData';
+import { VoteSignalDetail } from '@/wrappers/nouns-data';
 
 import VoteSignal from './vote-signal';
 

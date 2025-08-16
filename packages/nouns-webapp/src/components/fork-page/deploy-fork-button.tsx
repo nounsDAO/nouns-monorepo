@@ -8,7 +8,7 @@ import { isNullish } from 'remeda';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
-import { useExecuteFork } from '@/wrappers/nounsDao';
+import { useExecuteFork } from '@/wrappers/nouns-dao';
 
 import classes from './fork.module.css';
 

@@ -4,7 +4,7 @@ import React, { SetStateAction, useState } from 'react';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { Address } from '@/utils/types';
-import { ProposalTransaction } from '@/wrappers/nounsDao';
+import { ProposalTransaction } from '@/wrappers/nouns-dao';
 
 import FunctionCallEnterArgsStep from './steps/function-call-enter-args-step';
 import FunctionCallReviewStep from './steps/function-call-review-step';

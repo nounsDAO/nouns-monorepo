@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 import { useReadNounsTokenSeeds } from '@/contracts';
-import { INounSeed } from '@/wrappers/nounToken';
+import { INounSeed } from '@/wrappers/noun-token';
 
 export interface NounProps extends HTMLAttributes<HTMLImageElement> {
   nounId?: bigint;

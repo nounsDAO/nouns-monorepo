@@ -11,7 +11,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-import { useCancelSignature } from '@/wrappers/nounsDao';
+import { useCancelSignature } from '@/wrappers/nouns-dao';
 
 import classes from './candidate-sponsors.module.css';
 

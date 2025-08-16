@@ -41,8 +41,8 @@ import {
   useProposalThreshold,
   usePropose,
   useProposeOnTimelockV1,
-} from '@/wrappers/nounsDao';
-import { useUserVotes } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { useUserVotes } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './create-proposal.module.css';

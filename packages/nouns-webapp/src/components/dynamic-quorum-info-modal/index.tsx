@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 
 import { Backdrop } from '@/components/modal';
-import { Proposal, useDynamicQuorumProps } from '@/wrappers/nounsDao';
+import { Proposal, useDynamicQuorumProps } from '@/wrappers/nouns-dao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 
 import classes from './dynamic-quorum-info-modal.module.css';

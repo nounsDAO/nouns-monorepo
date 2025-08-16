@@ -27,13 +27,13 @@ import {
   useProposal,
   useProposalCount,
   useProposalThreshold,
-} from '@/wrappers/nounsDao';
+} from '@/wrappers/nouns-dao';
 import {
   useCancelCandidate,
   useCandidateFeedback,
   useCandidateProposal,
-} from '@/wrappers/nounsData';
-import { useUserVotes } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-data';
+import { useUserVotes } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import classes from './candidate.module.css';

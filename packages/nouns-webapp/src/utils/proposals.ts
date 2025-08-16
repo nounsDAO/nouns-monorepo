@@ -1,4 +1,4 @@
-import { Proposal, ProposalState } from '@/wrappers/nounsDao';
+import { Proposal, ProposalState } from '@/wrappers/nouns-dao';
 
 export const isProposalUpdatable = (
   proposalState: ProposalState,

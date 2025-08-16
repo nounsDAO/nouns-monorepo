@@ -11,7 +11,7 @@ import {
   EscrowWithdrawal,
   ForkCycleEvent,
   useProposalTitles,
-} from '@/wrappers/nounsDao';
+} from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
 import classes from './fork.module.css';

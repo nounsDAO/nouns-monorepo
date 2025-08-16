@@ -8,7 +8,7 @@ import { Col, Row } from 'react-bootstrap';
 
 import ForkStatus from '@/components/fork-status';
 import Section from '@/components/section';
-import { Fork, ForkState, useForks } from '@/wrappers/nounsDao';
+import { Fork, ForkState, useForks } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
 import classes from './forks.module.css';

@@ -18,7 +18,7 @@ import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-tr
 import ProposalStatus from '@/components/proposal-status';
 import Section from '@/components/section';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
-import { useProposal, useProposalVersions } from '@/wrappers/nounsDao';
+import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
 import { Link, useParams } from 'react-router';
 
 import VersionTab from './version-tab';

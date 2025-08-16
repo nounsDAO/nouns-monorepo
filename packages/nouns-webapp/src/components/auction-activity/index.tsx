@@ -26,7 +26,7 @@ import { useAppSelector } from '@/hooks';
 import { RootState } from '@/store';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
-import { Auction } from '@/wrappers/nounsAuction';
+import { Auction } from '@/wrappers/nouns-auction';
 
 import classes from './auction-activity.module.css';
 import bidHistoryClasses from './bid-history.module.css';

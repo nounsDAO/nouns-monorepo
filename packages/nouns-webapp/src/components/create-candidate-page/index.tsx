@@ -28,9 +28,9 @@ import { nounsTokenBuyerAddress } from '@/contracts';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
-import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
-import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
-import { useUserVotes } from '@/wrappers/nounToken';
+import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nouns-dao';
+import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nouns-data';
+import { useUserVotes } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';

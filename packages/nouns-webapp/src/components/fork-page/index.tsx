@@ -26,8 +26,8 @@ import {
   useForkThreshold,
   useForkThresholdBPS,
   useNumTokensInForkEscrow,
-} from '@/wrappers/nounsDao';
-import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/nounToken';
+} from '@/wrappers/nouns-dao';
+import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/noun-token';
 import { Link, useParams } from 'react-router';
 
 import DeployForkButton from './deploy-fork-button';

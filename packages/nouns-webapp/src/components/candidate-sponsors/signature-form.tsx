@@ -22,7 +22,7 @@ import { nounsGovernorAddress } from '@/contracts';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
-import { ProposalCandidate, useAddSignature } from '@/wrappers/nounsData';
+import { ProposalCandidate, useAddSignature } from '@/wrappers/nouns-data';
 
 import classes from './candidate-sponsors.module.css';
 

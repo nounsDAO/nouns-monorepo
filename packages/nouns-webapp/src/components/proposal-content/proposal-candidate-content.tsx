@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
-import { ProposalCandidate } from '@/wrappers/nounsData';
+import { ProposalCandidate } from '@/wrappers/nouns-data';
 
 import classes from './proposal-content.module.css';
 import ProposalTransactions from './proposal-transactions';

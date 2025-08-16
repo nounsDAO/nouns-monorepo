@@ -3,7 +3,7 @@ import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
 
-import { ForkState } from '@/wrappers/nounsDao';
+import { ForkState } from '@/wrappers/nouns-dao';
 
 import classes from './fork-status.module.css';
 

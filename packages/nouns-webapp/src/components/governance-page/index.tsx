@@ -13,7 +13,7 @@ import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
 import Section from '@/components/section';
-import { useAllProposals, useProposalThreshold } from '@/wrappers/nounsDao';
+import { useAllProposals, useProposalThreshold } from '@/wrappers/nouns-dao';
 
 import classes from './governance.module.css';
 

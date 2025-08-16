@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
 import { useAppSelector } from '@/hooks';
-import { Auction } from '@/wrappers/nounsAuction';
+import { Auction } from '@/wrappers/nouns-auction';
 
 import classes from './auction-timer.module.css';
 

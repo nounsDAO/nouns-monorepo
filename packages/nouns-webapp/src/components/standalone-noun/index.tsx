@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import LegacyNoun from '@/components/legacy-noun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
-import { INounSeed, useNounSeed } from '@/wrappers/nounToken';
+import { INounSeed, useNounSeed } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './standalone-noun.module.css';

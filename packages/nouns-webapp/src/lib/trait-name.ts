@@ -1,7 +1,7 @@
 import { ImageData } from '@noundry/nouns-assets';
 
 import { traitCategory } from '@/lib/trait-category';
-import { INounSeed } from '@/wrappers/nounToken';
+import { INounSeed } from '@/wrappers/noun-token';
 
 const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 

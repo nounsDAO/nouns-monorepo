@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
-import { Fork } from '@/wrappers/nounsDao';
+import { Fork } from '@/wrappers/nouns-dao';
 
 import classes from './fork.module.css';
 

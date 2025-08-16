@@ -5,7 +5,7 @@ import { buildSVG } from '@nouns/sdk';
 import { useQuery } from '@tanstack/react-query';
 
 import { traitCategory } from '@/lib/trait-category';
-import { INounSeed } from '@/wrappers/nounToken';
+import { INounSeed } from '@/wrappers/noun-token';
 
 export interface TraitProps extends HTMLAttributes<HTMLImageElement> {
   type: keyof INounSeed;

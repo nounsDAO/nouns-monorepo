@@ -13,7 +13,7 @@ import { Locales } from '@/i18n/locales';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/timeUtils';
-import { useUserVotesAsOfBlock } from '@/wrappers/nounToken';
+import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';
