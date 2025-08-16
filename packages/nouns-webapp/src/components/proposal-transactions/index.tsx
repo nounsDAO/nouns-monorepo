@@ -32,7 +32,7 @@ const ProposalTransactions = ({
 
     if (isProposalUpdate === true && tx.signature && tx.calldata !== '0x') {
       try {
-        const abi = parseAbi([`function ${tx.signature}` as any]);
+        const abi = parseAbi([`function ${tx.signature}`]);
         const { args } = decodeFunctionData({
           abi,
           data: tx.calldata as `0x${string}`,

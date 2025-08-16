@@ -80,7 +80,11 @@ const NoundersPage = () => {
           <div key={`bio-${index}`} className="mb-4 text-center">
             <div className="flex flex-col items-center">
               <img
-                src={typeof bio.image === 'string' ? (bio.image as any) : (bio.image as any).src}
+                src={
+                  typeof bio.image === 'string'
+                    ? (bio.image as string)
+                    : (bio.image as { src: string }).src
+                }
                 alt={bio.name}
                 className="mb-2 w-1/2 max-w-20 rounded-full"
               />

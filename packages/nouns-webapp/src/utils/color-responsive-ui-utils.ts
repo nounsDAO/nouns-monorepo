@@ -17,7 +17,7 @@ export const shouldUseStateBg = (location: { pathname: string }) => {
  * @param warmState  What to return is the state is warm
  * @returns item corresponding to current state
  */
-export const usePickByState = (whiteState: any, coolState: any, warmState: any) => {
+export const usePickByState = <T>(whiteState: T, coolState: T, warmState: T): T => {
   const location = useLocation();
   const useStateBg = shouldUseStateBg(location);
   const isCoolState = useAppSelector(state => state.application.isCoolBackground);

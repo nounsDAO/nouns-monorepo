@@ -15,7 +15,7 @@ export interface NounsTransitionProps {
   show: boolean;
   transitionStyes: TransitionStyles;
   timeout?: number;
-  onClick?: (e: any) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   className?: string;
 }
 
