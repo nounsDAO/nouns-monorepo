@@ -20,7 +20,7 @@ export const Link: React.FC<
     reloadDocument?: boolean;
   }>
 > = ({ to, className, onClick, target, children, replace, prefetch, reloadDocument }) => {
-  if (reloadDocument) {
+  if (reloadDocument === true) {
     return (
       <a href={to} className={className} onClick={onClick} target={target}>
         {children}
@@ -70,7 +70,7 @@ export const useLocation = () => {
 export const Navigate: React.FC<{ to: string; replace?: boolean }> = ({ to, replace }) => {
   const router = useRouter();
   useEffect(() => {
-    if (replace) router.replace(to);
+    if (replace === true) router.replace(to);
     else router.push(to);
   }, [router, to, replace]);
   return null;

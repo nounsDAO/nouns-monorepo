@@ -1,3 +1,5 @@
+import { isNullish } from 'remeda';
+
 export interface EventFilter {
   address?: string;
   topics?: Array<string | Array<string> | null>;
@@ -17,7 +19,7 @@ export interface Log {
 export const filterToKey = (filter: EventFilter): string => {
   return `${filter.address ?? ''}:${
     filter.topics
-      ?.map(topic => (topic ? (Array.isArray(topic) ? topic.join(';') : topic) : '\0'))
+      ?.map(topic => (!isNullish(topic) ? (Array.isArray(topic) ? topic.join(';') : topic) : '\0'))
       ?.join('-') ?? ''
   }`;
 };

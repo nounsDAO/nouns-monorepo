@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isNullish } from 'remeda';
 
 import { usePublicClient } from 'wagmi';
 
@@ -17,7 +18,7 @@ export const useReverseENSLookUp = (address: Address) => {
 
   useEffect(() => {
     let mounted = true;
-    if (address && publicClient) {
+    if (address && !isNullish(publicClient)) {
       // Look for resolved ENS in local storage (result of pre-fetching)
       const maybeCachedENSResultRaw = localStorage.getItem(ensCacheKey(address));
       if (maybeCachedENSResultRaw) {

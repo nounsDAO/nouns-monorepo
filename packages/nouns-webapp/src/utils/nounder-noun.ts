@@ -1,3 +1,4 @@
+import { isNullish } from 'remeda';
 import { AuctionState } from '@/state/slices/auction';
 import { Auction } from '@/wrappers/nounsAuction';
 
@@ -37,8 +38,8 @@ export const generateEmptyNounderAuction = (
   const nounderAuction = emptyNounderAuction(Number(nounId));
   // use nounderAuction.nounId + 1 to get mint time
   const auctionAbove = findAuction(nounId + 1n, pastAuctions);
-  const auctionAboveStartTime = auctionAbove && BigInt(auctionAbove.startTime);
-  if (auctionAboveStartTime) nounderAuction.startTime = auctionAboveStartTime;
+  const auctionAboveStartTime = auctionAbove != null ? BigInt(auctionAbove.startTime) : undefined;
+  if (!isNullish(auctionAboveStartTime)) nounderAuction.startTime = auctionAboveStartTime;
 
   return nounderAuction;
 };
