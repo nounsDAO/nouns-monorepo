@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { isNullish } from 'remeda';
 
 import { GetLatestAuctionsQuery } from '@/subgraphs/graphql';
 import { Address } from '@/utils/types';
@@ -15,12 +16,18 @@ const initialState: PastAuctionsState = {
 
 const reduxSafePastAuctions = (data: GetLatestAuctionsQuery): AuctionState[] => {
   const auctions = data.auctions;
-  if (!auctions) return [];
+  if (isNullish(auctions)) return [];
   return auctions.map(auction => {
     return {
       activeAuction: {
-        amount: auction.amount ? BigInt(auction.amount).toString() : undefined,
-        bidder: auction.bidder ? (auction.bidder.id as Address) : undefined,
+        amount:
+          !isNullish(auction.amount) && String(auction.amount) !== ''
+            ? BigInt(auction.amount as string | bigint).toString()
+            : undefined,
+        bidder:
+          !isNullish(auction.bidder?.id) && auction.bidder?.id !== ''
+            ? (auction.bidder!.id as Address)
+            : undefined,
         startTime: BigInt(auction.startTime).toString(),
         endTime: BigInt(auction.endTime).toString(),
         nounId: BigInt(auction.id).toString(),
