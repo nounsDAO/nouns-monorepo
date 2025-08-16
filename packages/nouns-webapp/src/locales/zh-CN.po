@@ -681,7 +681,7 @@ msgstr "正在创建ZIP..."
 
 #: src/components/bid/index.tsx
 msgid "Vote for the next Noun"
-msgstr ""
+msgstr "为下一个 Noun 投票"
 
 #: src/components/bid/index.tsx
 msgid "Settled auction successfully!"
