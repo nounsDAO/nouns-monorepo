@@ -25,7 +25,11 @@ export const svg2png = (
     canvas.height = newHeight;
 
     const ctx = canvas.getContext('2d');
-    const DOMURL = window.URL || window.webkitURL || window;
+    const win = window as Window & { webkitURL?: typeof URL };
+    const DOMURL = window.URL ?? win.webkitURL;
+    if (DOMURL === undefined) {
+      throw new Error('URL API is not supported in this environment');
+    }
     const img = new Image();
     const svg = new Blob([modSvg.outerHTML], { type: 'image/svg+xml' });
     const url = DOMURL.createObjectURL(svg);
@@ -34,7 +38,8 @@ export const svg2png = (
       ctx.scale(newWidth / width, newHeight / height);
       ctx.drawImage(img, 0, 0);
       const png = canvas.toDataURL('image/png');
-      DOMURL.revokeObjectURL(png);
+      // Revoke the created object URL to avoid memory leaks
+      DOMURL.revokeObjectURL(url);
       try {
         resolve(png);
       } catch (e) {

@@ -184,6 +184,9 @@ export default defineConfig([
           project: 'packages/nouns-webapp/tsconfig.json',
         },
       },
+      react: {
+        version: '19.1.0',
+      }
     },
     languageOptions: {
       globals: {
