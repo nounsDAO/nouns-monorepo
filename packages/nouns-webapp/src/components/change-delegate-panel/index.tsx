@@ -54,7 +54,6 @@ const getTitleFromState = (state: ChangeDelegateState) => {
   }
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
   const { onDismiss, delegateTo } = props;
 
