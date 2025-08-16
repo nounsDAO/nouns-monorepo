@@ -56,10 +56,20 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
+      "@tailwindcss/oxide",
+      "bufferutil",
+      "core-js",
+      "core-js-pure",
       "esbuild",
+      "keccak",
       "netlify-cli",
+      "postinstall-postinstall",
+      "secp256k1",
       "sharp",
-      "unix-dgram"
+      "unix-dgram",
+      "unrs-resolver",
+      "utf-8-validate",
+      "web3"
     ],
     "overrides": {
       "@babel/traverse": ">=7.23.2",
