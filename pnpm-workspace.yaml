@@ -5,7 +5,7 @@ catalogMode: manual
 
 catalog:
   wagmi: ^2.16.3
-  '@wagmi/core': ^2.16.3
+  '@wagmi/core': ^2.18.0
   '@wagmi/cli': ^2.3.1
   viem: ^2.33.0
   react: ^19.1.0
@@ -38,7 +38,7 @@ onlyBuiltDependencies:
 
 overrides:
   wagmi: 2.16.3
-  '@wagmi/core': 2.16.3
+  '@wagmi/core': 2.18.0
   viem: 2.33.0
 
   '@babel/traverse': '>=7.23.2'
