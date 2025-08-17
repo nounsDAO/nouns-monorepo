@@ -9,6 +9,7 @@
     "Nounders",
     "volky.eth"
   ],
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
