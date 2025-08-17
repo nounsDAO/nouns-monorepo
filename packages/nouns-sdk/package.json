@@ -239,10 +239,14 @@
   "peerDependencies": {
     "@tanstack/react-query": ">=5.0.0",
     "@wagmi/core": "^2.0.0",
+    "react": ">=18",
     "wagmi": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@tanstack/react-query": {
+      "optional": true
+    },
+    "react": {
       "optional": true
     },
     "wagmi": {
