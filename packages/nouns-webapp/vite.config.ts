@@ -51,10 +51,6 @@ export default defineConfig({
       '@nouns/contracts': path.resolve(__dirname, '../../packages/nouns-contracts/dist'),
       '@': path.resolve(__dirname, './src'),
     },
-    dedupe: ['react', 'react-dom', 'wagmi', '@wagmi/core', 'viem'],
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'wagmi', '@wagmi/core', 'viem'],
   },
   build: {
     rollupOptions: {
@@ -63,7 +59,7 @@ export default defineConfig({
         format: 'esm',
       },
     },
-    minify: false,
+    minify: 'terser',
     terserOptions: {
       compress: {
         // Remove console logs in production builds
