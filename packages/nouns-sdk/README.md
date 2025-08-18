@@ -173,6 +173,29 @@ const { data } = useReadNounsGovernorVotingPeriod();
 // data: 28800n
 ```
 
+> [!WARNING]
+> sometimes your app bundler might keep duplicate wagmi modules when using this sdk in react. If you get an error like this even after correctly setting up your `WagmiProvider`:
+>
+> ```ts
+> Uncaught WagmiProviderNotFoundError: `useConfig` must be used within
+> `WagmiProvider`.
+> ```
+>
+> it means your app is bundling multiple versions of wagmi that are conflicting with each other.
+> To solve that on Vite, set up `dedupe` for `wagmi` in your vite config:
+>
+> ```ts
+> // vite.config.ts
+> import { defineConfig } from 'vite';
+>
+> export default defineConfig({
+>   resolve: {
+>     dedupe: ['wagmi'],
+>   },
+>   // rest of the config
+> });
+> ```
+
 ### Images
 
 **Run-length Encode Images**
