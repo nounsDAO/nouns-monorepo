@@ -46,11 +46,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@nouns/assets': path.resolve(__dirname, '../../packages/nouns-assets/dist'),
-      '@nouns/sdk': path.resolve(__dirname, '../../packages/nouns-sdk/dist'),
-      '@nouns/contracts': path.resolve(__dirname, '../../packages/nouns-contracts/dist'),
       '@': path.resolve(__dirname, './src'),
     },
+    dedupe: ['wagmi'],
   },
   build: {
     rollupOptions: {
