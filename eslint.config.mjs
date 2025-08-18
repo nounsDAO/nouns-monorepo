@@ -18,7 +18,6 @@ import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import importPlugin from 'eslint-plugin-import';
 import linguiPlugin from 'eslint-plugin-lingui';
 import prettierPlugin from 'eslint-plugin-prettier';
-import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
@@ -46,6 +45,7 @@ export default defineConfig([
       // Generated code (use a more consistent pattern)
       '**/typechain/**',
       '**/src/{types,contracts,subgraphs}/**',
+      '**/*.gen.ts',
     ],
   },
 
@@ -70,7 +70,6 @@ export default defineConfig([
       import: importPlugin,
       lingui: linguiPlugin,
       prettier: prettierPlugin,
-      sonarjs: sonarjsPlugin,
       turbo: turboPlugin,
       unicorn: unicornPlugin,
       'unused-imports': unusedImportsPlugin,
@@ -82,7 +81,6 @@ export default defineConfig([
         'plugin:@typescript-eslint/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
-        'plugin:sonarjs/recommended-legacy',
         'plugin:prettier/recommended',
         'prettier',
       ),
@@ -132,8 +130,6 @@ export default defineConfig([
       'lingui/no-unlocalized-strings': 'off',
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
-      // SonarJS plugin rules
-      'sonarjs/todo-tag': 'warn',
       // Unicorn plugin rules
       'unicorn/better-regex': 'error',
       'unicorn/no-nested-ternary': 'error',
@@ -163,9 +159,32 @@ export default defineConfig([
     },
   },
 
+  // nouns-docs specific configuration
+  {
+    files: ['**/packages/nouns-docs/**/*.{ts,tsx}'],
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-docs/tsconfig.json',
+        },
+      },
+    },
+  },
+
   // Additional React-specific rules only for the webapp package
   {
     files: ['**/packages/nouns-webapp/**/*.{ts,tsx}'],
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-webapp/tsconfig.json',
+        },
+      },
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -256,6 +275,35 @@ export default defineConfig([
       'import/export': 'error',
       // Prettier rules
       'prettier/prettier': 'warn',
+    },
+  },
+
+  // nouns-api specific configuration (Ponder)
+  {
+    files: ['**/packages/nouns-api/**/*.{ts,tsx}'],
+    extends: [...compat.extends('ponder')],
+    languageOptions: {
+      parserOptions: {
+        project: ['packages/nouns-api/tsconfig.json'],
+      },
+    },
+    settings: {
+      ...importPlugin.configs.typescript.settings,
+      'import/resolver': {
+        ...importPlugin.configs.typescript.settings['import/resolver'],
+        typescript: {
+          project: 'packages/nouns-api/tsconfig.json',
+        },
+      },
+    },
+    rules: {
+      // Disable import/no-unresolved for Ponder virtual modules
+      'import/no-unresolved': [
+        'error',
+        {
+          ignore: ['^ponder:'],
+        },
+      ],
     },
   },
 

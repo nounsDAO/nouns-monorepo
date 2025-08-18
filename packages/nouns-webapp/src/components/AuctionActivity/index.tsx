@@ -76,11 +76,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
-    if (!auction) return;
-
     const timeLeft = Number(auction.endTime) - Math.floor(Date.now() / 1000);
 
-    if (auction && timeLeft <= 0) {
+    if (timeLeft <= 0) {
       setAuctionEnded(true);
     } else {
       setAuctionEnded(false);
@@ -96,8 +94,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       };
     }
   }, [auctionTimer, auction]);
-
-  if (!auction) return null;
 
   return (
     <>
@@ -139,11 +135,11 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
         </div>
-        {!auctionEnded && (
+        {auctionEnded && (
           <Row className={classes.activityRow}>
-            <Col lg={12} className={classes.fomoNounsLink}>
+            <Col lg={12} className={classes.nextNounLink}>
               <FontAwesomeIcon icon={faInfoCircle} />
-              <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
+              <a href={'https://www.nouns.game/crystal-ball'} target={'_blank'} rel="noreferrer">
                 <Trans>Help mint the next Noun</Trans>
               </a>
             </Col>

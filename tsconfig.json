@@ -4,6 +4,5 @@
     { "path": "packages/nouns-contracts" },
     { "path": "packages/nouns-sdk" },
     { "path": "packages/nouns-subgraph" },
-    { "path": "packages/nouns-webapp" }
   ]
 }

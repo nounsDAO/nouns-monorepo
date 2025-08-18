@@ -42,7 +42,7 @@ const minBidEth = (minBid: bigint): string => {
   return (Math.ceil(ethNum * 100) / 100).toFixed(2);
 };
 
-const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
+const currentBid = (bidInputRef: React.RefObject<HTMLInputElement | null>) => {
   if (!bidInputRef.current || !bidInputRef.current.value) {
     return 0n;
   }
@@ -172,9 +172,9 @@ const Bid: React.FC<BidProps> = props => {
 
   const isDisabled = isPlacingBid || isSettlingAuction || !activeAccount;
 
-  const fomoNounsBtnOnClickHandler = () => {
-    // Open Fomo Nouns in a new tab
-    window.open('https://fomonouns.wtf', '_blank', 'noopener,noreferrer')?.focus();
+  const crytalBallBtnOnClickHandler = () => {
+    // Open Crystal Ball in a new tab
+    window.open('https://www.nouns.game/crystal-ball', '_blank', 'noopener,noreferrer')?.focus();
   };
 
   const isWalletConnected = activeAccount !== undefined;
@@ -221,8 +221,8 @@ const Bid: React.FC<BidProps> = props => {
         ) : (
           <>
             <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                <Trans>Vote for the next Noun</Trans> ⌐◧-◧
+              <Button className={classes.bidBtnAuctionEnded} onClick={crytalBallBtnOnClickHandler}>
+                <Trans>Pick the next Noun</Trans> ⌐◧-◧
               </Button>
             </Col>
             {/* Only show the force settles button if the wallet connected */}
