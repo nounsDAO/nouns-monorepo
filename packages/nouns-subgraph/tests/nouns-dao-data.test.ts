@@ -181,7 +181,7 @@ describe('nouns-dao-data', () => {
       assert.assertNull(signature);
     });
 
-    test('save a proposal candidade includes candidate index', () => {
+    test('save a proposal candidate includes candidate index', () => {
       const candidate = ProposalCandidate.load(
         candidateProposer.toHexString().concat('-').concat(slug),
       )!;
