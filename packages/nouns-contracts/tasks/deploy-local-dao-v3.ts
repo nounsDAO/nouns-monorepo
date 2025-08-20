@@ -255,7 +255,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
 
     if (expectedAuctionHouseProxyAddress !== contracts.NounsAuctionHouseProxy.instance?.address) {
       console.log(
-        `wrong auctio house proxy address expected: ${expectedAuctionHouseProxyAddress} actual: ${contracts.NounsAuctionHouseProxy.instance?.address}`,
+        `wrong auction house proxy address expected: ${expectedAuctionHouseProxyAddress} actual: ${contracts.NounsAuctionHouseProxy.instance?.address}`,
       );
       throw 'wrong address';
     }
