@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';

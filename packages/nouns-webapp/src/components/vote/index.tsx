@@ -10,7 +10,6 @@ import { i18n } from '@lingui/core';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import advanced from 'dayjs/plugin/advancedFormat';

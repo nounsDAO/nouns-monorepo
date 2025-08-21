@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans, Plural } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Card, Col, Row } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
