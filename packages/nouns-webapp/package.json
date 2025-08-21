@@ -9,7 +9,7 @@
     "check": "tsc --noEmit --skipLibCheck",
     "clean": "rimraf .next out .netlify",
     "dev": "next dev",
-    "dev:sepolia": "NEXT_PUBLIC_CHAIN_ID=11155111 next dev",
+    "dev:sepolia": "NEXT_PUBLIC_CHAIN_ID=11155111 PORT=3001 next dev",
     "graphql-codegen": "graphql-codegen-esm --config codegen.config.ts",
     "graphql-codegen:watch": "graphql-codegen-esm --config codegen.config.ts --watch",
     "i18n:ai-translate": "pnpm dlx lingo.dev i18n",
