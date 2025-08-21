@@ -11,7 +11,7 @@ import '@/index.css';
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   title: 'Nouns',
-  description: 'Nouns DAO web app built with Next.js 15',
+  description: 'The Nouns DAO homepage',
   applicationName: 'Nouns',
 };
 
