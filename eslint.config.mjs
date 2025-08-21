@@ -141,7 +141,9 @@ export default defineConfig([
             '^mailto:',
             '^tel:',
             // CSS color/function tokens
-            'rgba'
+            'rgba',
+            // Next.js/React Server Components directive
+            '^use client$'
           ],
           ignoreNames: [
             // Attribute-like names that often contain non-user text
