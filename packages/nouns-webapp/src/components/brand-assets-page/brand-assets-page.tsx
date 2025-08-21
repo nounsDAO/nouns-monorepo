@@ -4,6 +4,8 @@ import type { StaticImageData } from 'next/image';
 
 import React from 'react';
 
+import { Trans } from '@lingui/react/macro';
+
 // i18n macros/components removed for build stability
 import { DownloadIcon } from 'lucide-react';
 
@@ -49,7 +51,7 @@ const AssetCard: React.FC<AssetCardProps> = ({ title, imageSrc, pngHref, svgHref
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
           >
             <DownloadIcon size={16} />
-            PNG
+            <Trans>PNG</Trans>
           </button>
           <button
             type="button"
@@ -57,7 +59,7 @@ const AssetCard: React.FC<AssetCardProps> = ({ title, imageSrc, pngHref, svgHref
             className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
           >
             <DownloadIcon size={16} />
-            SVG
+            <Trans>SVG</Trans>
           </button>
         </div>
       </div>
@@ -118,15 +120,21 @@ const BrandAssetsPage = () => {
     <div className="-mb-10 min-h-screen bg-gray-100 sm:-mb-20">
       <div className="container-sm py-12">
         <div className="mb-12">
-          <h1 className="mb-4 text-5xl font-bold text-gray-900">Brand Assets</h1>
+          <h1 className="mb-4 text-5xl font-bold text-gray-900">
+            <Trans>Brand Assets</Trans>
+          </h1>
           <p className="max-w-2xl text-lg text-gray-600">
-            Download official Nouns DAO brand assets including our iconic noggles in various
-            formats.
+            <Trans>
+              Download official Nouns DAO brand assets including our iconic noggles in various
+              formats.
+            </Trans>
           </p>
         </div>
 
         <section className="mt-12">
-          <h2 className="font-londrina text-4xl font-bold">Logo</h2>
+          <h2 className="font-londrina text-4xl font-bold">
+            <Trans>Logo</Trans>
+          </h2>
           {/* Responsive grid: 1 column on mobile, 2 on tablet, 3 on desktop */}
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {assets.map(asset => (
@@ -141,7 +149,9 @@ const BrandAssetsPage = () => {
           </div>
         </section>
         <section className="mt-12">
-          <h2 className="font-londrina mt-6 text-4xl font-bold">Nouns & Traits</h2>
+          <h2 className="font-londrina mt-6 text-4xl font-bold">
+            <Trans>Nouns & Traits</Trans>
+          </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             <SectionCard
               title={'Go to playground'}
@@ -158,20 +168,24 @@ const BrandAssetsPage = () => {
           </div>
         </section>
         <section className="mt-12">
-          <h2 className="font-londrina mt-6 text-4xl font-bold">License</h2>
+          <h2 className="font-londrina mt-6 text-4xl font-bold">
+            <Trans>License</Trans>
+          </h2>
           <div className="mt-6 items-start gap-6">
             <p className="max-w-2xl text-lg text-gray-600">
-              The logos, traits and every Noun generated on the playground are{' '}
-              <a
-                href="https://creativecommons.org/public-domain/cc0/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline hover:text-blue-800"
-              >
-                CC0
-              </a>{' '}
-              (Creative Commons Zero), meaning they are in the public domain and free to use for any
-              purpose without restriction.
+              <Trans>
+                The logos, traits and every Noun generated on the playground are{' '}
+                <a
+                  href="https://creativecommons.org/public-domain/cc0/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline hover:text-blue-800"
+                >
+                  CC0
+                </a>{' '}
+                (Creative Commons Zero), meaning they are in the public domain and free to use for
+                any purpose without restriction.
+              </Trans>
             </p>
             <CCZero className="mt-6 h-16" />
           </div>
