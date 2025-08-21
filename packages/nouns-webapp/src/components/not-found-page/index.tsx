@@ -1,3 +1,5 @@
+'use client';
+
 import { Trans } from '@lingui/react/macro';
 
 import _404img from '@/assets/404noun.png';
