@@ -127,7 +127,68 @@ export default defineConfig([
         },
       ],
       // Lingui plugin rules
-      'lingui/no-unlocalized-strings': 'warn',
+      'lingui/no-unlocalized-strings': [
+        'warn',
+        {
+          ignore: [
+            // Single "word" not starting with uppercase (e.g., class names, tokens)
+            '^(?![A-Z])\\S+$',
+            // UPPERCASE literals and tokens
+            '^[A-Z0-9_-]+$',
+            // Common non-user-facing strings and protocols
+            '^https?://',
+            '^data:',
+            '^mailto:',
+            '^tel:',
+            // CSS color/function tokens
+            'rgba'
+          ],
+          ignoreNames: [
+            // Attribute-like names that often contain non-user text
+            { regex: { pattern: 'className', flags: 'i' } },
+            { regex: { pattern: '^[A-Z0-9_-]+$' } },
+            { regex: { pattern: '^aria-', flags: 'i' } },
+            'style',
+            'styleName',
+            'src',
+            'srcSet',
+            'type',
+            'id',
+            'width',
+            'height',
+            'displayName',
+            'Authorization',
+            'href',
+            'rel',
+            'target',
+            'role',
+            'data-testid'
+          ],
+          ignoreFunctions: [
+            // Styling/class helpers and common utilities
+            'cva',
+            'cn',
+            'clsx',
+            // Analytics/logging/errors
+            'track',
+            'Error',
+            'console.*',
+            // Common DOM and platform methods where string args are not user-facing
+            '*headers.set',
+            '*.addEventListener',
+            '*.removeEventListener',
+            '*.postMessage',
+            '*.getElementById',
+            '*.dispatch',
+            '*.commit',
+            '*.includes',
+            '*.indexOf',
+            '*.endsWith',
+            '*.startsWith',
+            'require'
+          ]
+        }
+      ],
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
       // Unicorn plugin rules
