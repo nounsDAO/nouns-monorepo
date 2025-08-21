@@ -4,6 +4,7 @@ import type { StaticImageData } from 'next/image';
 
 import React from 'react';
 
+import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 
 // i18n macros/components removed for build stability
@@ -98,19 +99,19 @@ const SectionCard: React.FC<{
 const BrandAssetsPage = () => {
   const assets = [
     {
-      title: 'Colored Noggles',
+      title: t`Colored Noggles`,
       imageSrc: '/brand-assets/color_noggles.png',
       pngHref: '/brand-assets/color_noggles.png',
       svgHref: '/brand-assets/color_noggles.svg',
     },
     {
-      title: 'Black monochrome Noggles',
+      title: t`Black monochrome Noggles`,
       imageSrc: '/brand-assets/black_noggles.png',
       pngHref: '/brand-assets/black_noggles.png',
       svgHref: '/brand-assets/black_noggles.svg',
     },
     {
-      title: 'White monochrome Noggles',
+      title: t`White monochrome Noggles`,
       imageSrc: '/brand-assets/white_noggles.png',
       pngHref: '/brand-assets/white_noggles.png',
       svgHref: '/brand-assets/white_noggles.svg',
@@ -154,15 +155,15 @@ const BrandAssetsPage = () => {
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             <SectionCard
-              title={'Go to playground'}
+              title={t`Go to playground`}
               to="/playground"
               imageSrc={playgroundNouns}
-              description={'Generate endless Nouns assembled from the onchain artwork'}
+              description={t`Generate endless Nouns assembled from the onchain artwork`}
             />
             <SectionCard
-              title={'Explore traits'}
+              title={t`Explore traits`}
               imageSrc={traitsImage}
-              description={'Download the individual traits that compose Nouns'}
+              description={t`Download the individual traits that compose Nouns`}
               to="/traits"
             />
           </div>
