@@ -127,7 +127,7 @@ export default defineConfig([
         },
       ],
       // Lingui plugin rules
-      'lingui/no-unlocalized-strings': 'off',
+      'lingui/no-unlocalized-strings': 'warn',
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
       // Unicorn plugin rules
