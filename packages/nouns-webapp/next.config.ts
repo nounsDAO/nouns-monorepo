@@ -10,10 +10,10 @@ const nextConfig: NextConfig = {
     // Enable server components and SWC plugins
     swcPlugins: [
       [
-        "@lingui/swc-plugin",
+        '@lingui/swc-plugin',
         {
           // Additional Configuration for Lingui SWC plugin
-          rootMode: "upward",
+          rootMode: 'upward',
         },
       ],
     ],
@@ -24,7 +24,9 @@ const nextConfig: NextConfig = {
 
   // Environment variables
   env: {
-    CUSTOM_KEY: 'my-value',
+    // TODO: We can move some of envs here in refactor to be accessible in runtime when working server components or server scripts in refactors
+    // https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
+    // CUSTOM_KEY: 'my-value',
   },
 
   // Webpack configuration
@@ -100,7 +102,9 @@ const nextConfig: NextConfig = {
     const prevIgnore = config.ignoreWarnings ?? [];
     const ignoreFn = (warning: any) =>
       typeof warning?.message === 'string' &&
-      warning.message.includes('Critical dependency: the request of a dependency is an expression') &&
+      warning.message.includes(
+        'Critical dependency: the request of a dependency is an expression',
+      ) &&
       /node_modules\/(cosmiconfig|import-fresh|typescript)/.test(warning?.module?.resource || '');
     (config as any).ignoreWarnings = Array.isArray(prevIgnore)
       ? [...prevIgnore, ignoreFn]
