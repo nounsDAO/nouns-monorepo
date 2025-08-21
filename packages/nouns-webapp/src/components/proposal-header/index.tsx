@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Alert, Button } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { useBlockNumber } from 'wagmi';
@@ -160,7 +160,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     <>
       <div className={classes.backButtonWrapper}>
         <Link to={'/vote'}>
-          <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+          <button className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
         </Link>
       </div>
       <div className="d-flex justify-content-between align-items-center">

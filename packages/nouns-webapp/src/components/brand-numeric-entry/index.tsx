@@ -1,6 +1,6 @@
 import React from 'react';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { NumericFormat, OnValueChange } from 'react-number-format';
 
 import classes from './brand-numeric-entry.module.css';
@@ -23,7 +23,7 @@ const BrandNumericEntry: React.FC<BrandNumericEntryProps> = props => {
         onValueChange={onValueChange}
         value={value}
         placeholder={placeholder}
-        className={clsx(classes.entry, isInvalid ? classes.invalid : '')}
+        className={cn(classes.entry, isInvalid ? classes.invalid : '')}
         allowNegative={false}
         thousandSeparator=","
       />

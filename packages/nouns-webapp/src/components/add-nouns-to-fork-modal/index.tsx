@@ -4,7 +4,7 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { FormControl, FormSelect, FormText, InputGroup, Spinner } from 'react-bootstrap';
 import { map } from 'remeda';
 
@@ -235,7 +235,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       </p>
       <button
         type="button"
-        className={clsx(classes.button, classes.primaryButton)}
+        className={cn(classes.button, classes.primaryButton)}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
           props.setIsModalOpen(true);
@@ -245,7 +245,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       </button>
       <button
         type="button"
-        className={clsx(classes.button, classes.secondaryButton)}
+        className={cn(classes.button, classes.secondaryButton)}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
         }}
@@ -391,7 +391,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 isApprovalLoading ||
                 (props.userEscrowedNouns?.includes(nounId) ?? false)
               }
-              className={clsx(
+              className={cn(
                 classes.nounButton,
                 selectedNouns.includes(nounId) && classes.selectedNounButton,
                 (props.userEscrowedNouns?.includes(nounId) ?? false) && classes.escrowedNoun,
@@ -420,7 +420,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         ) && (
           <button
             type="button"
-            className={clsx(
+            className={cn(
               classes.button,
               classes.primaryButton,
               (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) &&
@@ -460,7 +460,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           </button>
         )}
         {(Boolean(approvalErrorMessage) || Boolean(errorMessage)) && (
-          <p className={clsx(classes.statusMessage, classes.errorMessage)}>
+          <p className={cn(classes.statusMessage, classes.errorMessage)}>
             {Boolean(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
             <button
               type="button"
@@ -474,7 +474,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         )}
         {isTxSuccessful && (
           <>
-            <p className={clsx(classes.statusMessage, classes.successMessage)}>
+            <p className={cn(classes.statusMessage, classes.successMessage)}>
               <a
                 href={
                   escrowToForkState.transaction?.hash

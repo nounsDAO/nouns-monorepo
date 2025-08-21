@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { useDelegateNounsAtBlockQuery } from '@/wrappers/noun-token';
 import { CandidateSignature } from '@/wrappers/nouns-data';
@@ -53,7 +53,7 @@ const CandidateSponsors = ({
 
   return (
     <div
-      className={cx(classes.sponsorsWrap, signerCountOverflow > 0 && classes.sponsorsWrapOverflow)}
+      className={cn(classes.sponsorsWrap, signerCountOverflow > 0 && classes.sponsorsWrapOverflow)}
     >
       {nounIds.length > 0 && (
         <div className={classes.sponsors}>

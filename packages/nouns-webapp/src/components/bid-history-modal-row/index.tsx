@@ -3,7 +3,7 @@ import React from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { blo } from 'blo';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import _trophy from '@/assets/icons/trophy.svg';
 import TruncatedAmount from '@/components/truncated-amount';
@@ -32,7 +32,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
   const shortAddress = formatShortAddress(bid.sender);
 
   return (
-    <li className={clsx(auctionActivityClasses.bidRowCool, classes.bidRow)}>
+    <li className={cn(auctionActivityClasses.bidRowCool, classes.bidRow)}>
       <div className={auctionActivityClasses.bidItem}>
         <div className={auctionActivityClasses.leftSectionWrapper}>
           <div className={auctionActivityClasses.bidder}>
@@ -64,7 +64,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
           </div>
         </div>
         <div className={auctionActivityClasses.rightSectionWrapper}>
-          <div className={clsx(classes.bidAmount, auctionActivityClasses.bidAmount)}>
+          <div className={cn(classes.bidAmount, auctionActivityClasses.bidAmount)}>
             {bidAmount}
           </div>
           <div className={auctionActivityClasses.linkSymbol}>

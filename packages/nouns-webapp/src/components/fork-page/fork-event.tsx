@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 import ShortAddress from '@/components/short-address';
@@ -176,7 +176,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
 
   return (
     <div
-      className={clsx(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)}
+      className={cn(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)}
       id={event.id}
     >
       <a href={`#${event.id}`} className={classes.eventPoint}>

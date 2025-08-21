@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
 import { isNullish } from 'remeda';
 import { useAccount } from 'wagmi';
@@ -122,7 +122,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           </p>
         )}
         <div
-          className={cx(
+          className={cn(
             classes.interiorWrapper,
             isFormDisplayed ? classes.formOverlayVisible : undefined,
           )}

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -229,7 +229,7 @@ const CandidatePage = () => {
                   onClick={destructiveStateAction}
                   disabled={isCancelPending}
                   variant="danger"
-                  className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+                  className={cn(classes.destructiveTransitionStateButton, classes.button)}
                 >
                   {isCancelPending ? (
                     <Spinner animation="border" />
@@ -239,7 +239,7 @@ const CandidatePage = () => {
                 </Button>
                 <Link
                   to={`/candidates/${id}/edit`}
-                  className={clsx(classes.primaryButton, classes.button)}
+                  className={cn(classes.primaryButton, classes.button)}
                 >
                   <Trans>Edit</Trans>
                 </Link>
@@ -256,7 +256,7 @@ const CandidatePage = () => {
               Jump to Sponsored Votes and Feedback
             </a>
           </Col>
-          <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
+          <Col lg={8} className={cn(classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col id="feedback" lg={4} className={classes.sidebar}>

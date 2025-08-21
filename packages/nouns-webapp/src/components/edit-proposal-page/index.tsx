@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { isNullish } from 'remeda';
@@ -458,7 +458,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
           <Link to={`/vote/${id}`}>
             <button
               type="button"
-              className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}
+              className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}
             >
               ←
             </button>

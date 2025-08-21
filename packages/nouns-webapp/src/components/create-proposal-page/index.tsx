@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { filter } from 'remeda';
@@ -262,7 +262,7 @@ const CreateProposalPage = () => {
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={'/vote'}>
-            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+            <button className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
             <Trans>Create Proposal</Trans>

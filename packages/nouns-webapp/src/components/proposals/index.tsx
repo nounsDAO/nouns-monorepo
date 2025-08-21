@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -169,7 +169,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
         <Section fullWidth={false} className={classes.section}>
           <Col
             lg={10}
-            className={clsx(
+            className={cn(
               classes.headerWrapper,
               !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
             )}
@@ -178,7 +178,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               {tabs.map((tab, index) => (
                 <button
                   type="button"
-                  className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
+                  className={cn(classes.tab, index === activeTab ? classes.activeTab : '')}
                   onClick={() => setActiveTab(index)}
                   key={index}
                 >
@@ -209,7 +209,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 )}
               </div>
             ) : (
-              <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
+              <div className={cn('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
                 {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
                 {!isMobile && (
                   <div className={classes.nullBtnWrapper}>
@@ -286,7 +286,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   const countdownPill = (
                     <div className={classes.proposalStatusWrapper}>
                       <div
-                        className={clsx(
+                        className={cn(
                           proposalStatusClasses.proposalStatus,
                           classes.countdownPill,
                         )}
@@ -305,7 +305,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
 
                   return (
                     <a
-                      className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
+                      className={cn(classes.proposalLink, classes.proposalLinkWithCountdown)}
                       href={`/vote/${p.id}`}
                       key={i}
                     >
@@ -321,7 +321,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                           <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
                         )}
                         <div
-                          className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
+                          className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}
                         >
                           <ProposalStatus status={p.status}></ProposalStatus>
                         </div>
@@ -408,7 +408,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     signatures by Nouns voters, it can be promoted to a proposal.
                   </Trans>
                 </p>
-                <Link to="/create-candidate" className={clsx(classes.button)}>
+                <Link to="/create-candidate" className={cn(classes.button)}>
                   Create a candidate
                 </Link>
               </Col>

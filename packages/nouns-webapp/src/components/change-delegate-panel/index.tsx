@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Collapse, FormControl } from 'react-bootstrap';
 import { isAddress } from 'viem';
 import { useAccount, useEnsAddress } from 'wagmi';
@@ -214,7 +214,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
     <>
       <div className={'flex h-fit flex-col gap-3'}>
         <h1
-          className={clsx(
+          className={cn(
             currentDelegatePannelClasses.title,
             locale !== 'en-US' ? classes.nonEnBottomMargin : '',
           )}
@@ -236,7 +236,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
 
       {changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE && delegateTo === undefined && (
         <FormControl
-          className={clsx(classes.delegateInput, delegateInputClass)}
+          className={cn(classes.delegateInput, delegateInputClass)}
           type="string"
           onChange={e => {
             setDelegateAddress(e.target.value);
@@ -300,7 +300,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         />
         {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && (
           <div
-            className={clsx(
+            className={cn(
               classes.customButtonHighlighter,
               isAddress(delegateAddress) && classes.extened,
             )}

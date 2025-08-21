@@ -2,7 +2,7 @@ import React from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { NavBarButtonStyle } from '../nav-bar-button';
 
@@ -38,7 +38,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = ({ treasuryBalance, treasu
           }}
         >
           <div
-            className={clsx(
+            className={cn(
               classes.treasuryHeader,
               treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
             )}

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -86,7 +86,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   }, [cancelSigState, setCancelStatusOverlay]);
   return (
     <li
-      className={clsx(
+      className={cn(
         classes.sponsor,
         Boolean(cancelStatusOverlay?.show) && classes.cancelOverlay,
         Boolean(props.signerHasActiveOrPendingProposal) && classes.sponsorInvalid,
@@ -98,7 +98,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         </div>
       )}
       <div
-        className={clsx(
+        className={cn(
           classes.sponsorInteriorWrapper,
           cancelSigState.status === 'Success' && classes.hidden,
         )}
@@ -125,7 +125,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         {props.reason && (
           <div className={classes.reason} onClick={() => setIsReasonShown(!isReasonShown)}>
             <div
-              className={clsx(
+              className={cn(
                 classes.reasonWrapper,
                 isReasonShown && props.reason.length > 50 && classes.reasonShown,
               )}
@@ -167,7 +167,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
       </div>
       {Boolean(cancelStatusOverlay?.show) && (
         <div
-          className={clsx(
+          className={cn(
             classes.cancelStatusOverlay,
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
               classes.errorMessage,

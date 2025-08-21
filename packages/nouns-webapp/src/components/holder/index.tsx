@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/short-address';
@@ -60,7 +60,7 @@ const Holder: React.FC<HolderProps> = props => {
 
   return (
     <>
-      <Row className={clsx(classes.wrapper, classes.section)}>
+      <Row className={cn(classes.wrapper, classes.section)}>
         <Col xs={1} lg={12} className={classes.leftCol}>
           <h4
             style={{

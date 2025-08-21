@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -19,7 +19,7 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
   return (
     <>
       <Row>
-        <Col className={clsx(classes.section, classes.v3Proposal, classes.hasSidebar)}>
+        <Col className={cn(classes.section, classes.v3Proposal, classes.hasSidebar)}>
           <h5>
             <Trans>Description</Trans>
           </h5>

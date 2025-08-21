@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
 import { isNullish } from 'remeda';
@@ -328,7 +328,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   return (
     <div className={classes.formWrapper}>
       <>
-        <div className={clsx(classes.fields, (isWaiting || isLoading) && classes.disabled)}>
+        <div className={cn(classes.fields, (isWaiting || isLoading) && classes.disabled)}>
           <h4 className={classes.formLabel}>Sponsor this proposal candidate</h4>
           <textarea
             placeholder="Optional reason"
@@ -370,7 +370,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
         {isOverlayVisible && (
           <div className={classes.submitSignatureStatusOverlay}>
             <span
-              className={clsx(
+              className={cn(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
                   classes.loadingButton,
               )}
@@ -388,7 +388,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               {isLoading && 'Submitting signature'}
             </span>
             {Boolean(getSignatureErrorMessage || errorMessage) && (
-              <p className={clsx(classes.statusMessage, classes.errorMessage)}>
+              <p className={cn(classes.statusMessage, classes.errorMessage)}>
                 {getSignatureErrorMessage || errorMessage}
                 <button
                   type="button"
@@ -402,7 +402,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             )}
             {isTxSuccessful && (
               <>
-                <p className={clsx(classes.statusMessage, classes.successMessage)}>
+                <p className={cn(classes.statusMessage, classes.successMessage)}>
                   <a
                     href={
                       addSignatureState.transaction?.hash &&

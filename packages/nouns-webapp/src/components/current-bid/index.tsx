@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import TruncatedAmount from '@/components/truncated-amount';
@@ -31,7 +31,7 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
   const titleContent = auctionEnded ? <Trans>Winning bid</Trans> : <Trans>Current bid</Trans>;
 
   return (
-    <Row className={clsx(classes.wrapper, classes.container, classes.section)}>
+    <Row className={cn(classes.wrapper, classes.container, classes.section)}>
       <Col xs={5} lg={12} className={classes.leftCol}>
         <h4
           style={{

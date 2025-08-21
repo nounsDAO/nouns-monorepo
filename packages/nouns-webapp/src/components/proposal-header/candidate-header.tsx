@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -88,7 +88,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     <>
       <div className={classes.backButtonWrapper}>
         <Link to={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
-          <button type="button" className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>
+          <button type="button" className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>
             ←
           </button>
         </Link>

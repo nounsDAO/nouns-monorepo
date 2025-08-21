@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -65,7 +65,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
     <>
       <Row>
         <Col
-          className={clsx(
+          className={cn(
             classes.section,
             props.hasSidebar === true ? classes.hasSidebar : undefined,
           )}

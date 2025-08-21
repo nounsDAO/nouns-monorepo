@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
@@ -145,7 +145,7 @@ const VoteModal = ({
         </div>
       )}
       {!isVoteFailed && !isVoteSucessful && (
-        <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
+        <div className={cn(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
           {isObjectionPeriod === false && (
             <>
               <div onClick={() => setVote(Vote.FOR)}>

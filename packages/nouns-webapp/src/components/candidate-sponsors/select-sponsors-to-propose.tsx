@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Alert } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
@@ -200,7 +200,7 @@ const SelectSponsorsToPropose = (props: Props) => {
                 isTxSuccessful ||
                 signature.signer.activeOrPendingProposal === true
               }
-              className={clsx(
+              className={cn(
                 classes.selectButton,
                 selectedSignatures.includes(signature) && classes.selectedButton,
               )}
@@ -219,7 +219,7 @@ const SelectSponsorsToPropose = (props: Props) => {
         {errorMessage === '' && !isTxSuccessful && (
           <button
             type="button"
-            className={clsx(
+            className={cn(
               classes.button,
               classes.primaryButton,
               (isWaiting || isLoading) && classes.loadingButton,
@@ -254,7 +254,7 @@ const SelectSponsorsToPropose = (props: Props) => {
           </button>
         )}
         {errorMessage !== '' && (
-          <p className={clsx(classes.statusMessage, classes.errorMessage)}>
+          <p className={cn(classes.statusMessage, classes.errorMessage)}>
             {errorMessage}
             <button
               type="button"
@@ -268,7 +268,7 @@ const SelectSponsorsToPropose = (props: Props) => {
         )}
         {isTxSuccessful && (
           <>
-            <p className={clsx(classes.statusMessage, classes.successMessage)}>
+            <p className={cn(classes.statusMessage, classes.successMessage)}>
               <strong>Success!</strong> <br />
               <a
                 href={

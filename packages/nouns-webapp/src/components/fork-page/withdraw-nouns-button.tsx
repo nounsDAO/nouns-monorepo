@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { map, isNullish } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
@@ -93,7 +93,7 @@ function WithdrawNounsButton(props: Props) {
       </h2>
       <p>Withdrawing {props.tokenIds.map(nounId => `Noun ${nounId}`).join(', ')}</p>
       <p
-        className={clsx(
+        className={cn(
           classes.transactionStatus,
           classes.withdrawStatus,
           isLoading && classes.transactionStatusLoading,
@@ -143,7 +143,7 @@ function WithdrawNounsButton(props: Props) {
   return (
     <>
       <button
-        className={clsx(classes.button, classes.secondaryButton, classes.withdrawButton)}
+        className={cn(classes.button, classes.secondaryButton, classes.withdrawButton)}
         onClick={async () => {
           await withdrawFromForkEscrow({
             args: [map(props.tokenIds, n => BigInt(n))],

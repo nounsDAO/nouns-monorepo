@@ -10,7 +10,7 @@ import { i18n } from '@lingui/core';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import advanced from 'dayjs/plugin/advancedFormat';
@@ -535,7 +535,7 @@ const VotePage = () => {
           />
         )}
       </Col>
-      <Col lg={isUpdateable() ? 12 : 10} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={isUpdateable() ? 12 : 10} className={cn(classes.proposal, classes.wrapper)}>
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
             .filter(txn => txn?.functionSig?.includes('createStream') === true)
@@ -547,7 +547,7 @@ const VotePage = () => {
               return (
                 <Row
                   key={parsedCallData.streamAddress}
-                  className={clsx(classes.section, classes.transitionStateButtonSection)}
+                  className={cn(classes.section, classes.transitionStateButtonSection)}
                 >
                   <span className={classes.boldedLabel}>
                     <Trans>Only visible to you</Trans>
@@ -578,7 +578,7 @@ const VotePage = () => {
                 </Row>
               );
             })}
-        <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+        <Row className={cn(classes.section, classes.transitionStateButtonSection)}>
           <Col className="d-grid gap-4">
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div className={classes.objectionWrapper}>
@@ -595,7 +595,7 @@ const VotePage = () => {
                   <button
                     type="button"
                     onClick={() => setShowVoteModal(true)}
-                    className={clsx(
+                    className={cn(
                       classes.destructiveTransitionStateButton,
                       classes.button,
                       classes.voteAgainst,
@@ -625,12 +625,12 @@ const VotePage = () => {
                   <div className="d-flex gap-3">
                     <>
                       {isAwaitingStateChange() && (
-                        <div className={clsx(classes.awaitingStateChangeButton)}>
+                        <div className={cn(classes.awaitingStateChangeButton)}>
                           <Button
                             onClick={moveStateAction}
                             disabled={isQueuePending || isExecutePending || !isExecutable}
                             variant="dark"
-                            className={clsx(classes.transitionStateButton, classes.button)}
+                            className={cn(classes.transitionStateButton, classes.button)}
                           >
                             {isQueuePending || isExecutePending ? (
                               <Spinner animation="border" />
@@ -646,7 +646,7 @@ const VotePage = () => {
                         <Button
                           onClick={destructiveStateAction}
                           disabled={isCancelPending}
-                          className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+                          className={cn(classes.destructiveTransitionStateButton, classes.button)}
                         >
                           {isCancelPending ? (
                             <Spinner animation="border" />
@@ -659,7 +659,7 @@ const VotePage = () => {
                     {isProposer() && isUpdateable() && (
                       <Link
                         to={`/vote/${id}/edit`}
-                        className={clsx(classes.primaryButton, classes.button)}
+                        className={cn(classes.primaryButton, classes.button)}
                       >
                         Edit
                       </Link>
@@ -719,7 +719,7 @@ const VotePage = () => {
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
                     onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
-                    className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
+                    className={cn(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
                     <span>
                       {isV2Prop ? <Trans>Current Threshold</Trans> : <Trans>Threshold</Trans>}

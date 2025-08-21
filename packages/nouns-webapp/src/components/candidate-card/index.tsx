@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 import ShortAddress from '@/components/short-address';
@@ -29,7 +29,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
 
   return (
     <Link
-      className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
+      className={cn(classes.candidateLink, classes.candidateLinkWithCountdown)}
       href={`/candidates/${candidate.id}`}
     >
       <div className={classes.title}>
@@ -54,7 +54,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
               }
             />
             <span
-              className={clsx(
+              className={cn(
                 classes.sponsorCount,
                 candidate.voteCount - candidate.requiredVotes > 0 && classes.sponsorCountOverflow,
               )}

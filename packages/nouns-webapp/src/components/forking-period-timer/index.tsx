@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -57,7 +57,7 @@ const ForkingPeriodTimer: React.FC<ForkingPeriodTimerProps> = props => {
       {timerToggle ? (
         <>
           <h2
-            className={clsx(classes.timerWrapper, classes.timeLeft)}
+            className={cn(classes.timerWrapper, classes.timeLeft)}
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
@@ -113,7 +113,7 @@ const ForkingPeriodTimer: React.FC<ForkingPeriodTimerProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            <div className={clsx(classes.timerSection, classes.clockSection)}>
+            <div className={cn(classes.timerSection, classes.clockSection)}>
               <span>{i18n.date(new Date(endTimeUnix * 1000))}</span>{' '}
               <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
             </div>

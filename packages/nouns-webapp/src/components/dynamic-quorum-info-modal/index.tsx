@@ -3,7 +3,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import ReactDOM from 'react-dom';
 
 import { Backdrop } from '@/components/modal';
@@ -105,7 +105,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           </p>
 
           {/* Mobile - no graph content */}
-          <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
+          <div className={cn(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
               <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
@@ -126,7 +126,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           </div>
 
           {/* Outter container */}
-          <div className={clsx(classes.graphContainer, classes.outterGraphContainer)}>
+          <div className={cn(classes.graphContainer, classes.outterGraphContainer)}>
             <div className={classes.graphWrapper}>
               {/* Y-Axis label */}
               <div className={classes.yAxisText}>
@@ -134,7 +134,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
               </div>
 
               {/* Inner graph container */}
-              <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}>
+              <div className={cn(classes.graphContainer, classes.innerGraphContainer)}>
                 {/* <svg width="950" height="320"> */}
                 <svg width={PLOTTING_CONSTANTS.width} height={PLOTTING_CONSTANTS.height}>
                   <line

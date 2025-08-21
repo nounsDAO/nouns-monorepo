@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -74,7 +74,7 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
 
   return (
     <div
-      className={cx(classes.wrapper, classes.section)}
+      className={cn(classes.wrapper, classes.section)}
       onClick={() => setTimerToggle(!timerToggle)}
     >
       <div className={classes.leftCol}>
@@ -100,7 +100,7 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
       <div>
         {timerToggle ? (
           <h2
-            className={cx(classes.timerWrapper, classes.timeLeft)}
+            className={cn(classes.timerWrapper, classes.timeLeft)}
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
@@ -137,7 +137,7 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            <div className={cx(classes.timerSection, classes.clockSection)}>
+            <div className={cn(classes.timerSection, classes.clockSection)}>
               <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
             </div>
           </h2>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
 import { map } from 'remeda';
@@ -180,7 +180,7 @@ const ForkPage = () => {
 
   if (!isPageDataLoaded) {
     return (
-      <div className={cx(classes.spinner, classes.pageLoadingSpinner)}>
+      <div className={cn(classes.spinner, classes.pageLoadingSpinner)}>
         <img src="/loading-noggles.svg" alt="loading" className={classes.transactionModalSpinner} />
       </div>
     );
@@ -199,14 +199,14 @@ const ForkPage = () => {
       <Section fullWidth={false} className="h-100">
         <Row>
           {isNewForkPage ? (
-            <div className={cx(classes.pageHeader, classes.emptyState)}>
+            <div className={cn(classes.pageHeader, classes.emptyState)}>
               <Col lg={12}>
                 <header>
                   <div className={classes.status}>
                     <Link className={classes.backButton} to="/fork">
                       ←
                     </Link>
-                    <span className={cx(classes.forkStatus)}>{forkStatusLabel}</span>
+                    <span className={cn(classes.forkStatus)}>{forkStatusLabel}</span>
                     <div className={classes.spacer} />
                   </div>
                   <h1>
@@ -226,7 +226,7 @@ const ForkPage = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
-                  className={cx(classes.button, classes.primaryButton)}
+                  className={cn(classes.button, classes.primaryButton)}
                   disabled={userOwnedNounIds?.data?.length === 0}
                 >
                   {addNounsButtonLabel}
@@ -235,7 +235,7 @@ const ForkPage = () => {
             </div>
           ) : (
             <div
-              className={cx(
+              className={cn(
                 classes.pageHeader,
                 (escrowEvents.data == null || isNewForkPage) && classes.emptyState,
                 isForked && classes.isForked,
@@ -246,7 +246,7 @@ const ForkPage = () => {
                   <Link className={classes.backButton} to="/fork">
                     ←
                   </Link>
-                  <span className={cx(classes.forkStatus)}>{forkStatusLabel}</span>
+                  <span className={cn(classes.forkStatus)}>{forkStatusLabel}</span>
                   <div className={classes.spacer} />
                 </div>
                 <h1>
@@ -265,7 +265,7 @@ const ForkPage = () => {
               {!isForked && (
                 <Col
                   lg={6}
-                  className={cx(classes.buttons, escrowEvents.data == null && classes.emptyState)}
+                  className={cn(classes.buttons, escrowEvents.data == null && classes.emptyState)}
                 >
                   {!isForkPeriodActive &&
                     userEscrowedNounIds != null &&
@@ -287,7 +287,7 @@ const ForkPage = () => {
                         setIsModalOpen(true);
                       }
                     }}
-                    className={cx(classes.button, classes.primaryButton)}
+                    className={cn(classes.button, classes.primaryButton)}
                     disabled={userOwnedNounIds?.data?.length === 0}
                   >
                     {addNounsButtonLabel}
@@ -304,7 +304,7 @@ const ForkPage = () => {
             <div className={classes.callout}>
               {forkDetails.data.forkingPeriodEndTimestamp &&
                 +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
-                  <div className={clsx(classes.countdown)}>
+                  <div className={cn(classes.countdown)}>
                     <ForkingPeriodTimer
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={Boolean(
@@ -315,7 +315,7 @@ const ForkPage = () => {
                     />
                   </div>
                 )}
-              <div className={clsx(classes.isForked)}>
+              <div className={cn(classes.isForked)}>
                 {forkDetails.data.executedAt != null && forkDetails.data.executedAt > 0n ? (
                   <p>
                     <strong>
@@ -359,7 +359,7 @@ const ForkPage = () => {
 
       {!isNewForkPage && escrowEvents.data != null && (
         <div
-          className={clsx(
+          className={cn(
             classes.forkTimelineWrapper,
             isForkPeriodActive && classes.isForkingPeriod,
             isForked && classes.isForked,
@@ -421,7 +421,7 @@ const ForkPage = () => {
                     ))}
                     {/* add phantom elements to align boxes */}
                     {phantomListItems.map(i => (
-                      <div className={clsx(classes.nounImage, classes.phantom)} key={i} />
+                      <div className={cn(classes.nounImage, classes.phantom)} key={i} />
                     ))}
                   </div>
                 )}
@@ -430,7 +430,7 @@ const ForkPage = () => {
                 {!isForked &&
                   userEscrowedNounIds.data != null &&
                   userEscrowedNounIds.data.length > 0 && (
-                    <div className={clsx(classes.userNouns, classes.callout)}>
+                    <div className={cn(classes.userNouns, classes.callout)}>
                       <p>
                         Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow:{' '}
                         <strong>

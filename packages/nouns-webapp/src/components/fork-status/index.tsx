@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { ForkState } from '@/wrappers/nouns-dao';
 
@@ -41,7 +41,7 @@ interface ForkStateProps {
 const ForkStatus: React.FC<ForkStateProps> = props => {
   const { status, className } = props;
   return (
-    <div className={clsx(statusVariant(status), classes.proposalStatus, className)}>
+    <div className={cn(statusVariant(status), classes.proposalStatus, className)}>
       {statusText(status)}
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { VoteSignalDetail } from '@/wrappers/nouns-data';
@@ -31,7 +31,7 @@ const VoteSignalGroup = (props: Props) => {
   return (
     <div className="border-b border-[#e6e6e6] py-2.5 last:border-none">
       <button
-        className={clsx(
+        className={cn(
           'flex w-full flex-row items-center justify-between gap-2.5 border-none bg-transparent',
           props.support === 1 && '[&>p]:text-[var(--brand-color-green)]',
           props.support === 0 && '[&>p]:text-[var(--brand-color-red)]',
@@ -49,7 +49,7 @@ const VoteSignalGroup = (props: Props) => {
         </p>
         {props.voteSignals.length > 0 && (
           <motion.div
-            className={clsx(props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25')}
+            className={cn(props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25')}
             animate={{
               rotate: isExpanded ? 0 : 180,
             }}
@@ -65,7 +65,7 @@ const VoteSignalGroup = (props: Props) => {
       <AnimatePresence>
         <motion.div
           key={props.support}
-          className={clsx(isExpanded && 'mt-2.5 flex flex-col gap-2.5')}
+          className={cn(isExpanded && 'mt-2.5 flex flex-col gap-2.5')}
         >
           {isExpanded &&
             props.voteSignals.map((voteSignal, i) => (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans, Plural } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Card, Col, Row } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
@@ -115,7 +115,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
               {titleCopy}
             </span>
             <span
-              className={clsx(
+              className={cn(
                 classes.voteCardVoteCount,
                 responsiveUiUtilsClasses.desktopOnly,
                 !isEnUS ? classes.smallerVoteCountText : '',
@@ -136,7 +136,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             </span>
           </Card.Text>
 
-          <Card.Text className={clsx('m-0 py-2', classes.mobileVoteCountWrapper)}>
+          <Card.Text className={cn('m-0 py-2', classes.mobileVoteCountWrapper)}>
             <span className={cn(classes.voteCardVoteCount, 'relative')}>
               {i18n.number(voteCount)}
               {filteredDelegateGroupedVoteData.length > 0 && (

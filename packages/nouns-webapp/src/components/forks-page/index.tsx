@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import ForkStatus from '@/components/fork-status';
@@ -37,14 +37,14 @@ const ForksPage: React.FC = () => {
               <Trans>Fork</Trans>
             </h1>
           </Row>
-          <p className={clsx(classes.subheading, 'm-0')}>
+          <p className={cn(classes.subheading, 'm-0')}>
             <Trans>
               Forking is the crypto-native way for groups of token holders to exit together into a
               new instance of their protocol, resulting in maximal conservation of momentum in the
               ecosystem.
             </Trans>
           </p>
-          <p className={clsx(classes.subheading, 'mt-0')}>
+          <p className={cn(classes.subheading, 'mt-0')}>
             <a
               href="https://mirror.xyz/0x10072dfc23771101dC042fD0014f263316a6E400/iN0FKOn_oYVBzlJkwPwK2mhzaeL8K2-W80u82F7fHj8"
               target="_blank"
@@ -76,7 +76,7 @@ const ForksPage: React.FC = () => {
                       <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
                         <div className={classes.title}>Nouns DAO Fork #{fork.id}</div>
                         <div
-                          className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
+                          className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}
                         >
                           <ForkStatus status={status} />
                         </div>

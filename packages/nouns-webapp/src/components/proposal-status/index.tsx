@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { ProposalState } from '@/wrappers/nouns-dao';
 
@@ -67,7 +67,7 @@ interface ProposalStateProps {
 const ProposalStatus: React.FC<ProposalStateProps> = props => {
   const { status, className } = props;
   return (
-    <div className={clsx(statusVariant(status), classes.proposalStatus, className)}>
+    <div className={cn(statusVariant(status), classes.proposalStatus, className)}>
       {statusText(status)}
     </div>
   );

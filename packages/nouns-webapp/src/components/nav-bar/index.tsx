@@ -6,7 +6,7 @@ import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { ConnectKitButton } from 'connectkit';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -78,7 +78,7 @@ const NavBar = () => {
       buttonStyle={nonWalletButtonStyle}
     >
       <Dropdown.Item
-        className={clsx(
+        className={cn(
           usePickByState(
             navDropdownClasses.whiteInfoSelectedBottom,
             navDropdownClasses.coolInfoSelected,
@@ -136,7 +136,7 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end z-10">
-            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+            <div className={cn(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link as={Link} href="/vote" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={isDaoGteV3 ? <Trans>Proposals</Trans> : <Trans>DAO</Trans>}
@@ -163,7 +163,7 @@ const NavBar = () => {
                 </>
               )}
             </div>
-            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+            <div className={cn(responsiveUiUtilsClasses.desktopOnly)}>
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
@@ -181,7 +181,7 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+            <div className={cn(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}
                 href="/playground"
@@ -197,7 +197,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/nouns"
-                className={clsx(classes.nounsNavLink, classes.exploreButton)}
+                className={cn(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -209,7 +209,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/traits"
-                className={clsx(classes.nounsNavLink, classes.exploreButton)}
+                className={cn(classes.nounsNavLink, classes.exploreButton)}
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -219,14 +219,14 @@ const NavBar = () => {
                 />
               </Nav.Link>
             </div>
-            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+            <div className={cn(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown
                 buttonText="Explore"
                 buttonIcon={<NogglesIcon />}
                 buttonStyle={nonWalletButtonStyle}
               >
                 <Dropdown.Item
-                  className={clsx(
+                  className={cn(
                     usePickByState(
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
@@ -238,7 +238,7 @@ const NavBar = () => {
                   <Trans>Nouns</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={clsx(
+                  className={cn(
                     usePickByState(
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,
@@ -250,7 +250,7 @@ const NavBar = () => {
                   <Trans>Traits</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={clsx(
+                  className={cn(
                     usePickByState(
                       navDropdownClasses.whiteInfoSelectedBottom,
                       navDropdownClasses.coolInfoSelected,

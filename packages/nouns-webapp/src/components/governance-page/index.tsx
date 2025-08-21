@@ -6,7 +6,7 @@ import {
   useReadNounsTreasuryBalancesInEth,
   useReadNounsTreasuryBalancesInUsd,
 } from '@nouns/sdk/react/treasury';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { formatEther, formatUnits } from 'viem';
@@ -84,7 +84,7 @@ const GovernancePage = () => {
                 </span>
               </Row>
               <Row>
-                <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
+                <Col className={cn(classes.ethTreasuryAmt)} lg={3}>
                   <h1 className={classes.ethSymbol}>Ξ</h1>
                   <h1>
                     {treasuryBalance != undefined &&

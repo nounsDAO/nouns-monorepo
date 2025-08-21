@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import classes from './vote-card-pager.module.css';
 
@@ -29,7 +29,7 @@ const VoteCardPager: React.FC<VoteCardPagerProps> = props => {
   return (
     <>
       {/* Dots */}
-      <div className={clsx(classes.pageDots, isOnePage ? classes.disabled : '')}>
+      <div className={cn(classes.pageDots, isOnePage ? classes.disabled : '')}>
         {Array.from(Array(numPages).keys()).map((n: number) => {
           return (
             <span className={n === currentPage ? '' : classes.disabledPageDot} key={n}>
@@ -39,7 +39,7 @@ const VoteCardPager: React.FC<VoteCardPagerProps> = props => {
         })}
       </div>
       {/* Arrows */}
-      <div className={clsx(classes.paginationArrowsWrapper, isOnePage ? classes.disabled : '')}>
+      <div className={cn(classes.paginationArrowsWrapper, isOnePage ? classes.disabled : '')}>
         <button
           className={classes.paginationArrowBtnWrapper}
           disabled={isLeftArrowDisabled || isOnePage}

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 import { useAtom } from 'jotai/react';
 
 import LanguageSelectionModal from '@/components/language-selection-modal';
@@ -45,7 +45,7 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
   onClick,
 }) => (
   <div
-    className={cx(
+    className={cn(
       navDropdownClasses.wrapper,
       buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
     )}
@@ -98,7 +98,7 @@ const CustomMenu = ({
         return (
           <div
             key={locale}
-            className={cx(
+            className={cn(
               navDropdownClasses.button,
               navDropdownClasses.dropdownPrimaryText,
               buttonStyle,
@@ -157,7 +157,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={cx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
+        className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -167,7 +167,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
       </div>
 
-      <div className={cx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}>
+      <div className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}>
         <CustomDropdownToggle
           buttonUp={buttonUp}
           stateSelectedDropdownClass={stateSelectedDropdownClass}

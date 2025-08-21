@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -60,7 +60,7 @@ const ProposalHistory = () => {
   const highlightSyntax = (markdownText: string) => {
     return (
       <ReactMarkdown
-        className={clsx(editorClasses.markdown, editorClasses.diffs)}
+        className={cn(editorClasses.markdown, editorClasses.diffs)}
         remarkPlugins={[remarkBreaks]}
       >
         {markdownText}
@@ -78,7 +78,7 @@ const ProposalHistory = () => {
           <>
             <div className={headerClasses.backButtonWrapper}>
               <Link to={`/vote/${id}`}>
-                <button className={clsx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
+                <button className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
                   ←
                 </button>
               </Link>
@@ -98,7 +98,7 @@ const ProposalHistory = () => {
                 </div>
               </span>
               <div className={headerClasses.proposalTitleWrapper}>
-                <div className={clsx(headerClasses.proposalTitle, classes.proposalTitle)}>
+                <div className={cn(headerClasses.proposalTitle, classes.proposalTitle)}>
                   {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
                     <div className={classes.diffsWrapper}>
                       <ReactDiffViewer
@@ -125,7 +125,7 @@ const ProposalHistory = () => {
           </>
         )}
       </Col>
-      <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={12} className={cn(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
@@ -139,7 +139,7 @@ const ProposalHistory = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
-                <Col className={clsx(classes.section, 'm-0 p-0')}>
+                <Col className={cn(classes.section, 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
@@ -200,7 +200,7 @@ const ProposalHistory = () => {
               </div>
               {activeVersion > 1 && (
                 <button
-                  className={clsx(
+                  className={cn(
                     classes.diffsLink,
                     isDiffsVisible ? classes.diffsLinkActive : classes.diffsLinkInactive,
                   )}

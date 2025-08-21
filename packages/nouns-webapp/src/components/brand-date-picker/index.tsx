@@ -1,6 +1,6 @@
 import React from 'react';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import classes from './brand-date-picker.module.css';
 
@@ -25,7 +25,7 @@ const BrandDatePicker: React.FC<BrandDatePickerProps> = ({
         onChange={onChange}
         value={value}
         type={'date'}
-        className={clsx(classes.entry, isInvalid ? classes.invalid : '')}
+        className={cn(classes.entry, isInvalid ? classes.invalid : '')}
       />
     </div>
   );

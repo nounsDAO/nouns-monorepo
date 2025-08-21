@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import cx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -60,7 +60,7 @@ const CandidateHistoryPage = () => {
   const highlightSyntax = (str: string) => {
     return (
       <ReactMarkdown
-        className={cx(editorClasses.markdown, editorClasses.diffs)}
+        className={cn(editorClasses.markdown, editorClasses.diffs)}
         remarkPlugins={[remarkBreaks]}
       >
         {str}
@@ -79,7 +79,7 @@ const CandidateHistoryPage = () => {
           <Link to={`/candidates/${id}`}>
             <button
               type="button"
-              className={cx(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
+              className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
             >
               ←
             </button>
@@ -94,7 +94,7 @@ const CandidateHistoryPage = () => {
             </div>
           </span>
           <div className={headerClasses.proposalTitleWrapper}>
-            <div className={cx(headerClasses.proposalTitle, classes.proposalTitle)}>
+            <div className={cn(headerClasses.proposalTitle, classes.proposalTitle)}>
               {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
                 <div className={classes.diffsWrapper}>
                   <ReactDiffViewer
@@ -119,7 +119,7 @@ const CandidateHistoryPage = () => {
           </div>
         </div>
       </Col>
-      <Col lg={12} className={cx(classes.proposal, classes.wrapper)}>
+      <Col lg={12} className={cn(classes.proposal, classes.wrapper)}>
         <Row>
           <Col lg={8} md={12}>
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
@@ -133,7 +133,7 @@ const CandidateHistoryPage = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
-                <Col className={cx(classes.section, 'm-0 p-0')}>
+                <Col className={cn(classes.section, 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>

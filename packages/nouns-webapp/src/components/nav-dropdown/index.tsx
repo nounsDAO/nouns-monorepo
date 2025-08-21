@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, useState } from 'react';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Dropdown } from 'react-bootstrap';
 
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
@@ -42,7 +42,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
     <>
       <div
         ref={ref}
-        className={clsx(classes.wrapper)}
+        className={cn(classes.wrapper)}
         onClick={e => {
           e.preventDefault();
           onClick?.(e);
@@ -64,7 +64,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={clsx(
+        className={cn(
           classes.dropdownButton,
           navDropdownClasses.nounsNavLink,
           responsiveUiUtilsClasses.desktopOnly,
@@ -74,7 +74,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
       >
         <Dropdown.Toggle as={customDropdownToggle} id="dropdown" />
         <Dropdown.Menu
-          className={clsx(
+          className={cn(
             classes.menu,
             stateSelectedDropdownClass,
             buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,

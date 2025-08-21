@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { VoteCardVariant } from '../vote-card';
 
@@ -29,12 +29,12 @@ const VoteProgressBar: React.FC<{
   }
 
   return (
-    <div className={clsx(classes.wrapper, wrapperClass)}>
+    <div className={cn(classes.wrapper, wrapperClass)}>
       <div
         style={{
           width: `${percentage}%`,
         }}
-        className={clsx(classes.progressBar, progressBarClass)}
+        className={cn(classes.progressBar, progressBarClass)}
       ></div>
     </div>
   );

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { filter, isNullish } from 'remeda';
@@ -286,7 +286,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={`/candidates/${id}`}>
-            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+            <button className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
             <Trans>Edit Proposal Candidate</Trans>

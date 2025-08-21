@@ -1,6 +1,6 @@
 import React from 'react';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import classes from './brand-text-entry.module.css';
 
@@ -26,7 +26,7 @@ const BrandTextEntry: React.FC<BrandTextEntryProps> = props => {
         type={type ? type : 'string'}
         min={min}
         placeholder={placeholder}
-        className={clsx(classes.entry, isInvalid ? classes.invalid : '')}
+        className={cn(classes.entry, isInvalid ? classes.invalid : '')}
       />
     </div>
   );

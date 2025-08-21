@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { Spinner } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 
@@ -100,7 +100,7 @@ function DeployForkButton(props: Props) {
         <Trans>Deploying Nouns fork and beginning the forking period</Trans>
       </p>
       <p
-        className={clsx(
+        className={cn(
           classes.transactionStatus,
           isLoading ? classes.transactionStatusLoading : undefined,
           isTxSuccessful ? classes.transactionStatusSuccess : undefined,
@@ -151,7 +151,7 @@ function DeployForkButton(props: Props) {
     <>
       {!props.isForkPeriodActive && props.isThresholdMet && (
         <button
-          className={clsx(classes.button, classes.primaryButton, classes.deployButton)}
+          className={cn(classes.button, classes.primaryButton, classes.deployButton)}
           onClick={async () => {
             props.setIsDeployModalOpen(true);
             await executeFork({});

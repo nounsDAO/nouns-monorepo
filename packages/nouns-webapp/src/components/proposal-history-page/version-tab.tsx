@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 import { Link } from 'react-router';
@@ -35,7 +35,7 @@ const VersionTab = (props: Props) => {
   return (
     <>
       <Link
-        className={clsx(classes.version, props.isActive && classes.activeVersion)}
+        className={cn(classes.version, props.isActive && classes.activeVersion)}
         to={versionLink}
       >
         <h4>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { FormControl } from 'react-bootstrap';
 import { toast } from 'sonner';
@@ -153,7 +153,7 @@ function VoteSignals({
     <Trans>
       You provided{' '}
       <span
-        className={clsx(
+        className={cn(
           userVoteSupport?.supportDetailed === 1 && 'text-[var(--brand-color-green)]',
           userVoteSupport?.supportDetailed === 0 && 'text-[var(--brand-color-red)]',
           userVoteSupport?.supportDetailed === 2 && 'text-[var(--brand-gray-light-text)]',
@@ -176,9 +176,9 @@ function VoteSignals({
   return (
     <>
       {proposalId && (
-        <div className={clsx(isCandidate === true && 'relative top-0')}>
-          <div className={clsx('my-4', isCandidate === true && 'mt-8')}>
-            <h2 className={clsx('m-0 mb-2 text-base font-bold', isCandidate === true && 'text-xl')}>
+        <div className={cn(isCandidate === true && 'relative top-0')}>
+          <div className={cn('my-4', isCandidate === true && 'mt-8')}>
+            <h2 className={cn('m-0 mb-2 text-base font-bold', isCandidate === true && 'text-xl')}>
               {title}
             </h2>
             {isCandidate !== true && (
@@ -192,7 +192,7 @@ function VoteSignals({
             )}
           </div>
           <div
-            className={clsx(
+            className={cn(
               'flex flex-col items-center justify-between overflow-hidden rounded-xl border border-[#e6e6e6]',
               isCandidate !== true && 'lg:sticky lg:top-5',
             )}
@@ -222,7 +222,7 @@ function VoteSignals({
                 </div>
                 {isFeedbackClosed !== true && userVotes !== undefined && userVotes > 0 && (
                   <div
-                    className={clsx(
+                    className={cn(
                       'flex w-full flex-col items-center justify-center gap-2.5 border-t border-[#e6e6e6] bg-[#f4f4f8] p-5',
                       userVoteSupport && 'block',
                     )}
@@ -247,7 +247,7 @@ function VoteSignals({
                             </p>
                             <div className="flex flex-row gap-2.5 md:w-full md:flex-col">
                               <button
-                                className={clsx(
+                                className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 1
@@ -264,7 +264,7 @@ function VoteSignals({
                                 <Trans>For</Trans>
                               </button>
                               <button
-                                className={clsx(
+                                className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 0
@@ -281,7 +281,7 @@ function VoteSignals({
                                 <Trans>Against</Trans>
                               </button>
                               <button
-                                className={clsx(
+                                className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 2
@@ -312,7 +312,7 @@ function VoteSignals({
                                 as="textarea"
                               />
                               <button
-                                className={clsx(
+                                className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   'disabled:cursor-not-allowed disabled:opacity-20',
                                   'disabled:hover:border-2 disabled:hover:border-transparent disabled:hover:opacity-20 disabled:hover:outline-2 disabled:hover:outline-transparent',
