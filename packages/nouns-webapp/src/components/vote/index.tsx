@@ -587,8 +587,10 @@ const VotePage = () => {
                       <strong className="d-block">
                         <Trans>Objection only period</Trans>
                       </strong>
-                      Voting is now limited to against votes. This objection-only period protects
-                      the DAO from last-minute vote swings.
+                      <Trans>
+                        Voting is now limited to against votes. This objection-only period protects
+                        the DAO from last-minute vote swings.
+                      </Trans>
                     </p>
                   </div>
                   <button
@@ -600,7 +602,7 @@ const VotePage = () => {
                       classes.voteAgainst,
                     )}
                   >
-                    Vote against
+                    <Trans>Vote against</Trans>
                   </button>
                 </div>
               </div>
@@ -634,7 +636,7 @@ const VotePage = () => {
                             {isQueuePending || isExecutePending ? (
                               <Spinner animation="border" />
                             ) : (
-                              <>{moveStateButtonAction} Proposal ⌐◧-◧</>
+                              <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
                             )}
                           </Button>
                           {forkPeriodMessage}
@@ -650,7 +652,7 @@ const VotePage = () => {
                           {isCancelPending ? (
                             <Spinner animation="border" />
                           ) : (
-                            <>{destructiveStateButtonAction} Proposal </>
+                            <Trans>{destructiveStateButtonAction} Proposal </Trans>
                           )}
                         </Button>
                       )}
@@ -660,7 +662,7 @@ const VotePage = () => {
                         to={`/vote/${id}/edit`}
                         className={cn(classes.primaryButton, classes.button)}
                       >
-                        Edit
+                        <Trans>Edit</Trans>
                       </Link>
                     )}
                   </div>
@@ -781,10 +783,14 @@ const VotePage = () => {
               <Card.Body className="p-2">
                 <div className={classes.voteMetadataRow}>
                   <div className={classes.voteMetadataRowTitle}>
-                    <h1>Snapshot</h1>
+                    <h1>
+                      <Trans>Snapshot</Trans>
+                    </h1>
                   </div>
                   <div className={classes.snapshotBlock}>
-                    <span>Taken at block</span>
+                    <span>
+                      <Trans>Taken at block</Trans>
+                    </span>
                     <h3>{String(proposal?.voteSnapshotBlock)}</h3>
                   </div>
                 </div>

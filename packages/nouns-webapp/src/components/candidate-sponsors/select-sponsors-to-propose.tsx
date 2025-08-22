@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
-import { Trans } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { Plural, Trans } from '@lingui/react/macro';
 import { Alert } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
@@ -175,7 +176,11 @@ const SelectSponsorsToPropose = (props: Props) => {
             }}
             disabled={isWaiting || isLoading}
           >
-            {selectedSignatures.length === props.signatures.length ? 'Unselect' : 'Select'} all
+            {selectedSignatures.length === props.signatures.length ? (
+              <Trans>Unselect all</Trans>
+            ) : (
+              <Trans>Select all</Trans>
+            )}
           </button>
         )}
       </div>
@@ -208,7 +213,7 @@ const SelectSponsorsToPropose = (props: Props) => {
               <div>
                 <ShortAddress address={signature.signer.id} />
                 <p className={classes.voteCount}>
-                  {signature.signer.voteCount} vote{signature.signer.voteCount !== 1 && 's'}
+                  <Plural value={signature.signer.voteCount ?? 0} one="# vote" other="# votes" />
                 </p>
               </div>
             </button>
@@ -232,11 +237,9 @@ const SelectSponsorsToPropose = (props: Props) => {
             {!isWaiting && !isLoading && (
               <>
                 {selectedSignatures.length === 0 ? (
-                  <>Submit with no sponsors</>
+                  <Trans>Submit with no sponsors</Trans>
                 ) : (
-                  <>
-                    Submit {selectedVoteCount} vote{selectedVoteCount > 1 && 's'}
-                  </>
+                  <Plural value={selectedVoteCount} one="Submit # vote" other="Submit # votes" />
                 )}
               </>
             )}
@@ -244,12 +247,12 @@ const SelectSponsorsToPropose = (props: Props) => {
               {(isWaiting || isLoading) && (
                 <img
                   src="/loading-noggles.svg"
-                  alt="loading"
+                  alt={t`loading`}
                   className={classes.transactionModalSpinner}
                 />
               )}
-              {isWaiting && 'Awaiting confirmation'}
-              {isLoading && `Submitting proposal`}
+              {isWaiting && <Trans>Awaiting confirmation</Trans>}
+              {isLoading && <Trans>Submitting proposal</Trans>}
             </span>
           </button>
         )}
@@ -262,14 +265,17 @@ const SelectSponsorsToPropose = (props: Props) => {
                 clearTransactionState();
               }}
             >
-              Try again
+              <Trans>Try again</Trans>
             </button>
           </p>
         )}
         {isTxSuccessful && (
           <>
             <p className={cn(classes.statusMessage, classes.successMessage)}>
-              <strong>Success!</strong> <br />
+              <strong>
+                <Trans>Success!</Trans>
+              </strong>{' '}
+              <br />
               <a
                 href={
                   proposeBySigsState.transaction?.hash
@@ -279,15 +285,15 @@ const SelectSponsorsToPropose = (props: Props) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                Your candidate is now a proposal
+                <Trans>Your candidate is now a proposal</Trans>
                 {proposeBySigsState.transaction != null && (
-                  <img src={link} width={16} alt="link symbol" />
+                  <img src={link} width={16} alt={t`link symbol`} />
                 )}
               </a>
               <br />
               {(props.candidate.matchingProposalIds?.length ?? 0) > 0 && (
-                <Link to={`/vote/${props.candidate.matchingProposalIds[0]}`}>
-                  View the proposal
+                <Link to={`/vote/${props?.candidate?.matchingProposalIds?.[0]}`}>
+                  <Trans>View the proposal</Trans>
                 </Link>
               )}
             </p>
