@@ -21,18 +21,18 @@ const BidHistoryModal: React.FC<BidHistoryModalProps> = ({ auction, onDismiss })
 
   return (
     <Dialog open onOpenChange={open => !open && onDismiss()}>
-      <DialogContent className="[font-family:'PT Root UI',_sans-serif] w-[40rem] max-w-[90vw] border-0 bg-[#f4f4f8] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] max-[992px]:bg-transparent max-[992px]:shadow-none sm:rounded-[24px]">
-        <div className="max-h-[50vh] overflow-y-hidden rounded-[24px] p-4 max-[992px]:h-full max-[992px]:max-h-full">
+      <DialogContent className="font-pt w-[40rem] max-w-[90vw] border-0 bg-[#f4f4f8] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] max-[992px]:bg-transparent max-[992px]:shadow-none sm:rounded-[24px]">
+        <div className="max-h-[50vh] overflow-y-hidden rounded-[24px] max-[992px]:h-full max-[992px]:max-h-full">
           <div className="flex items-start gap-4">
             <div className="mr-4 h-24 w-24 shrink-0 overflow-hidden rounded-[12px]">
               <StandaloneNounRoundedCorners nounId={BigInt(auction.nounId)} />
             </div>
 
-            <div className="[font-family:'Londrina Solid'] flex flex-col">
-              <h2 className="mt-2 text-[24px] text-[rgba(140,141,146,1)]">
+            <div className="flex flex-col">
+              <h2 className="font-londrina mt-2 text-[24px] text-[rgba(140,141,146,1)]">
                 <Trans>Bids for</Trans>
               </h2>
-              <h1 className="h-8 rounded-[24px] text-[42px] leading-[25px] text-[#1b2140] max-[992px]:leading-[0px] max-[992px]:text-white">
+              <h1 className="font-londrina h-8 rounded-[24px] text-[42px] leading-[25px] text-[#1b2140] max-[992px]:leading-[0px] max-[992px]:text-white">
                 Noun {auction.nounId.toString()}
               </h1>
             </div>
