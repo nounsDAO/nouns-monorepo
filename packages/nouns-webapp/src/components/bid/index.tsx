@@ -17,8 +17,6 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Auction } from '@/wrappers/nouns-auction';
 
-import classes from './bid.module.css';
-
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 const computeMinimumNextBid = (
@@ -185,11 +183,11 @@ const Bid: React.FC<BidProps> = props => {
 
   return (
     <>
-      <div className={!auctionEnded ? classes.bidWrapper : undefined}>
+      <div className={!auctionEnded ? 'm-0 flex flex-row items-center justify-center' : undefined}>
         {!auctionEnded && (
           <>
-            <div className={classes.bidInputWrapper}>
-              <span className={classes.customPlaceholderBidAmt}>
+            <div className="relative flex flex-1">
+              <span className="pointer-events-none absolute left-[3%] top-[15%] z-[1] font-['PT_Root_UI'] text-[25px] font-bold text-[var(--brand-cool-light-text)] opacity-30">
                 {!auctionEnded && !bidInput ? (
                   <>
                     Ξ {minBidEth(minBid)}{' '}
@@ -206,7 +204,7 @@ const Bid: React.FC<BidProps> = props => {
                 )}
               </span>
               <Input
-                className={`${classes.bidInput} w-auto grow`}
+                className="h-[54px] w-auto grow appearance-none rounded-[12px] border-0 !bg-white font-['PT_Root_UI'] text-[25px] font-bold text-black shadow-none outline-none ring-1 ring-inset ring-white transition-all duration-200 ease-in-out focus:ring-1 focus:ring-inset focus:ring-[var(--brand-cool-dark-text)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
                 min="0"
                 onChange={bidInputHandler}
@@ -219,7 +217,7 @@ const Bid: React.FC<BidProps> = props => {
         {!auctionEnded ? (
           <Button
             type="button"
-            className={classes.bidBtn}
+            className="ml-2 mt-[3px] h-12 w-auto rounded-[12px] border border-transparent bg-[var(--brand-black)] px-4 font-bold leading-none tracking-normal text-white transition-all duration-200 ease-in-out hover:bg-[#2125298a] focus:bg-[#2125298a] active:bg-[#2125298a] disabled:cursor-not-allowed disabled:bg-gray-500"
             onClick={placeBidHandler}
             disabled={isDisabled}
           >
@@ -234,10 +232,10 @@ const Bid: React.FC<BidProps> = props => {
           </Button>
         ) : (
           <>
-            <div className={classes.voteForNextNounBtnWrapper}>
+            <div className="w-full">
               <Button
                 type="button"
-                className={classes.bidBtnAuctionEnded}
+                className="h-12 w-full rounded-[10px] border border-transparent bg-[var(--brand-black)] font-['PT_Root_UI'] text-[18px] font-bold text-white hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-500 disabled:bg-gray-500 disabled:text-[rgb(209,207,207)]"
                 onClick={voteForNextNounOnClickHandler}
               >
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧
