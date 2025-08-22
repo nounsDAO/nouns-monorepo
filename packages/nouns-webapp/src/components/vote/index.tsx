@@ -15,8 +15,6 @@ import en from 'dayjs/locale/en';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
-import ReactTooltip from 'react-tooltip';
 import { isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { zeroAddress } from 'viem';
@@ -27,7 +25,10 @@ import ProposalContent from '@/components/proposal-content';
 import ProposalHeader from '@/components/proposal-header';
 import Section from '@/components/section';
 import ShortAddress from '@/components/short-address';
+import { Spinner as LoadingSpinner } from '@/components/spinner';
 import StreamWithdrawModal from '@/components/stream-withdraw-modal';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import VoteCard, { VoteCardVariant } from '@/components/vote-card';
 import VoteModal from '@/components/vote-modal';
 import VoteSignals from '@/components/vote-signals/vote-signals';
@@ -480,7 +481,7 @@ const VotePage = () => {
   if (!proposal || loading || !data || loadingDQInfo || dqInfo === undefined) {
     return (
       <div className={classes.spinner}>
-        <Spinner animation="border" />
+        <LoadingSpinner />
       </div>
     );
   }
@@ -517,7 +518,7 @@ const VotePage = () => {
         availableVotes={userVotes ?? 0}
         isObjectionPeriod={isObjectionPeriod}
       />
-      <Col lg={isUpdateable() ? 12 : 10} className={classes.wrapper}>
+      <div className={cn(classes.wrapper, 'w-full', isUpdateable() ? 'lg:w-full' : 'lg:w-5/6')}>
         {proposal !== undefined && (
           <ProposalHeader
             proposal={proposal}
@@ -533,8 +534,15 @@ const VotePage = () => {
             isObjectionPeriod={isObjectionPeriod}
           />
         )}
-      </Col>
-      <Col lg={isUpdateable() ? 12 : 10} className={cn(classes.proposal, classes.wrapper)}>
+      </div>
+      <div
+        className={cn(
+          classes.proposal,
+          classes.wrapper,
+          'w-full',
+          isUpdateable() ? 'lg:w-full' : 'lg:w-5/6',
+        )}
+      >
         {proposal.status === ProposalState.EXECUTED &&
           proposal.details
             .filter(txn => txn?.functionSig?.includes('createStream') === true)
@@ -544,14 +552,14 @@ const VotePage = () => {
                 return <Fragment key={parsedCallData.streamAddress} />;
               }
               return (
-                <Row
+                <div
                   key={parsedCallData.streamAddress}
                   className={cn(classes.section, classes.transitionStateButtonSection)}
                 >
                   <span className={classes.boldedLabel}>
                     <Trans>Only visible to you</Trans>
                   </span>
-                  <Col className="d-grid gap-4">
+                  <div className="grid gap-4">
                     <Button
                       onClick={() => {
                         setStreamWithdrawInfo({
@@ -563,7 +571,6 @@ const VotePage = () => {
                         });
                         setShowStreamWithdrawModal(true);
                       }}
-                      variant="primary"
                       className={classes.transitionStateButton}
                     >
                       <Trans>
@@ -573,18 +580,18 @@ const VotePage = () => {
                         />
                       </Trans>
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               );
             })}
-        <Row className={cn(classes.section, classes.transitionStateButtonSection)}>
-          <Col className="d-grid gap-4">
+        <div className={cn(classes.section, classes.transitionStateButtonSection)}>
+          <div className="grid gap-4">
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div className={classes.objectionWrapper}>
                 <div className={classes.objection}>
                   <div className={classes.objectionHeader}>
                     <p>
-                      <strong className="d-block">
+                      <strong className="block">
                         <Trans>Objection only period</Trans>
                       </strong>
                       <Trans>
@@ -623,18 +630,17 @@ const VotePage = () => {
                     )}
                   </p>
 
-                  <div className="d-flex gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <>
                       {isAwaitingStateChange() && (
                         <div className={cn(classes.awaitingStateChangeButton)}>
                           <Button
                             onClick={moveStateAction}
                             disabled={isQueuePending || isExecutePending || !isExecutable}
-                            variant="dark"
                             className={cn(classes.transitionStateButton, classes.button)}
                           >
                             {isQueuePending || isExecutePending ? (
-                              <Spinner animation="border" />
+                              <LoadingSpinner className="size-4" />
                             ) : (
                               <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
                             )}
@@ -650,7 +656,7 @@ const VotePage = () => {
                           className={cn(classes.destructiveTransitionStateButton, classes.button)}
                         >
                           {isCancelPending ? (
-                            <Spinner animation="border" />
+                            <LoadingSpinner className="size-4" />
                           ) : (
                             <Trans>{destructiveStateButtonAction} Proposal </Trans>
                           )}
@@ -669,11 +675,11 @@ const VotePage = () => {
                 </div>
               </div>
             )}
-          </Col>
-        </Row>
+          </div>
+        </div>
         {!isUpdateable() && (
           <>
-            <Row>
+            <div>
               <VoteCard
                 proposal={proposal}
                 percentage={forPercentage}
@@ -692,54 +698,62 @@ const VotePage = () => {
                 variant={VoteCardVariant.ABSTAIN}
                 delegateGroupedVoteData={data}
               />
-            </Row>
+            </div>
           </>
         )}
 
         {/* TODO abstract this into a component  */}
-        <Row>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
+        <div className="-mx-2 flex flex-wrap">
+          <div className="w-full px-2 xl:w-1/3">
+            <div className={classes.voteInfoCard}>
+              <div className="p-2">
                 <div className={classes.voteMetadataRow}>
                   <div className={classes.voteMetadataRowTitle}>
                     <h1>
                       <Trans>Threshold</Trans>
                     </h1>
                   </div>
-                  {isV2Prop && (
-                    <ReactTooltip
-                      id={'view-dq-info'}
-                      className={classes.delegateHover}
-                      getContent={() => {
-                        return <Trans>View Threshold Info</Trans>;
-                      }}
-                    />
+
+                  {isV2Prop ? (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
+                            className={cn(classes.thresholdInfo, classes.cursorPointer)}
+                          >
+                            <span>
+                              <Trans>Current Threshold</Trans>
+                            </span>
+                            <h3>
+                              <Trans>{i18n.number(Number(currentQuorum ?? 0))} votes</Trans>
+                              <SearchIcon className={cn(classes.dqIcon, 'inline-block')} />
+                            </h3>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className={classes.delegateHover}>
+                          <Trans>View Threshold Info</Trans>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : (
+                    <div className={classes.thresholdInfo}>
+                      <span>
+                        <Trans>Threshold</Trans>
+                      </span>
+                      <h3>
+                        <Trans>{proposal.quorumVotes} votes</Trans>
+                      </h3>
+                    </div>
                   )}
-                  <div
-                    data-for="view-dq-info"
-                    data-tip="View Dynamic Quorum Info"
-                    onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
-                    className={cn(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
-                  >
-                    <span>
-                      {isV2Prop ? <Trans>Current Threshold</Trans> : <Trans>Threshold</Trans>}
-                    </span>
-                    <h3>
-                      <Trans>
-                        {isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes}{' '}
-                        votes
-                      </Trans>
-                      {isV2Prop && <SearchIcon className={cn(classes.dqIcon, 'inline-block')} />}
-                    </h3>
-                  </div>
                 </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full px-2 xl:w-1/3">
+            <div className={classes.voteInfoCard}>
+              <div className="p-2">
                 <div className={classes.voteMetadataRow}>
                   <div className={classes.voteMetadataRowTitle}>
                     <h1>{startOrEndTimeCopy()}</h1>
@@ -775,12 +789,13 @@ const VotePage = () => {
                         currentBlock < proposal.endBlock && <p>{objectionNoteCopy}</p>}
                     </div>
                   )}
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full px-2 xl:w-1/3">
+            <div className={classes.voteInfoCard}>
+              <div className="p-2">
                 <div className={classes.voteMetadataRow}>
                   <div className={classes.voteMetadataRowTitle}>
                     <h1>
@@ -794,16 +809,16 @@ const VotePage = () => {
                     <h3>{String(proposal?.voteSnapshotBlock)}</h3>
                   </div>
                 </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Col>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {isUpdateable() ? (
         <div className={classes.v3ProposalWrapper}>
-          <Row>
-            <Col xl={8} lg={12}>
+          <div className="flex flex-wrap">
+            <div className="w-full xl:w-2/3">
               <ProposalContent
                 description={proposal.description}
                 title={proposal.title}
@@ -811,8 +826,8 @@ const VotePage = () => {
                 hasSidebar={true}
                 proposeOnV1={proposal.onTimelockV1}
               />
-            </Col>
-            <Col xl={4} lg={12} className={classes.sidebar}>
+            </div>
+            <div className={cn('w-full xl:w-1/3', classes.sidebar)}>
               {proposalVersions !== undefined && (
                 <VoteSignals
                   feedback={proposalFeedback}
@@ -823,20 +838,20 @@ const VotePage = () => {
                   handleRefetch={handleRefetchData}
                 />
               )}
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       ) : (
-        <Row>
-          <Col xl={10} lg={12} className="m-auto">
+        <div className="flex">
+          <div className="mx-auto w-full xl:w-5/6">
             <ProposalContent
               description={proposal.description}
               title={proposal.title}
               details={proposal.details}
               proposeOnV1={proposal.onTimelockV1}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
     </Section>
   );
