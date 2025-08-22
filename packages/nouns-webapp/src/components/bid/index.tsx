@@ -1,11 +1,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Button, Col, FormControl, InputGroup, Spinner } from 'react-bootstrap';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatEther, parseEther } from 'viem';
 
 import SettleManuallyBtn from '@/components/settle-manually-btn';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
   useWriteNounsAuctionHouseCreateBid,
@@ -108,7 +110,7 @@ const Bid: React.FC<BidProps> = props => {
   }, [placeBidSucceeded, t]);
 
   const placeBidHandler = async () => {
-    if (auction == undefined || !bidInputRef.current || !bidInputRef.current.value) {
+    if (auction === undefined || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
 
@@ -168,20 +170,22 @@ const Bid: React.FC<BidProps> = props => {
     t,
   ]);
 
-  if (auction == undefined) return null;
+  if (auction === undefined) return null;
 
   const isDisabled = isPlacingBid || isSettlingAuction || !activeAccount;
 
-  const fomoNounsBtnOnClickHandler = () => {
-    // Open Fomo Nouns in a new tab
-    window.open('https://fomonouns.wtf', '_blank', 'noopener,noreferrer')?.focus();
+  const voteForNextNounOnClickHandler = () => {
+    // Open external site in a new tab
+    const newWin = window.open('https://fomonouns.wtf', '_blank');
+    if (newWin) newWin.opener = null;
+    newWin?.focus();
   };
 
   const isWalletConnected = activeAccount !== undefined;
 
   return (
     <>
-      <InputGroup>
+      <div>
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
@@ -200,7 +204,7 @@ const Bid: React.FC<BidProps> = props => {
                 ''
               )}
             </span>
-            <FormControl
+            <Input
               className={classes.bidInput}
               type="number"
               min="0"
@@ -212,28 +216,40 @@ const Bid: React.FC<BidProps> = props => {
         )}
         {!auctionEnded ? (
           <Button
-            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+            type="button"
+            className={classes.bidBtn}
+            onClick={placeBidHandler}
             disabled={isDisabled}
           >
-            {isPlacingBid ? <Spinner animation="border" /> : <Trans>Bid</Trans>}
+            {isPlacingBid ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Trans>Processing</Trans>
+              </>
+            ) : (
+              <Trans>Bid</Trans>
+            )}
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
+            <div className={classes.voteForNextNounBtnWrapper}>
+              <Button
+                type="button"
+                className={classes.bidBtnAuctionEnded}
+                onClick={voteForNextNounOnClickHandler}
+              >
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧
               </Button>
-            </Col>
+            </div>
             {/* Only show the force settles button if the wallet connected */}
             {isWalletConnected && (
-              <Col lg={12}>
+              <div>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
-              </Col>
+              </div>
             )}
           </>
         )}
-      </InputGroup>
+      </div>
     </>
   );
 };
