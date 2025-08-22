@@ -679,7 +679,7 @@ const VotePage = () => {
         </div>
         {!isUpdateable() && (
           <>
-            <div>
+            <div className="flex flex-row gap-4">
               <VoteCard
                 proposal={proposal}
                 percentage={forPercentage}
