@@ -3,10 +3,10 @@ import React from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { blo } from 'blo';
-import { cn } from '@/lib/utils';
 
 import _trophy from '@/assets/icons/trophy.svg';
 import TruncatedAmount from '@/components/truncated-amount';
+import { cn } from '@/lib/utils';
 import { shortENS, formatShortAddress } from '@/utils/address-and-ens-display-utils';
 import { useReverseENSLookUp } from '@/utils/ens-lookup';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
@@ -64,9 +64,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
           </div>
         </div>
         <div className={auctionActivityClasses.rightSectionWrapper}>
-          <div className={cn(classes.bidAmount, auctionActivityClasses.bidAmount)}>
-            {bidAmount}
-          </div>
+          <div className={cn(classes.bidAmount, auctionActivityClasses.bidAmount)}>{bidAmount}</div>
           <div className={auctionActivityClasses.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
               <div className={classes.linkIcon}>

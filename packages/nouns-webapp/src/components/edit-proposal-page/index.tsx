@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { isNullish } from 'remeda';
@@ -26,6 +25,7 @@ const ProposalTransactions = dynamic(() => import('@/components/proposal-transac
 const Section = dynamic(() => import('@/components/section'), { ssr: false });
 
 import { nounsTokenBuyerAddress } from '@/contracts';
+import { cn } from '@/lib/utils';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
@@ -456,10 +456,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={`/vote/${id}`}>
-            <button
-              type="button"
-              className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}
-            >
+            <button type="button" className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>
               ←
             </button>
           </Link>

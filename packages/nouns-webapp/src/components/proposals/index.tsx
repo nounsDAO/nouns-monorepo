@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -21,6 +20,7 @@ import config from '@/config';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
+import { cn } from '@/lib/utils';
 import { setCandidates } from '@/state/slices/candidates';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
 import { isMobileScreen } from '@/utils/is-mobile';
@@ -286,10 +286,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   const countdownPill = (
                     <div className={classes.proposalStatusWrapper}>
                       <div
-                        className={cn(
-                          proposalStatusClasses.proposalStatus,
-                          classes.countdownPill,
-                        )}
+                        className={cn(proposalStatusClasses.proposalStatus, classes.countdownPill)}
                       >
                         <div className={classes.countdownPillContentWrapper}>
                           <span className={classes.countdownPillClock}>
@@ -320,9 +317,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                         {isPropInStateToHaveCountDown && (
                           <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
                         )}
-                        <div
-                          className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}
-                        >
+                        <div className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                           <ProposalStatus status={p.status}></ProposalStatus>
                         </div>
                       </div>

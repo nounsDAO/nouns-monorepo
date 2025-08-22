@@ -3,11 +3,11 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import ForkStatus from '@/components/fork-status';
 import Section from '@/components/section';
+import { cn } from '@/lib/utils';
 import { Fork, ForkState, useForks } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
@@ -75,9 +75,7 @@ const ForksPage: React.FC = () => {
                     return (
                       <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
                         <div className={classes.title}>Nouns DAO Fork #{fork.id}</div>
-                        <div
-                          className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}
-                        >
+                        <div className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                           <ForkStatus status={status} />
                         </div>
                       </Link>

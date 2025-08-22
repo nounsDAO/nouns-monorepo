@@ -2,6 +2,7 @@ import { FC, HTMLAttributes } from 'react';
 
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { cn } from '@/lib/utils';
 
 import navDropdownClasses from '../nav-bar/nav-bar-dropdown.module.css';
@@ -110,9 +111,7 @@ const NavBarButton: FC<NavBarButtonProps> = ({
         )}
         onClick={isDisabled ? () => {} : onClick}
       >
-        <div
-          className={cn(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
-        >
+        <div className={cn(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}>
           {buttonIcon !== undefined && (
             <div className={cn(classes.icon, isDropdown === true && classes.dropdown)}>
               {buttonIcon}

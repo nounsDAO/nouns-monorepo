@@ -1,10 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 import ShortAddress from '@/components/short-address';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import {
   EscrowDeposit,
@@ -175,10 +175,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
   if (event.createdAt === null) return null;
 
   return (
-    <div
-      className={cn(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)}
-      id={event.id}
-    >
+    <div className={cn(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)} id={event.id}>
       <a href={`#${event.id}`} className={classes.eventPoint}>
         {''}
       </a>
