@@ -140,8 +140,20 @@ export default defineConfig([
             '^data:',
             '^mailto:',
             '^tel:',
+            // MIME types
+            '^application/',
+            // Root-relative static asset paths
+            '^/[A-Za-z0-9/_-]+\\.(?:png|svg|webp|jpg|jpeg)$',
+            // Root-relative internal routes (non-user-facing)
+            '^/[A-Za-z0-9/_-]+$',
+            // Filenames with common extensions (tests, downloads)
+            '\\.(?:json|png|svg|webp|jpg|jpeg)$',
             // CSS color/function tokens
             'rgba',
+            // CSS custom properties via var() in inline styles
+            '^var\\(',
+            // Day.js-like date/time format masks (letters & punctuation only)
+            '^[MDYHhmsA, :/\\-]+$',
             // Next.js/React Server Components directive
             '^use client$'
           ],
@@ -164,7 +176,11 @@ export default defineConfig([
             'rel',
             'target',
             'role',
-            'data-testid'
+            'alt',
+            'data-testid',
+            // Inline style property names commonly using non-translatable CSS tokens/values
+            'transform',
+            'transition'
           ],
           ignoreFunctions: [
             // Styling/class helpers and common utilities
