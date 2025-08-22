@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
+import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
 

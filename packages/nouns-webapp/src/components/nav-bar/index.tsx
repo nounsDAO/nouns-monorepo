@@ -6,7 +6,6 @@ import { faFile, faPenToSquare, faPlay, faUsers } from '@fortawesome/free-solid-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
-import { cn } from '@/lib/utils';
 import { ConnectKitButton } from 'connectkit';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -24,6 +23,7 @@ import ShortAddress from '@/components/short-address';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';

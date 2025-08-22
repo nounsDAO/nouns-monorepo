@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+
 import { cn } from '@/lib/utils';
 
 import classes from './vote-card-pager.module.css';

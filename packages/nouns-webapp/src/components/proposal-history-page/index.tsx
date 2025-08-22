@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -17,6 +16,7 @@ import ProposalContent from '@/components/proposal-content';
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import ProposalStatus from '@/components/proposal-status';
 import Section from '@/components/section';
+import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
 import { Link, useParams } from 'react-router';

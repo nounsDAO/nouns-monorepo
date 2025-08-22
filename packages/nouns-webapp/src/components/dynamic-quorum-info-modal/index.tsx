@@ -3,10 +3,10 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import ReactDOM from 'react-dom';
 
 import { Backdrop } from '@/components/modal';
+import { cn } from '@/lib/utils';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nouns-dao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -21,6 +20,7 @@ import CandidateHeader from '@/components/proposal-header/candidate-header';
 import Section from '@/components/section';
 import VoteSignals from '@/components/vote-signals/vote-signals';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
 import { useUserVotes } from '@/wrappers/noun-token';
 import {

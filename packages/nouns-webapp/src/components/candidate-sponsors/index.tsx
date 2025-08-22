@@ -3,11 +3,11 @@ import React, { useMemo, useState } from 'react';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
 import { isNullish } from 'remeda';
 import { useAccount } from 'wagmi';
 
+import { cn } from '@/lib/utils';
 import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/noun-token';
 import { Proposal, ProposalState } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';

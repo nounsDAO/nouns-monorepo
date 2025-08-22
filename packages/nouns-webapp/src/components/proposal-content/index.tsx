@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -10,6 +9,7 @@ import { isAddress } from 'viem';
 import linkIcon from '@/assets/icons/Link.svg';
 import EnsOrLongAddress from '@/components/ens-or-long-address';
 import { nounsTokenAddress } from '@/contracts';
+import { cn } from '@/lib/utils';
 import {
   buildEtherscanAddressLink,
   buildEtherscanHoldingsLink,

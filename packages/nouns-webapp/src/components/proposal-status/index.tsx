@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 
+import { cn } from '@/lib/utils';
 import { ProposalState } from '@/wrappers/nouns-dao';
 
 import classes from './proposal-status.module.css';

@@ -1,11 +1,11 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Spinner } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nouns-dao';

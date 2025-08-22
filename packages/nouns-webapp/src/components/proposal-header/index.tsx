@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Alert, Button } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { useBlockNumber } from 'wagmi';
@@ -15,6 +14,7 @@ import ShortAddress from '@/components/short-address';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { useBlockTimestamp } from '@/hooks/use-block-timestamp';
 import { Locales } from '@/i18n/locales';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/time-utils';

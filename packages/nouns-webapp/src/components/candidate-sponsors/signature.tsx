@@ -5,11 +5,11 @@ import React, { useEffect } from 'react';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import ShortAddress from '@/components/short-address';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { useCancelSignature } from '@/wrappers/nouns-dao';
 

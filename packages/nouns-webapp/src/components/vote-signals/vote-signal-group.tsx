@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
 
+import { cn } from '@/lib/utils';
 import { VoteSignalDetail } from '@/wrappers/nouns-data';
 
 import VoteSignal from './vote-signal';

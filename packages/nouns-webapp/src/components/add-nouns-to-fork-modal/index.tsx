@@ -4,12 +4,12 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { FormControl, FormSelect, FormText, InputGroup, Spinner } from 'react-bootstrap';
 import { map } from 'remeda';
 
 import link from '@/assets/icons/Link.svg';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useIsApprovedForAll, useSetApprovalForAll } from '@/wrappers/noun-token';
 import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nouns-dao';

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { FormControl } from 'react-bootstrap';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
 import { Spinner } from '@/components/spinner';
+import { cn } from '@/lib/utils';
 import { useSendFeedback, VoteSignalDetail } from '@/wrappers/nouns-data';
 
 import VoteSignalGroup from './vote-signal-group';

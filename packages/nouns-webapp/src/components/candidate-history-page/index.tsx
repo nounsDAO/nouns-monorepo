@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -17,6 +16,7 @@ import ProposalContent from '@/components/proposal-content';
 import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import VersionTab from '@/components/proposal-history-page/version-tab';
 import Section from '@/components/section';
+import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import {
   ProposalCandidateVersionContent,

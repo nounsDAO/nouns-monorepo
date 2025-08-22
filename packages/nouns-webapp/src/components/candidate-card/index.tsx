@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 import ShortAddress from '@/components/short-address';
+import { cn } from '@/lib/utils';
 import { relativeTimestamp } from '@/utils/time-utils';
 import { PartialProposal } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';

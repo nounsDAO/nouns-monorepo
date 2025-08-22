@@ -1,12 +1,12 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Alert } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
 import ShortAddress from '@/components/short-address';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address, Hex } from '@/utils/types';
 import { usePropose } from '@/wrappers/nouns-dao';

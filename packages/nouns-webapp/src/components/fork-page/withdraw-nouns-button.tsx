@@ -1,10 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { map, isNullish } from 'remeda';
 
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useWithdrawFromForkEscrow } from '@/wrappers/nouns-dao';
 

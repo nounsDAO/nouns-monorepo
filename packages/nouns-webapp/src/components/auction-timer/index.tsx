@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { Auction } from '@/wrappers/nouns-auction';
 
 import classes from './auction-timer.module.css';

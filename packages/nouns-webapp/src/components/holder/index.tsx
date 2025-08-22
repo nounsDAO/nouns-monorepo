@@ -2,12 +2,12 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { nounQuery } from '@/wrappers/subgraph';
 

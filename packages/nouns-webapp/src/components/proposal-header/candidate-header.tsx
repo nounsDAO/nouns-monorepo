@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -10,6 +9,7 @@ import { transactionIconLink } from '@/components/proposal-content';
 import ShortAddress from '@/components/short-address';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Locales } from '@/i18n/locales';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/time-utils';

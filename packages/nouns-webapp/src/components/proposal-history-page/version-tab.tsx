@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
+import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
 import classes from './vote.module.css';

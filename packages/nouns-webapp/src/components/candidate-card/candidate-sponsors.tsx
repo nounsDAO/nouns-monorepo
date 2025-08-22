@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-
 import { useDelegateNounsAtBlockQuery } from '@/wrappers/noun-token';
 import { CandidateSignature } from '@/wrappers/nouns-data';
 

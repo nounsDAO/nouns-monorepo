@@ -3,7 +3,6 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
 import { isNullish } from 'remeda';
@@ -19,6 +18,7 @@ import { useSignTypedData } from 'wagmi';
 
 import link from '@/assets/icons/Link.svg';
 import { nounsGovernorAddress } from '@/contracts';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';

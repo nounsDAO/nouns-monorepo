@@ -6,13 +6,13 @@ import {
   useReadNounsTreasuryBalancesInEth,
   useReadNounsTreasuryBalancesInUsd,
 } from '@nouns/sdk/react/treasury';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { formatEther, formatUnits } from 'viem';
 
 import Proposals from '@/components/proposals';
 import Section from '@/components/section';
+import { cn } from '@/lib/utils';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nouns-dao';
 
 import classes from './governance.module.css';

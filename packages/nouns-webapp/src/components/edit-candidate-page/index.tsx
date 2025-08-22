@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, FormControl, InputGroup } from 'react-bootstrap';
 import { filter, isNullish } from 'remeda';
@@ -26,6 +25,7 @@ const ProposalTransactions = dynamic(() => import('@/components/proposal-transac
 const Section = dynamic(() => import('@/components/section'), { ssr: false });
 
 import { nounsTokenBuyerAddress } from '@/contracts';
+import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';

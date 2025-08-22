@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { cn } from '@/lib/utils';
 import { NumericFormat, OnValueChange } from 'react-number-format';
+
+import { cn } from '@/lib/utils';
 
 import classes from './brand-numeric-entry.module.css';
 

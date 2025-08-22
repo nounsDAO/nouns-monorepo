@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { filter } from 'remeda';
@@ -29,6 +28,7 @@ const Section = dynamic(() => import('@/components/section'), { ssr: false });
 
 import config from '@/config';
 import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
+import { cn } from '@/lib/utils';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
 import { useEthNeeded } from '@/utils/token-buyer-contract-utils/token-buyer';
 import { defaultChain } from '@/wagmi';

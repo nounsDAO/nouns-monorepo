@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import TruncatedAmount from '@/components/truncated-amount';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 
 import classes from './current-bid.module.css';
 

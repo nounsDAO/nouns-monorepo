@@ -1,10 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { FormControl } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import {
   CandidateSignature,

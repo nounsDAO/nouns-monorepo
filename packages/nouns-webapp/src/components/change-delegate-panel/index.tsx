@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Collapse, FormControl } from 'react-bootstrap';
 import { isAddress } from 'viem';
 import { useAccount, useEnsAddress } from 'wagmi';
@@ -10,6 +9,7 @@ import BrandSpinner from '@/components/brand-spinner';
 import DelegationCandidateInfo from '@/components/delegation-candidate-info';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
+import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { usePickByState } from '@/utils/pick-by-state';
 import { Address } from '@/utils/types';

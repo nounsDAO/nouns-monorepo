@@ -2,6 +2,7 @@ import React from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
+
 import { cn } from '@/lib/utils';
 
 import { NavBarButtonStyle } from '../nav-bar-button';

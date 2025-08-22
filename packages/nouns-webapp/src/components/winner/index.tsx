@@ -3,13 +3,13 @@ import type { Address } from '@/utils/types';
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
 import classes from './winner.module.css';

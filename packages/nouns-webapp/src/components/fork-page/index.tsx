@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { Col, Container, Row } from 'react-bootstrap';
 import { map } from 'remeda';
@@ -16,6 +15,7 @@ import NotFoundPage from '@/components/not-found-page';
 import Section from '@/components/section';
 import useForkTreasuryBalance from '@/hooks/use-fork-treasury-balance';
 import { useScrollToLocation } from '@/hooks/use-scroll-to-location';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { Address } from '@/utils/types';
 import { useUserEscrowedNounIds, useUserOwnedNounIds } from '@/wrappers/noun-token';

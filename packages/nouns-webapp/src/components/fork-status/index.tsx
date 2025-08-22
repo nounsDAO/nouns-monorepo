@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 
+import { cn } from '@/lib/utils';
 import { ForkState } from '@/wrappers/nouns-dao';
 
 import classes from './fork-status.module.css';

@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { faCheck, faGlobe, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-import { cn } from '@/lib/utils';
 import { useAtom } from 'jotai/react';
 
 import LanguageSelectionModal from '@/components/language-selection-modal';
 import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { activeLocaleAtom } from '@/i18n/active-locale-atom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
+import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
 import classes from './nav-local-switcher.module.css';
