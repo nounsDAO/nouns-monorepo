@@ -185,33 +185,35 @@ const Bid: React.FC<BidProps> = props => {
 
   return (
     <>
-      <div>
+      <div className={!auctionEnded ? classes.bidWrapper : undefined}>
         {!auctionEnded && (
           <>
-            <span className={classes.customPlaceholderBidAmt}>
-              {!auctionEnded && !bidInput ? (
-                <>
-                  Ξ {minBidEth(minBid)}{' '}
-                  <span
-                    className={
-                      activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
-                    }
-                  >
-                    <Trans>or more</Trans>
-                  </span>
-                </>
-              ) : (
-                ''
-              )}
-            </span>
-            <Input
-              className={classes.bidInput}
-              type="number"
-              min="0"
-              onChange={bidInputHandler}
-              ref={bidInputRef}
-              value={bidInput}
-            />
+            <div className={classes.bidInputWrapper}>
+              <span className={classes.customPlaceholderBidAmt}>
+                {!auctionEnded && !bidInput ? (
+                  <>
+                    Ξ {minBidEth(minBid)}{' '}
+                    <span
+                      className={
+                        activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
+                      }
+                    >
+                      <Trans>or more</Trans>
+                    </span>
+                  </>
+                ) : (
+                  ''
+                )}
+              </span>
+              <Input
+                className={`${classes.bidInput} w-auto grow`}
+                type="number"
+                min="0"
+                onChange={bidInputHandler}
+                ref={bidInputRef}
+                value={bidInput}
+              />
+            </div>
           </>
         )}
         {!auctionEnded ? (
