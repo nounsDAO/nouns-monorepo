@@ -1,137 +1,112 @@
+/* Root-level Tailwind layers must already be included globally (base/components/utilities) */
+
+/* Layout wrappers */
 .bidWrapper {
-  margin: 0;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
+  @apply m-0 flex flex-row items-center justify-center;
 }
 
 .bidInputWrapper {
-  position: relative;
-  display: flex;
-  flex: 1;
+  @apply relative flex flex-1;
 }
 
+/* Bid button */
 .bidBtn {
-  font-family: 'PT Root UI';
+  /* Keep exact radii, sizes, and colors */
   border-radius: 12px !important;
-  margin-left: 0.6rem !important;
-  margin-top: 3px;
-  width: auto;
-  padding: 10px 16px;
-  height: 3rem;
-  color: white;
-  border: transparent;
+  @apply font-bold leading-none tracking-normal text-white;
+  @apply ml-2 mt-[3px] h-12 w-auto px-4;
+  @apply transition-all duration-200 ease-in-out;
+  @apply border border-transparent;
   background-color: var(--brand-black);
-  font-weight: bold;
-  letter-spacing: normal;
+  font-family: 'PT Root UI';
   font-size: 19px;
-  transition: all 0.2s ease-in-out;
 }
 
 .bidBtn:disabled {
-  cursor: not-allowed;
+  @apply cursor-not-allowed;
 }
 
 .bidBtn:hover,
 .bidBtn:active,
 .bidBtn:focus .bidBtn:disabled {
-  outline: none !important;
-  box-shadow: none !important;
+  @apply shadow-none outline-none;
   background-color: #2125298a;
 }
 
 .bidBtn:disabled {
-  background-color: gray !important;
+  @apply bg-gray-500 !important;
 }
 
+/* Small helper copy */
 .minBidCopy {
-  padding-top: 0;
-  font-size: small;
-  margin-left: 0.25rem;
-  margin-bottom: 0.3rem;
+  @apply mb-[0.3rem] ml-1 pt-0 text-sm;
 }
 
+/* Bid input */
 .bidInput {
+  /* Keep exact radius and shadows */
+  border-radius: 12px !important;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  width: auto;
-  height: 54px;
-  color: black;
-  border-radius: 12px !important;
-  box-shadow: inset 0px 0px 0px 1px #fff;
-  background-color: white;
-  outline: none !important;
-  box-shadow: none !important;
+  @apply h-[54px] w-auto bg-white text-black;
+  @apply shadow-none outline-none;
+  @apply font-bold transition-all duration-200 ease-in-out;
   font-family: 'PT Root UI';
-  font-weight: bold;
   font-size: 25px;
-  transition: all 0.2s ease-in-out;
   border: none;
-}
-/* Ensure migration/theme utilities (e.g., shadcn bg-transparent/bg-background) don't override */
-.bidInput {
-  background-color: #ffffff !important;
+  /* Inner white outline like original */
+  box-shadow: inset 0px 0px 0px 1px #fff;
 }
 
+/* Stronger focus ring (exact token kept) */
 .bidInput:focus {
   box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
 }
 
+/* Custom placeholder styles */
 .customPlaceholder {
+  @apply select-none;
   color: var(--brand-cool-light-text);
   font-family: 'PT Root UI';
   font-weight: bold;
   z-index: 3;
-  user-select: none;
 }
 
+/* ETH amount “placeholder” overlay */
 .customPlaceholderBidAmt {
-  position: absolute;
-  opacity: 0.3;
+  @apply pointer-events-none absolute z-[1] opacity-30;
   top: 15%;
   left: 3%;
   color: var(--brand-cool-light-text);
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 25px;
-  z-index: 1;
-  pointer-events: none;
 }
 
-.activityRow .form-floating {
-  display: flex !important;
-  flex-flow: row nowrap !important;
-  justify-content: space-between !important;
-}
-
+/* Auction-ended button */
 .bidBtnAuctionEnded {
-  width: 100%;
-  height: 3rem;
-  color: white;
-  border: transparent;
+  @apply h-12 w-full rounded-[10px] font-bold text-white;
+  @apply border border-transparent;
   background-color: var(--brand-black);
-  font-weight: bold;
   font-family: 'PT Root UI';
   font-size: 18px;
-  border-radius: 10px;
 }
 
 .bidBtnAuctionEnded:hover,
 .bidBtnAuctionEnded:active,
 .bidBtnAuctionEnded:focus,
 .bidBtnAuctionEnded:disabled {
-  background-color: gray !important;
-  color: rgb(209, 207, 207);
-  outline: none !important;
-  box-shadow: none;
+  @apply text-[rgb(209,207,207)] shadow-none outline-none;
+  @apply bg-gray-500 !important;
 }
 
+/* Hidden input when auction ended */
 .bidInputAuctionEnded {
-  display: none;
+  @apply hidden;
 }
 
+/* Extra safety on input focus */
 .bidInput:focus {
   outline: none;
 }
@@ -149,6 +124,21 @@
   -moz-appearance: textfield;
 }
 
+/* Ensure input background is solid white regardless of theme/utilities order */
+.bidInput,
+.bidInput:focus,
+.bidInput:active,
+.bidInput:disabled {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Defensive: if the underlying Input injects a bg via data-* variants */
+:where(.bidInput) {
+  background-color: #ffffff !important;
+}
+
+/* Responsive tweaks */
 @media (max-width: 992px) {
   .bidInput {
     border: none;
@@ -158,26 +148,23 @@
   .customPlaceholder {
     left: 40%;
   }
+
   .customPlaceholderBidAmt {
     left: 3.5%;
     top: 16%;
   }
+
   .emergencySettleWrapper {
-    text-align: center;
+    @apply text-center;
   }
 
   .voteForNextNounBtnWrapper {
-    width: 100%;
+    @apply w-full;
   }
 }
 
+/* Link-style emergency settle button */
 .emergencySettleButton {
+  @apply m-0 inline cursor-pointer border-none bg-transparent p-0 underline;
   color: var(--brand-dark-red);
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-  display: inline;
-  margin: 0;
-  padding: 0;
 }
