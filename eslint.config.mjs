@@ -373,6 +373,14 @@ export default defineConfig([
     },
   },
 
+  // Disable lingui/no-unlocalized-strings in test files (intentional literals in tests)
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      'lingui/no-unlocalized-strings': 'off',
+    },
+  },
+
   // Global ignores
   globalIgnores(['**/*.d.ts']),
 ]);
