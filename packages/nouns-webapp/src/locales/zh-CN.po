@@ -26,6 +26,10 @@ msgstr "您对此提案投了<0>反对</0>票"
 msgid "bodies ({0})"
 msgstr "身体（{0}）"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Unselect all"
+msgstr ""
+
 #: src/components/edit-candidate-page/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "这将清除所有先前的支持者和反馈投票"
@@ -154,9 +158,18 @@ msgstr "获胜者"
 msgid "Candidates"
 msgstr "候选提案"
 
+#: src/components/vote/index.tsx
+msgid "Taken at block"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr "Noun 投票不可转让，但可<0>委托</0>，只要拥有 Noun，就可将投票权委托给他人。"
+
+#. placeholder {0}: signature.signer.voteCount ?? 0
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{0, plural, one {# vote} other {# votes}}"
+msgstr ""
 
 #: src/components/proposal-content/index.tsx
 msgid "This proposal interacts with the <0>original treasury</0>"
@@ -283,9 +296,9 @@ msgstr "竞拍记录："
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr "门槛（通过提案所需的最少支持票数）取决于提案的反对票数。它会随反对比例线性增加，介于最小门槛与最大门槛之间。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Go to playground"
-#~ msgstr "前往游乐场"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Go to playground"
+msgstr "前往游乐场"
 
 #: src/components/bid/index.tsx
 msgid "or more"
@@ -366,6 +379,10 @@ msgstr "该试验场使用 {nounsProtocolLink} 构建。Noun 的特征由 Noun S
 #: src/components/auction-timer/index.tsx
 msgid "s"
 msgstr "秒"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "loading"
+msgstr ""
 
 #: src/components/candidate-sponsors/submit-update-proposal.tsx
 msgid "Add an optional message for the changes to the proposal"
@@ -581,6 +598,10 @@ msgstr "分叉为代币持有者群体提供了一种加密原生途径，使他
 msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
 msgstr "此交易被自动添加以补充 TokenBuyer。提案者不会收到这些 ETH。"
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "SVG"
+msgstr ""
+
 #: src/components/documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "结算流程虽然主要激励的是中标者，但妙处在于任何人都能触发。这就使得只要以太坊网络持续运作、并且一直有感兴趣的竞标者，系统便能无需信任地持续拍卖 Nouns。"
@@ -593,6 +614,10 @@ msgstr "查看候选人"
 #: src/components/proposal-status/index.tsx
 msgid "Succeeded"
 msgstr "成功"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Try again"
+msgstr ""
 
 #: src/components/vote/index.tsx
 msgid "Proposal Executed!"
@@ -655,6 +680,10 @@ msgstr "您已生成价值 {0} 年的 Nouns"
 #: src/components/language-selection-modal/index.tsx
 msgid "Select Language"
 msgstr "选择语言"
+
+#: src/components/vote/index.tsx
+msgid "Voting is now limited to against votes. This objection-only period protects the DAO from last-minute vote swings."
+msgstr ""
 
 #: src/components/nav-bar/index.tsx
 #: src/components/nav-bar/index.tsx
@@ -742,6 +771,10 @@ msgstr "此候选（方案/提案）已满足了必要的支持门槛，但在�
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "了解更多，或使用 {playgroundLink} 开始链下创建 Nouns。"
 
+#: src/components/vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal "
+msgstr ""
+
 #. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/components/vote/index.tsx
 msgid "{0} votes"
@@ -756,10 +789,6 @@ msgstr "什么情况？"
 #: src/components/change-delegate-panel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
 msgstr "在此次委托后，您的账户将少于{0}{1}。如果您没有足够的赞助者投票，您创建的未执行提案可能会被取消。"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Pick the next Noun"
-#~ msgstr "选择下一个名词"
 
 #: src/components/delegation-candidate-info/index.tsx
 msgid "Will have"
@@ -833,13 +862,17 @@ msgstr "Nounders 奖励"
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "使用<0>{numVotesForProp}</0>个 Nouns 进行投票"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download the individual traits that compose Nouns"
-#~ msgstr "下载构成名词的各个特征"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr "下载构成名词的各个特征"
 
 #: src/components/create-proposal-page/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "添加一个或多个提案操作，并为社区描述您的提案。提交后无法修改提案，因此请在提交前验证所有信息。投票期将在 5 天后开始，持续 5 天。"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "link symbol"
+msgstr ""
 
 #: src/components/documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
@@ -857,17 +890,21 @@ msgstr "添加流支付日期详情"
 msgid "Forks"
 msgstr "分叉"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Explore traits"
-#~ msgstr "探索特征"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Explore traits"
+msgstr "探索特征"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Awaiting confirmation"
+msgstr ""
 
 #: src/components/footer.tsx
 msgid "Token"
 msgstr "令牌"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-#~ msgstr "在游乐场生成的标志、特征和每个名词都是<0>CC0</0>（Creative Commons Zero），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "在游乐场生成的标志、特征和每个名词都是<0>CC0</0>（Creative Commons Zero），这意味着它们属于公共领域，可以自由用于任何目的，无需限制。"
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -891,6 +928,7 @@ msgid "ended {0}"
 msgstr "{0}结束"
 
 #: src/components/footer.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "Brand Assets"
 msgstr "品牌资产"
 
@@ -949,9 +987,9 @@ msgstr "未找到提案"
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "此候选提案最初是通过（一组）签名来创建的。若编辑此提案将会生成一份新的候选提案，需要原签署人重新签名，才能更新链上的提案"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
-#~ msgstr "下载官方 Nouns DAO 品牌资产，包括我们标志性的眼镜，提供多种格式。"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+msgstr "下载官方 Nouns DAO 品牌资产，包括我们标志性的眼镜，提供多种格式。"
 
 #: src/components/vote/index.tsx
 msgid "Only visible to you"
@@ -1009,6 +1047,10 @@ msgstr "动态阈值"
 #: src/components/candidate-page/index.tsx
 msgid "Proposer functions"
 msgstr "提案者功能"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "View the proposal"
+msgstr ""
 
 #: src/components/nouns-intro-section/index.tsx
 msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
@@ -1102,9 +1144,9 @@ msgstr "理由（可选）"
 msgid "Settlement of one auction kicks off the next."
 msgstr "一次拍卖结算后，下一次拍卖随即开始。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Black monochrome Noggles"
-#~ msgstr "黑色单色眼镜"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Black monochrome Noggles"
+msgstr "黑色单色眼镜"
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate Update Failed"
@@ -1169,6 +1211,7 @@ msgstr "版本"
 msgid "Held by"
 msgstr "由…持有"
 
+#: src/components/vote/index.tsx
 #: src/components/candidate-page/index.tsx
 msgid "Edit"
 msgstr "编辑"
@@ -1285,6 +1328,10 @@ msgstr "当前反对的 Nouns 百分比"
 msgid "Failed to fetch"
 msgstr "获取失败"
 
+#: src/components/vote/index.tsx
+msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Delegation"
 msgstr "委托"
@@ -1337,9 +1384,9 @@ msgstr "使用 <0>{0}</0> 个 Noun 投票"
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr "通过采用DUNA模式，Nouns DAO为寻求在去中心化自治与法律确定性之间取得平衡的DAO们树立了先锋榜样，进一步巩固了其在去中心化治理创新前沿的地位。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Logo"
-#~ msgstr "标志"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Logo"
+msgstr "标志"
 
 #: src/components/proposal-actions-modal/steps/transfer-funds-review-step/index.tsx
 #: src/components/proposal-actions-modal/steps/transfer-funds-details-step/index.tsx
@@ -1353,6 +1400,7 @@ msgid "Back"
 msgstr "返回"
 
 #: src/components/traits-page/index.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "License"
 msgstr "许可证"
 
@@ -1388,9 +1436,9 @@ msgstr "成功！分叉已部署。"
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 msgstr "属性稀缺性没有明确规则；所有 Nouns 同等稀有。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "White monochrome Noggles"
-#~ msgstr "白色单色眼镜"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "White monochrome Noggles"
+msgstr "白色单色眼镜"
 
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 #: src/components/edit-proposal-page/index.tsx
@@ -1399,6 +1447,10 @@ msgstr "属性稀缺性没有明确规则；所有 Nouns 同等稀有。"
 #: src/components/create-candidate-page/index.tsx
 msgid "Add Action"
 msgstr "添加操作"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submitting proposal"
+msgstr ""
 
 #: src/components/candidate-sponsors/index.tsx
 msgid "No sponsored votes needed"
@@ -1409,13 +1461,17 @@ msgstr "不需要赞助票"
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr "选择要与您的提案一起提交的签名。签名总数必须大于提案阈值 {0}。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Nouns & Traits"
-#~ msgstr "Nouns 和特征"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Nouns & Traits"
+msgstr "Nouns 和特征"
 
 #: src/components/fork-page/deploy-fork-button.tsx
 msgid "Deploy Fork"
 msgstr "部署分叉"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submit with no sponsors"
+msgstr ""
 
 #: src/components/playground-page/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1521,6 +1577,10 @@ msgstr "更改"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "您对此提案<0>弃权</0>"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Success!"
+msgstr ""
+
 #. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/proposals/index.tsx
 msgid "Expires {0}"
@@ -1544,9 +1604,9 @@ msgstr "无需参数 "
 msgid "Add Streaming Payment Action"
 msgstr "添加流支付操作"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Generate endless Nouns assembled from the onchain artwork"
-#~ msgstr "从链上艺术作品中生成无尽的名词"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Generate endless Nouns assembled from the onchain artwork"
+msgstr "从链上艺术作品中生成无尽的名词"
 
 #: src/components/vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1653,9 +1713,9 @@ msgstr "头部"
 msgid "Tip"
 msgstr "提示"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Colored Noggles"
-#~ msgstr "彩色眼镜"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Colored Noggles"
+msgstr "彩色眼镜"
 
 #: src/components/fork-status/index.tsx
 msgid "Forking"
@@ -1682,6 +1742,10 @@ msgstr "Noun"
 #: src/components/vote/index.tsx
 msgid "Transaction Successful!"
 msgstr "交易成功！"
+
+#: src/components/vote/index.tsx
+msgid "Vote against"
+msgstr ""
 
 #: src/components/playground-page/index.tsx
 msgid "Generate Nouns"
@@ -1732,6 +1796,14 @@ msgstr "审查转账操作"
 msgid "Language"
 msgstr "语言"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{selectedVoteCount, plural, one {Submit # vote} other {Submit # votes}}"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Your candidate is now a proposal"
+msgstr ""
+
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 msgid "Value"
 msgstr "价值"
@@ -1739,6 +1811,10 @@ msgstr "价值"
 #: src/components/documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
 msgstr "Nouns 拍卖合约将作为一个自给自足的 Noun 生成和分发机制，每 24 小时拍卖一个 Noun，永远如此。100% 的拍卖收益（ETH）将自动存入 Nouns DAO 金库，由 Noun 拥有者管理。"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Select all"
+msgstr ""
 
 #: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
 msgid "Choose sponsors"
@@ -1757,6 +1833,10 @@ msgstr "该候选人目前有 {0} 个签名。"
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr "在未经审计的情况下对关键智能合约进行升级"
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "PNG"
+msgstr ""
+
 #: src/components/playground-page/index.tsx
 msgid "Glasses"
 msgstr "眼镜"
@@ -1764,6 +1844,10 @@ msgstr "眼镜"
 #: src/components/proposals/index.tsx
 msgid "You have no Votes."
 msgstr "您没有投票。"
+
+#: src/components/vote/index.tsx
+msgid "Snapshot"
+msgstr ""
 
 #: src/components/stream-withdraw-modal/index.tsx
 msgid "There was an error withdrawing to your wallet."

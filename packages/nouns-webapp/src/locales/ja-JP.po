@@ -31,6 +31,10 @@ msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 msgid "bodies ({0})"
 msgstr "ボディ ({0})"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Unselect all"
+msgstr ""
+
 #: src/components/edit-candidate-page/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "これにより、以前のすべてのスポンサーとフィードバック投票がクリアされます"
@@ -159,9 +163,18 @@ msgstr "落札者"
 msgid "Candidates"
 msgstr "候補者"
 
+#: src/components/vote/index.tsx
+msgid "Taken at block"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr "Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
+
+#. placeholder {0}: signature.signer.voteCount ?? 0
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{0, plural, one {# vote} other {# votes}}"
+msgstr ""
 
 #: src/components/proposal-content/index.tsx
 msgid "This proposal interacts with the <0>original treasury</0>"
@@ -288,9 +301,9 @@ msgstr "入札"
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr "閾値（提案を通過させるために必要な賛成票の最小数）は、提案が受けた反対票の数に基づいて設定されます。これは、提案に反対するNounsの割合に応じて線形に増加し、最小閾値と最大閾値の間で変動します。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Go to playground"
-#~ msgstr "プレイグラウンドに行く"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Go to playground"
+msgstr "プレイグラウンドに行く"
 
 #: src/components/bid/index.tsx
 msgid "or more"
@@ -371,6 +384,10 @@ msgstr "遊び場は{nounsProtocolLink} を使用して作られており、Noun
 #: src/components/auction-timer/index.tsx
 msgid "s"
 msgstr "秒"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "loading"
+msgstr ""
 
 #: src/components/candidate-sponsors/submit-update-proposal.tsx
 msgid "Add an optional message for the changes to the proposal"
@@ -586,6 +603,10 @@ msgstr "フォークは、トークン保有者のグループが一緒にプロ
 msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
 msgstr "この取引はTokenBuyerを補充するために自動的に追加されました。提案者はこのETHを受け取りません。"
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "SVG"
+msgstr ""
+
 #: src/components/documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
@@ -598,6 +619,10 @@ msgstr "候補者を表示"
 #: src/components/proposal-status/index.tsx
 msgid "Succeeded"
 msgstr "成功しました"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Try again"
+msgstr ""
 
 #: src/components/vote/index.tsx
 msgid "Proposal Executed!"
@@ -660,6 +685,10 @@ msgstr "{0} 年分のナウンを生成しました"
 #: src/components/language-selection-modal/index.tsx
 msgid "Select Language"
 msgstr "言語を選択"
+
+#: src/components/vote/index.tsx
+msgid "Voting is now limited to against votes. This objection-only period protects the DAO from last-minute vote swings."
+msgstr ""
 
 #: src/components/nav-bar/index.tsx
 #: src/components/nav-bar/index.tsx
@@ -747,6 +776,10 @@ msgstr "この候補者は必要な閾値を満たしていますが、Nounsの�
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
+#: src/components/vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal "
+msgstr ""
+
 #. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/components/vote/index.tsx
 msgid "{0} votes"
@@ -761,10 +794,6 @@ msgstr "WTF?"
 #: src/components/change-delegate-panel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
 msgstr "この委任の後、あなたのアカウントは{0}{1}未満になります。十分なスポンサー票がない場合、作成した未実行の提案はキャンセル可能になるかもしれません。"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Pick the next Noun"
-#~ msgstr "次の名詞を選んでください"
 
 #: src/components/delegation-candidate-info/index.tsx
 msgid "Will have"
@@ -838,13 +867,17 @@ msgstr "Nounderへの報酬"
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download the individual traits that compose Nouns"
-#~ msgstr "名詞を構成する個々の特性をダウンロード"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr "名詞を構成する個々の特性をダウンロード"
 
 #: src/components/create-proposal-page/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr "1つ以上の提案アクションを追加し、コミュニティのために提案を説明してください。提案は提出後に変更できないため、提出前にすべての情報を確認してください。投票期間は5日後に始まり、5日間続きます。"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "link symbol"
+msgstr ""
 
 #: src/components/documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
@@ -862,17 +895,21 @@ msgstr "ストリーム日付の詳細を追加"
 msgid "Forks"
 msgstr "フォーク"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Explore traits"
-#~ msgstr "特性を探索"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Explore traits"
+msgstr "特性を探索"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Awaiting confirmation"
+msgstr ""
 
 #: src/components/footer.tsx
 msgid "Token"
 msgstr "トークン"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-#~ msgstr "プレイグラウンドで生成されたロゴ、特性、およびすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr "プレイグラウンドで生成されたロゴ、特性、およびすべての名詞は<0>CC0</0>（クリエイティブ・コモンズ・ゼロ）であり、パブリックドメインに属し、制限なくあらゆる目的で自由に使用できます。"
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -896,6 +933,7 @@ msgid "ended {0}"
 msgstr "終了しました {0}"
 
 #: src/components/footer.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "Brand Assets"
 msgstr "ブランド資産"
 
@@ -954,9 +992,9 @@ msgstr "提案が見つかりません"
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr "この提案は候補者の署名によって作成されました。提案を編集すると、新しい提案候補が作成され、元の署名者がオンチェーン提案を更新するために再署名する必要があります。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
-#~ msgstr "さまざまな形式での象徴的なノグルを含む公式のNouns DAOブランド資産をダウンロードしてください。"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+msgstr "さまざまな形式での象徴的なノグルを含む公式のNouns DAOブランド資産をダウンロードしてください。"
 
 #: src/components/vote/index.tsx
 msgid "Only visible to you"
@@ -1014,6 +1052,10 @@ msgstr "動的しきい値"
 #: src/components/candidate-page/index.tsx
 msgid "Proposer functions"
 msgstr "提案者の機能"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "View the proposal"
+msgstr ""
 
 #: src/components/nouns-intro-section/index.tsx
 msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
@@ -1107,9 +1149,9 @@ msgstr "理由\"(任意)\""
 msgid "Settlement of one auction kicks off the next."
 msgstr "オークションの決済が１つ終わる度に次が始まります。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Black monochrome Noggles"
-#~ msgstr "黒の単色ノグル"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Black monochrome Noggles"
+msgstr "黒の単色ノグル"
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate Update Failed"
@@ -1174,6 +1216,7 @@ msgstr "バージョン"
 msgid "Held by"
 msgstr "主催者"
 
+#: src/components/vote/index.tsx
 #: src/components/candidate-page/index.tsx
 msgid "Edit"
 msgstr "編集"
@@ -1290,6 +1333,10 @@ msgstr "現在反対している名詞の割合"
 msgid "Failed to fetch"
 msgstr "取得できませんでした"
 
+#: src/components/vote/index.tsx
+msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Delegation"
 msgstr "デリゲーション"
@@ -1342,9 +1389,9 @@ msgstr "<0>{0}</0> 名詞で投票"
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr "DUNAモデルを採用することで、Nouns DAOは分散型自治と法的確実性のバランスを求めるDAOにとって先駆的な例を示し、分散ガバナンスイノベーションの最前線におけるその地位をさらに強固なものにしています。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Logo"
-#~ msgstr "ロゴ"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Logo"
+msgstr "ロゴ"
 
 #: src/components/proposal-actions-modal/steps/transfer-funds-review-step/index.tsx
 #: src/components/proposal-actions-modal/steps/transfer-funds-details-step/index.tsx
@@ -1358,6 +1405,7 @@ msgid "Back"
 msgstr "戻る"
 
 #: src/components/traits-page/index.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "License"
 msgstr "ライセンス"
 
@@ -1393,9 +1441,9 @@ msgstr "成功！フォークが展開されました。"
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 msgstr "Nounsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "White monochrome Noggles"
-#~ msgstr "白の単色ノグル"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "White monochrome Noggles"
+msgstr "白の単色ノグル"
 
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 #: src/components/edit-proposal-page/index.tsx
@@ -1404,6 +1452,10 @@ msgstr "Nounsは全て等しく希少なため、属性の希少性について�
 #: src/components/create-candidate-page/index.tsx
 msgid "Add Action"
 msgstr "アクションを追加"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submitting proposal"
+msgstr ""
 
 #: src/components/candidate-sponsors/index.tsx
 msgid "No sponsored votes needed"
@@ -1414,13 +1466,17 @@ msgstr "スポンサー付き投票は不要"
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr "提案と共に提出する署名を選択してください。署名の総数は提案の閾値{0}を超える必要があります。"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Nouns & Traits"
-#~ msgstr "名詞と特性"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Nouns & Traits"
+msgstr "名詞と特性"
 
 #: src/components/fork-page/deploy-fork-button.tsx
 msgid "Deploy Fork"
 msgstr "フォークをデプロイ"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submit with no sponsors"
+msgstr ""
 
 #: src/components/playground-page/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1526,6 +1582,10 @@ msgstr "代理人を変更する"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "あなたはこの提案から<0>棄権</0>しました"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Success!"
+msgstr ""
+
 #. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/proposals/index.tsx
 msgid "Expires {0}"
@@ -1549,9 +1609,9 @@ msgstr "引数は不要"
 msgid "Add Streaming Payment Action"
 msgstr "ストリーミング支払いアクションを追加"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Generate endless Nouns assembled from the onchain artwork"
-#~ msgstr "オンチェーンアートワークから組み立てられた無限の名詞を生成する"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Generate endless Nouns assembled from the onchain artwork"
+msgstr "オンチェーンアートワークから組み立てられた無限の名詞を生成する"
 
 #: src/components/vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1658,9 +1718,9 @@ msgstr "頭"
 msgid "Tip"
 msgstr "ヒント"
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Colored Noggles"
-#~ msgstr "カラーノグル"
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Colored Noggles"
+msgstr "カラーノグル"
 
 #: src/components/fork-status/index.tsx
 msgid "Forking"
@@ -1687,6 +1747,10 @@ msgstr "Noun"
 #: src/components/vote/index.tsx
 msgid "Transaction Successful!"
 msgstr "取引に成功しました！"
+
+#: src/components/vote/index.tsx
+msgid "Vote against"
+msgstr ""
 
 #: src/components/playground-page/index.tsx
 msgid "Generate Nouns"
@@ -1737,6 +1801,14 @@ msgstr "資金移動のアクションを確認"
 msgid "Language"
 msgstr "言語"
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{selectedVoteCount, plural, one {Submit # vote} other {Submit # votes}}"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Your candidate is now a proposal"
+msgstr ""
+
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 msgid "Value"
 msgstr "値"
@@ -1744,6 +1816,10 @@ msgstr "値"
 #: src/components/documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
 msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、Nouns DAO のトレジャリーに預けられます。"
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Select all"
+msgstr ""
 
 #: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
 msgid "Choose sponsors"
@@ -1762,6 +1838,10 @@ msgstr "この候補者は現在{0}の署名を持っています。"
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr "監査を受けずに重要なスマートコントラクトをアップグレードする"
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "PNG"
+msgstr ""
+
 #: src/components/playground-page/index.tsx
 msgid "Glasses"
 msgstr "メガネ"
@@ -1769,6 +1849,10 @@ msgstr "メガネ"
 #: src/components/proposals/index.tsx
 msgid "You have no Votes."
 msgstr "投票がありません。"
+
+#: src/components/vote/index.tsx
+msgid "Snapshot"
+msgstr ""
 
 #: src/components/stream-withdraw-modal/index.tsx
 msgid "There was an error withdrawing to your wallet."

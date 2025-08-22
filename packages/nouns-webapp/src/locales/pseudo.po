@@ -26,6 +26,10 @@ msgstr ""
 msgid "bodies ({0})"
 msgstr ""
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Unselect all"
+msgstr ""
+
 #: src/components/edit-candidate-page/index.tsx
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr ""
@@ -154,8 +158,17 @@ msgstr ""
 msgid "Candidates"
 msgstr ""
 
+#: src/components/vote/index.tsx
+msgid "Taken at block"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr ""
+
+#. placeholder {0}: signature.signer.voteCount ?? 0
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{0, plural, one {# vote} other {# votes}}"
 msgstr ""
 
 #: src/components/proposal-content/index.tsx
@@ -283,9 +296,9 @@ msgstr ""
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Go to playground"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Go to playground"
+msgstr ""
 
 #: src/components/bid/index.tsx
 msgid "or more"
@@ -365,6 +378,10 @@ msgstr ""
 
 #: src/components/auction-timer/index.tsx
 msgid "s"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "loading"
 msgstr ""
 
 #: src/components/candidate-sponsors/submit-update-proposal.tsx
@@ -581,6 +598,10 @@ msgstr ""
 msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not receive this ETH."
 msgstr ""
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "SVG"
+msgstr ""
+
 #: src/components/documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
@@ -592,6 +613,10 @@ msgstr ""
 #: src/components/proposal-status-copy/index.tsx
 #: src/components/proposal-status/index.tsx
 msgid "Succeeded"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Try again"
 msgstr ""
 
 #: src/components/vote/index.tsx
@@ -654,6 +679,10 @@ msgstr ""
 
 #: src/components/language-selection-modal/index.tsx
 msgid "Select Language"
+msgstr ""
+
+#: src/components/vote/index.tsx
+msgid "Voting is now limited to against votes. This objection-only period protects the DAO from last-minute vote swings."
 msgstr ""
 
 #: src/components/nav-bar/index.tsx
@@ -742,6 +771,10 @@ msgstr ""
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr ""
 
+#: src/components/vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal "
+msgstr ""
+
 #. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
 #: src/components/vote/index.tsx
 msgid "{0} votes"
@@ -756,10 +789,6 @@ msgstr ""
 #: src/components/change-delegate-panel/index.tsx
 msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created might become cancelable if you don't have enough sponsor votes."
 msgstr ""
-
-#: src/components/Bid/index.tsx
-#~ msgid "Pick the next Noun"
-#~ msgstr ""
 
 #: src/components/delegation-candidate-info/index.tsx
 msgid "Will have"
@@ -833,12 +862,16 @@ msgstr ""
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download the individual traits that compose Nouns"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download the individual traits that compose Nouns"
+msgstr ""
 
 #: src/components/create-proposal-page/index.tsx
 msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "link symbol"
 msgstr ""
 
 #: src/components/documentation/index.tsx
@@ -857,17 +890,21 @@ msgstr ""
 msgid "Forks"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Explore traits"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Explore traits"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Awaiting confirmation"
+msgstr ""
 
 #: src/components/footer.tsx
 msgid "Token"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "The logos, traits and every Noun generated on the playground are <0>CC0</0> (Creative Commons Zero), meaning they are in the public domain and free to use for any purpose without restriction."
+msgstr ""
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate {availableVotes} Vote"
@@ -891,6 +928,7 @@ msgid "ended {0}"
 msgstr ""
 
 #: src/components/footer.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "Brand Assets"
 msgstr ""
 
@@ -949,9 +987,9 @@ msgstr ""
 msgid "This proposal was created by candidate signatures. Editing the proposal will create a new proposal candidate requiring the original signers to resign to update the onchain proposal."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Download official Nouns DAO brand assets including our iconic noggles in various formats."
+msgstr ""
 
 #: src/components/vote/index.tsx
 msgid "Only visible to you"
@@ -1008,6 +1046,10 @@ msgstr ""
 
 #: src/components/candidate-page/index.tsx
 msgid "Proposer functions"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "View the proposal"
 msgstr ""
 
 #: src/components/nouns-intro-section/index.tsx
@@ -1102,9 +1144,9 @@ msgstr ""
 msgid "Settlement of one auction kicks off the next."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Black monochrome Noggles"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Black monochrome Noggles"
+msgstr ""
 
 #: src/components/change-delegate-panel/index.tsx
 msgid "Delegate Update Failed"
@@ -1169,6 +1211,7 @@ msgstr ""
 msgid "Held by"
 msgstr ""
 
+#: src/components/vote/index.tsx
 #: src/components/candidate-page/index.tsx
 msgid "Edit"
 msgstr ""
@@ -1285,6 +1328,10 @@ msgstr ""
 msgid "Failed to fetch"
 msgstr ""
 
+#: src/components/vote/index.tsx
+msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
+msgstr ""
+
 #: src/components/current-delegate-pannel/index.tsx
 msgid "Delegation"
 msgstr ""
@@ -1337,9 +1384,9 @@ msgstr ""
 msgid "By adopting the DUNA model, Nouns DAO sets a pioneering example for DAOs seeking to balance decentralized autonomy with legal certainty, further solidifying its position at the forefront of decentralized governance innovation."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Logo"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Logo"
+msgstr ""
 
 #: src/components/proposal-actions-modal/steps/transfer-funds-review-step/index.tsx
 #: src/components/proposal-actions-modal/steps/transfer-funds-details-step/index.tsx
@@ -1353,6 +1400,7 @@ msgid "Back"
 msgstr ""
 
 #: src/components/traits-page/index.tsx
+#: src/components/brand-assets-page/brand-assets-page.tsx
 msgid "License"
 msgstr ""
 
@@ -1388,9 +1436,9 @@ msgstr ""
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "White monochrome Noggles"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "White monochrome Noggles"
+msgstr ""
 
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 #: src/components/edit-proposal-page/index.tsx
@@ -1398,6 +1446,10 @@ msgstr ""
 #: src/components/create-proposal-page/index.tsx
 #: src/components/create-candidate-page/index.tsx
 msgid "Add Action"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submitting proposal"
 msgstr ""
 
 #: src/components/candidate-sponsors/index.tsx
@@ -1409,12 +1461,16 @@ msgstr ""
 msgid "Select signatures to submit with your proposal. The total number of signatures must be greater than the proposal threshold of {0}."
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Nouns & Traits"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Nouns & Traits"
+msgstr ""
 
 #: src/components/fork-page/deploy-fork-button.tsx
 msgid "Deploy Fork"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Submit with no sponsors"
 msgstr ""
 
 #: src/components/playground-page/index.tsx
@@ -1521,6 +1577,10 @@ msgstr ""
 msgid "You <0>Abstained</0> from this proposal"
 msgstr ""
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Success!"
+msgstr ""
+
 #. placeholder {0}: expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] ?? en).fromNow()
 #: src/components/proposals/index.tsx
 msgid "Expires {0}"
@@ -1544,9 +1604,9 @@ msgstr ""
 msgid "Add Streaming Payment Action"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Generate endless Nouns assembled from the onchain artwork"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Generate endless Nouns assembled from the onchain artwork"
+msgstr ""
 
 #: src/components/vote/index.tsx
 msgid "Withdraw from Stream <0/>"
@@ -1653,9 +1713,9 @@ msgstr ""
 msgid "Tip"
 msgstr ""
 
-#: src/pages/BrandAssets/BrandAssetsPage.tsx
-#~ msgid "Colored Noggles"
-#~ msgstr ""
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "Colored Noggles"
+msgstr ""
 
 #: src/components/fork-status/index.tsx
 msgid "Forking"
@@ -1681,6 +1741,10 @@ msgstr ""
 
 #: src/components/vote/index.tsx
 msgid "Transaction Successful!"
+msgstr ""
+
+#: src/components/vote/index.tsx
+msgid "Vote against"
 msgstr ""
 
 #: src/components/playground-page/index.tsx
@@ -1732,12 +1796,24 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "{selectedVoteCount, plural, one {Submit # vote} other {Submit # votes}}"
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Your candidate is now a proposal"
+msgstr ""
+
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
 msgid "Value"
 msgstr ""
 
 #: src/components/documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
+msgstr ""
+
+#: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
+msgid "Select all"
 msgstr ""
 
 #: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
@@ -1757,12 +1833,20 @@ msgstr ""
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr ""
 
+#: src/components/brand-assets-page/brand-assets-page.tsx
+msgid "PNG"
+msgstr ""
+
 #: src/components/playground-page/index.tsx
 msgid "Glasses"
 msgstr ""
 
 #: src/components/proposals/index.tsx
 msgid "You have no Votes."
+msgstr ""
+
+#: src/components/vote/index.tsx
+msgid "Snapshot"
 msgstr ""
 
 #: src/components/stream-withdraw-modal/index.tsx
