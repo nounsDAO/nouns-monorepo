@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         londrina: ['Londrina Solid', 'sans-serif'],
+        pt: ['PT Root UI', 'sans-serif'],
       },
       screens: {
         xs: '425px',
