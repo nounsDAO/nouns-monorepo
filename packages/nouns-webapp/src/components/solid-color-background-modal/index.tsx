@@ -40,21 +40,25 @@ const SolidColorBackgroundModalOverlay: React.FC<{
   const exitBtnRef = useRef(null);
   const modalRef = useRef(null);
   const isMobile = isMobileScreen();
-  const root = document.getElementById('root')!;
 
   useEffect(() => {
-    if (show) {
-      // When the modal is shown, we want a fixed body
-      root.style.position = 'fixed';
-      root.style.top = `-${window.scrollY}px`;
-    } else {
-      // When the modal is hidden, we want to remain at the top of the scroll position
-      const scrollY = document.body.style.top;
-      root.style.position = '';
-      root.style.top = '';
-      window.scrollTo(0, Number(scrollY || '0') * -1);
-    }
-  }, [show, root]);
+    if (typeof document === 'undefined') return;
+
+    if (!show) return;
+
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+
+    return () => {
+      const top = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, Math.abs(parseInt(top || '0', 10)));
+    };
+  }, [show]);
 
   return (
     <>
@@ -93,15 +97,25 @@ const SolidColorBackgroundModal: React.FC<{
   // Avoid rendering on the server where document/window are not available
   if (typeof document === 'undefined') return null;
 
+  const ensurePortalRoot = (id: string): HTMLElement => {
+    let el = document.getElementById(id) as HTMLElement | null;
+    if (!el) {
+      el = document.createElement('div');
+      el.setAttribute('id', id);
+      document.body.appendChild(el);
+    }
+    return el;
+  };
+
+  const backdropRoot = ensurePortalRoot('backdrop-root');
+  const overlayRoot = ensurePortalRoot('overlay-root');
+
   return (
     <>
-      {ReactDOM.createPortal(
-        <Backdrop show={show} onDismiss={onDismiss} />,
-        document.getElementById('backdrop-root')!,
-      )}
+      {ReactDOM.createPortal(<Backdrop show={show} onDismiss={onDismiss} />, backdropRoot)}
       {ReactDOM.createPortal(
         <SolidColorBackgroundModalOverlay show={show} onDismiss={onDismiss} content={content} />,
-        document.getElementById('overlay-root')!,
+        overlayRoot,
       )}
     </>
   );
