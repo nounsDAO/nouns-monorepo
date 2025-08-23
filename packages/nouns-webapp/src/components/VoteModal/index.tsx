@@ -8,6 +8,7 @@ import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 import NavBarButton, { NavBarButtonStyle } from '@/components/NavBarButton';
 import SolidColorBackgroundModal from '@/components/SolidColorBackgroundModal';
 import { cn } from '@/lib/utils';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nounsDao';
 
 import classes from './VoteModal.module.css';
@@ -40,12 +41,7 @@ const VoteModal = ({
   const [failureCopy, setFailureCopy] = useState<ReactNode>('');
   const [errorMessage, setErrorMessage] = useState<ReactNode>('');
 
-  const getVoteErrorMessage = (error: string) => {
-    if (RegExp(/voter already voted/).exec(error)) {
-      return <Trans>User Already Voted</Trans>;
-    }
-    return <>{error}</>;
-  };
+  const getVoteErrorMessage = (error: string) => <>{formatTxErrorMessage(error)}</>;
 
   const handleVoteStateChange = useCallback(
     ({ errorMessage, status }: { errorMessage?: string; status: string }) => {

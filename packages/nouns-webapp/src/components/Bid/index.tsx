@@ -14,6 +14,7 @@ import {
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
 import { Auction } from '@/wrappers/nounsAuction';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 
 import classes from './Bid.module.css';
 
@@ -101,7 +102,7 @@ const Bid: React.FC<BidProps> = props => {
   };
 
   useEffect(() => {
-    if (didPlaceBidFail) toast.error(t`Please try again.`);
+    if (didPlaceBidFail) toast.error(formatTxErrorMessage(t`Please try again.`));
   }, [didPlaceBidFail, t]);
   useEffect(() => {
     if (placeBidSucceeded) toast.success(t`Bid placed.`);
@@ -156,7 +157,9 @@ const Bid: React.FC<BidProps> = props => {
       toast.success(t`Settled auction successfully!`);
     }
     if (auctionEnded && didSettleFail) {
-      toast.error(settleAuctionError?.message || t`Please try again.`);
+      toast.error(
+        formatTxErrorMessage(settleAuctionError?.message || t`Please try again.`),
+      );
     }
   }, [
     auctionEnded,

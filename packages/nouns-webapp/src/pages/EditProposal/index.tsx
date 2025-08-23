@@ -18,6 +18,7 @@ import Section from '@/layout/Section';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import {
   ProposalDetail,
   ProposalTransaction,
@@ -230,7 +231,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         break;
       case 'Fail':
       case 'Exception':
-        toast.error(updateProposalState?.errorMessage || _(t`Please try again.`));
+        toast.error(formatTxErrorMessage(updateProposalState?.errorMessage || _(t`Please try again.`)));
         setProposePending(false);
         break;
     }
@@ -250,7 +251,9 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         break;
       case 'Fail':
       case 'Exception':
-        toast.error(updateProposalDescriptionState?.errorMessage || _(t`Please try again.`));
+        toast.error(
+          formatTxErrorMessage(updateProposalDescriptionState?.errorMessage || _(t`Please try again.`)),
+        );
         setProposePending(false);
         break;
     }
@@ -270,7 +273,9 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
         break;
       case 'Fail':
       case 'Exception':
-        toast.error(updateProposalTransactionsState?.errorMessage || _(t`Please try again.`));
+        toast.error(
+          formatTxErrorMessage(updateProposalTransactionsState?.errorMessage || _(t`Please try again.`)),
+        );
         setProposePending(false);
         break;
     }
