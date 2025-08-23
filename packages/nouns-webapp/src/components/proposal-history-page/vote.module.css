@@ -47,11 +47,11 @@
 }
 
 .transitionStateButton {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out;
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out;
 }
 
 .transitionStateButton:hover {
-  @apply hover:opacity-50 hover:cursor-pointer;
+  @apply opacity-50 cursor-pointer;
 }
 
 .transitionStateButtonSection {
@@ -59,15 +59,15 @@
 }
 
 .destructiveTransitionStateButton {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out bg-[var(--brand-color-red)];
 }
 
 .destructiveTransitionStateButton:hover {
-  @apply hover:bg-[var(--brand-color-red)] hover:opacity-50 hover:cursor-pointer;
+  @apply bg-[var(--brand-color-red)] opacity-50 cursor-pointer;
 }
 
 .destructiveTransitionStateButtonSection {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out bg-[var(--brand-color-red)];
 }
 
 .spinner {
@@ -116,7 +116,7 @@
 }
 
 .delegateHover {
-  @apply rounded-lg bg-[var(--brand-gray-dark-text)] text-white opacity-75 font-medium transition duration-150 ease-in-out;
+  @apply !rounded-lg !bg-[var(--brand-gray-dark-text)] text-white !opacity-75 font-medium transition duration-[125ms] ease-in-out;
 }
 
 .dqIcon {
@@ -156,7 +156,7 @@
   @apply p-[15px] rounded-[12px] bg-[#f2f2f5] border border-transparent text-left no-underline;
 }
 .versionHistory .version:hover {
-  @apply hover:bg-[#e6e6eb] hover:border hover:border-[rgba(0,0,0,0.2)];
+  @apply bg-[#e6e6eb] border border-[rgba(0,0,0,0.2)];
 }
 
 .versionHistory .version.activeVersion h4 {

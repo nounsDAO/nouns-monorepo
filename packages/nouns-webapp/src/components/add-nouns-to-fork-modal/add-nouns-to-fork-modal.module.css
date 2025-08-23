@@ -28,7 +28,7 @@
   @apply h-fit border-0 bg-transparent font-bold underline;
 }
 .sectionHeader button:hover {
-  @apply hover:opacity-75 hover:no-underline;
+  @apply opacity-75 no-underline;
 }
 .sectionHeader button:disabled {
   @apply no-underline opacity-75 cursor-not-allowed;
@@ -116,7 +116,7 @@
 }
 
 .button {
-  @apply rounded-lg font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0 text-[22px];
+  @apply rounded-lg font-pt font-bold transition-all duration-[125ms] ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0 text-[22px];
 }
 
 .primaryButton {
@@ -146,7 +146,7 @@
   @apply text-[#14161b] text-[15px] p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] w-full;
 }
 p.statusMessage {
-  @apply text-[#14161b] text-[15px] mb-4 px-8 py-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-lg transition-all duration-150 ease-in-out;
+  @apply text-[#14161b] text-[15px] mb-4 px-8 py-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-lg transition-all duration-[125ms] ease-in-out;
 }
 .statusMessage.errorMessage {
   @apply text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)];
@@ -167,7 +167,7 @@ p.statusMessage {
   @apply hover:opacity-75;
 }
 .statusMessage.successMessage a img {
-  @apply relative top-[-2px] transition-all duration-150 ease-in-out;
+  @apply relative top-[-2px] transition-all duration-[125ms] ease-in-out;
 }
 .selectedNouns {
   @apply text-[#14161b] text-[15px];
