@@ -1,34 +1,15 @@
 .nounButton {
-  height: 28px;
-  border-radius: 8px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  vertical-align: middle;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 8px;
-  color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent);
-  font-size: 14px;
-  width: fit-content;
+  @apply h-7 rounded-[8px] mt-[5px] mb-[5px] font-pt font-bold align-middle text-center flex flex-row justify-center items-center px-2 text-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[14px] w-fit;
 }
 
 .pass {
-  color: var(--brand-color-blue);
-  background-color: var(--brand-color-blue-translucent);
+  @apply text-[var(--brand-color-blue)] bg-[var(--brand-color-blue-translucent)];
 }
 
 .fail {
-  color: var(--brand-color-red);
-  background-color: var(--brand-color-red-translucent);
+  @apply text-[var(--brand-color-red)] bg-[var(--brand-color-red-translucent)];
 }
 
 .pending {
-  color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent);
+  @apply text-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)];
 }
