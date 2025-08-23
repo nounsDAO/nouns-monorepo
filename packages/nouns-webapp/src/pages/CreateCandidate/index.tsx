@@ -18,6 +18,7 @@ import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import { defaultChain } from '@/wagmi';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrappers/nounsData';
@@ -177,7 +178,9 @@ const CreateCandidatePage = () => {
         break;
       case 'Fail':
       case 'Exception':
-        toast.error(createProposalCandidateState?.errorMessage || _(t`Please try again.`));
+        toast.error(
+          formatTxErrorMessage(createProposalCandidateState?.errorMessage || _(t`Please try again.`)),
+        );
         setProposePending(false);
         break;
     }
