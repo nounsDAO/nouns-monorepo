@@ -1,1 +1,3 @@
-.text { @apply text-[22px] font-bold text-[var(--brand-cool-dark-text)] mb-2; }
+.text {
+  @apply mb-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)];
+}

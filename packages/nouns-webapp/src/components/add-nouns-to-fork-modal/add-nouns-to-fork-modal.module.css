@@ -2,15 +2,15 @@
   @apply font-normal;
 }
 .inputs {
-  @apply flex flex-col gap-[10px] mb-[10px] w-full;
+  @apply mb-[10px] flex w-full flex-col gap-[10px];
 }
 .inputs input,
 .inputs select {
-  @apply py-[10px] px-[12px];
+  @apply px-[12px] py-[10px];
 }
 .inputs small,
 .sectionLabel p {
-  @apply text-[16px] text-[#14161b] font-normal;
+  @apply text-[16px] font-normal text-[#14161b];
 }
 .inputs small strong {
   @apply font-bold;
@@ -22,16 +22,16 @@
 
 /* nouns */
 .sectionHeader {
-  @apply flex flex-row justify-between items-end my-[20px] max-[991px]:flex-col;
+  @apply my-[20px] flex flex-row items-end justify-between max-[991px]:flex-col;
 }
 .sectionHeader button {
   @apply h-fit border-0 bg-transparent font-bold underline;
 }
 .sectionHeader button:hover {
-  @apply opacity-75 no-underline;
+  @apply no-underline opacity-75;
 }
 .sectionHeader button:disabled {
-  @apply no-underline opacity-75 cursor-not-allowed;
+  @apply cursor-not-allowed no-underline opacity-75;
 }
 .sectionLabel {
   @apply w-[70%] max-[991px]:w-full;
@@ -40,10 +40,10 @@
   @apply m-0 p-0;
 }
 .nounsList {
-  @apply flex flex-row flex-wrap gap-[10px] mt-[10px] justify-center items-center;
+  @apply mt-[10px] flex flex-row flex-wrap items-center justify-center gap-[10px];
 }
 .nounButton {
-  @apply relative p-[10px] rounded-[12px] bg-white cursor-pointer transition-all duration-200 ease-in-out text-left w-[calc(33%_-_6px)] font-londrina text-[20px] leading-[1] border-2 border-[rgba(0,0,0,0.25)] max-[991px]:w-full;
+  @apply font-londrina relative w-[calc(33%_-_6px)] cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-[1] transition-all duration-200 ease-in-out max-[991px]:w-full;
 }
 .nounButton > div {
   @apply flex flex-row items-center justify-center gap-[10px];
@@ -55,7 +55,7 @@
 }
 
 .nounButton:disabled {
-  @apply opacity-50 cursor-not-allowed;
+  @apply cursor-not-allowed opacity-50;
 }
 
 .nounButton img {
@@ -67,7 +67,7 @@
 }
 
 .nounButton.escrowedNoun {
-  @apply opacity-100 border-[#e8e8e8] overflow-hidden;
+  @apply overflow-hidden border-[#e8e8e8] opacity-100;
 }
 .escrowedNoun > div {
   @apply opacity-[0.65];
@@ -77,7 +77,7 @@
 }
 
 .escrowedNounLabel {
-  @apply absolute w-full text-center font-pt top-0 left-0 bg-white p-0 text-[10px] font-bold rounded-[4px] border-b border-[#e6e6e6];
+  @apply font-pt absolute left-0 top-0 w-full rounded-[4px] border-b border-[#e6e6e6] bg-white p-0 text-center text-[10px] font-bold;
 }
 
 /* proposals */
@@ -85,7 +85,7 @@
   @apply flex flex-col gap-[10px];
 }
 .selectedProposal {
-  @apply bg-white border-2 border-[#d3d3d3] px-[10px] py-[6px] rounded-[8px] flex flex-row justify-between items-center text-[16px];
+  @apply flex flex-row items-center justify-between rounded-[8px] border-2 border-[#d3d3d3] bg-white px-[10px] py-[6px] text-[16px];
 }
 .selectedProposal a {
   @apply text-[#14161b] no-underline;
@@ -97,7 +97,7 @@
   @apply font-londrina;
 }
 .removeButton {
-  @apply border-0 bg-transparent cursor-pointer text-[20px] w-[20px] h-[20px] p-0 opacity-20 transition-all duration-200 ease-in-out;
+  @apply h-[20px] w-[20px] cursor-pointer border-0 bg-transparent p-0 text-[20px] opacity-20 transition-all duration-200 ease-in-out;
 }
 .removeButton svg {
   @apply align-top;
@@ -108,7 +108,7 @@
 
 /* confirm */
 .modalActions {
-  @apply text-center my-[20px];
+  @apply my-[20px] text-center;
 }
 
 .modalActions p {
@@ -116,11 +116,11 @@
 }
 
 .button {
-  @apply rounded-lg font-pt font-bold transition-all duration-[125ms] ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0 text-[22px];
+  @apply font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-[125ms] ease-in-out;
 }
 
 .primaryButton {
-  @apply bg-black text-white no-underline mb-4;
+  @apply mb-4 bg-black text-white no-underline;
 }
 
 .primaryButton:disabled {
@@ -133,29 +133,29 @@
   @apply hover:opacity-75;
 }
 .approvalNote button {
-  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 m-0 text-[#14161b];
+  @apply m-0 cursor-pointer border-0 bg-transparent p-0 font-bold text-[#14161b] underline;
 }
 .approvalNote button:hover {
   @apply no-underline;
 }
 
 .transactionModalSpinner {
-  @apply block mx-auto mb-2 max-w-[45px];
+  @apply mx-auto mb-2 block max-w-[45px];
 }
 .loadingButton {
-  @apply text-[#14161b] text-[15px] p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] w-full;
+  @apply font-pt w-full border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold text-[#14161b];
 }
 p.statusMessage {
-  @apply text-[#14161b] text-[15px] mb-4 px-8 py-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-lg transition-all duration-[125ms] ease-in-out;
+  @apply font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-[125ms] ease-in-out;
 }
 .statusMessage.errorMessage {
-  @apply text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)];
+  @apply border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)];
 }
 .statusMessage.successMessage {
-  @apply text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)];
+  @apply border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)];
 }
 .statusMessage button {
-  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 m-0 text-[#14161b] block w-auto mx-auto;
+  @apply m-0 mx-auto block w-auto cursor-pointer border-0 bg-transparent p-0 font-bold text-[#14161b] underline;
 }
 .statusMessage button:hover {
   @apply no-underline;
@@ -170,16 +170,16 @@ p.statusMessage {
   @apply relative top-[-2px] transition-all duration-[125ms] ease-in-out;
 }
 .selectedNouns {
-  @apply text-[#14161b] text-[15px];
+  @apply text-[15px] text-[#14161b];
 }
 
 /* 2 step process */
 .steps {
-  @apply list-none m-0 p-0;
+  @apply m-0 list-none p-0;
 }
 
 .steps li {
-  @apply mb-[6px] relative font-bold;
+  @apply relative mb-[6px] font-bold;
 }
 
 .steps:last-child {
@@ -188,12 +188,12 @@ p.statusMessage {
 
 .steps strong,
 .steps .spinner-border {
-  @apply w-[20px] h-[20px] inline-block mr-[3px];
+  @apply mr-[3px] inline-block h-[20px] w-[20px];
 }
 
 .steps .spinner > div {
-  @apply w-[18px] h-[18px] opacity-50;
+  @apply h-[18px] w-[18px] opacity-50;
 }
 .steps .placeholder {
-  @apply w-[18px] h-[18px] bg-[rgba(0,0,0,0.3)] rounded-full inline-block animate-pulse opacity-50 relative top-[3px];
+  @apply relative top-[3px] inline-block h-[18px] w-[18px] animate-pulse rounded-full bg-[rgba(0,0,0,0.3)] opacity-50;
 }

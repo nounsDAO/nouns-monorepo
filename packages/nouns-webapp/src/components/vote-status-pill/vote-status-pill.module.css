@@ -1,15 +1,15 @@
 .nounButton {
-  @apply h-7 rounded-[8px] mt-[5px] mb-[5px] font-pt font-bold align-middle text-center flex flex-row justify-center items-center px-2 text-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[14px] w-fit;
+  @apply font-pt mb-[5px] mt-[5px] flex h-7 w-fit flex-row items-center justify-center rounded-[8px] bg-[var(--brand-color-green-translucent)] px-2 text-center align-middle text-[14px] font-bold text-[var(--brand-color-green)];
 }
 
 .pass {
-  @apply text-[var(--brand-color-blue)] bg-[var(--brand-color-blue-translucent)];
+  @apply bg-[var(--brand-color-blue-translucent)] text-[var(--brand-color-blue)];
 }
 
 .fail {
-  @apply text-[var(--brand-color-red)] bg-[var(--brand-color-red-translucent)];
+  @apply bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)];
 }
 
 .pending {
-  @apply text-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)];
+  @apply bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)];
 }

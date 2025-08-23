@@ -2,7 +2,7 @@
   @apply font-normal;
 }
 .inputs {
-  @apply flex flex-col gap-[10px] mb-[10px] w-full;
+  @apply mb-[10px] flex w-full flex-col gap-[10px];
 }
 .inputs input,
 .inputs select {
@@ -10,7 +10,7 @@
 }
 .inputs small,
 .sectionLabel p {
-  @apply text-[16px] text-[var(--brand-gray-dark-text)] font-normal;
+  @apply text-[16px] font-normal text-[var(--brand-gray-dark-text)];
 }
 .inputs small strong {
   @apply font-bold;
@@ -24,17 +24,17 @@
 
 /* nouns */
 .sectionHeader {
-  @apply flex flex-row justify-between items-end my-[20px] max-[991px]:flex-col;
+  @apply my-[20px] flex flex-row items-end justify-between max-[991px]:flex-col;
 }
 .sectionHeader button {
   @apply h-fit border-0 bg-transparent font-bold underline;
 }
 .sectionHeader button:hover {
-  @apply opacity-75 no-underline;
+  @apply no-underline opacity-75;
 }
 .sectionHeader button:disabled,
 .sectionHeader button:disabled:hover {
-  @apply no-underline opacity-75 cursor-not-allowed;
+  @apply cursor-not-allowed no-underline opacity-75;
 }
 .sectionLabel {
   @apply w-[70%] max-[991px]:w-full;
@@ -43,10 +43,10 @@
   @apply m-0 p-0;
 }
 .list {
-  @apply flex flex-row flex-wrap gap-[10px] mt-[10px] justify-center items-center;
+  @apply mt-[10px] flex flex-row flex-wrap items-center justify-center gap-[10px];
 }
 .selectButton {
-  @apply relative p-[10px] rounded-[12px] bg-white cursor-pointer transition-all duration-200 ease-in-out text-left w-full font-londrina text-[20px] leading-[1] border-2 border-[rgba(0,0,0,0.25)] max-[991px]:w-full;
+  @apply font-londrina relative w-full cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-[1] transition-all duration-200 ease-in-out max-[991px]:w-full;
 }
 .selectButton > div {
   @apply flex flex-row items-center justify-center gap-[10px];
@@ -59,7 +59,7 @@
 
 .selectButton:disabled,
 .selectButton:disabled:hover {
-  @apply opacity-50 cursor-not-allowed shadow-none;
+  @apply cursor-not-allowed opacity-50 shadow-none;
 }
 
 .selectButton img {
@@ -72,7 +72,7 @@
 
 /* confirm */
 .modalActions {
-  @apply text-center my-[20px];
+  @apply my-[20px] text-center;
 }
 
 .modalActions p {
@@ -80,39 +80,39 @@
 }
 
 .button {
-  @apply rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-[16px] py-[10px] h-fit border-0 text-[22px];
+  @apply font-pt h-fit rounded-[8px] border-0 bg-[#faf4f8] px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out;
 }
 
 .primaryButton {
-  @apply bg-black text-white no-underline mb-4 hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100;
+  @apply mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100;
 }
 
 .approvalNote button {
-  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 m-0 text-[var(--brand-gray-dark-text)];
+  @apply m-0 cursor-pointer border-0 bg-transparent p-0 font-bold text-[var(--brand-gray-dark-text)] underline;
 }
 .approvalNote button:hover {
   @apply no-underline;
 }
 
 .transactionModalSpinner {
-  @apply block mx-auto mb-2 max-w-[45px];
+  @apply mx-auto mb-2 block max-w-[45px];
 }
 .loadingButton {
-  @apply text-[var(--brand-gray-dark-text)] text-[15px] p-4 text-center font-pt font-bold border border-[#e6e6e6] w-full;
+  @apply font-pt w-full border border-[#e6e6e6] p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)];
   background-color: #fff !important;
 }
 p.statusMessage {
-  @apply text-[var(--brand-gray-dark-text)] text-[15px] mb-4 py-4 px-8 text-center font-pt font-bold border border-[#e6e6e6] rounded-[8px] transition-all duration-150 ease-in-out;
+  @apply font-pt mb-4 rounded-[8px] border border-[#e6e6e6] px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out;
   background-color: #fff !important;
 }
 .statusMessage.errorMessage {
-  @apply text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)];
+  @apply border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)];
 }
 .statusMessage.successMessage {
-  @apply text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)];
+  @apply border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)];
 }
 .statusMessage button {
-  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 mx-auto text-[var(--brand-gray-dark-text)] block w-auto;
+  @apply mx-auto block w-auto cursor-pointer border-0 bg-transparent p-0 font-bold text-[var(--brand-gray-dark-text)] underline;
 }
 .statusMessage button:hover {
   @apply no-underline;
@@ -127,16 +127,16 @@ p.statusMessage {
   @apply relative top-[-2px] transition-all duration-150 ease-in-out;
 }
 .selectedNouns {
-  @apply text-[var(--brand-gray-dark-text)] text-[15px];
+  @apply text-[15px] text-[var(--brand-gray-dark-text)];
 }
 
 /* 2 step process */
 .steps {
-  @apply list-none m-0 p-0;
+  @apply m-0 list-none p-0;
 }
 
 .steps li {
-  @apply mb-[6px] relative font-bold;
+  @apply relative mb-[6px] font-bold;
 }
 
 .steps:last-child {
@@ -145,7 +145,7 @@ p.statusMessage {
 
 .steps strong,
 .steps .spinner-border {
-  @apply w-[20px] h-[20px] inline-block mr-[3px];
+  @apply mr-[3px] inline-block h-[20px] w-[20px];
 }
 
 .steps .spinner > div {
@@ -155,12 +155,12 @@ p.statusMessage {
   height: 100%;
 }
 .steps .placeholder {
-  @apply w-[18px] h-[18px] bg-[rgba(0,0,0,0.3)] rounded-full inline-block opacity-50 relative top-[3px];
+  @apply relative top-[3px] inline-block h-[18px] w-[18px] rounded-full bg-[rgba(0,0,0,0.3)] opacity-50;
   animation: pulse 1.5s ease-out;
   animation-iteration-count: infinite;
 }
 .reasonTextarea {
-  @apply w-full rounded-[12px] px-[12px] py-[10px] font-pt text-[16px] leading-[1.5] border-2 border-[rgba(0,0,0,0.25)] mb-[10px];
+  @apply font-pt mb-[10px] w-full rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] px-[12px] py-[10px] text-[16px] leading-[1.5];
 }
 
 @keyframes pulse {

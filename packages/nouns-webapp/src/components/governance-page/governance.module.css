@@ -1,17 +1,17 @@
 .heading {
-  @apply inline-block font-bold text-[3rem];
+  @apply inline-block text-[3rem] font-bold;
 }
 
 .headerRow span {
-  @apply text-[#8c8d92] text-[24px] font-londrina;
+  @apply font-londrina text-[24px] text-[#8c8d92];
 }
 
 .headerRow h1 {
-  @apply text-[#14161b] text-[56px] font-londrina;
+  @apply font-londrina text-[56px] text-[#14161b];
 }
 
 .subheading {
-  @apply text-[var(--brand-dark-green)] font-pt font-medium text-[1.2rem];
+  @apply font-pt text-[1.2rem] font-medium text-[var(--brand-dark-green)];
 }
 
 .boldText {
@@ -35,7 +35,7 @@
 }
 
 .treasuryAmtWrapper {
-  @apply py-4 px-8;
+  @apply px-8 py-4;
 }
 
 .usdTreasuryAmt {
@@ -47,11 +47,11 @@
 }
 
 .ethTreasuryAmt h1 {
-  @apply text-[36px] font-londrina;
+  @apply font-londrina text-[36px];
 }
 
 .usdBalance {
-  @apply text-[36px] font-londrina text-[var(--brand-gray-light-text)];
+  @apply font-londrina text-[36px] text-[var(--brand-gray-light-text)];
 }
 
 .ethSymbol {
@@ -59,13 +59,13 @@
 }
 
 .treasuryInfoText {
-  @apply py-4 px-8 font-pt font-medium;
+  @apply font-pt px-8 py-4 font-medium;
 }
 
 .treasuryAmtWrapper {
-  @apply min-[992px]:border-r-2 border-[#e2e3e8];
+  @apply border-[#e2e3e8] min-[992px]:border-r-2;
 }
 
 .ethTreasuryAmt {
-  @apply min-[992px]:border-r-2 border-[#e2e3e8];
+  @apply border-[#e2e3e8] min-[992px]:border-r-2;
 }

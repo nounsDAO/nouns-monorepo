@@ -50,11 +50,11 @@
 }
 
 .transitionStateButton {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out;
+  @apply font-pt h-[50px] rounded-lg text-[24px] font-bold transition-all duration-[125ms] ease-in-out;
 }
 
 .transitionStateButton:hover {
-  @apply opacity-50 cursor-pointer;
+  @apply cursor-pointer opacity-50;
 }
 
 .transitionStateButtonSection {
@@ -62,15 +62,15 @@
 }
 
 .destructiveTransitionStateButton {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out bg-[var(--brand-color-red)];
+  @apply font-pt h-[50px] rounded-lg bg-[var(--brand-color-red)] text-[24px] font-bold transition-all duration-[125ms] ease-in-out;
 }
 
 .destructiveTransitionStateButton:hover {
-  @apply bg-[var(--brand-color-red)] opacity-50 cursor-pointer;
+  @apply cursor-pointer bg-[var(--brand-color-red)] opacity-50;
 }
 
 .destructiveTransitionStateButtonSection {
-  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-[125ms] ease-in-out bg-[var(--brand-color-red)];
+  @apply font-pt h-[50px] rounded-lg bg-[var(--brand-color-red)] text-[24px] font-bold transition-all duration-[125ms] ease-in-out;
 }
 
 .spinner {
@@ -79,7 +79,7 @@
 
 /* Info section stuff */
 .voteInfoCard {
-  @apply mt-4 p-2 rounded-[12px];
+  @apply mt-4 rounded-[12px] p-2;
 }
 
 .voteMetadataRow {
@@ -115,15 +115,15 @@
 }
 
 .toggleDelegateVoteView {
-  @apply mt-[0.1rem] mb-[0.1rem] opacity-50 text-[14px] cursor-pointer transition duration-150 ease-in-out w-fit ml-[0.1rem] hover:underline max-[1200px]:hidden;
+  @apply mb-[0.1rem] ml-[0.1rem] mt-[0.1rem] w-fit cursor-pointer text-[14px] opacity-50 transition duration-150 ease-in-out hover:underline max-[1200px]:hidden;
 }
 
 .delegateHover {
-  @apply !rounded-lg !bg-[var(--brand-gray-dark-text)] text-white !opacity-75 font-medium transition duration-[125ms] ease-in-out;
+  @apply !rounded-lg !bg-[var(--brand-gray-dark-text)] font-medium text-white !opacity-75 transition duration-[125ms] ease-in-out;
 }
 
 .dqIcon {
-  @apply opacity-50 ml-1 mb-1 h-[18px] w-[18px];
+  @apply mb-1 ml-1 h-[18px] w-[18px] opacity-50;
 }
 
 .cursorPointer {
@@ -131,16 +131,16 @@
 }
 
 .boldedLabel {
-  @apply font-medium text-[var(--brand-gray-light-text)] mb-2;
+  @apply mb-2 font-medium text-[var(--brand-gray-light-text)];
 }
 
 /* candidate page */
 .editCandidate {
-  @apply border border-[#e6e6e6] p-[15px] rounded-[12px] flex justify-between items-center mb-8 gap-4 max-[992px]:text-center max-[992px]:flex-col;
+  @apply mb-8 flex items-center justify-between gap-4 rounded-[12px] border border-[#e6e6e6] p-[15px] max-[992px]:flex-col max-[992px]:text-center;
 }
 
 .editCandidate .buttons {
-  @apply flex flex-row justify-end gap-4 w-[30%] max-[992px]:w-full max-[992px]:justify-center;
+  @apply flex w-[30%] flex-row justify-end gap-4 max-[992px]:w-full max-[992px]:justify-center;
 }
 
 .editCandidate p {
@@ -152,15 +152,15 @@
 }
 
 .button {
-  @apply rounded-lg font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0;
+  @apply font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out;
 }
 
 .editCandidate .editButton {
-  @apply font-bold bg-black text-white rounded-lg border-black transition-all duration-150 ease-in-out;
+  @apply rounded-lg border-black bg-black font-bold text-white transition-all duration-150 ease-in-out;
 }
 
 .editCandidate .editButton:hover {
-  @apply hover:opacity-80 hover:cursor-pointer;
+  @apply hover:cursor-pointer hover:opacity-80;
 }
 
 a.primaryButton {
@@ -173,20 +173,20 @@ a.primaryButton:hover {
 
 .proposerOptions p,
 .objection p {
-  @apply max-[992px]:pt-0 max-[992px]:m-0 max-[992px]:mb-[5px];
+  @apply max-[992px]:m-0 max-[992px]:mb-[5px] max-[992px]:pt-0;
 }
 
 .proposerOptionsHeader,
 .objectionHeader {
-  @apply text-[13px] opacity-70 p-0 m-0 block font-bold;
+  @apply m-0 block p-0 text-[13px] font-bold opacity-70;
 }
 
 .sponsorsLoading {
-  @apply border border-[#e6e6e6] p-[25px] rounded-[12px] text-left;
+  @apply rounded-[12px] border border-[#e6e6e6] p-[25px] text-left;
 }
 
 .sponsorsLoading img {
-  @apply block mx-auto max-w-[45px];
+  @apply mx-auto block max-w-[45px];
 }
 
 .sidebar {
@@ -194,9 +194,9 @@ a.primaryButton:hover {
 }
 
 .destructiveTransitionStateButton > div {
-  @apply w-4 h-4;
+  @apply h-4 w-4;
 }
 
 .jump {
-  @apply bg-white w-full border border-[#e6e6e6] mt-2 mb-0 p-2 rounded-[12px] flex text-center flex-col font-bold no-underline font-londrina min-[991px]:hidden;
+  @apply font-londrina mb-0 mt-2 flex w-full flex-col rounded-[12px] border border-[#e6e6e6] bg-white p-2 text-center font-bold no-underline min-[991px]:hidden;
 }

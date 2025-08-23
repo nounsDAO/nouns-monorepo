@@ -1,1 +1,3 @@
-.title { @apply font-londrina; }
+.title {
+  @apply font-londrina;
+}

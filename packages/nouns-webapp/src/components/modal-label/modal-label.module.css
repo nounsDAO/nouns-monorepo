@@ -1,1 +1,3 @@
-.label { @apply opacity-50; }
+.label {
+  @apply opacity-50;
+}

@@ -1,5 +1,5 @@
 .wrapper {
-  @apply relative border border-[#e6e6e6] rounded-[12px] text-left;
+  @apply relative rounded-[12px] border border-[#e6e6e6] text-left;
   transition: height 0.125s ease-in-out;
 }
 
@@ -22,12 +22,12 @@
   @apply opacity-0;
 }
 .sponsorsList {
-  @apply text-left p-0 gap-4 flex flex-col my-[10px];
+  @apply my-[10px] flex flex-col gap-4 p-0 text-left;
 }
 
 .sponsorsList li {
   /* placeholder styles */
-  @apply border border-[#e6e6e6] p-[10px] rounded-[12px] mb-[10px] bg-[#f3f3f3] list-none m-0;
+  @apply m-0 mb-[10px] list-none rounded-[12px] border border-[#e6e6e6] bg-[#f3f3f3] p-[10px];
 }
 
 .sponsorsList p {
@@ -35,7 +35,7 @@
 }
 
 .sponsorsList li.sponsor {
-  @apply bg-[#fbfbfc] border relative;
+  @apply relative border bg-[#fbfbfc];
 }
 
 .sponsorsList li.sponsor.cancelOverlay {
@@ -43,7 +43,7 @@
 }
 
 .sponsorsList li.placeholder {
-  @apply border-dashed border-2 min-h-[40px] border-[rgba(0,0,0,0.05)];
+  @apply min-h-[40px] border-2 border-dashed border-[rgba(0,0,0,0.05)];
 }
 
 .sponsorsList li.sponsor.sponsorInvalid .reason,
@@ -56,7 +56,7 @@
 }
 
 .reason {
-  @apply text-[13px] text-[#646465] border-t border-[#e6e6e6] mt-2.5 pt-[10px] leading-[1.2];
+  @apply mt-2.5 border-t border-[#e6e6e6] pt-[10px] text-[13px] leading-[1.2] text-[#646465];
 }
 
 .reasonWrapper {
@@ -89,11 +89,11 @@
 }
 
 .voteCount {
-  @apply m-0 p-0 font-bold text-[13px] text-[#646465];
+  @apply m-0 p-0 text-[13px] font-bold text-[#646465];
 }
 
 .button {
-  @apply p-[10px] rounded-[8px] bg-black border border-[#e6e6e6] text-[14px] font-bold text-white cursor-pointer transition-opacity duration-[125ms] ease-in-out;
+  @apply cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-[125ms] ease-in-out;
 }
 
 .button:hover {
@@ -101,39 +101,39 @@
 }
 
 .button:disabled {
-  @apply disabled:bg-[#f4f4f8] disabled:text-[#8c8d92] disabled:pointer-events-none;
+  @apply disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92];
   border: #f4f4f8;
   border: 1px solid #e2e3e8;
 }
 
 .removeSignature {
-  @apply border-0 text-center border-t border-[#e6e6e6] mt-2 pt-[10px] leading-[1.1];
+  @apply mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-center leading-[1.1];
 }
 
 .removeSignature button {
-  @apply bg-transparent border-0 text-[14px] font-bold text-[var(--brand-color-red)] cursor-pointer p-0 m-0;
+  @apply m-0 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-[var(--brand-color-red)];
 }
 
 .readMore {
-  @apply block w-full text-center text-[13px] font-bold border-0 relative z-[2] -mt-5 pt-5 px-[3px] pb-1;
+  @apply relative z-[2] -mt-5 block w-full border-0 px-[3px] pb-1 pt-5 text-center text-[13px] font-bold;
   color: #000 !important;
   background: rgb(251, 251, 252);
   background: linear-gradient(0deg, rgba(251, 251, 252, 1) 33%, rgba(251, 251, 252, 0) 100%);
 }
 
 .withoutVotesMsg {
-  @apply text-center m-0 p-0 text-[13px] leading-none text-[var(--brand-gray-light-text)] px-5 my-0 mx-auto;
+  @apply m-0 mx-auto my-0 p-0 px-5 text-center text-[13px] leading-none text-[var(--brand-gray-light-text)];
 }
 
 .thresholdMet {
-  @apply text-[var(--brand-color-green)] font-bold text-[14px] mt-[-4px] mb-0 pt-[0.7rem] px-4 pb-2 border-b border-[rgba(0,0,0,0.1)];
+  @apply mb-0 mt-[-4px] border-b border-[rgba(0,0,0,0.1)] px-4 pb-2 pt-[0.7rem] text-[14px] font-bold text-[var(--brand-color-green)];
 }
 .thresholdMet img {
   @apply relative top-[1px];
 }
 
 .formOverlay {
-  @apply top-0 left-0 w-full z-[100] flex justify-center items-center rounded-[12px];
+  @apply left-0 top-0 z-[100] flex w-full items-center justify-center rounded-[12px];
   background-color: rgba(255, 255, 255);
 }
 
@@ -143,39 +143,39 @@
 
 .formOverlay .closeButton,
 .cancelStatusOverlay .closeButton {
-  @apply absolute top-0 right-[10px] text-[20px] text-black cursor-pointer border-0 bg-transparent z-[99];
+  @apply absolute right-[10px] top-0 z-[99] cursor-pointer border-0 bg-transparent text-[20px] text-black;
 }
 .formOverlay .closeButton {
   top: 3px;
 }
 
 .formWrapper {
-  @apply text-left w-full p-4;
+  @apply w-full p-4 text-left;
 }
 .formWrapper input,
 .formWrapper textarea {
   @apply w-full;
 }
 .formWrapper button {
-  @apply block mx-auto my-0;
+  @apply mx-auto my-0 block;
 }
 
 .formLabel {
-  @apply font-bold mb-[2px];
+  @apply mb-[2px] font-bold;
 }
 
 .formWrapper input,
 .formWrapper textarea {
-  @apply p-[10px] text-[14px] rounded-[8px] mb-[10px];
+  @apply mb-[10px] rounded-[8px] p-[10px] text-[14px];
   border: 1px solid #aaa !important;
 }
 
 .formWrapper .note {
-  @apply text-[12px] text-[#646465] leading-[1.2] m-0 text-center;
+  @apply m-0 text-center text-[12px] leading-[1.2] text-[#646465];
 }
 
 .aboutText {
-  @apply text-[14px] text-[var(--brand-gray-light-text)] leading-[1.2] mt-[15px];
+  @apply mt-[15px] text-[14px] leading-[1.2] text-[var(--brand-gray-light-text)];
 }
 
 .aboutText p {
@@ -183,21 +183,21 @@
 }
 
 .transactionStatus {
-  @apply text-[14px] text-[#646465] leading-[1.2] mt-[15px] text-center;
+  @apply mt-[15px] text-center text-[14px] leading-[1.2] text-[#646465];
 }
 
 .cancelStatusOverlay,
 .submitSignatureStatusOverlay {
-  @apply absolute top-[3px] left-[3px] bg-white text-center p-[10px] flex flex-col justify-center;
+  @apply absolute left-[3px] top-[3px] flex flex-col justify-center bg-white p-[10px] text-center;
   height: calc(100% - 6px);
   width: calc(100% - 6px);
 }
 .cancelStatusOverlay .cancelStatusOverlayTitle,
 .submitSignatureStatusOverlay {
-  @apply text-[18px] font-bold text-center leading-[1];
+  @apply text-center text-[18px] font-bold leading-[1];
 }
 .cancelStatusOverlayMessage {
-  @apply text-[14px] font-normal mt-[4px];
+  @apply mt-[4px] text-[14px] font-normal;
 }
 .cancelStatusOverlay.errorMessage {
   color: var(--brand-color-red);
@@ -211,22 +211,22 @@
 }
 
 .loadingNoggles {
-  @apply mx-auto p-[10px] max-w-[60px];
+  @apply mx-auto max-w-[60px] p-[10px];
 }
 
 .submitSignatureStatusOverlay {
-  @apply p-[10px] z-[100] bg-white;
+  @apply z-[100] bg-white p-[10px];
 }
 
 .submitSignatureStatusOverlay p {
-  @apply text-center font-normal text-[14px] m-0 p-0;
+  @apply m-0 p-0 text-center text-[14px] font-normal;
 }
 .submitSignatureStatusOverlay strong {
-  @apply font-bold text-[18px];
+  @apply text-[18px] font-bold;
 }
 
 button.closeLink {
-  @apply underline border-0 bg-transparent font-bold m-0 mx-auto text-[14px] text-center;
+  @apply m-0 mx-auto border-0 bg-transparent text-center text-[14px] font-bold underline;
 }
 .closeLink:hover {
   @apply no-underline;
@@ -238,15 +238,15 @@ button.closeLink {
 
 /* submission status */
 .transactionModalSpinner {
-  @apply block mx-auto mb-2 max-w-[45px];
+  @apply mx-auto mb-2 block max-w-[45px];
 }
 .loadingButton {
-  @apply rounded-[8px] text-[#14161b] text-[15px] p-4 text-center font-bold bg-[rgba(0,0,0,0.05)] border border-[#e6e6e6] w-full mb-5;
+  @apply mb-5 w-full rounded-[8px] border border-[#e6e6e6] bg-[rgba(0,0,0,0.05)] p-4 text-center text-[15px] font-bold text-[#14161b];
   font-family: 'PT Root UI';
 }
 
 p.statusMessage {
-  @apply text-[#14161b] text-[14px] leading-[1.1] mb-4 p-4 text-center font-normal border border-[#e6e6e6] rounded-[8px] transition-all duration-[125ms] ease-in-out;
+  @apply mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-[125ms] ease-in-out;
   font-family: 'PT Root UI';
 }
 .statusMessage.errorMessage {
@@ -260,7 +260,7 @@ p.statusMessage {
   background-color: var(--brand-color-green-translucent);
 }
 .statusMessage button {
-  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 mt-2 text-[#14161b] block w-auto text-[14px] mx-auto;
+  @apply mx-auto mt-2 block w-auto cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-[#14161b] underline;
 }
 .statusMessage button:hover {
   @apply no-underline;
@@ -277,11 +277,11 @@ p.statusMessage {
 
 /* 2 step process */
 .steps {
-  @apply list-none m-0 p-0;
+  @apply m-0 list-none p-0;
 }
 
 .steps li {
-  @apply text-[14px] font-normal mb-[6px] relative;
+  @apply relative mb-[6px] text-[14px] font-normal;
 }
 
 .steps:last-child {
@@ -294,7 +294,7 @@ p.statusMessage {
 
 .steps strong,
 .steps .spinner-border {
-  @apply w-[20px] h-[20px] inline-block mr-[3px];
+  @apply mr-[3px] inline-block h-[20px] w-[20px];
 }
 
 .steps .spinner > div {
@@ -304,34 +304,34 @@ p.statusMessage {
   opacity: 0.5;
 }
 .steps .placeholder {
-  @apply w-[18px] h-[18px] bg-[rgba(0,0,0,0.3)] rounded-full inline-block opacity-50 relative top-[3px];
+  @apply relative top-[3px] inline-block h-[18px] w-[18px] rounded-full bg-[rgba(0,0,0,0.3)] opacity-50;
   animation: pulse 1.5s ease-out;
   animation-iteration-count: infinite;
 }
 
 .sponsorInvalidLabel {
-  @apply text-center bg-[rgba(0,0,0,0.05)] text-[rgba(0,0,0,0.4)] text-[13px] leading-[1] py-2 px-4 mb-2 rounded-[8px];
+  @apply mb-2 rounded-[8px] bg-[rgba(0,0,0,0.05)] px-4 py-2 text-center text-[13px] leading-[1] text-[rgba(0,0,0,0.4)];
 }
 
 .dateErrorMessage {
-  @apply text-[var(--brand-color-red)] text-[13px] leading-[1] m-0 p-0 text-left mb-2;
+  @apply m-0 mb-2 p-0 text-left text-[13px] leading-[1] text-[var(--brand-color-red)];
 }
 
 p.sigStatus {
-  @apply border-0 border-t border-[#e6e6e6] text-[12px] mt-2 pt-[10px] leading-[1.1] text-left text-[#646465];
+  @apply mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-left text-[12px] leading-[1.1] text-[#646465];
 }
 p.sigStatus span {
-  @apply inline-block mr-2 text-[var(--brand-color-green)];
+  @apply mr-2 inline-block text-[var(--brand-color-green)];
 }
 
 p.inactiveCandidate {
-  @apply py-4 px-2 m-0 border border-[#e6e6e6] rounded-[12px] text-center;
+  @apply m-0 rounded-[12px] border border-[#e6e6e6] px-2 py-4 text-center;
 }
 p.proposerVotesLabel {
-  @apply text-[14px] -mt-1 mb-1 p-0 font-bold text-[var(--brand-gray-light-text)];
+  @apply -mt-1 mb-1 p-0 text-[14px] font-bold text-[var(--brand-gray-light-text)];
 }
 .naVotesLabel {
-  @apply text-base font-normal opacity-[0.36] p-1 rounded bg-[rgba(0,0,0,0.2)] relative top-[-0.1em];
+  @apply relative top-[-0.1em] rounded bg-[rgba(0,0,0,0.2)] p-1 text-base font-normal opacity-[0.36];
   font-family: monospace;
 }
 @keyframes pulse {
