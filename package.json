@@ -45,6 +45,7 @@
     "prettier-plugin-packagejson": "^2.5.19",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "rimraf": "^6.0.1",
+    "tailwindcss": "catalog:",
     "turbo": "^2.5.5",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.1"
