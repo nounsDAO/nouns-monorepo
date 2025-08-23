@@ -775,7 +775,9 @@ msgstr ""
 msgid "{destructiveStateButtonAction} Proposal "
 msgstr ""
 
-#. placeholder {0}: isV2Prop ? i18n.number(Number(currentQuorum ?? 0)) : proposal.quorumVotes
+#. placeholder {0}: i18n.number(Number(currentQuorum ?? 0))
+#. placeholder {0}: proposal.quorumVotes
+#: src/components/vote/index.tsx
 #: src/components/vote/index.tsx
 msgid "{0} votes"
 msgstr ""
@@ -1802,6 +1804,10 @@ msgstr ""
 
 #: src/components/candidate-sponsors/select-sponsors-to-propose.tsx
 msgid "Your candidate is now a proposal"
+msgstr ""
+
+#: src/components/bid/index.tsx
+msgid "Processing"
 msgstr ""
 
 #: src/components/proposal-actions-modal/steps/function-call-review-step/index.tsx
