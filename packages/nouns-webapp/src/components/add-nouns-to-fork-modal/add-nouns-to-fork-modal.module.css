@@ -1,375 +1,199 @@
 .modalContent {
-  font-weight: normal;
+  @apply font-normal;
 }
 .inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
-  width: 100%;
+  @apply flex flex-col gap-[10px] mb-[10px] w-full;
 }
 .inputs input,
 .inputs select {
-  padding: 10px 12px;
+  @apply py-[10px] px-[12px];
 }
 .inputs small,
 .sectionLabel p {
-  font-size: 16px;
-  color: #14161b;
-  font-weight: normal;
+  @apply text-[16px] text-[#14161b] font-normal;
 }
 .inputs small strong {
-  font-weight: bold;
+  @apply font-bold;
 }
 .reasonInput,
 .selectMenu {
-  width: 100% !important;
-  border-radius: 6px !important;
+  @apply w-full rounded-[6px];
 }
 
 /* nouns */
 .sectionHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin: 20px 0;
-  @media (max-width: 991px) {
-    flex-direction: column;
-  }
+  @apply flex flex-row justify-between items-end my-[20px] max-[991px]:flex-col;
 }
 .sectionHeader button {
-  height: fit-content;
-  border: none;
-  background: transparent;
-  font-weight: bold;
-  text-decoration: underline;
+  @apply h-fit border-0 bg-transparent font-bold underline;
 }
 .sectionHeader button:hover {
-  opacity: 0.75;
-  text-decoration: none;
+  @apply hover:opacity-75 hover:no-underline;
 }
 .sectionHeader button:disabled {
-  text-decoration: none;
-  opacity: 0.75;
-  cursor: not-allowed;
+  @apply no-underline opacity-75 cursor-not-allowed;
 }
 .sectionLabel {
-  width: 70%;
-  @media (max-width: 991px) {
-    width: 100%;
-  }
+  @apply w-[70%] max-[991px]:w-full;
 }
 .sectionLabel p {
-  margin: 0;
-  padding: 0;
+  @apply m-0 p-0;
 }
 .nounsList {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: center;
-  align-items: center;
+  @apply flex flex-row flex-wrap gap-[10px] mt-[10px] justify-center items-center;
 }
 .nounButton {
-  position: relative;
-  padding: 10px;
-  border-radius: 12px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-align: left;
-  /* width: auto; */
-  width: calc(33% - 6px);
-  font-family: 'Londrina Solid', sans-serif;
-  font-size: 20px;
-  line-height: 1;
-  border: 2px solid rgba(0, 0, 0, 0.25);
-  @media (max-width: 991px) {
-    width: 100%;
-  }
+  @apply relative p-[10px] rounded-[12px] bg-white cursor-pointer transition-all duration-200 ease-in-out text-left w-[calc(33%_-_6px)] font-londrina text-[20px] leading-[1] border-2 border-[rgba(0,0,0,0.25)] max-[991px]:w-full;
 }
 .nounButton > div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  @apply flex flex-row items-center justify-center gap-[10px];
 }
 
 .nounButton:hover,
 .selectedNounButton:hover {
-  box-shadow: 0px 0px 0 2px rgba(0, 0, 0, 0.25) inset;
+  @apply shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)];
 }
 
 .nounButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  @apply opacity-50 cursor-not-allowed;
 }
 
 .nounButton img {
-  max-width: 48px;
-  border-radius: 6px;
+  @apply max-w-[48px] rounded-[6px];
 }
 
 .selectedNounButton {
-  border: 2px solid rgba(0, 0, 0, 0.75);
+  @apply border-2 border-[rgba(0,0,0,0.75)];
 }
 
 .nounButton.escrowedNoun {
-  opacity: 1;
-  border-color: #e8e8e8;
-  overflow: hidden;
+  @apply opacity-100 border-[#e8e8e8] overflow-hidden;
 }
 .escrowedNoun > div {
-  opacity: 0.65;
+  @apply opacity-[0.65];
 }
 .escrowedNoun:hover {
-  border-color: #e8e8e8;
-  box-shadow: none;
+  @apply border-[#e8e8e8] shadow-none;
 }
 
 .escrowedNounLabel {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  font-family: 'PT Root UI';
-  top: 0;
-  left: 0;
-  background-color: #fff;
-  padding: 0;
-  font-size: 10px;
-  font-weight: bold;
-  border-radius: 4px;
-  border-bottom: 1px solid #e6e6e6;
+  @apply absolute w-full text-center font-pt top-0 left-0 bg-white p-0 text-[10px] font-bold rounded-[4px] border-b border-[#e6e6e6];
 }
 
 /* proposals */
 .selectedProposals {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  @apply flex flex-col gap-[10px];
 }
 .selectedProposal {
-  background-color: white;
-  border: 2px solid #d3d3d3;
-  padding: 6px 10px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
+  @apply bg-white border-2 border-[#d3d3d3] px-[10px] py-[6px] rounded-[8px] flex flex-row justify-between items-center text-[16px];
 }
 .selectedProposal a {
-  color: #14161b;
-  text-decoration: none;
+  @apply text-[#14161b] no-underline;
 }
 .selectedProposal a:hover {
-  text-decoration: underline;
+  @apply underline;
 }
 .selectedProposal span {
-  font-family: 'Londrina Solid', sans-serif;
+  @apply font-londrina;
 }
 .removeButton {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  opacity: 0.2;
-  transition: all 0.2s ease-in-out;
+  @apply border-0 bg-transparent cursor-pointer text-[20px] w-[20px] h-[20px] p-0 opacity-20 transition-all duration-200 ease-in-out;
 }
 .removeButton svg {
-  vertical-align: top;
+  @apply align-top;
 }
 .removeButton:hover {
-  opacity: 1;
+  @apply opacity-100;
 }
 
 /* confirm */
 .modalActions {
-  text-align: center;
-  margin: 20px 0;
+  @apply text-center my-[20px];
 }
 
 .modalActions p {
-  margin: 10px 0;
-  padding: 0;
-  opacity: 0.7;
+  @apply my-[10px] p-0 opacity-70;
 }
 
 .button {
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  transition: all 0.125s ease-in-out;
-  background-color: #faf4f8;
-  color: var(--brand-gray-dark-text);
-  line-height: 1;
-  padding: 10px 16px;
-  height: fit-content;
-  border: none;
-  font-size: 22px;
+  @apply rounded-lg font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0 text-[22px];
 }
 
 .primaryButton {
-  background: #000;
-  color: #fff;
-  text-decoration: none;
-  margin-bottom: 1rem;
+  @apply bg-black text-white no-underline mb-4;
 }
 
 .primaryButton:disabled {
-  background-color: #ccc;
+  @apply bg-[#ccc];
 }
 .primaryButton:disabled:hover {
-  opacity: 1;
+  @apply opacity-100;
 }
 .primaryButton:hover {
-  opacity: 0.75;
+  @apply hover:opacity-75;
 }
 .approvalNote button {
-  border: none;
-  background: transparent;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  color: #14161b;
+  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 m-0 text-[#14161b];
 }
 .approvalNote button:hover {
-  text-decoration: none;
+  @apply no-underline;
 }
 
 .transactionModalSpinner {
-  display: block;
-  margin: 0 auto 0.5rem;
-  max-width: 45px;
+  @apply block mx-auto mb-2 max-w-[45px];
 }
 .loadingButton {
-  color: #14161b;
-  font-size: 15px;
-  padding: 1rem;
-  text-align: center;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  background-color: #fff !important;
-  border: 1px solid #e6e6e6;
-  width: 100%;
+  @apply text-[#14161b] text-[15px] p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] w-full;
 }
 p.statusMessage {
-  color: #14161b;
-  font-size: 15px;
-  margin-bottom: 1rem;
-  padding: 1rem 2rem;
-  text-align: center;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  background-color: #fff !important;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
-  transition: all 0.125s ease-in-out;
+  @apply text-[#14161b] text-[15px] mb-4 px-8 py-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-lg transition-all duration-150 ease-in-out;
 }
 .statusMessage.errorMessage {
-  color: var(--brand-color-red);
-  border-color: var(--brand-color-red-translucent);
-  background-color: var(--brand-color-red-translucent);
+  @apply text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)];
 }
 .statusMessage.successMessage {
-  color: var(--brand-color-green);
-  border-color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent);
+  @apply text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)];
 }
 .statusMessage button {
-  border: none;
-  background: transparent;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
-  margin: 0 auto;
-  color: #14161b;
-  display: block;
-  width: auto;
+  @apply border-0 bg-transparent font-bold underline cursor-pointer p-0 m-0 text-[#14161b] block w-auto mx-auto;
 }
 .statusMessage button:hover {
-  text-decoration: none;
+  @apply no-underline;
 }
 .statusMessage.successMessage a {
-  color: var(--brand-color-green);
-  text-decoration: none;
+  @apply text-[var(--brand-color-green)] no-underline;
 }
 .statusMessage.successMessage a:hover img {
-  opacity: 0.75;
+  @apply hover:opacity-75;
 }
 .statusMessage.successMessage a img {
-  position: relative;
-  top: -2px;
-  transition: all 0.125s ease-in-out;
+  @apply relative top-[-2px] transition-all duration-150 ease-in-out;
 }
 .selectedNouns {
-  color: #14161b;
-  font-size: 15px;
+  @apply text-[#14161b] text-[15px];
 }
 
 /* 2 step process */
 .steps {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+  @apply list-none m-0 p-0;
 }
 
 .steps li {
-  margin-bottom: 6px;
-  position: relative;
-  font-weight: bold;
+  @apply mb-[6px] relative font-bold;
 }
 
 .steps:last-child {
-  margin-bottom: 0;
+  @apply mb-0;
 }
 
 .steps strong,
 .steps .spinner-border {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  margin-right: 3px;
+  @apply w-[20px] h-[20px] inline-block mr-[3px];
 }
 
 .steps .spinner > div {
-  width: 18px !important;
-  height: 18px;
-  height: 100%;
-  opacity: 0.5;
+  @apply w-[18px] h-[18px] opacity-50;
 }
 .steps .placeholder {
-  width: 18px;
-  height: 18px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 100%;
-  display: inline-block;
-  animation: pulse 1.5s ease-out;
-  animation-iteration-count: infinite;
-  opacity: 0.5;
-  position: relative;
-  top: 3px;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.5;
-  }
+  @apply w-[18px] h-[18px] bg-[rgba(0,0,0,0.3)] rounded-full inline-block animate-pulse opacity-50 relative top-[3px];
 }

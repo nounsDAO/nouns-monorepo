@@ -1,82 +1,48 @@
 .bidHistoryWrapper {
-  background-color: var(--brand-cool-accent);
-  display: flex;
-  border-radius: 10px !important;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  @apply flex cursor-pointer justify-center rounded-[10px] bg-[var(--brand-cool-accent)] transition-all duration-200 ease-in-out;
 }
 
 .bidHistoryWrapperCool {
-  display: flex;
-  border-radius: 10px !important;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  color: var(--brand-cool-light-text);
+  @apply flex cursor-pointer justify-center rounded-[10px] text-[var(--brand-cool-light-text)] transition-all duration-200 ease-in-out;
 }
 
 .bidHistoryWrapperWarm {
-  display: flex;
-  border-radius: 10px !important;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  color: var(--brand-warm-light-text);
+  @apply flex cursor-pointer justify-center rounded-[10px] text-[var(--brand-warm-light-text)] transition-all duration-200 ease-in-out;
 }
 
 .bidHistory {
-  margin-left: 0.5rem;
-  color: var(--brand-color-cool);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 1rem;
-  font-size: 16px;
-  padding-bottom: 1rem;
+  @apply font-pt ml-2 pb-4 text-[16px] font-bold text-[var(--brand-color-blue)];
 }
 
 .bidHistoryWarm {
-  margin-left: 0.5rem;
-  color: var(--brand-color-red);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 1rem;
-  font-size: 16px;
+  @apply font-pt ml-2 text-[16px] font-bold text-[var(--brand-color-red)];
 }
 
 .bidHistoryCool {
-  margin-left: 0.5rem;
-  color: var(--brand-color-blue);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 1rem;
-  font-size: 16px;
+  @apply font-pt ml-2 text-[16px] font-bold text-[var(--brand-color-blue)];
 }
 
 .bidHistoryWarm,
 .bidHistoryCool {
-  text-decoration: none;
-  transition: all 0.2s ease-in-out;
+  @apply no-underline transition-all duration-200 ease-in-out;
 }
 
 .bidHistoryWarm:hover {
-  filter: brightness(110%);
-  color: var(--brand-color-red);
+  @apply text-[var(--brand-color-red)] brightness-110;
 }
 
 .bidHistoryCool:hover {
-  filter: brightness(110%);
-  color: var(--brand-color-blue);
+  @apply text-[var(--brand-color-blue)] brightness-110;
 }
 
 .bidHistoryWrapperWarm:hover {
-  color: var(--brand-color-warm);
+  @apply text-[var(--brand-color-red)];
 }
 
 .bidHistoryWrapperCool:hover {
-  color: var(--brand-color-blue);
+  @apply text-[var(--brand-color-blue)];
 }
 
 .bidHistoryWrapper:hover {
-  background-color: var(--brand-gray-hover);
+  @apply bg-[var(--brand-gray-hover)];
 }

@@ -1,138 +1,73 @@
 .navBarBrand {
-  position: relative;
-  z-index: 2;
-  padding: 0.5rem 0rem;
-  transition: all 0.15s ease-in-out;
-}
-
-.navBarBrand:hover {
-  transform: scale(0.95);
+  @apply relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95;
 }
 
 .navBarLogo {
-  width: 80px;
-  height: 80px;
+  @apply h-20 w-20 max-[992px]:h-[75px] max-[992px]:w-[75px];
 }
 
 .navBarCustom {
-  padding-bottom: 1rem;
-}
-
-@media (max-width: 992px) {
-  .navBarLogo {
-    width: 75px;
-    height: 75px;
-  }
-
-  .navBarCustom {
-    margin-bottom: -1px;
-    margin-right: -5px;
-    padding-bottom: 0rem;
-  }
+  @apply pb-4 max-[992px]:mb-[-1px] max-[992px]:mr-[-5px] max-[992px]:pb-0;
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
-
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
-  cursor: pointer !important;
+  @apply cursor-pointer;
 }
 
 .disconnectBtn {
-  cursor: pointer;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  @apply font-pt cursor-pointer font-bold;
 }
-
 .disconnectBtn:hover,
 .disconnectBtn:active,
 .disconnectBtn:focus {
-  cursor: pointer !important;
+  @apply cursor-pointer;
 }
 
 .greenStatusCircle {
-  display: relative;
-  width: 10px;
-  height: 10px;
-  background-color: #7fc59c;
-  border-radius: 50%;
-  margin-right: -30px;
-  margin-left: 20px;
-  margin-top: -20px;
-  z-index: 3;
+  @apply relative z-[3] ml-[20px] mr-[-30px] mt-[-20px] h-[10px] w-[10px] rounded-full bg-[#7fc59c];
 }
 
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited,
 .nounsNavDropdownButton > button {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 0.9rem;
-  padding: 0.3rem 0.3rem !important;
-  color: black !important;
+  @apply font-pt px-[0.3rem] py-[0.3rem] text-[0.9rem] font-bold text-black;
 }
 
 .nounsNavDropdownButton > button {
-  background: transparent;
+  @apply bg-transparent;
 }
 
 .testnetImg {
-  width: auto;
-  height: 45px;
+  @apply h-[45px] w-auto;
 }
 
 .addressNavLink {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  @apply relative flex flex-row items-center;
 }
 
 .brandAndTreasuryWrapper {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
+  @apply flex flex-row flex-nowrap items-center justify-center;
 }
 
 .navBarToggle {
-  border-radius: 10px;
-  height: 44px;
-  padding: 0.25rem 0.5rem;
-  margin-right: 12px;
+  @apply mr-3 h-[44px] rounded-[10px] px-2 py-1;
 }
 
 .nounsNavDropdownButton {
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  line-height: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  padding: 0px 12px 0px 12px;
-  transition: all 0.125s ease-in-out;
-  box-shadow: none !important;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply font-pt h-[40px] rounded-[10px] border border-[rgba(0,0,0,0.1)] px-[12px] text-[16px] font-bold leading-[16px] shadow-none transition-all duration-150 ease-in-out;
 }
 .nounsNavDropdownButton button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  border: none;
+  @apply flex h-full w-full flex-row items-center justify-center border-0;
 }
+
 /* Unique styling for non-fa icon on Explore button */
-@media (max-width: 992px) {
-  .exploreButton svg {
-    max-height: none;
-    min-height: 40px;
-    max-width: 40px;
-  }
+.exploreButton svg {
+  @apply max-[992px]:max-h-none max-[992px]:min-h-[40px] max-[992px]:max-w-[40px];
 }

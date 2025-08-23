@@ -1,21 +1,19 @@
 .wrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 5rem;
+  @apply font-londrina text-[5rem];
 }
 
 @media (max-width: 992px) {
   .wrapper {
-    padding: 2rem;
+    @apply p-8;
   }
 
   .wrapper h1 {
-    font-size: 3.75rem;
+    @apply text-[3.75rem];
   }
 }
 
 @media (min-width: 992px) {
   .wrapper h1 {
-    font-size: 6rem;
-    margin-left: 2rem;
+    @apply ml-8 text-[6rem];
   }
 }

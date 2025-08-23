@@ -1,13 +1,3 @@
-.minBidWrapper {
-  margin-top: 1rem;
-  display: flex;
-}
+.minBidWrapper { @apply mt-4 flex; }
 
-.minBid {
-  font-family: 'Londrina Solid';
-  margin-left: 1rem;
-  color: var(--brand-black);
-  font-weight: normal;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
+.minBid { @apply font-londrina ml-4 text-[var(--brand-black)] font-normal text-xl cursor-pointer; }

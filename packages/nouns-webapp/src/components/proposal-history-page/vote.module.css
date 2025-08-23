@@ -1,327 +1,207 @@
 .votePage a {
-  color: var(--brand-dark-red);
+  @apply text-[var(--brand-dark-red)];
 }
 
 .proposal {
-  margin-top: 1em;
-  background-color: white;
+  @apply mt-4 bg-white;
 }
 
 .backArrow {
-  height: 1rem;
+  @apply h-4;
 }
 
 .votingButton {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .voteCountCard {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .proposalId {
-  margin: 1rem 0;
+  @apply my-4;
 }
 
 .voteCountCard p {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
 }
 
 .section {
-  word-wrap: break-word;
-  padding-top: 2rem;
-  margin-top: 2rem;
+  @apply break-words pt-8 mt-8;
 }
 
 .section h5 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-family: 'Londrina Solid';
+  @apply font-londrina mt-4 text-[1.7rem];
 }
 
 .voterIneligibleAlert {
-  margin: 1rem 0 0 0;
+  @apply mt-4;
 }
 
 .blockRestrictionAlert {
-  margin: 1rem 0 0 0;
+  @apply mt-4;
 }
 
 .wrapper {
-  margin-left: auto;
-  margin-right: auto;
+  @apply mx-auto;
 }
 
 .transitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out;
 }
 
 .transitionStateButton:hover {
-  opacity: 0.5;
-  cursor: pointer;
+  @apply hover:opacity-50 hover:cursor-pointer;
 }
 
 .transitionStateButtonSection {
-  border-top: 0px;
+  @apply border-t-0;
 }
 
 .destructiveTransitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  border-color: var(--brand-color-red);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
 }
 
 .destructiveTransitionStateButton:hover {
-  background-color: var(--brand-color-red);
-  opacity: 0.5;
-  cursor: pointer;
+  @apply hover:bg-[var(--brand-color-red)] hover:opacity-50 hover:cursor-pointer;
 }
 
 .destructiveTransitionStateButtonSection {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
 }
 
 .spinner {
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--brand-gray-light-text);
+  @apply mx-auto text-[var(--brand-gray-light-text)];
 }
 
 /* Info section stuff */
 .voteInfoCard {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  border-radius: 12px;
+  @apply mt-4 p-2 rounded-[12px];
 }
 
 .voteMetadataRow {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
 }
 
 .voteMetadataRow h1 {
-  font-size: 20px;
-  color: var(--brand-gray-light-text);
-  font-family: 'Londrina Solid';
+  @apply font-londrina text-[20px] text-[var(--brand-gray-light-text)];
 }
 
 .voteMetadataRow span {
-  font-size: 14px;
-  font-family: 'PT Root UI';
-  color: var(--brand-gray-light-text);
+  @apply font-pt text-[14px] text-[var(--brand-gray-light-text)];
 }
 
 .voteMetadataRow h3 {
-  font-size: 18px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  @apply font-pt text-[18px] font-bold;
 }
 
 .voteMetadataRowTitle {
-  margin-top: 0.5rem;
-  width: max-content;
+  @apply mt-2 w-max;
 }
 
 .voteMetadataTime {
-  min-width: fit-content;
-  text-align: right;
+  @apply min-w-fit text-right;
 }
 
 .snapshotBlock {
-  text-align: right;
+  @apply text-right;
 }
 
 .thresholdInfo {
-  text-align: right;
+  @apply text-right;
 }
 
 .toggleDelegateVoteView {
-  margin-top: 0.1rem;
-  margin-bottom: 0.1rem;
-  opacity: 0.5;
-  font-size: 14px;
-  cursor: pointer;
-  transition: ease-in-out 125ms;
-  width: fit-content;
-  margin-left: 0.1rem;
-}
-
-.toggleDelegateVoteView:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 1200px) {
-  .toggleDelegateVoteView {
-    display: none;
-  }
+  @apply mt-[0.1rem] mb-[0.1rem] opacity-50 text-[14px] cursor-pointer transition duration-150 ease-in-out w-fit ml-[0.1rem] hover:underline max-[1200px]:hidden;
 }
 
 .delegateHover {
-  border-radius: 8px !important;
-  background-color: var(--brand-gray-dark-text) !important;
-  color: white;
-  opacity: 0.75 !important;
-  font-weight: 500;
-  transition: ease-in-out 125ms;
+  @apply rounded-lg bg-[var(--brand-gray-dark-text)] text-white opacity-75 font-medium transition duration-150 ease-in-out;
 }
 
 .dqIcon {
-  opacity: 0.5;
-  margin-left: 0.25rem;
-  margin-bottom: 0.25rem;
-  height: 18px;
-  width: 18px;
+  @apply opacity-50 ml-1 mb-1 h-[18px] w-[18px];
 }
 
 .cursorPointer {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .boldedLabel {
-  font-weight: 500;
-  color: var(--brand-gray-light-text);
-  margin-bottom: 0.5rem;
+  @apply font-medium text-[var(--brand-gray-light-text)] mb-2;
 }
 
 /* // Proposal History */
 .versionHistory {
-  position: sticky;
-  top: 20px;
-  @media (max-width: 992px) {
-    position: relative;
-  }
+  @apply sticky top-[20px] max-[992px]:relative;
 }
 
 .versionHistory h2 {
-  font-size: 1.7rem;
-  margin: 1rem 0 0;
-  font-family: 'Londrina Solid';
-  color: var(--brand-gray-light-text);
+  @apply font-londrina text-[1.7rem] mt-4 text-[var(--brand-gray-light-text)];
 }
 
 .versionHistoryHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1rem;
+  @apply flex justify-between items-baseline mb-4;
 }
 
 .versionHistory .wrapper {
-  border: 1px solid #e6e6e6;
-  padding: 15px;
-  border-radius: 12px;
+  @apply border border-[#e6e6e6] p-[15px] rounded-[12px];
 }
 
 .versionHistory .versionsList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: var(--brand-gray-light-text);
+  @apply flex flex-col gap-[10px] text-[var(--brand-gray-light-text)];
 }
 
 .versionHistory .version {
-  padding: 15px;
-  border-radius: 12px;
-  background-color: #f2f2f5;
-  border: 1px solid transparent;
-  text-align: left;
-  text-decoration: none;
+  @apply p-[15px] rounded-[12px] bg-[#f2f2f5] border border-transparent text-left no-underline;
 }
 .versionHistory .version:hover {
-  background-color: #e6e6eb;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  @apply hover:bg-[#e6e6eb] hover:border hover:border-[rgba(0,0,0,0.2)];
 }
 
 .versionHistory .version.activeVersion h4 {
-  color: var(--brand-gray-dark-text);
+  @apply text-[var(--brand-gray-dark-text)];
 }
 .versionHistory .version.activeVersion {
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  background-color: #fff;
+  @apply border border-[rgba(0,0,0,0.4)] bg-white;
 }
 
 .versionHistory .version h3,
 .versionHistory .version h5 {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
+  @apply text-[14px] font-bold m-0 p-0;
 }
 
 .versionHistory .version span,
 .versionHistory .version h4 {
-  font-size: 14px;
-  color: var(--brand-gray-light-text);
-  line-height: 1;
+  @apply text-[14px] text-[var(--brand-gray-light-text)] leading-[1];
 }
 
 .versionHistory .version h4,
 .versionHistory .message {
-  color: var(--brand-gray-light-text);
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
+  @apply text-[var(--brand-gray-light-text)] font-bold m-0 p-0;
 }
 
 .versionHistory .message {
-  border-top: 1px solid #e6e6e6;
-  margin-top: 10px;
-  padding-top: 10px;
+  @apply border-t border-[#e6e6e6] mt-[10px] pt-[10px];
 }
 
 .versionHistory .message p {
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-family: 'PT Root UI';
-  font-weight: normal;
-  color: var(--brand-gray-light-text);
+  @apply m-0 p-0 text-[14px] font-pt font-normal text-[var(--brand-gray-light-text)];
 }
 
 .diffsLink {
-  border: 2px solid transparent;
-  text-align: center;
-  margin: 1rem auto 0;
-  display: block;
-  color: #fff;
-  background: #000;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
+  @apply border-2 border-transparent text-center mt-4 mx-auto mb-0 block text-white bg-black font-bold rounded-lg px-3 py-2 text-[14px];
 }
 .diffsLink.diffsLinkActive {
-  background: #fff;
-  color: #000;
-  border: 3px solid #000;
+  @apply bg-white text-black border-[3px] border-black;
 }
 .diffsWrapper table:first-of-type {
-  margin-left: -10px;
-  @media (min-width: 992px) {
-    margin-left: -30px;
-  }
+  @apply ml-[-10px] min-[992px]:ml-[-30px];
 }
 
 .diffsWrapper :global(pre) {
-  min-width: 8px;
+  @apply min-w-[8px];
 }
 .proposalTitle {
-  width: 100%;
+  @apply w-full;
 }

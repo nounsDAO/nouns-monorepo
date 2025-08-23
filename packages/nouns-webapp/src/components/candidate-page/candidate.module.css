@@ -1,338 +1,202 @@
 .votePage {
-  font-family: 'PT Root UI';
+  @apply font-pt;
 }
 .votePage a {
-  color: var(--brand-dark-red);
+  @apply text-[var(--brand-dark-red)];
 }
 
 .proposal {
-  margin-top: 1em;
-  background-color: white;
+  @apply mt-4 bg-white;
 }
 
 .backArrow {
-  height: 1rem;
+  @apply h-4;
 }
 
 .votingButton {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .voteCountCard {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .proposalId {
-  margin: 1rem 0;
+  @apply my-4;
 }
 
 .voteCountCard p {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
 }
 
 .section {
-  word-wrap: break-word;
+  @apply break-words;
 }
 
 .section h5 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-family: 'Londrina Solid';
+  @apply font-londrina mt-4 text-[1.7rem];
 }
 
 .voterIneligibleAlert {
-  margin: 1rem 0 0 0;
+  @apply mt-4;
 }
 
 .blockRestrictionAlert {
-  margin: 1rem 0 0 0;
+  @apply mt-4;
 }
 
 .wrapper {
-  margin-left: auto;
-  margin-right: auto;
+  @apply mx-auto;
 }
 
 .transitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out;
 }
 
 .transitionStateButton:hover {
-  opacity: 0.5;
-  cursor: pointer;
+  @apply hover:opacity-50 hover:cursor-pointer;
 }
 
 .transitionStateButtonSection {
-  border-top: 0px;
+  @apply border-t-0;
 }
 
 .destructiveTransitionStateButton {
-  height: 50px;
-  border-radius: 8px;
-  border-color: var(--brand-color-red);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
 }
 
 .destructiveTransitionStateButton:hover {
-  background-color: var(--brand-color-red);
-  opacity: 0.5;
-  cursor: pointer;
+  @apply hover:bg-[var(--brand-color-red)] hover:opacity-50 hover:cursor-pointer;
 }
 
 .destructiveTransitionStateButtonSection {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  @apply h-[50px] rounded-lg font-pt font-bold text-[24px] transition-all duration-150 ease-in-out bg-[var(--brand-color-red)];
 }
 
 .spinner {
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--brand-gray-light-text);
+  @apply mx-auto text-[var(--brand-gray-light-text)];
 }
 
 /* Info section stuff */
 .voteInfoCard {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  border-radius: 12px;
+  @apply mt-4 p-2 rounded-[12px];
 }
 
 .voteMetadataRow {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
 }
 
 .voteMetadataRow h1 {
-  font-size: 20px;
-  color: var(--brand-gray-light-text);
-  font-family: 'Londrina Solid';
+  @apply font-londrina text-[20px] text-[var(--brand-gray-light-text)];
 }
 
 .voteMetadataRow span {
-  font-size: 14px;
-  font-family: 'PT Root UI';
-  color: var(--brand-gray-light-text);
+  @apply font-pt text-[14px] text-[var(--brand-gray-light-text)];
 }
 
 .voteMetadataRow h3 {
-  font-size: 18px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  @apply font-pt text-[18px] font-bold;
 }
 
 .voteMetadataRowTitle {
-  margin-top: 0.5rem;
-  width: max-content;
+  @apply mt-2 w-max;
 }
 
 .voteMetadataTime {
-  min-width: fit-content;
-  text-align: right;
+  @apply min-w-fit text-right;
 }
 
 .snapshotBlock {
-  text-align: right;
+  @apply text-right;
 }
 
 .thresholdInfo {
-  text-align: right;
+  @apply text-right;
 }
 
 .toggleDelegateVoteView {
-  margin-top: 0.1rem;
-  margin-bottom: 0.1rem;
-  opacity: 0.5;
-  font-size: 14px;
-  cursor: pointer;
-  transition: ease-in-out 125ms;
-  width: fit-content;
-  margin-left: 0.1rem;
-}
-
-.toggleDelegateVoteView:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 1200px) {
-  .toggleDelegateVoteView {
-    display: none;
-  }
+  @apply mt-[0.1rem] mb-[0.1rem] opacity-50 text-[14px] cursor-pointer transition duration-150 ease-in-out w-fit ml-[0.1rem] hover:underline max-[1200px]:hidden;
 }
 
 .delegateHover {
-  border-radius: 8px !important;
-  background-color: var(--brand-gray-dark-text) !important;
-  color: white;
-  opacity: 0.75 !important;
-  font-weight: 500;
-  transition: ease-in-out 125ms;
+  @apply rounded-lg bg-[var(--brand-gray-dark-text)] text-white opacity-75 font-medium transition duration-150 ease-in-out;
 }
 
 .dqIcon {
-  opacity: 0.5;
-  margin-left: 0.25rem;
-  margin-bottom: 0.25rem;
-  height: 18px;
-  width: 18px;
+  @apply opacity-50 ml-1 mb-1 h-[18px] w-[18px];
 }
 
 .cursorPointer {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .boldedLabel {
-  font-weight: 500;
-  color: var(--brand-gray-light-text);
-  margin-bottom: 0.5rem;
+  @apply font-medium text-[var(--brand-gray-light-text)] mb-2;
 }
 
 /* candidate page */
 .editCandidate {
-  border: 1px solid #e6e6e6;
-  padding: 15px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  @media (max-width: 992px) {
-    text-align: center;
-    flex-direction: column;
-  }
+  @apply border border-[#e6e6e6] p-[15px] rounded-[12px] flex justify-between items-center mb-8 gap-4 max-[992px]:text-center max-[992px]:flex-col;
 }
 
 .editCandidate .buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 1rem;
-  width: 30%;
-  @media (max-width: 992px) {
-    width: 100%;
-    justify-content: center;
-  }
+  @apply flex flex-row justify-end gap-4 w-[30%] max-[992px]:w-full max-[992px]:justify-center;
 }
 
 .editCandidate p {
-  margin: 0;
-  padding: 0;
+  @apply m-0 p-0;
 }
 
 .editCandidate button {
-  font-size: 16px;
+  @apply text-[16px];
 }
 
 .button {
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  transition: all 0.125s ease-in-out;
-  background-color: #faf4f8;
-  color: var(--brand-gray-dark-text);
-  line-height: 1;
-  padding: 10px 16px;
-  height: fit-content;
-  border: none;
+  @apply rounded-lg font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-none px-4 py-[10px] h-fit border-0;
 }
 
 .editCandidate .editButton {
-  font-weight: bold;
-  background-color: #000;
-  color: white;
-  border-radius: 8px;
-  border-color: #000;
-  transition: all 0.125s ease-in-out;
+  @apply font-bold bg-black text-white rounded-lg border-black transition-all duration-150 ease-in-out;
 }
 
 .editCandidate .editButton:hover {
-  opacity: 0.8;
-  cursor: pointer;
+  @apply hover:opacity-80 hover:cursor-pointer;
 }
 
 a.primaryButton {
-  background: #000;
-  color: #fff;
-  text-decoration: none;
+  @apply bg-black text-white no-underline;
 }
 
 a.primaryButton:hover {
-  opacity: 0.75;
+  @apply hover:opacity-75;
 }
 
 .proposerOptions p,
 .objection p {
-  @media (max-width: 992px) {
-    padding-top: 0;
-    margin: 0 0 5px;
-  }
+  @apply max-[992px]:pt-0 max-[992px]:m-0 max-[992px]:mb-[5px];
 }
 
 .proposerOptionsHeader,
 .objectionHeader {
-  font-size: 13px;
-  opacity: 0.7;
-  padding: 0;
-  margin: 0;
-  display: block;
-  font-weight: bold;
+  @apply text-[13px] opacity-70 p-0 m-0 block font-bold;
 }
 
 .sponsorsLoading {
-  border: 1px solid #e6e6e6;
-  padding: 25px;
-  border-radius: 12px;
-  text-align: left;
+  @apply border border-[#e6e6e6] p-[25px] rounded-[12px] text-left;
 }
 
 .sponsorsLoading img {
-  display: block;
-  margin: 0 auto;
-  max-width: 45px;
+  @apply block mx-auto max-w-[45px];
 }
 
 .sidebar {
-  margin-top: 1rem;
-  @media (min-width: 993px) {
-    margin-top: 1.5rem;
-  }
+  @apply mt-4 min-[993px]:mt-6;
 }
 
 .destructiveTransitionStateButton > div {
-  width: 1rem;
-  height: 1rem;
+  @apply w-4 h-4;
 }
 
 .jump {
-  background: #fff;
-  width: 100%;
-  border: 1px solid #e6e6e6;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-  padding: 0.5rem;
-  border-radius: 12px;
-  display: flex;
-  text-align: center;
-  flex-direction: column;
-  font-weight: bold;
-  text-decoration: none;
-  font-family: 'Londrina Solid';
-  @media (min-width: 991px) {
-    display: none;
-  }
+  @apply bg-white w-full border border-[#e6e6e6] mt-2 mb-0 p-2 rounded-[12px] flex text-center flex-col font-bold no-underline font-londrina min-[991px]:hidden;
 }

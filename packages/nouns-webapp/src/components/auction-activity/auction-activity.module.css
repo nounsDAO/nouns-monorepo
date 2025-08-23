@@ -1,138 +1,100 @@
 .wrapper {
-  padding: 1rem 1rem;
-  color: var(--brand-black);
-  align-self: flex-start !important;
+  @apply self-start p-4 text-[var(--brand-black)];
 }
 
 .informationRow {
-  margin-bottom: 0.5rem;
+  @apply mb-2;
 }
 
 .activityRow {
-  margin-bottom: 0rem;
+  @apply mb-0;
 }
 
 .heading1 {
-  font-size: 3rem;
+  @apply text-5xl;
 }
 
 .heading2 {
-  font-size: 2.5rem;
+  @apply text-[2.5rem];
 }
 
 .heading4 {
-  font-size: 1rem;
-  font-weight: 400;
+  @apply text-base font-normal;
 }
 
 .modalHeader {
-  border-bottom: none;
-  justify-content: flex-start;
-  align-items: center;
+  @apply items-center justify-start border-b-0;
 }
 
 .modalTitleWrapper {
-  color: var(--brand-black);
+  @apply text-[var(--brand-black)];
 }
 
 .modalTitleWrapper .modalHeading {
-  font-size: xx-large;
-  margin-left: 2rem;
+  @apply ml-8 text-[xx-large];
 }
 
 .modalHeader button {
-  align-self: flex-start;
+  @apply self-start;
 }
 
 .modalHeaderNounImgWrapper {
-  width: 150px;
-  height: 150px;
+  @apply h-[150px] w-[150px];
 }
 
 .currentBidCol {
-  border-right: 1px solid #79809c49;
-  margin-left: 6px;
-  margin-top: 6px;
+  @apply ml-[6px] mt-[6px] border-r border-r-[#79809c49];
 }
 
 .auctionTimerCol {
-  padding-left: 0rem;
+  @apply pl-0;
 }
 
 .section .sectionHeading4 {
-  font-family: 'PT Root UI';
-  font-size: 17px;
-  line-height: 25px;
+  @apply font-pt text-[17px] leading-[25px];
 }
 
 .section .sectionHeading2 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 32px;
+  @apply font-pt text-[32px] font-bold;
 }
 
-@media (max-width: 992px) {
-  .heading1 {
-    padding-top: 12px;
-  }
-
-  .wrapper {
-    padding: 1rem;
-  }
-
-  .auctionTimerCol {
-    margin-left: 6px;
-    margin-top: 6px;
-    padding-left: 0rem;
-  }
-
-  .currentBidCol {
-    border-right: 0px;
-    padding-left: 0rem;
-  }
-
-  .nextNounLink {
-    padding-left: 14px;
-  }
+.heading1 {
+  @apply max-[992px]:pt-[12px];
 }
-
-@media (max-width: 400px) {
-  .nextNounLink {
-    font-size: 14px;
-  }
+.wrapper {
+  @apply max-[992px]:p-4;
+}
+.auctionTimerCol {
+  @apply max-[992px]:ml-[6px] max-[992px]:mt-[6px] max-[992px]:pl-0;
+}
+.currentBidCol {
+  @apply max-[992px]:border-r-0 max-[992px]:pl-0;
+}
+.nextNounLink {
+  @apply max-[992px]:pl-[14px] max-[400px]:text-[14px];
 }
 
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {
   .colAlignCenter {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
   }
 }
 
 .nextNounLink {
-  margin-top: 0rem;
-  margin-bottom: 1rem;
-  transition: 0.2s ease-in-out;
+  @apply mb-4 mt-0 transition duration-200 ease-in-out;
 }
 
 .nextNounLink svg {
-  opacity: 0.6;
+  @apply opacity-60;
 }
 
 .nextNounLink a,
 .nextNounLink:active a {
-  font-family: 'PT Root UI', sans-serif;
-  font-weight: 500;
-  padding-left: 0.5rem;
-  text-decoration: none;
-  opacity: 1;
-  color: rgb(95, 95, 95);
+  @apply font-pt pl-2 font-medium text-[rgb(95,95,95)] no-underline opacity-100;
 }
 
 .nextNounLink:hover,
 .nextNounLink:hover a {
-  text-decoration: none;
-  color: black;
-  opacity: 1;
+  @apply text-black no-underline opacity-100;
 }

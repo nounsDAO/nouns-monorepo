@@ -1,17 +1,16 @@
 .auctionTitleAndNavContainer {
-  display: flex;
+  @apply flex;
 }
 
 @media (max-width: 992px) {
   .auctionTitleAndNavContainer h1 {
-    font-size: 2.75rem;
+    @apply text-[2.75rem];
   }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {
   .auctionTitleAndNavContainer {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
   }
 }

@@ -1,110 +1,89 @@
 .voteCardHeaderTextEn {
-  font-size: 22px;
-  font-family: 'Londrina Solid';
+  @apply font-londrina text-[22px];
 }
 
 .voteCardHeaderTextNonEn {
-  font-size: 16px;
-  font-family: 'Londrina Solid';
+  @apply font-londrina text-[16px];
 }
 
 .voteCardVoteCount {
-  font-size: 22px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  margin-top: 0.15rem;
+  @apply font-pt mt-[0.15rem] text-[22px] font-bold;
 }
 
 .for {
-  color: var(--brand-color-green);
+  @apply text-[var(--brand-color-green)];
 }
 
 .against {
-  color: var(--brand-color-red);
+  @apply text-[var(--brand-color-red)];
 }
 
 .abstain {
-  color: var(--brand-gray-light-text);
+  @apply text-[var(--brand-gray-light-text)];
 }
 
 .voteCountCard {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  border-radius: 12px;
-  background-color: #f4f4f8;
-  min-height: 18rem;
+  @apply mt-4 min-h-[18rem] rounded-[12px] bg-[#f4f4f8] p-2;
 }
 
 .voteCountCard p {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
 }
 
 .nounProfilePics {
-  margin-top: 1.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  @apply mt-6 pl-2 pr-2;
 }
 
 .mobileVoteCountWrapper {
-  display: none !important;
+  @apply hidden;
 }
 
 .unitTextEn {
-  opacity: 0.5;
-  font-size: 18px;
-  font-weight: 500;
+  @apply text-[18px] font-medium opacity-50;
 }
 
 .unitTextNonEn {
-  opacity: 0.5;
-  font-size: 14px;
-  font-weight: 500;
+  @apply text-[14px] font-medium opacity-50;
 }
 
 .smallerVoteCountText {
-  font-size: 16px;
+  @apply text-[16px];
 }
 
 @media (max-width: 1200px) {
   .voteCountCard {
-    min-height: 0rem;
+    @apply min-h-0;
   }
 
   .unitTextEn {
-    font-size: 16px;
+    @apply text-[16px];
   }
 
   .unitTextNonEn {
-    font-size: 13px;
+    @apply text-[13px];
   }
 
   .mobileVoteCountWrapper {
-    display: flex !important;
-    flex-direction: column;
+    @apply flex flex-col;
   }
 
   .voteCardVoteCount {
-    margin-left: auto;
-    margin-right: auto;
+    @apply mx-auto;
   }
 
   .wrapper {
-    width: 33%;
+    @apply w-1/3;
   }
 
   .voteCardHeaderTextEn {
-    margin-left: auto;
-    margin-right: auto;
+    @apply mx-auto;
   }
 
   .voteCardHeaderTextNonEn {
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 16px;
+    @apply mx-auto text-[16px];
   }
 
   .nounProfilePics {
-    display: none;
+    @apply hidden;
   }
 }

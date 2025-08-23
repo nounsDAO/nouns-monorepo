@@ -1,141 +1,82 @@
 .backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  background: rgba(75, 75, 75, 0.5);
-  backdrop-filter: blur(24px);
-  transition: opacity 50ms ease-in-out;
-  /* default value set of transitions */
-  opacity: 0;
+  @apply fixed inset-0 z-10 h-full w-full bg-[rgba(75,75,75,0.5)] opacity-0 backdrop-blur-[24px] transition-opacity duration-75 ease-in-out;
 }
 
 .backdrop-enter {
-  opacity: 0;
-  transform: scale(0.9);
+  @apply scale-90 opacity-0;
 }
 .backdrop-enter-active {
-  opacity: 1;
-  transform: translateX(0);
-  transition:
-    opacity 300ms,
-    transform 300ms;
+  @apply translate-x-0 opacity-100 transition-opacity duration-300 ease-in-out;
 }
 .backdrop-exit {
-  opacity: 1;
+  @apply opacity-100;
 }
 .backdrop-exit-active {
-  opacity: 0;
-  transform: scale(0.9);
-  transition:
-    opacity 300ms,
-    transform 300ms;
+  @apply scale-90 opacity-0 transition-opacity duration-300 ease-in-out;
 }
 
 .content {
-  max-height: 50vh;
-  overflow-y: hidden;
+  @apply max-h-[50vh] overflow-y-hidden;
 }
 
 .modal {
-  font-family: 'PT Root UI', sans-serif;
-  font-weight: bold;
-  position: absolute;
-  top: 15vh;
-  z-index: 100;
-  background-color: rgba(244, 244, 248, 1);
-  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  border-radius: 24px;
-  left: calc(50% - 236px);
-  width: 472px;
-  transition: all 125ms ease-in-out;
-  /* set defaults for transition */
-  transform: translateY(-1rem) scale(0.5);
+  @apply font-pt absolute left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] translate-y-[-1rem] scale-50 rounded-[24px] bg-[rgba(244,244,248,1)] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] transition-all duration-150 ease-in-out;
 }
 
 .modal .header {
-  display: flex;
+  @apply flex;
 }
 
 .modal .title {
-  font-family: 'Londrina Solid';
-  display: flex;
-  flex-direction: column;
+  @apply font-londrina flex flex-col;
 }
 
 .modal .title h2 {
-  font-size: 24px;
-  margin-top: 0.5rem;
-  color: rgba(140, 141, 146, 1);
+  @apply mt-2 text-[24px] text-[rgba(140,141,146,1)];
 }
 
 .modal .title h1 {
-  line-height: 42px;
-  height: 2rem;
-  font-size: 42px;
+  @apply h-8 text-[42px] leading-[42px];
 }
 
 .closeBtnWrapper {
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: flex-end;
+  @apply flex justify-end px-8 py-4;
 }
 
 @media (min-width: 992px) {
   .closeBtnWrapper {
-    position: absolute;
-    left: 96.5%;
+    @apply absolute left-[96.5%];
   }
 }
 
 @media (max-width: 992px) {
   .modal {
-    transform: translateY(20rem) scale(1);
+    @apply translate-y-[20rem] scale-100;
   }
 }
 
 .closeBtn {
-  z-index: 100;
-  position: fixed;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  transition: all 0.125s ease-in-out;
-  border: 0;
+  @apply fixed z-[100] h-10 w-10 rounded-full border-0 transition-all duration-150 ease-in-out;
 }
 
 .closeBtn:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
+  @apply cursor-pointer bg-[rgba(255,255,255,0.5)];
 }
 
 .closeBtn .icon {
-  height: 24px;
-  width: 24px;
+  @apply h-6 w-6;
 }
 
 @media (max-width: 992px) {
   .backdrop {
-    background: rgba(0, 0, 0, 0.74);
+    @apply bg-[rgba(0,0,0,0.74)];
   }
 
   .content {
-    max-height: 100%;
-    height: 100%;
+    @apply h-full max-h-full;
   }
 
   .modal {
-    top: auto;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    max-height: calc(100% - 75px); /* prevent overlap with close button */
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: none;
-    overflow-y: scroll;
+    @apply bottom-0 left-0 top-auto max-h-[calc(100%_-_75px)] w-full overflow-y-scroll rounded-b-none shadow-none;
   }
 }

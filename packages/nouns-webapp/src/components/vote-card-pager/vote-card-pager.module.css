@@ -1,34 +1,27 @@
 .pageDots {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  color: var(--brand-gray-light-text);
+  @apply text-center text-[24px] font-bold text-[var(--brand-gray-light-text)];
 }
 
 .disabledPageDot {
-  opacity: 0.5;
+  @apply opacity-50;
 }
 
 .paginationArrowsWrapper {
-  display: flex;
-  justify-content: center;
+  @apply flex justify-center;
 }
 
 .paginationArrowBtnWrapper {
-  border: none;
-  background-color: transparent;
+  @apply border-0 bg-transparent;
 }
 
 .paginationArrowBtnWrapper:disabled {
-  opacity: 0.5;
+  @apply opacity-50;
 }
 
 .paginationArrow {
-  height: 28px;
-  width: 28px;
-  color: var(--brand-gray-light-text);
+  @apply h-7 w-7 text-[var(--brand-gray-light-text)];
 }
 
 .disabled {
-  opacity: 0.25;
+  @apply opacity-25;
 }

@@ -1,6 +1,1 @@
-.text {
-  font-size: 22px;
-  font-weight: bold;
-  color: var(--brand-cool-dark-text);
-  margin-bottom: 0.5rem;
-}
+.text { @apply text-[22px] font-bold text-[var(--brand-cool-dark-text)] mb-2; }

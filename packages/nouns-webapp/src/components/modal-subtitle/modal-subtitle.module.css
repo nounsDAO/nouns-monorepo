@@ -1,3 +1,1 @@
-.subtitle {
-  font-weight: 500;
-}
+.subtitle { @apply font-medium; }

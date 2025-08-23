@@ -1,52 +1,22 @@
 .nounWrapper {
-  align-self: flex-end;
-  width: 100%;
+  @apply w-full self-end;
 }
 
 .nounContentCol {
-  display: flex;
+  @apply flex;
 }
 
 .auctionActivityCol {
-  padding-right: 5rem;
-  padding-bottom: 0rem;
-  min-height: 558px;
-  align-self: flex-end !important;
+  @apply min-h-[558px] self-end pb-0 pr-20;
 }
 
-@media (max-width: 992px) {
-  .nounWrapper {
-    width: 70%;
-    margin-left: 15%;
-    margin-right: 15%;
-  }
-  .auctionActivityCol {
-    padding-top: 5%;
-    padding-right: 5%;
-    padding-left: 5%;
-    width: 100%;
-    background-color: white;
-  }
+.nounWrapper {
+  @apply max-[992px]:ml-[15%] max-[992px]:mr-[15%] max-[992px]:w-[70%] max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%];
+}
+.auctionActivityCol {
+  @apply max-[992px]:w-full max-[992px]:bg-white max-[992px]:pl-[5%] max-[992px]:pr-[5%] max-[992px]:pt-[5%] max-[568px]:ml-0 max-[568px]:mr-0 max-[568px]:w-full max-[568px]:pl-0 max-[568px]:pr-0 max-[568px]:pt-8;
 }
 
-@media (max-width: 568px) {
-  .auctionActivityCol {
-    width: 100%;
-    margin-left: unset;
-    margin-right: unset;
-    padding-top: 2rem;
-    padding-right: unset;
-    padding-left: 0;
-  }
-
-  .nounWrapper {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 2rem;
-  }
-
-  .nounContentCol {
-    padding: 0rem;
-  }
+.nounContentCol {
+  @apply max-[568px]:p-0;
 }

@@ -1,96 +1,32 @@
 .navArrowsContainer {
-  position: absolute;
+  @apply absolute;
 }
 
 .leftArrowCool {
-  -webkit-appearance: none;
-  padding: 0;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-size: contain;
-  background-repeat: no-repeat;
-  font-size: large;
-  border-radius: 50%;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
-  font-weight: bold;
+  @apply inline-block h-8 w-8 appearance-none rounded-full border-0 bg-[var(--brand-cool-accent)] bg-contain bg-no-repeat p-0 text-[large] font-bold text-[var(--brand-cool-dark-text)] min-[992px]:hover:bg-[var(--brand-gray-hover)] min-[992px]:hover:opacity-90;
 }
 
 .rightArrowCool {
-  -webkit-appearance: none;
-  padding: 0;
-  margin-left: 0.3rem;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-size: contain;
-  background-repeat: no-repeat;
-  font-size: large;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
-  border-radius: 50%;
-  font-weight: bold;
+  @apply ml-[0.3rem] inline-block h-8 w-8 appearance-none rounded-full border-0 bg-[var(--brand-cool-accent)] bg-contain bg-no-repeat p-0 text-[large] font-bold text-[var(--brand-cool-dark-text)] min-[992px]:hover:bg-[var(--brand-gray-hover)] min-[992px]:hover:opacity-90;
 }
 
 .leftArrowWarm {
-  -webkit-appearance: none;
-  padding: 0;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-size: contain;
-  background-repeat: no-repeat;
-  font-size: large;
-  border-radius: 50%;
-  color: var(--brand-warm-dark-text);
-  background-color: var(--brand-warm-accent);
-  font-weight: bold;
+  @apply inline-block h-8 w-8 appearance-none rounded-full border-0 bg-[var(--brand-warm-accent)] bg-contain bg-no-repeat p-0 text-[large] font-bold text-[var(--brand-warm-dark-text)] min-[992px]:hover:bg-[var(--brand-gray-hover)] min-[992px]:hover:opacity-90;
 }
 
 .rightArrowWarm {
-  -webkit-appearance: none;
-  padding: 0;
-  margin-left: 0.3rem;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-size: contain;
-  background-repeat: no-repeat;
-  font-size: large;
-  color: var(--brand-warm-dark-text);
-  background-color: var(--brand-warm-accent);
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-/* Disable hover on mobile because it was leading to
-buttons looking disabled when they were not */
-@media (min-width: 992px) {
-  .leftArrowWarm:hover,
-  .leftArrowCool:hover,
-  .rightArrowWarm:hover,
-  .rightArrowCool:hover {
-    opacity: 0.9;
-    background-color: var(--brand-gray-hover);
-  }
+  @apply ml-[0.3rem] inline-block h-8 w-8 appearance-none rounded-full border-0 bg-[var(--brand-warm-accent)] bg-contain bg-no-repeat p-0 text-[large] font-bold text-[var(--brand-warm-dark-text)] min-[992px]:hover:bg-[var(--brand-gray-hover)] min-[992px]:hover:opacity-90;
 }
 
 .leftArrowWarm:disabled,
 .leftArrowCool:disabled,
 .rightArrowWarm:disabled,
 .rightArrowCool:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  @apply cursor-not-allowed opacity-50;
 }
 
 @-moz-document url-prefix() {
   .navArrowsContainer {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
+    @apply mb-2 mt-0;
   }
 }
