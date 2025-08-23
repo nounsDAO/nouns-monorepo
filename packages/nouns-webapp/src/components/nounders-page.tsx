@@ -2,16 +2,16 @@
 
 import { Trans } from '@lingui/react/macro';
 
-import pfp4156 from '../../assets/nounder-pfps/4156.png';
-import pfp9999 from '../../assets/nounder-pfps/9999.png';
-import pfpCryptoseneca from '../../assets/nounder-pfps/cryptoseneca.png';
-import pfpDevcarrot from '../../assets/nounder-pfps/devcarrot.png';
-import pfpDom from '../../assets/nounder-pfps/dom.png';
-import pfpGremplin from '../../assets/nounder-pfps/gremplin.png';
-import pfpKai from '../../assets/nounder-pfps/kai.png';
-import pfpSolimander from '../../assets/nounder-pfps/solimander.png';
-import pfpTimpers from '../../assets/nounder-pfps/timpers.png';
-import pfpVapeape from '../../assets/nounder-pfps/vapeape.png';
+import pfp4156 from '@/assets/nounder-pfps/4156.png';
+import pfp9999 from '@/assets/nounder-pfps/9999.png';
+import pfpCryptoseneca from '@/assets/nounder-pfps/cryptoseneca.png';
+import pfpDevcarrot from '@/assets/nounder-pfps/devcarrot.png';
+import pfpDom from '@/assets/nounder-pfps/dom.png';
+import pfpGremplin from '@/assets/nounder-pfps/gremplin.png';
+import pfpKai from '@/assets/nounder-pfps/kai.png';
+import pfpSolimander from '@/assets/nounder-pfps/solimander.png';
+import pfpTimpers from '@/assets/nounder-pfps/timpers.png';
+import pfpVapeape from '@/assets/nounder-pfps/vapeape.png';
 
 const bios = [
   {
