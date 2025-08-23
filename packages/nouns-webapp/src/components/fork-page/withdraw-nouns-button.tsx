@@ -143,6 +143,7 @@ function WithdrawNounsButton(props: Props) {
   return (
     <>
       <button
+        type="button"
         className={cn(classes.button, classes.secondaryButton, classes.withdrawButton)}
         onClick={async () => {
           await withdrawFromForkEscrow({

@@ -247,6 +247,7 @@ function VoteSignals({
                             </p>
                             <div className="flex flex-row gap-2.5 md:w-full md:flex-col">
                               <button
+                                type="button"
                                 className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
@@ -264,6 +265,7 @@ function VoteSignals({
                                 <Trans>For</Trans>
                               </button>
                               <button
+                                type="button"
                                 className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
@@ -281,6 +283,7 @@ function VoteSignals({
                                 <Trans>Against</Trans>
                               </button>
                               <button
+                                type="button"
                                 className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
@@ -312,6 +315,7 @@ function VoteSignals({
                                 as="textarea"
                               />
                               <button
+                                type="button"
                                 className={cn(
                                   'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   'disabled:cursor-not-allowed disabled:opacity-20',

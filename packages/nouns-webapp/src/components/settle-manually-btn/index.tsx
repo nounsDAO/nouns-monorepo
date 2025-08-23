@@ -63,6 +63,7 @@ const SettleManuallyBtn: React.FC<{
   return (
     <p className={classes.emergencySettleWrapper}>
       <button
+        type="button"
         onClick={settleAuctionHandler}
         className={classes.emergencySettleButton}
         disabled={!settleEnabled}

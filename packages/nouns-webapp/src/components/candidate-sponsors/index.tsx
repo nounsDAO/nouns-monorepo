@@ -270,6 +270,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                           <>
                             {/* no sign button for proposers */}
                             <button
+                              type="button"
                               className={classes.button}
                               onClick={() => {
                                 if (props.isUpdateToProposal === true) {
@@ -293,6 +294,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                               <>
                                 {!props.isProposer && connectedAccountNounVotes > 0 ? (
                                   <button
+                                    type="button"
                                     className={classes.button}
                                     onClick={() => setIsFormDisplayed(!isFormDisplayed)}
                                   >
@@ -331,6 +333,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       transition={{ duration: 0.15 }}
                     >
                       <button
+                        type="button"
                         className={classes.closeButton}
                         onClick={() => {
                           setIsFormDisplayed(false);

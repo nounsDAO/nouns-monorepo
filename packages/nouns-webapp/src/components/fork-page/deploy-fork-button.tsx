@@ -151,6 +151,7 @@ function DeployForkButton(props: Props) {
     <>
       {!props.isForkPeriodActive && props.isThresholdMet && (
         <button
+          type="button"
           className={cn(classes.button, classes.primaryButton, classes.deployButton)}
           onClick={async () => {
             props.setIsDeployModalOpen(true);

@@ -78,7 +78,10 @@ const ProposalHistory = () => {
           <>
             <div className={headerClasses.backButtonWrapper}>
               <Link to={`/vote/${id}`}>
-                <button className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}>
+                <button
+                  type="button"
+                  className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
+                >
                   ←
                 </button>
               </Link>

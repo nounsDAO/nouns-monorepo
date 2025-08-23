@@ -160,7 +160,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     <>
       <div className={classes.backButtonWrapper}>
         <Link to={'/vote'}>
-          <button className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+          <button type="button" className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>
+            ←
+          </button>
         </Link>
       </div>
       <div className="d-flex justify-content-between align-items-center">

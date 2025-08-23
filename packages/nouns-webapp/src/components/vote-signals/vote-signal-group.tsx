@@ -31,6 +31,7 @@ const VoteSignalGroup = (props: Props) => {
   return (
     <div className="border-b border-[#e6e6e6] py-2.5 last:border-none">
       <button
+        type="button"
         className={cn(
           'flex w-full flex-row items-center justify-between gap-2.5 border-none bg-transparent',
           props.support === 1 && '[&>p]:text-[var(--brand-color-green)]',
