@@ -24,7 +24,7 @@ const BidHistoryModal: React.FC<BidHistoryModalProps> = ({ auction, onDismiss })
       <DialogContent className="font-pt w-[40rem] max-w-[90vw] border-0 bg-[#f4f4f8] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] max-[992px]:bg-transparent max-[992px]:shadow-none sm:rounded-[24px]">
         <div className="max-h-[50vh] overflow-y-hidden rounded-[24px] max-[992px]:h-full max-[992px]:max-h-full">
           <div className="flex items-start gap-2">
-            <div className="mr-4 h-24 w-24 shrink-0 overflow-hidden rounded-[12px]">
+            <div className="mr-4 size-24 shrink-0 overflow-hidden rounded-[12px]">
               <StandaloneNounRoundedCorners nounId={BigInt(auction.nounId)} />
             </div>
 

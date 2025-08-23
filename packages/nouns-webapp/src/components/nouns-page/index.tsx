@@ -128,10 +128,10 @@ const NounsPage: React.FC<NounsPageProps> = () => {
   return (
     <motion.div
       layout
-      className="border-border mx-auto mt-1 flex h-[665px] w-fit overflow-clip rounded-2xl border"
+      className="border-border mx-auto mt-1 flex h-[665px] w-fit text-clip rounded-2xl border"
     >
       {/* Explore Container */}
-      <div className="hidden h-full flex-grow flex-col justify-between sm:flex">
+      <div className="hidden h-full grow flex-col justify-between sm:flex">
         {/* Explore NavBar */}
         <div className="border-border flex items-center justify-between border-b px-6 py-4">
           <h3>
@@ -165,7 +165,7 @@ const NounsPage: React.FC<NounsPageProps> = () => {
         <motion.div
           layout
           ref={containerRef}
-          className="w-fit flex-grow overflow-y-auto overscroll-contain !p-2 !pr-0 shadow-inner"
+          className="w-fit grow overflow-y-auto overscroll-contain !p-2 !pr-0 shadow-inner"
         >
           <div
             style={{
@@ -188,7 +188,7 @@ const NounsPage: React.FC<NounsPageProps> = () => {
                         setSelectedNounId(nounId);
                       }}
                       data-selected={selectedNounId === nounId}
-                      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in group absolute cursor-pointer overflow-clip rounded-2xl shadow-sm transition-all ease-in-out hover:shadow-lg motion-safe:hover:scale-105 motion-safe:data-[selected=true]:scale-105"
+                      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in group absolute cursor-pointer text-clip rounded-2xl shadow-sm transition-all ease-in-out hover:shadow-lg motion-safe:hover:scale-105 motion-safe:data-[selected=true]:scale-105"
                       style={{
                         left: `${virtualColumn.start}px`,
                         top: `${virtualRow.start}px`,
@@ -271,7 +271,7 @@ const NounsPage: React.FC<NounsPageProps> = () => {
           </div>
 
           {/* Traits List */}
-          <div className="flex-grow border-t bg-white p-2">
+          <div className="grow border-t bg-white p-2">
             <ul className="space-y-1">
               {(['glasses', 'head', 'accessory', 'body', 'background'] as const).map(traitType => {
                 const traitIndex = selectedNounSeed?.[traitType] ?? 0;

@@ -76,7 +76,7 @@ export const Footer = () => {
   return (
     <footer className="mt-10 border-t px-6 py-10 sm:mt-20 sm:!p-10 lg:!p-12">
       <div className="flex flex-wrap-reverse items-end justify-between gap-10">
-        <section className="flex flex-grow items-center justify-center gap-4 sm:justify-normal">
+        <section className="flex grow items-center justify-center gap-4 sm:justify-normal">
           {socialItems.map(({ alt, url, icon }) => (
             <Link
               className="text-black transition-opacity hover:opacity-70"

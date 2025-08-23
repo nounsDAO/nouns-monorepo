@@ -285,7 +285,7 @@ const TraitsPage: React.FC = () => {
                       <img
                         src={`data:image/svg+xml;base64,${btoa(trait.svg)}`}
                         alt={trait.name}
-                        className="h-full w-full object-contain drop-shadow"
+                        className="size-full object-contain drop-shadow"
                       />
                     </div>
                     <div className="flex flex-1 items-center justify-center">
@@ -306,7 +306,7 @@ const TraitsPage: React.FC = () => {
                       <img
                         src={`data:image/svg+xml;base64,${btoa(trait.svg)}`}
                         alt={trait.name}
-                        className="h-full w-full object-contain"
+                        className="size-full object-contain"
                       />
                     </div>
                     {trait.type === 'background' ? (

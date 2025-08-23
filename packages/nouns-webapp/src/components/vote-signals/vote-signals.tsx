@@ -198,7 +198,7 @@ function VoteSignals({
             )}
           >
             {!feedbackList ? (
-              <div className="mx-auto flex h-full w-full items-center justify-center p-5 text-center">
+              <div className="mx-auto flex size-full items-center justify-center p-5 text-center">
                 <Spinner />
               </div>
             ) : (
@@ -248,7 +248,7 @@ function VoteSignals({
                             <div className="flex flex-row gap-2.5 md:w-full md:flex-col">
                               <button
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 1
                                     ? 'border-2 border-white outline-2 outline-black'
@@ -265,7 +265,7 @@ function VoteSignals({
                               </button>
                               <button
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 0
                                     ? 'border-2 border-white outline-2 outline-black'
@@ -282,7 +282,7 @@ function VoteSignals({
                               </button>
                               <button
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 2
                                     ? 'border-2 border-white outline-2 outline-black'
@@ -313,7 +313,7 @@ function VoteSignals({
                               />
                               <button
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-0 border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   'disabled:cursor-not-allowed disabled:opacity-20',
                                   'disabled:hover:border-2 disabled:hover:border-transparent disabled:hover:opacity-20 disabled:hover:outline-2 disabled:hover:outline-transparent',
                                 )}
@@ -359,7 +359,7 @@ function VoteSignals({
             )}
           </div>
           {isCandidate === true && (
-            <p className="m-0 mt-2 p-0 text-base text-sm font-[PT_Root_UI] leading-tight text-[var(--brand-gray-light-text)]">
+            <p className="font-pt m-0 mt-2 p-0 text-sm leading-tight text-[var(--brand-gray-light-text)]">
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea
                 of how they intend to vote and helpful guidance on proposal changes to change their
