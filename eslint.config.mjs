@@ -22,6 +22,7 @@ import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 import vitestPlugin from 'eslint-plugin-vitest';
+import tailwindPlugin from 'eslint-plugin-tailwindcss';
 
 // Compatibility layer for traditional configs
 const compat = new FlatCompat({
@@ -234,6 +235,43 @@ export default defineConfig([
         typescript: {
           project: './tsconfig.json',
         },
+      },
+    },
+  },
+
+  // Tailwind CSS plugin configuration for TS/TSX/JSX
+  {
+    files: ['**/*.{ts,tsx,jsx}'],
+    plugins: {
+      tailwindcss: tailwindPlugin,
+    },
+    extends: [tailwindPlugin.configs['flat/recommended']],
+    rules: {
+      // Enforce canonical Tailwind class order (v3 official sorting)
+      'tailwindcss/classnames-order': 'warn',
+      // Avoid noisy false positives; still hint when a core utility exists
+      'tailwindcss/no-arbitrary-value': [
+        'warn',
+        {
+          ignoreFunctions: ['theme', 'rgb', 'rgba', 'hsl', 'hsla', 'var'],
+        },
+      ],
+      // Allow project-specific design tokens as classnames (BEM, CSS modules, etc.)
+      'tailwindcss/no-custom-classname': 'off',
+    },
+    settings: {
+      tailwindcss: {
+        // Autodetect Tailwind config (monorepo-friendly glob)
+        config: ['tailwind.config.{js,cjs,mjs,ts}'],
+        // Recognize common class helper utilities
+        callees: ['clsx', 'cn', 'cva'],
+        // Properties that may contain classnames
+        classRegex: '^(class|className|tw)$',
+        // Consider CSS files for directive/variant detection
+        cssFiles: ['**/*.css'],
+        // Prefer official Tailwind grouping/sorting
+        officialSorting: true,
+        removeDuplicates: true,
       },
     },
   },
