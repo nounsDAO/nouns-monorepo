@@ -1,5 +1,5 @@
 .wrapper {
-  @apply self-start p-4 text-[var(--brand-black)];
+  @apply self-start p-4 text-[var(--brand-black)] lg-max:p-4;
 }
 
 .informationRow {
@@ -11,7 +11,7 @@
 }
 
 .heading1 {
-  @apply text-5xl;
+  @apply text-5xl lg-max:pt-3;
 }
 
 .heading2 {
@@ -43,11 +43,11 @@
 }
 
 .currentBidCol {
-  @apply ml-[6px] mt-[6px] border-r border-r-[#79809c49];
+  @apply ml-1.5 mt-1.5 border-r border-r-[#79809c49] lg-max:border-r-0 lg-max:pl-0;
 }
 
 .auctionTimerCol {
-  @apply pl-0;
+  @apply pl-0 lg-max:ml-1.5 lg-max:mt-1.5 lg-max:pl-0;
 }
 
 .section .sectionHeading4 {
@@ -58,20 +58,8 @@
   @apply font-pt text-[32px] font-bold;
 }
 
-.heading1 {
-  @apply max-[992px]:pt-[12px];
-}
-.wrapper {
-  @apply max-[992px]:p-4;
-}
-.auctionTimerCol {
-  @apply max-[992px]:ml-[6px] max-[992px]:mt-[6px] max-[992px]:pl-0;
-}
-.currentBidCol {
-  @apply max-[992px]:border-r-0 max-[992px]:pl-0;
-}
 .nextNounLink {
-  @apply max-[992px]:pl-[14px] max-[400px]:text-[14px];
+  @apply mb-4 mt-0 transition duration-200 ease-in-out lg-max:pl-3.5 max-[400px]:text-sm;
 }
 
 /* Fix Firefox navigation arrow alignment issues */
@@ -79,10 +67,6 @@
   .colAlignCenter {
     @apply flex items-center;
   }
-}
-
-.nextNounLink {
-  @apply mb-4 mt-0 transition duration-200 ease-in-out;
 }
 
 .nextNounLink svg {

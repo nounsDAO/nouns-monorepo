@@ -1,9 +1,9 @@
 .wrapper {
-@apply h-12 rounded-[10px] text-base leading-4 font-pt font-bold px-3 py-0 transition-all duration-150 ease-in-out !shadow-none border border-[rgba(0,0,0,0.1)];
+  @apply h-10 rounded-[10px] text-base leading-4 font-pt font-bold px-3 py-0 transition-all duration-150 ease-in-out !shadow-none border border-[rgba(0,0,0,0.1)];
 }
 
 .button {
-@apply flex flex-row items-center justify-center h-full w-full;
+  @apply flex flex-row items-center justify-center h-full w-full;
 }
 
 .icon {
@@ -11,7 +11,7 @@
 }
 
 .icon > svg {
-@apply max-h-[14px] opacity-50 lg-max:max-h-[17px];
+  @apply max-h-[14px] opacity-50 lg-max:max-h-[17px];
 }
 
 .wrapper.dropdown {
@@ -19,11 +19,11 @@
 }
 
 .icon.dropdown {
-@apply mr-[0.2rem] w-[30px] block;
+  @apply mr-[0.2rem] w-[30px] block;
 }
 
 .icon.dropdown > svg {
-@apply w-full max-h-10 relative top-px;
+  @apply w-full max-h-10 relative top-px;
 }
 
 .btnEnabled {
@@ -35,7 +35,7 @@
 }
 
 .coolInfo {
-@apply border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-cool-dark-text)];
+  @apply border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-cool-dark-text)];
 }
 
 .coolInfo:hover {
@@ -43,15 +43,15 @@
 }
 
 .coolWallet {
-@apply bg-[var(--brand-cool-accent)] border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-warm-dark-text)] px-3 py-0 transition-all duration-200 ease-in-out;
+  @apply bg-[var(--brand-cool-accent)] border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-warm-dark-text)] px-3 py-0 transition-all duration-200 ease-in-out;
 }
 
 .coolWallet:hover {
-@apply bg-brand-color-blue text-white brightness-110;
+  @apply bg-brand-color-blue text-white brightness-110;
 }
 
 .warmInfo {
-@apply border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-dark-text)];
+  @apply border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-dark-text)];
 }
 
 .warmInfo:hover {
@@ -59,16 +59,16 @@
 }
 
 .warmWallet {
-@apply bg-[var(--brand-warm-accent)] border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-dark-text)] px-3 py-0 transition-all duration-200 ease-in-out;
+  @apply bg-[var(--brand-warm-accent)] border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-dark-text)] px-3 py-0 transition-all duration-200 ease-in-out;
 }
 
 .warmWallet:hover {
-@apply bg-brand-color-red text-white brightness-110;
+  @apply bg-brand-color-red text-white brightness-110;
 }
 
 .whiteInfo,
 .whiteWallet {
-@apply bg-white border border-[rgba(0,0,0,0.1)] text-[rgb(95,95,95)];
+  @apply bg-white border border-[rgba(0,0,0,0.1)] text-[rgb(95,95,95)];
 }
 
 .whiteInfo:hover,
@@ -81,7 +81,7 @@
 }
 
 .whiteActive .icon {
-@apply bg-[#e2e3e8] text-black;
+  @apply text-brand-dark-red;
 }
 
 .whiteActiveVoteSubmit {
@@ -89,7 +89,7 @@
 }
 
 .delegateBack {
-@apply bg-white border border-[rgba(0,0,0,0.1)] text-[var(--brand-cool-dark-text)] w-[100px];
+  @apply bg-white border border-[rgba(0,0,0,0.1)] text-[var(--brand-cool-dark-text)] w-[100px];
 }
 
 .delegateBack:hover {
@@ -97,7 +97,7 @@
 }
 
 .delegatePrimary {
-@apply bg-[var(--brand-cool-dark-text)] text-white w-[315px];
+  @apply bg-[var(--brand-cool-dark-text)] text-white w-[315px];
 }
 
 .delegatePrimary:hover {
@@ -105,19 +105,25 @@
 }
 
 .delegateSecondary {
-@apply bg-brand-color-blue text-white w-[315px] border-0;
+  @apply bg-brand-color-blue text-white w-[315px] border-0;
 }
 
 .delegateSecondary:hover {
-@apply bg-brand-color-blue opacity-50 text-white w-[315px] border-0;
+  @apply bg-brand-color-blue-darker;
 }
 
 .delegateDisabled {
-@apply lg-max:w-[210px];
+  @apply bg-brand-color-blue opacity-50 text-white w-[315px] border-0;
+}
+
+.delegatePrimary,
+.delegateSecondary,
+.delegateDisabled {
+  @apply lg-max:w-[210px];
 }
 
 .forVoteSubmit {
-@apply bg-brand-color-green-translucent text-brand-color-green;
+  @apply bg-brand-color-green-translucent text-brand-color-green;
 }
 
 .forVoteSubmit:hover {
@@ -125,7 +131,7 @@
 }
 
 .againstVoteSubmit {
-@apply bg-brand-color-red-translucent text-brand-color-red;
+  @apply bg-brand-color-red-translucent text-brand-color-red;
 }
 
 .againstVoteSubmit:hover {
@@ -133,7 +139,7 @@
 }
 
 .abstainVoteSubmit {
-@apply bg-brand-gray-light-text-translucent text-brand-gray-light-text;
+  @apply bg-brand-gray-light-text-translucent text-brand-gray-light-text;
 }
 
 .abstainVoteSubmit:hover {
