@@ -5,7 +5,7 @@ import { render } from '@testing-library/react';
 import dayjs from 'dayjs';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BidHistoryItem } from './index';
+import { BidHistoryItem } from './bid-history-item';
 
 // Mock the dependencies
 vi.mock('@/assets/icons/Link.svg?react', () => ({
