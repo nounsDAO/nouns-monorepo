@@ -10,8 +10,6 @@ import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
 import { INounSeed, useNounSeed } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
-import classes from './standalone-noun.module.css';
-
 import nounClasses from '@/components/legacy-noun/noun.module.css';
 
 interface StandaloneNounProps {
@@ -68,11 +66,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   };
 
   return (
-    <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
-      onClick={onClickHandler}
-    >
+    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
     </Link>
   );
@@ -97,11 +91,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     return <LegacyNoun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
 
   return (
-    <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
-      onClick={onClickHandler}
-    >
+    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
@@ -128,11 +118,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   };
 
   return (
-    <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
-      onClick={onClickHandler}
-    >
+    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
@@ -171,11 +157,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
 
   const noun = <LegacyNoun imgPath={image} alt={description} />;
   const nounWithLink = (
-    <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
-      onClick={onClickHandler}
-    >
+    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       {noun}
     </Link>
   );
