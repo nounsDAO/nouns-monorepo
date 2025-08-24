@@ -1,175 +1,123 @@
 .proposalEditor {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem 1rem 1rem;
-  border: 1px solid #aaa !important;
-  border-radius: 8px !important;
-  outline: none !important;
-  box-shadow: none !important;
+  @apply mt-4 mb-4 pt-2 pr-4 pb-4 pl-4 border border-[#aaa] rounded-[8px] outline-none shadow-none;
 }
 
 .titleInput,
 .bodyInput {
-  padding: 0;
-  border: none;
-  width: 100% !important;
-  outline: none !important;
-  box-shadow: none !important;
+  @apply p-0 border-0 w-full outline-none shadow-none;
 }
 
 .titleInput {
-  font-size: 1.25rem;
+  @apply text-[1.25rem];
 }
 
 .propTitle {
-  font-family: 'Londrina Solid';
+  @apply font-londrina;
 }
 
 .previewArea h3 {
-  font-weight: 400;
-  font-size: 14px;
-  color: rgb(108, 117, 125);
+  @apply font-normal text-[14px] text-[rgb(108,117,125)];
 }
 
 .bodyInput {
-  min-height: 340px !important;
+  @apply min-h-[340px];
 }
 
 .divider {
-  width: 100%;
-  margin: 0 0 0.5rem 0;
+  @apply w-full mb-2;
 }
 
 .previewArea {
-  padding: 0.5rem 1rem 1rem 1rem;
-  border: 1px solid #aaa !important;
-  border-radius: 8px !important;
-  outline: none !important;
-  box-shadow: none !important;
+  @apply pt-2 pr-4 pb-4 pl-4 border border-[#aaa] rounded-[8px] outline-none shadow-none;
 }
 
 .markdown h1,
 .diffs h1 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.7rem] mt-4 font-bold;
 }
 
 .markdown h2,
 .diffs h2 {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.5rem] mt-4 font-bold;
 }
 
 .markdown h3,
 .diffs h3 {
-  font-size: 1.3rem;
+  @apply text-[1.3rem];
 }
 
 .markdown img,
 .diffs img {
-  max-width: 100%;
-  height: auto;
+  @apply max-w-full h-auto;
 }
 
 /* diff compare overrides */
 .diffs {
-  font-size: inherit;
-  font-family: 'PT Root UI' !important;
-  font-size: 1.1rem;
+  @apply font-pt text-[1.1rem];
 }
+
 .diffs h1 {
-  font-size: 1.7rem !important;
-  margin-top: 1rem !important;
-  font-weight: bold !important;
+  @apply text-[1.7rem] mt-4 font-bold;
 }
 
 .diffs h2 {
-  font-size: 1.5rem !important;
-  margin-top: 1rem !important;
-  font-weight: bold !important;
+  @apply text-[1.5rem] mt-4 font-bold;
 }
 
 .diffs h3 {
-  font-size: 1.3rem !important;
+  @apply text-[1.3rem];
 }
 
 .diffs .section {
-  word-wrap: break-word;
-  padding-top: 2rem;
-  margin-top: 2rem;
+  @apply break-words pt-8 mt-8;
 }
 
 .diffs .section h5 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-family: 'Londrina Solid';
+  @apply text-[1.7rem] mt-4 font-londrina;
 }
 
 .diffs .markdown {
-  font-family: 'PT Root UI';
-  font-size: 1.1rem;
+  @apply font-pt text-[1.1rem];
 }
 
 .diffs .markdown h1 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.7rem] mt-4 font-bold;
 }
 
 .diffs .markdown h2 {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.5rem] mt-4 font-bold;
 }
 
 .diffs .markdown h3 {
-  font-weight: bold;
-  font-size: 1.3rem;
+  @apply font-bold text-[1.3rem];
 }
 
 .diffs .markdown img {
-  max-width: 100%;
-  height: auto;
+  @apply max-w-full h-auto;
 }
 
 .diffs .txnInfoText {
-  color: var(--brand-gray-light-text);
-  margin-left: -0.1rem;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  font-weight: 500;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
+  @apply text-[var(--brand-gray-light-text)] -ml-[0.1rem] mt-1 mb-1 font-medium text-[16px] flex items-center;
 }
 
 @media (max-width: 992px) {
   .diffs .txnInfoText {
-    align-items: flex-start;
-    margin-top: 1rem;
+    @apply items-start mt-4;
   }
 
   .diffs .txnInfoIcon {
-    margin-top: 0.25rem;
-    margin-right: 0.5rem;
+    @apply mt-1 mr-2;
   }
 }
 
 .diffs .txnInfoIcon {
-  height: 18px;
-  width: 18px;
-  opacity: 0.5;
+  @apply h-[18px] w-[18px] opacity-50;
 }
 
 .diffs .txnInfoIconWrapper {
-  width: 25px;
-  display: flex;
-  align-items: center;
+  @apply w-[25px] flex items-center;
 }
 
 .diffs .v3Proposal.section {
-  padding-top: 0;
-  margin-top: 0;
+  @apply pt-0 mt-0;
 }

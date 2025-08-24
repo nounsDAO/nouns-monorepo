@@ -1,28 +1,18 @@
 @media (max-width: 992px) {
   .emergencySettleWrapper {
-    text-align: center;
-    margin-left: 0.5rem;
+    @apply text-center ml-2;
   }
 }
 
 @media (max-width: 660px) {
   .emergencySettleWrapper {
-    text-align: center;
-    margin-left: 0rem;
+    @apply text-center ml-0;
   }
 }
 
 .emergencySettleButton {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-  display: inline;
-  margin: 0;
-  padding: 0;
+  @apply bg-transparent border-0 cursor-pointer underline inline m-0 p-0;
 }
 .emergencySettleButton:disabled {
-  color: #8c8d92;
-  text-decoration: none;
-  cursor: default;
+  @apply text-[#8c8d92] no-underline cursor-default;
 }

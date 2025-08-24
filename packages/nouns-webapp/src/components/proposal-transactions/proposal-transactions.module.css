@@ -1,21 +1,15 @@
 .popover {
-  max-width: 600px;
+  @apply max-w-[600px];
 }
 
 .transactionDetails {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid #aaa !important;
-  border-radius: 8px !important;
+  @apply mt-4 px-4 py-2 border border-[#aaa] rounded-[8px];
 }
 
 .removeTransactionButton {
-  border: none;
-  background: none;
-  outline: none !important;
-  box-shadow: none !important;
+  @apply border-0 bg-transparent outline-none shadow-none;
 }
 
 .removeTransactionButton img {
-  width: 1rem;
+  @apply w-4;
 }

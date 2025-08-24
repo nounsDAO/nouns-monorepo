@@ -1,219 +1,147 @@
 .backButton {
-  -webkit-appearance: none;
-  padding: 0;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  font-weight: bold;
-  margin-right: 1rem;
-  margin-top: 0.1rem;
-  position: absolute;
-  left: -3rem;
-  @media (max-width: 1040px) {
-    position: relative;
-    left: 0;
+  @apply appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem];
+}
+@media (max-width: 1040px) {
+  .backButton {
+    @apply relative left-0;
   }
-  @media (max-width: 414px) {
-    display: none;
+}
+@media (max-width: 414px) {
+  .backButton {
+    @apply hidden;
   }
 }
 .backButtonWrapper {
-  position: relative;
+  @apply relative;
 }
 
 .headerRow span {
-  color: #8c8d92;
-  font-size: 24px;
-  font-family: 'Londrina Solid';
+  @apply text-[#8c8d92] text-[24px] font-londrina;
 }
 .headerRow h1 {
-  color: #14161b;
-  font-size: 42px;
-  font-family: 'Londrina Solid';
+  @apply text-[#14161b] text-[42px] font-londrina;
 }
 
 .proposalStatus {
-  margin-left: 0.75rem;
-  margin-top: 0.1rem;
+  @apply ml-3 mt-[0.1rem];
 }
 
 .connectWalletText {
-  color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
-  font-weight: 500;
-  font-size: 16px;
-  min-width: 12rem;
-  margin-bottom: 1.15rem;
+  @apply text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] min-w-[12rem] mb-[1.15rem];
 }
 
 .noVotesText {
-  color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
-  font-weight: 500;
-  font-size: 16px;
-  margin-bottom: 1.15rem;
-  min-width: 9.5rem;
+  @apply text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] mb-[1.15rem] min-w-[9.5rem];
 }
 
 .submitBtn {
-  width: 100%;
-  max-width: 8rem;
-  min-width: 8rem;
-  height: 3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  background-color: var(--brand-color-green);
-  border: var(--brand-color-green);
+  @apply w-full max-w-[8rem] min-w-[8rem] h-12 font-bold mb-2 rounded-[12px] bg-[var(--brand-color-green)] border border-[var(--brand-color-green)];
 }
 .submitBtn:focus,
 .submitBtn:hover {
-  background-color: var(--brand-color-green) !important;
-  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+  @apply bg-[var(--brand-color-green)] shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)];
 }
 .submitBtn:active {
-  background-color: var(--brand-color-green) !important;
+  @apply bg-[var(--brand-color-green)];
 }
 .submitBtnDisabled {
-  background-color: var(--brand-gray-light-text) !important;
-  width: 100%;
-  max-width: 8rem;
-  min-width: 8rem;
-  height: 3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  border: var(--brand-dark-red);
-  opacity: 0.5;
-  box-shadow: none !important;
+  @apply bg-[var(--brand-gray-light-text)] w-full max-w-[8rem] min-w-[8rem] h-12 font-bold mb-2 rounded-[12px] border border-[var(--brand-dark-red)] opacity-50 shadow-none;
 }
 
 .submitBtnDisabled:hover,
 .submitBtnDisabled:active,
 .submitBtn:focus {
-  cursor: not-allowed;
-  box-shadow: none !important;
+  @apply cursor-not-allowed shadow-none;
 }
 
 .proposalTitleWrapper {
-  display: flex;
-  padding-right: 2rem;
+  @apply flex pr-8;
 }
 
 .proposalTitle {
-  margin-right: 0.5rem;
+  @apply mr-2;
 }
 
 .mobileSubmitProposalButton {
-  padding-left: 3rem;
-  padding-right: 3rem;
+  @apply px-[3rem];
 }
 
 @media (max-width: 992px) {
   .submitBtn {
-    max-width: 100%;
+    @apply max-w-full;
   }
 
   .submitBtnDisabled {
-    max-width: 100%;
+    @apply max-w-full;
   }
 }
 
 .voterIneligibleAlert {
-  font-family: 'PT Root UI';
-  font-weight: 500;
-  background-color: #e2e3e8;
-  color: black;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-top: 0.5rem;
+  @apply font-pt font-medium bg-[#e2e3e8] text-black border border-[rgba(0,0,0,0.1)] mt-2;
 }
 
 .byLineWrapper {
-  display: flex;
-  flex-direction: row;
+  @apply flex flex-row;
 }
 
 .byLineWrapper h3 {
-  font-family: 'Londrina Solid';
-  color: var(--brand-gray-light-text);
-  font-size: 18px;
+  @apply font-londrina text-[var(--brand-gray-light-text)] text-[18px];
 }
 
 .byLineContentWrapper {
-  display: flex;
-  flex-direction: row;
-  margin-left: 0;
+  @apply flex flex-row ml-0;
 }
 
 .propTransactionWrapper {
-  margin-left: 0.33rem;
-  margin-right: 0.5rem;
-  font-size: 18px;
-  color: var(--brand-gray-light-text);
+  @apply ml-[0.33rem] mr-2 text-[18px] text-[var(--brand-gray-light-text)];
 }
 .propTransactionWrapperJp {
-  margin-left: 0.37rem;
-  margin-right: 0.25rem;
-  color: var(--brand-gray-light-text);
-  display: flex;
-  flex-direction: row;
+  @apply ml-[0.37rem] mr-1 text-[var(--brand-gray-light-text)] flex flex-row;
 }
 
 .proposedByJp {
-  color: var(--brand-gray-light-text);
+  @apply text-[var(--brand-gray-light-text)];
 }
 
 .proposerLinkJp {
-  margin-right: 0.25rem;
+  @apply mr-1;
 }
 
 .proposalByLineWrapperJp {
-  font-weight: 500;
-  margin-left: 2.5rem;
+  @apply font-medium ml-10;
 }
 
 .propTransactionHash {
-  margin-left: 0.2rem;
+  @apply ml-[0.2rem];
 }
 
 .byLineContentWrapper h3 {
-  margin-left: 0.5rem;
+  @apply ml-2;
 }
 
 .linkIcon {
-  position: relative;
-  top: -3px;
+  @apply relative top-[-3px];
 }
 
 .versionHistory {
-  display: inline-block;
-  font-size: 12px;
+  @apply inline-block text-[12px];
 }
 
 .versionHistory a {
-  color: #14161b !important;
-  font-size: 14px;
-  text-decoration: none;
+  @apply text-[#14161b] text-[14px] no-underline;
 }
 
 .versionHistory strong {
-  padding: 6px 10px;
-  border: 1px solid #e6e6e6;
-  border-radius: 6px;
-  margin-right: 5px;
+  @apply px-[10px] py-[6px] border border-[#e6e6e6] rounded-[6px] mr-[5px];
 }
 
 .versionHistory a:hover strong {
-  background-color: #e6e6e6;
+  @apply bg-[#e6e6e6];
 }
 
 .versionHistory span {
-  opacity: 0.7;
+  @apply opacity-70;
 }
 .proposalSponsors {
-  margin-left: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
+  @apply ml-2 flex flex-row gap-[5px];
 }

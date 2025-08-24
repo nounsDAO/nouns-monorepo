@@ -1,404 +1,245 @@
 .proposals {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 
 .proposals > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  @apply flex items-center justify-between mb-4;
 }
 
 .section {
-  margin: 0 auto;
-  width: 100%;
+  @apply mx-auto w-full;
 }
 
 .sectionWrapper {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  @apply border-b border-[rgba(0,0,0,0.1)];
 }
 
 .headerWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
+  @apply flex flex-row justify-between ml-auto mr-auto;
 }
 
 .tabs {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 10px;
-  margin: 0;
+  @apply flex flex-row items-end justify-between gap-[10px] m-0;
 }
 
 .tab {
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  font-family: 'Londrina Solid';
-  padding: 10px 14px 6px;
-  font-size: 32px;
-  line-height: 1;
-  color: #000;
+  @apply bg-white border border-transparent rounded-[12px] rounded-bl-none rounded-br-none font-londrina pt-[10px] pr-[14px] pb-[6px] pl-[14px] text-[32px] leading-none text-black;
 }
 
 .activeTab {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #fff;
-  padding: 10px 14px 10px;
-  position: relative;
-  top: 2px;
+  @apply border border-[rgba(0,0,0,0.1)] border-b border-b-white pt-[10px] pb-[10px] px-[14px] relative top-[2px];
 }
 
 .heading {
-  font-family: 'Londrina Solid';
-  font-size: 40px;
-  margin: 0 !important;
-  width: auto;
+  @apply font-londrina text-[40px] m-0 w-auto;
 }
 
 .generateBtn {
-  max-width: 10rem;
-  height: 3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  background-color: var(--brand-color-green);
-  border: var(--brand-color-green);
+  @apply max-w-[10rem] h-12 font-bold mb-2 rounded-[12px] bg-[var(--brand-color-green)] border border-[var(--brand-color-green)];
 }
 .generateBtn:focus,
 .generateBtn:hover {
-  background-color: var(--brand-color-green) !important;
-  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+  @apply bg-[var(--brand-color-green)] shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)];
 }
 .generateBtn:active {
-  background-color: var(--brand-color-green) !important;
+  @apply bg-[var(--brand-color-green)];
 }
 
 .generateBtnDisabled {
-  max-width: 10rem;
-  height: 3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  background-color: #f4f4f8;
-  border: #f4f4f8;
-  color: #8c8d92;
-  border: 1px solid #e2e3e8;
+  @apply max-w-[10rem] h-12 font-bold mb-2 rounded-[12px] bg-[#f4f4f8] border border-[#e2e3e8] text-[#8c8d92];
 }
 .generateBtnDisabled:focus,
 .generateBtnDisabled:hover,
 .generateBtnDisabled:active {
-  cursor: not-allowed;
-  background-color: #f4f4f8 !important;
-  border: #f4f4f8 !important;
-  color: #8c8d92 !important;
-  border: 1px solid #e2e3e8 !important;
-  outline: none;
-  box-shadow: none;
+  @apply cursor-not-allowed bg-[#f4f4f8] border-[#f4f4f8] text-[#8c8d92] outline-none shadow-none;
 }
 
 .proposalLink {
-  padding: 1rem;
-  margin-top: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e2e3e8;
-  box-sizing: border-box;
-  border-radius: 16px;
-  background: #f4f4f8;
-  font-size: 22px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 1rem;
+  @apply p-4 mt-[0.4rem] flex flex-col border border-[#e2e3e8] rounded-[16px] bg-[#f4f4f8] text-[22px] font-pt font-bold no-underline mb-4;
 }
 
 .proposalInfoWrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  @apply flex flex-row items-center justify-between w-full;
 }
 
 .proposalLink:hover {
-  background: white;
-  color: inherit !important;
-  cursor: pointer;
+  @apply bg-white cursor-pointer;
 }
 
 .markdown h1 {
-  font-size: 1.7rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.7rem] mt-4 font-bold;
 }
 
 .markdown h2 {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply text-[1.5rem] mt-4 font-bold;
 }
 
 .markdown h3 {
-  font-size: 1.3rem;
+  @apply text-[1.3rem];
 }
 
 .markdown img {
-  max-width: 100%;
-  height: auto;
+  @apply max-w-full h-auto;
 }
 
 .nullStateCopy {
-  margin-top: 0.9rem;
-  margin-right: 1rem;
-  font-family: 'PT Root UI';
-  font-weight: 500;
-  color: var(--brand-gray-light-text);
-  font-size: 16px;
-  line-height: 22.4px;
-  @media (max-width: 992px) {
-    text-align: center;
-    margin: 0;
-  }
+  @apply mt-[0.9rem] mr-4 font-pt font-medium text-[var(--brand-gray-light-text)] text-[16px] leading-[22.4px];
 }
 
 .mobileCountdownWrapper {
-  display: none;
+  @apply hidden;
 }
 
 .desktopCountdownWrapper {
-  display: flex;
+  @apply flex;
 }
 
 .nounInWalletBtnWrapper {
-  display: flex;
-  padding-top: 0.8rem;
+  @apply flex pt-[0.8rem];
 }
 
 .alert {
-  width: 100%;
+  @apply w-full;
 }
 
 .proposalsList {
-  margin-left: auto;
-  margin-right: auto;
+  @apply ml-auto mr-auto;
 }
 
 @media (max-width: 992px) {
   .headerWrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    @apply flex flex-col justify-start;
   }
 
   .desktopCountdownWrapper {
-    display: none;
+    @apply hidden;
   }
 
   .mobileCountdownWrapper {
-    display: flex;
-    width: 100%;
-    margin-top: 1rem;
+    @apply flex w-full mt-4;
   }
 
   .nullStateCopy {
-    margin-top: 0;
-    margin-right: 0;
-    text-align: center;
+    @apply mt-0 mr-0 text-center;
   }
 
   .proposalTitle {
-    max-width: 65%;
-    overflow-wrap: break-word;
+    @apply max-w-[65%] break-words;
   }
 
   .nounInWalletBtnWrapper {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @apply w-full flex items-center justify-center;
   }
 
   .headerWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    @apply flex flex-col items-start;
   }
 
   .forceFlexRow {
-    flex-direction: row;
+    @apply flex-row;
   }
 
   .heading {
-    width: 100%;
+    @apply w-full;
   }
 
   .nullStateSubmitProposalBtnWrapper {
-    text-align: right;
+    @apply text-right;
   }
 }
 
 .nullBtnWrapper {
-  min-width: 10rem;
+  @apply min-w-[10rem];
 }
 
 .proposalId {
-  color: #8c8d92;
-  margin-right: 0.5rem;
+  @apply text-[#8c8d92] mr-2;
 }
 
 .proposalTitle {
-  width: 80%;
+  @apply w-[80%];
 }
 
 .proposalStatusWrapper {
-  margin-left: 0.5rem;
-  min-width: max-content;
+  @apply ml-2 min-w-max;
 }
 
 .submitProposalButtonWrapper {
-  text-align: right;
+  @apply text-right;
 }
 
 .nullStateSubmitProposalBtnWrapper {
-  text-align: right;
+  @apply text-right;
 }
 
 .votePillWrapper {
-  max-width: 5rem;
+  @apply max-w-[5rem];
 }
 
 .countdownPill {
-  background-color: var(--brand-gray-light-text-translucent);
-  color: #00000080;
-  width: fit-content;
-  margin-left: -0.5rem;
+  @apply bg-[var(--brand-gray-light-text-translucent)] text-[#00000080] w-fit -ml-2;
 }
 
 .countdownPillContentWrapper {
-  display: flex;
-  flex-direction: row;
+  @apply flex flex-row;
 }
 
 .countdownPillClock {
-  display: flex;
-  flex-direction: column;
-  margin-top: auto;
-  margin-bottom: auto;
+  @apply flex flex-col my-auto;
 }
 
 .countdownPillText {
-  margin-left: 0.25rem;
+  @apply ml-1;
 }
 
 .delegateBtnWrapper {
-  padding-left: 0.5rem;
+  @apply pl-2;
 }
 
 .changeDelegateBtn {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgb(95, 95, 95);
-  max-width: 10rem;
-  height: 3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
+  @apply bg-white border border-[rgba(0,0,0,0.1)] text-[rgb(95,95,95)] max-w-[10rem] h-12 font-bold mb-2 rounded-[12px];
 }
 
 .changeDelegateBtn:focus,
 .changeDelegateBtn:hover {
-  background-color: #e2e3e8;
-  color: black;
-  box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply bg-[#e2e3e8] text-black shadow-none border border-[rgba(0,0,0,0.1)];
 }
 
 .changeDelegateBtn:active {
-  background-color: #e2e3e8 !important;
+  @apply bg-[#e2e3e8];
 }
 
 .candidatesSidebar {
-  font-family: 'PT Root UI';
+  @apply font-pt;
 }
 
 .candidatesSidebar h4 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  @apply text-[1.2rem] font-bold mb-2;
 }
 .candidatesSidebar h5 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 0.5rem;
+  @apply text-[1rem] font-bold mt-2;
 }
 .candidatesSidebar p {
-  margin: 0;
-  padding: 0;
-  color: var(--brand-gray-light-text);
+  @apply m-0 p-0 text-[var(--brand-gray-light-text)];
 }
 .candidatesSidebar .button {
-  display: block;
-  background-color: black;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: white;
-  padding: 1rem 1rem;
-  line-height: 1;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  text-align: center;
-  text-decoration: none;
-  margin-top: 1rem;
+  @apply block bg-black border border-[rgba(0,0,0,0.1)] text-white p-4 leading-none font-bold mb-2 rounded-[12px] text-center no-underline mt-4;
 }
 .candidatesSidebar .button.disabled {
-  background-color: #f4f4f8;
-  border: #f4f4f8;
-  color: #8c8d92;
-  border: 1px solid #e2e3e8;
-  pointer-events: none;
+  @apply bg-[#f4f4f8] border border-[#e2e3e8] text-[#8c8d92] pointer-events-none;
 }
 
 .candidatesSidebar .button:focus,
 .candidatesSidebar .button:hover {
-  background-color: black;
-  color: #e2e3e8;
-  box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply bg-black text-[#e2e3e8] shadow-none border border-[rgba(0,0,0,0.1)];
 }
 
 .candidatesSidebar .button.disabled:focus,
 .candidatesSidebar .button.disabled:hover,
 .candidatesSidebar .button.disabled:active {
-  cursor: not-allowed;
-  background-color: #f4f4f8 !important;
-  border: #f4f4f8 !important;
-  color: #8c8d92 !important;
-  border: 1px solid #e2e3e8 !important;
-  outline: none;
-  box-shadow: none;
+  @apply cursor-not-allowed bg-[#f4f4f8] border-[#f4f4f8] text-[#8c8d92] outline-none shadow-none;
 }
 
 .dataStatus {
-  text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-family: 'PT Root UI';
-  font-weight: 500;
-  color: var(--brand-gray-light-text);
-  font-size: 16px;
-  line-height: 22.4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @apply text-center mt-4 mb-4 font-pt font-medium text-[var(--brand-gray-light-text)] text-[16px] leading-[22.4px] flex flex-col items-center justify-center;
 }
