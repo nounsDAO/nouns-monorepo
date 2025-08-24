@@ -213,6 +213,12 @@ export default defineConfig([
       // Unicorn plugin rules
       'unicorn/better-regex': 'error',
       'unicorn/no-nested-ternary': 'error',
+      'unicorn/filename-case': [
+        'warn',
+        {
+          case: 'kebabCase',
+        },
+      ],
       // Unused imports plugin rules
       'no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
@@ -385,6 +391,7 @@ export default defineConfig([
     plugins: {
       import: importPlugin,
       prettier: prettierPlugin,
+      unicorn: unicornPlugin,
     },
     rules: {
       // Import plugin rules for JS files
@@ -393,6 +400,10 @@ export default defineConfig([
       'import/default': 'error',
       'import/namespace': 'error',
       'import/export': 'error',
+      'unicorn/filename-case': [
+        'warn',
+        { case: 'kebabCase' },
+      ],
       // Prettier rules
       'prettier/prettier': 'warn',
     },
