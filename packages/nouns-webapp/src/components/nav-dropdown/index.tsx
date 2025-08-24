@@ -6,8 +6,6 @@ import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
-import classes from './nav-dropdown.module.css';
-
 import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
@@ -42,7 +40,9 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
     <>
       <div
         ref={ref}
-        className={cn(classes.wrapper)}
+        className={cn(
+          'font-pt h-10 rounded-[10px] p-0 text-base font-bold leading-4 shadow-none transition-all duration-150 ease-in-out',
+        )}
         onClick={e => {
           e.preventDefault();
           onClick?.(e);
@@ -64,18 +64,14 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={cn(
-          classes.dropdownButton,
-          navDropdownClasses.nounsNavLink,
-          responsiveUiUtilsClasses.desktopOnly,
-        )}
+        className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >
         <Dropdown.Toggle as={customDropdownToggle} id="dropdown" />
         <Dropdown.Menu
           className={cn(
-            classes.menu,
+            '!left-[5px] m-0 overflow-hidden rounded-[10px] border border-[rgba(0,0,0,0.1)] p-0 [&>a:hover]:bg-white [&>a:last-child]:border-none [&>a]:block [&>a]:rounded-none [&>a]:border-0 [&>a]:border-b-[1.5px] [&>a]:border-b-[#e2e3e8] [&>a]:px-4 [&>a]:py-2 [&>a]:font-bold [&>a]:text-[rgb(95,95,95)] [&>a]:no-underline',
             stateSelectedDropdownClass,
             buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
           )}
