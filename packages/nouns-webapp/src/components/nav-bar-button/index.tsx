@@ -43,13 +43,13 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
       return 'rounded-[10px] border border-[var(--brand-cool-border)] text-[var(--brand-cool-dark-text)] hover:bg-[var(--brand-cool-accent)] hover:text-black';
     }
     case NavBarButtonStyle.COOL_WALLET: {
-      return 'rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out hover:bg-[var(--brand-color-blue)] hover:text-white hover:brightness-110';
+      return 'rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out hover:bg-[var(--brand-color-blue)] hover:text-white hover:brightness-110';
     }
     case NavBarButtonStyle.WARM_INFO: {
       return 'rounded-[10px] border border-[var(--brand-warm-border)] text-[var(--brand-warm-dark-text)] hover:bg-[var(--brand-warm-accent)] hover:text-black';
     }
     case NavBarButtonStyle.WARM_WALLET: {
-      return 'rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out hover:bg-[var(--brand-color-red)] hover:text-white hover:brightness-110';
+      return 'rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out hover:bg-[var(--brand-color-red)] hover:text-white hover:brightness-110';
     }
     case NavBarButtonStyle.WHITE_INFO: {
       return whiteInfo;
