@@ -23,16 +23,10 @@ import ShortAddress from '@/components/short-address';
 import config, { CHAIN_ID } from '@/config';
 import { nounsTreasuryAddress } from '@/contracts';
 import { useAppSelector } from '@/hooks';
-import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { useIsDaoGteV3 } from '@/wrappers/nouns-dao';
-
-import navDropdownClasses from './nav-bar-dropdown.module.css';
-import classes from './nav-bar.module.css';
-
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 const NavBar = () => {
   const chainId = defaultChain.id;
@@ -61,9 +55,9 @@ const NavBar = () => {
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
-    navDropdownClasses.whiteInfoSelectedBottom,
-    navDropdownClasses.coolInfoSelected,
-    navDropdownClasses.warmInfoSelected,
+    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
+    'bg-[#e9ebf3] text-[#79809c]',
+    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
   );
   const candidatesNavItem = config.featureToggles.candidates ? (
     <Dropdown.Item className={buttonClasses} href="/vote#candidates">
@@ -78,12 +72,10 @@ const NavBar = () => {
       buttonStyle={nonWalletButtonStyle}
     >
       <Dropdown.Item
-        className={cn(
-          usePickByState(
-            navDropdownClasses.whiteInfoSelectedBottom,
-            navDropdownClasses.coolInfoSelected,
-            navDropdownClasses.warmInfoSelected,
-          ),
+        className={usePickByState(
+          'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
+          'bg-[#e9ebf3] text-[#79809c]',
+          'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
         )}
         href="/vote"
       >
@@ -98,19 +90,25 @@ const NavBar = () => {
       <Navbar
         expand="xl"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
-        className={classes.navBarCustom}
+        className="pb-4 max-[992px]:-mb-px max-[992px]:mr-[-5px] max-[992px]:pb-0"
         expanded={isNavExpanded}
       >
         <Container style={{ maxWidth: 'unset' }}>
-          <div className={classes.brandAndTreasuryWrapper}>
-            <Link href="/packages/nouns-webapp/public" className={classes.navBarBrand}>
+          <div className="flex flex-row flex-nowrap items-center justify-center">
+            <Link
+              href="/packages/nouns-webapp/public"
+              className="relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95"
+            >
               <Navbar.Brand>
-                <NogglesLogo className={classes.navBarLogo} aria-label="Nouns DAO noggles" />
+                <NogglesLogo
+                  className="size-20 max-[992px]:size-[75px]"
+                  aria-label="Nouns DAO noggles"
+                />
               </Navbar.Brand>
             </Link>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className={classes.testnetImg} src={testnetNoun.src} alt="testnet noun" />
+                <img className="h-[45px] w-auto" src={testnetNoun.src} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
             )}
@@ -118,7 +116,7 @@ const NavBar = () => {
               {treasuryBalance !== undefined ? (
                 <Nav.Link
                   href={daoEtherscanLink}
-                  className={classes.nounsNavLink}
+                  className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -131,13 +129,18 @@ const NavBar = () => {
             </Nav.Item>
           </div>
           <Navbar.Toggle
-            className={classes.navBarToggle}
+            className="mr-3 h-[44px] rounded-[10px] px-2 py-1"
             aria-controls="basic-navbar-nav"
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end z-10">
-            <div className={cn(responsiveUiUtilsClasses.mobileOnly)}>
-              <Nav.Link as={Link} href="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+            <div className="hidden max-[1200px]:block">
+              <Nav.Link
+                as={Link}
+                href="/vote"
+                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                onClick={closeNav}
+              >
                 <NavBarButton
                   buttonText={isDaoGteV3 ? <Trans>Proposals</Trans> : <Trans>DAO</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faFile} />}
@@ -150,7 +153,7 @@ const NavBar = () => {
                     <Nav.Link
                       as={Link}
                       href="/vote#candidates"
-                      className={classes.nounsNavLink}
+                      className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
                       onClick={closeNav}
                     >
                       <NavBarButton
@@ -163,14 +166,14 @@ const NavBar = () => {
                 </>
               )}
             </div>
-            <div className={cn(responsiveUiUtilsClasses.desktopOnly)}>
+            <div className="max-[1200px]:hidden">
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
                 <Nav.Link
                   as={Link}
                   href="/vote"
-                  className={classes.nounsNavLink}
+                  className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
                   onClick={closeNav}
                 >
                   <NavBarButton
@@ -181,11 +184,11 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <div className={cn(responsiveUiUtilsClasses.mobileOnly)}>
+            <div className="hidden max-[1200px]:block">
               <Nav.Link
                 as={Link}
                 href="/playground"
-                className={classes.nounsNavLink}
+                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -197,7 +200,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/nouns"
-                className={cn(classes.nounsNavLink, classes.exploreButton)}
+                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black max-[992px]:[&_svg]:max-h-none max-[992px]:[&_svg]:min-h-[40px] max-[992px]:[&_svg]:max-w-[40px]"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -209,7 +212,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/traits"
-                className={cn(classes.nounsNavLink, classes.exploreButton)}
+                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black max-[992px]:[&_svg]:max-h-none max-[992px]:[&_svg]:min-h-[40px] max-[992px]:[&_svg]:max-w-[40px]"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -219,43 +222,37 @@ const NavBar = () => {
                 />
               </Nav.Link>
             </div>
-            <div className={cn(responsiveUiUtilsClasses.desktopOnly)}>
+            <div className="max-[1200px]:hidden">
               <NavDropdown
                 buttonText="Explore"
                 buttonIcon={<NogglesIcon />}
                 buttonStyle={nonWalletButtonStyle}
               >
                 <Dropdown.Item
-                  className={cn(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                    ),
+                  className={usePickByState(
+                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
+                    'bg-[#e9ebf3] text-[#79809c]',
+                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
                   )}
                   href="/nouns"
                 >
                   <Trans>Nouns</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={cn(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                    ),
+                  className={usePickByState(
+                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
+                    'bg-[#e9ebf3] text-[#79809c]',
+                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
                   )}
                   href="/traits"
                 >
                   <Trans>Traits</Trans>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  className={cn(
-                    usePickByState(
-                      navDropdownClasses.whiteInfoSelectedBottom,
-                      navDropdownClasses.coolInfoSelected,
-                      navDropdownClasses.warmInfoSelected,
-                    ),
+                  className={usePickByState(
+                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
+                    'bg-[#e9ebf3] text-[#79809c]',
+                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
                   )}
                   href="/playground"
                 >
