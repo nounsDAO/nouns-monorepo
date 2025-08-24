@@ -29,6 +29,16 @@ const nextConfig: NextConfig = {
     // CUSTOM_KEY: 'my-value',
   },
 
+  // Turbopack configuration
+  turbopack: {
+    rules: {
+      '*.po': {
+        loaders: ['@lingui/loader'],
+        as: '*.js'
+      }
+    }
+  },
+
   // Webpack configuration
   webpack: (config, { isServer }) => {
     // SVGR support for SVG imports
