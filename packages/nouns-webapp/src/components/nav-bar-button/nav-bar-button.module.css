@@ -43,7 +43,7 @@
 }
 
 .coolWallet {
-  @apply rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out;
+  @apply rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out;
 }
 
 .coolWallet:hover {
@@ -59,7 +59,7 @@
 }
 
 .warmWallet {
-  @apply rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out;
+  @apply rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out;
 }
 
 .warmWallet:hover {

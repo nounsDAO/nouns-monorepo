@@ -93,7 +93,7 @@
 }
 
 .button {
-  @apply cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-[125ms] ease-in-out;
+  @apply cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out;
 }
 
 .button:hover {
@@ -246,7 +246,7 @@ button.closeLink {
 }
 
 p.statusMessage {
-  @apply mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-[125ms] ease-in-out;
+  @apply mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out;
   font-family: 'PT Root UI';
 }
 .statusMessage.errorMessage {
@@ -272,7 +272,7 @@ p.statusMessage {
   opacity: 0.75;
 }
 .statusMessage.successMessage a img {
-  @apply relative -top-px ml-[2px] transition-all duration-[125ms] ease-in-out;
+  @apply relative -top-px ml-[2px] transition-all duration-150 ease-in-out;
 }
 
 /* 2 step process */
