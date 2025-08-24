@@ -69,6 +69,7 @@ export default {
         'brand-gray-dark-text': 'var(--brand-gray-dark-text)',
         'brand-gray-light-text': 'var(--brand-gray-light-text)',
         'brand-gray-light-text-translucent': 'var(--brand-gray-light-text-translucent)',
+        'brand-gray-background': 'var(--brand-gray-background)',
         'brand-cool-dark-text': 'var(--brand-cool-dark-text)',
         'brand-cool-light-text': 'var(--brand-cool-light-text)',
         border: 'hsl(var(--border))',
