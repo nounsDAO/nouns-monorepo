@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { default as ABIUpload } from './index';
+import { default as ABIUpload } from './abi-upload';
 
 describe('ABIUpload Component', () => {
   it('should render the correct default label when file name is not etherscan-abi-download.json', () => {
