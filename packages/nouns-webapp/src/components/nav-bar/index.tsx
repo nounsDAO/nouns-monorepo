@@ -95,17 +95,16 @@ const NavBar = () => {
       >
         <Container style={{ maxWidth: 'unset' }}>
           <div className="flex flex-row flex-nowrap items-center justify-center">
-            <Link
-              href="/packages/nouns-webapp/public"
+            <Navbar.Brand
+              as={Link}
+              href="/"
               className="relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95"
             >
-              <Navbar.Brand>
-                <NogglesLogo
-                  className="size-20 max-[992px]:size-[75px]"
-                  aria-label="Nouns DAO noggles"
-                />
-              </Navbar.Brand>
-            </Link>
+              <NogglesLogo
+                className="size-20 max-[992px]:size-[75px]"
+                aria-label="Nouns DAO noggles"
+              />
+            </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
                 <img className="h-[45px] w-auto" src={testnetNoun.src} alt="testnet noun" />
