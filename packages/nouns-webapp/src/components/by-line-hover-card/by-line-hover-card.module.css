@@ -1,48 +1,31 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 
 .stackedNounWrapper {
-  display: flex;
+  @apply flex;
 }
 
 .address {
-  font-family: 'Londrina Solid';
-  font-size: 24px;
-  width: 100%;
-  text-align: left;
+  @apply font-londrina text-2xl w-full text-left;
 }
 
 .nounsRepresented {
-  color: var(--brand-gray-dark-text);
-  display: flex;
-  margin-top: 0.25rem;
-  font-weight: 500;
-  font-size: 15px;
-  max-width: 11rem;
+  @apply text-brand-gray-dark-text flex mt-1 font-medium text-[15px] max-w-[11rem];
 }
 
 .bold {
-  font-weight: bold;
+  @apply font-bold;
 }
 
 .spinnerWrapper {
-  color: var(--brand-gray-light-text);
-  width: 100%;
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  @apply text-brand-gray-light-text w-full h-[120px] flex flex-col justify-center;
 }
 
 .spinner {
-  display: flex;
-  width: 100%;
-  justify-content: center;
+  @apply flex w-full justify-center;
 }
 
 .icon {
-  margin-bottom: 5px;
-  margin-right: 6px;
+  @apply mb-[5px] mr-[6px];
 }

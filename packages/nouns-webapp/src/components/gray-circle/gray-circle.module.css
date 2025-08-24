@@ -1,4 +1,3 @@
 .wrapper {
-  height: 55px;
-  width: 55px;
+  @apply h-[55px] w-[55px];
 }

@@ -1,5 +1,3 @@
 .buttonWrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
+  @apply mt-8 flex justify-between;
 }

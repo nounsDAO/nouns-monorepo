@@ -1,6 +1,5 @@
 .backdrop {
-  @apply fixed left-0 top-0 z-10 h-full w-full bg-[rgba(75,75,75,0.5)];
-  backdrop-filter: blur(24px);
+  @apply fixed left-0 top-0 z-10 h-full w-full bg-[rgba(75,75,75,0.5)] backdrop-blur-[24px];
 }
 
 .content {
@@ -8,8 +7,7 @@
 }
 
 .modal {
-  @apply font-pt fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold;
-  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
+  @apply font-pt fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold shadow-quorum-modal;
 }
 
 .modal .header {
@@ -37,9 +35,7 @@
 }
 
 .yAxisText {
-  @apply flex justify-center;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  @apply flex justify-center [writing-mode:vertical-rl] [text-orientation:mixed];
 }
 
 .xAxisText {
@@ -69,8 +65,7 @@
 }
 
 .bidWrapper {
-  @apply mt-4 h-[35vh] overflow-y-scroll rounded-[16px] bg-[rgba(224,224,231,1)] p-3;
-  box-shadow: inset 0px -12px 16px rgba(0, 0, 0, 0.08);
+  @apply mt-4 h-[35vh] overflow-y-scroll rounded-[16px] bg-[rgba(224,224,231,1)] p-3 shadow-bid-wrapper;
 }
 
 .bidWrapper ul {
@@ -120,8 +115,7 @@
 }
 
 .graphContainer {
-  @apply rounded-[14px] p-4;
-  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
+  @apply rounded-[14px] p-4 shadow-quorum-modal;
 }
 
 .outterGraphContainer {

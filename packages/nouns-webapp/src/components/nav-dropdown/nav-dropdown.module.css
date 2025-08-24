@@ -1,40 +1,18 @@
 .wrapper {
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  line-height: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  padding: 0;
-  transition: all 0.125s ease-in-out;
-  box-shadow: none;
+  @apply h-10 rounded-[10px] text-base leading-4 font-pt font-bold p-0 transition-all duration-[125ms] ease-in-out shadow-none;
 }
 
 .menu {
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  left: 5px !important;
+  @apply rounded-[10px] border border-[rgba(0,0,0,0.1)] m-0 p-0 overflow-hidden !left-[5px];
 }
 
 .menu a {
-  color: rgb(95, 95, 95);
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  /* background-color: #f4f4f8; */
-  border: 0;
-  border-bottom: 1.5px solid #e2e3e8;
-  border-radius: 0;
+  @apply text-[rgb(95,95,95)] py-2 px-4 no-underline font-bold block border-0 border-b-[1.5px] border-b-[#e2e3e8] rounded-none;
 }
 .menu a:last-child {
-  border: none;
+  @apply border-none;
 }
 
 .menu a:hover {
-  /* color: var(--brand-black); */
-  background-color: #fff;
+  @apply bg-white;
 }

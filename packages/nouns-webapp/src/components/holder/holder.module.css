@@ -1,83 +1,61 @@
 .wrapper {
-  margin-left: 0.5rem;
-  margin-top: 2px;
-  padding-left: 1.5rem;
+  @apply ml-2 mt-[2px] pl-6;
 }
 
 .youCopy {
-  margin-top: 0.25rem;
+  @apply mt-1;
 }
 
 .holderCopy {
-  min-width: 250px;
+  @apply min-w-[250px];
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
-  font-size: 18px;
-  line-height: 27px;
+  @apply font-pt text-[18px] leading-[27px];
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 32px;
+  @apply font-pt font-bold text-[32px];
 }
 
 .leftCol {
-  font-family: 'PT Root UI';
+  @apply font-pt;
 }
 
 .leftCol h4 {
-  font-weight: bold;
+  @apply font-bold;
 }
 
 .link,
 .link:hover,
 .link:active {
-  color: black;
-  text-decoration: none;
-  display: flex;
-  cursor: pointer;
+  @apply text-black no-underline flex cursor-pointer;
 }
 
 .holderContent {
-  white-space: nowrap;
+  @apply whitespace-nowrap;
 }
 
-@media (max-width: 992px) {
-  .section h4 {
-    font-size: 18px;
-  }
+.section h4 {
+  @apply max-[992px]:text-[18px];
+}
 
-  .section h2 {
-    font-size: 23px;
-  }
+.section h2 {
+  @apply max-[992px]:text-[23px];
+}
 
-  .section {
-    justify-content: space-between;
-  }
+.section {
+  @apply max-[992px]:justify-between;
+}
 
-  .wrapper {
-    margin-top: 0px;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
+.wrapper {
+  @apply max-[992px]:mt-0 max-[992px]:w-full max-[992px]:ml-0 max-[992px]:mr-0 max-[992px]:pl-0 max-[992px]:pr-0;
+}
 
-  .leftCol {
-    padding-left: 0.5rem;
-  }
+.leftCol {
+  @apply max-[992px]:pl-2;
+}
 
-  .holderContent {
-    margin-right: 0.5rem;
-  }
-
-  .wrapper {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
+.holderContent {
+  @apply max-[992px]:mr-2;
 }

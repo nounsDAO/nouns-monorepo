@@ -1,20 +1,11 @@
-.link,
-.link:visited,
-.link:active {
-  color: var(--brand-dark-green);
-  text-decoration: underline;
-}
-
-.link:hover {
-  color: var(--brand-dark-red);
+.link {
+  @apply text-brand-dark-green underline visited:text-brand-dark-green active:text-brand-dark-green hover:text-brand-dark-red;
 }
 
 .bidRow {
-  font-weight: 500;
-  font-size: 15.5px;
-  line-height: 21px;
+  @apply font-medium text-[15.5px] leading-[21px];
 }
 
 .currentBidCol {
-  border-right: 0 !important;
+  @apply !border-r-0;
 }

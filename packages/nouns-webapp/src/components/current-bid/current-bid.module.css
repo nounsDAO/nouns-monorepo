@@ -1,54 +1,39 @@
 .section span {
-  font-size: 3rem;
-  font-weight: bold;
-  font-family: 'Londrina Solid';
+  @apply font-londrina text-5xl font-bold;
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 18px;
+  @apply font-pt font-bold text-[18px];
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 32px;
-  margin-bottom: 0px !important;
-  margin-top: 3px;
+  @apply font-pt font-bold text-[32px] mb-0 mt-[3px];
 }
 
 .wrapper {
-  padding-left: 0rem;
-  padding-right: 0rem;
+  @apply pl-0 pr-0;
 }
 
-@media (max-width: 992px) {
-  .section h4 {
-    font-size: 18px;
-    margin-bottom: 0px;
-    margin-top: 6px;
-  }
+.section h4 {
+  @apply max-[992px]:text-[18px] max-[992px]:mb-0 max-[992px]:mt-[6px];
+}
 
-  .section h2 {
-    font-size: 23px;
-  }
+.section h2 {
+  @apply max-[992px]:text-[23px];
+}
 
-  .section {
-    justify-content: space-between;
-  }
+.section {
+  @apply max-[992px]:justify-between;
+}
 
-  .currentBid {
-    margin-right: 0.5rem;
-  }
+.currentBid {
+  @apply max-[992px]:mr-2;
+}
 
-  .wrapper {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
+.wrapper {
+  @apply max-[992px]:w-full max-[992px]:ml-0 max-[992px]:mr-0;
+}
 
-  .leftCol {
-    padding-left: 0.5rem;
-  }
+.leftCol {
+  @apply max-[992px]:pl-2;
 }

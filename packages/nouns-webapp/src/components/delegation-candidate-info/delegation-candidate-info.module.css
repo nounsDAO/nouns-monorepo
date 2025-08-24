@@ -1,33 +1,23 @@
 .spinner {
-  display: flex;
-  justify-content: center;
+  @apply flex justify-center;
 }
 
 .wrapper {
-  display: flex;
-  flex-direction: row;
-  margin-top: 0.75rem;
-  justify-content: space-between;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  @apply flex mt-3 justify-between px-2;
 }
 
 .delegateCandidateInfoWrapper {
-  display: flex;
+  @apply flex;
 }
 
 .avatarWrapper {
-  margin-right: 1rem;
+  @apply mr-4;
 }
 
 .ensText {
-  color: var(--brand-cool-dark-text);
-  font-weight: bold;
-  font-size: 22px;
+  @apply text-brand-cool-dark-text font-bold text-[22px];
 }
 
 .shortAddress {
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--brand-cool-light-text);
+  @apply font-medium text-[13px] text-brand-cool-light-text;
 }

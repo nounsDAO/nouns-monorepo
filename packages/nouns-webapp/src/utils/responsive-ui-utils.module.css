@@ -1,19 +1,11 @@
 .mobileOnly {
-  display: none !important;
+  @apply !hidden max-[1200px]:!block;
 }
 
-@media (max-width: 1200px) {
-  .desktopOnly {
-    display: none;
-  }
-
-  .mobileOnly {
-    display: inherit !important;
-  }
+.desktopOnly {
+  @apply max-[1200px]:hidden;
 }
 
-@media (max-width: 414px) {
-  .disableSmallScreens {
-    display: none;
-  }
+.disableSmallScreens {
+  @apply max-[414px]:hidden;
 }

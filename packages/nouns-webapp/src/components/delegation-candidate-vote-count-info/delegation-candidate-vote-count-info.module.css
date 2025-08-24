@@ -1,21 +1,15 @@
 .wrapper {
-  display: flex;
+  @apply flex;
 }
 
 .spinner {
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
+  @apply mr-2 mt-2;
 }
 
 .voteInfoWrapper {
-  display: flex;
-  flex-direction: column;
-  font-weight: normal;
-  color: var(--brand-gray-light-text);
-  text-align: right;
+  @apply flex flex-col font-normal text-brand-gray-light-text text-right;
 }
 
 .voteCount {
-  color: black;
-  font-weight: bold;
+  @apply text-black font-bold;
 }

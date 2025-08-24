@@ -1,83 +1,39 @@
 .wrapper {
-  margin-left: 0.5rem;
-  margin-top: 2px;
-  padding-left: 1.5rem;
+  @apply ml-2 mt-[2px] pl-6 lg-max:mt-0 lg-max:w-full lg-max:ml-0 lg-max:mr-0 lg-max:pl-0 lg-max:pr-0;
 }
 
 .youCopy {
-  margin-top: 0.25rem;
+  @apply mt-1 lg-max:pr-1;
 }
 
 .winnerCopy {
-  min-width: 250px;
+  @apply min-w-[250px];
 }
 
-.link,
-.link:hover,
-.link:active {
-  color: black;
-  text-decoration: none;
-  display: flex;
-  cursor: pointer;
+.link {
+  @apply flex cursor-pointer text-brand-black no-underline hover:text-brand-black hover:no-underline active:text-brand-black active:no-underline;
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
-  font-size: 18px;
-  line-height: 27px;
+  @apply font-pt text-[18px] leading-[27px];
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 32px;
+  @apply font-pt font-bold text-[32px] lg-max:text-[23px];
+}
+
+.section {
+  @apply lg-max:justify-between;
 }
 
 .leftCol {
-  font-family: 'PT Root UI';
+  @apply font-pt lg-max:pl-2;
 }
 
 .leftCol h4 {
-  font-weight: bold;
+  @apply font-bold;
 }
 
-@media (max-width: 992px) {
-  .section h4 {
-    font-size: 18px;
-  }
-
-  .section h2 {
-    font-size: 23px;
-  }
-
-  .section {
-    justify-content: space-between;
-  }
-
-  .wrapper {
-    margin-top: 0px;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .leftCol {
-    padding-left: 0.5rem;
-  }
-
-  .winnerContent {
-    margin-right: 0.5rem;
-  }
-
-  .wrapper {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .youCopy {
-    padding-right: 0.25rem;
-  }
+.winnerContent {
+  @apply lg-max:mr-2;
 }

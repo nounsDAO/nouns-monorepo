@@ -1,126 +1,52 @@
 .candidateLink {
-  padding: 1rem;
-  margin-top: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e2e3e8;
-  box-sizing: border-box;
-  border-radius: 16px;
-  background: #f4f4f8;
-  font-size: 22px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 1rem;
-  text-align: center;
-  @media screen and (min-width: 768px) {
-    text-align: left;
-  }
+  @apply p-4 mt-1.5 flex flex-col border border-[#e2e3e8] box-border rounded-2xl bg-[#f4f4f8] text-[22px] font-pt font-bold no-underline text-inherit mb-4 text-center md:text-left;
 }
 
 .candidateLink:hover {
-  background: white;
-  color: inherit !important;
-  cursor: pointer;
+  @apply bg-white text-inherit cursor-pointer;
 }
 
 .candidateTitle {
-  width: 100%;
+  @apply w-full;
 }
 
 .footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 10px;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+  @apply border-t border-black/10 pt-2.5 mt-2.5 flex flex-col justify-between items-center md:flex-row md:items-start;
 }
 
 .candidateSponsors {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  @media screen and (min-width: 768px) {
-    overflow: hidden;
-    justify-content: flex-start;
-  }
+  @apply flex flex-row flex-wrap items-center justify-center gap-[5px] md:overflow-hidden md:justify-start;
 }
 
 .candidateSponsors span {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 10px;
-  display: block;
+  @apply text-base font-normal ml-[10px] block;
 }
 
 .candidateSponsors strong {
-  font-weight: bold;
+  @apply font-bold;
 }
 
 .proposer {
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0;
+  @apply text-base font-normal m-0 p-0;
 }
 
 .proposer a,
 .proposerAddress {
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--brand-color-red);
+  @apply font-bold no-underline text-brand-color-red;
 }
 
 .timestamp {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
+  @apply text-base font-bold m-0 p-0;
 }
 
 .sponsorCount.sponsorCountOverflow {
-  @media screen and (min-width: 992px) {
-    height: 100%;
-    padding: 10px 40px;
-    margin-left: -25px;
-    background: linear-gradient(
-      90deg,
-      rgba(244, 244, 248, 0) 0%,
-      rgba(244, 244, 248, 0.9) 15%,
-      rgba(244, 244, 248, 1) 25%,
-      rgba(244, 244, 248, 1) 100%
-    );
-  }
+  @apply [@media(min-width:992px)]:h-full [@media(min-width:992px)]:py-[10px] [@media(min-width:992px)]:px-10 [@media(min-width:992px)]:-ml-[25px] [@media(min-width:992px)]:bg-[linear-gradient(90deg,rgba(244,244,248,0)_0%,rgba(244,244,248,0.9)_15%,rgba(244,244,248,1)_25%,rgba(244,244,248,1)_100%)];
 }
 
 .candidateLink:hover .sponsorCount.sponsorCountOverflow {
-  @media screen and (min-width: 992px) {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.9) 15%,
-      rgba(255, 255, 255, 1) 25%,
-      rgba(255, 255, 255, 1) 100%
-    );
-  }
+  @apply [@media(min-width:992px)]:bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.9)_15%,rgba(255,255,255,1)_25%,rgba(255,255,255,1)_100%)];
 }
+
 .naVotesLabel {
-  font-size: 0.8rem;
-  font-family: monospace;
-  font-weight: normal;
-  opacity: 0.5;
-  font-style: normal;
-  padding: 4px;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.2);
+  @apply text-[0.8rem] font-mono font-normal opacity-50 not-italic p-1 rounded bg-black/20;
 }

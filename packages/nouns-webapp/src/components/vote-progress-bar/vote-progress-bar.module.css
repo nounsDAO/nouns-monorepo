@@ -1,33 +1,31 @@
 .wrapper {
-  border-radius: 6px;
-  height: 1rem;
+  @apply h-4 rounded-md;
 }
 
 .progressBar {
-  height: 100%;
-  border-radius: 6px;
+  @apply h-full rounded-md;
 }
 
 .forWrapper {
-  background-color: var(--brand-color-green-translucent);
+  @apply bg-brand-color-green-translucent;
 }
 
 .forProgressBar {
-  background-color: var(--brand-color-green);
+  @apply bg-brand-color-green;
 }
 
 .againstWrapper {
-  background-color: var(--brand-color-red-translucent);
+  @apply bg-brand-color-red-translucent;
 }
 
 .againstProgressBar {
-  background-color: var(--brand-color-red);
+  @apply bg-brand-color-red;
 }
 
 .abstainWrapper {
-  background-color: var(--brand-gray-light-text-translucent);
+  @apply bg-brand-gray-light-text-translucent;
 }
 
 .abstainProgressBar {
-  background-color: var(--brand-gray-light-text);
+  @apply bg-brand-gray-light-text;
 }

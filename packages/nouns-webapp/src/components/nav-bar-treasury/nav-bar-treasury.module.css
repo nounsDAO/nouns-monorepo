@@ -1,101 +1,68 @@
 .wrapper {
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  padding: 0px 10px 0px 10px;
-  transition: all 0.125s ease-in-out;
-  box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply h-10 rounded-[10px] text-[16px] font-pt font-bold px-[10px] py-0 transition-all duration-[125ms] ease-in-out shadow-none border border-black/10;
 }
 
 .button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
+  @apply flex flex-row items-center justify-center h-full w-full;
 }
 
 .treasuryHeader {
-  font-size: 16px;
-  margin-left: 0.25rem;
-  margin-right: 0.4rem;
-  margin-top: 1px;
+  @apply text-[16px] ml-1 mr-[0.4rem] mt-[1px] opacity-50;
 }
 
 .warmInfo .icon {
-  color: #b6a9a7;
-  border-left: 1px solid #e1d7d5;
+  @apply text-[#b6a9a7] border-l border-l-[#e1d7d5];
 }
 
 .treasuryBalance {
-  font-size: 16.5px;
-  letter-spacing: 0.3px;
-  margin-left: 0.4rem;
-  margin-right: 0.25rem;
+  @apply text-[16.5px] tracking-[0.3px] ml-[0.4rem] mr-1;
 }
 
 @media (max-width: 400px) {
   .wrapper {
-    margin-left: -0.5rem;
-    padding: 0px 7px 0px 6px;
+    @apply ml-[-0.5rem] pl-[6px] pr-[7px];
   }
-
   .treasuryHeader {
-    display: none;
+    @apply hidden;
   }
 }
 
 .warmInfo .treasuryBalance {
-  color: var(--brand-warm-dark-text);
+  @apply text-[var(--brand-warm-dark-text)];
 }
 
 .coolInfo .treasuryBalance {
-  color: var(--brand-cool-dark-text);
-}
-
-.treasuryHeader {
-  opacity: 0.5;
+  @apply text-[var(--brand-cool-dark-text)];
 }
 
 .button:hover {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .coolInfo {
-  border: 1px solid var(--brand-cool-border);
-  border-radius: 10px;
-  color: var(--brand-cool-dark-text);
+  @apply border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-cool-dark-text)];
 }
 
 .coolInfo:hover {
-  background-color: var(--brand-cool-accent);
-  color: black;
+  @apply bg-[var(--brand-cool-accent)] text-black;
 }
 
 .warmInfo {
-  border: 1px solid var(--brand-warm-border);
-  border-radius: 10px;
-  color: var(--brand-warm-light-text);
+  @apply border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-light-text)];
 }
 
 .warmInfo:hover {
-  background-color: var(--brand-warm-accent);
-  color: var(--brand-warm-dark-text);
-  color: black;
+  @apply bg-[var(--brand-warm-accent)] text-black;
 }
 
 .whiteInfo {
-  background: white;
+  @apply bg-white;
 }
 
 .whiteTreasuryHeader {
-  opacity: 0.5;
+  @apply opacity-50;
 }
 
 .whiteInfo:hover {
-  background-color: #e2e3e8;
+  @apply bg-[#e2e3e8];
 }
