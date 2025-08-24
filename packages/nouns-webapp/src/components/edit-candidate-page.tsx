@@ -39,7 +39,6 @@ import {
 import { Link, useParams } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 
 interface EditCandidateProps {
   match: {
@@ -286,7 +285,14 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={`/candidates/${id}`}>
-            <button className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+            <button
+              className={cn(
+                classes.backButton,
+                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+              )}
+            >
+              ←
+            </button>
           </Link>
           <h3 className={classes.heading}>
             <Trans>Edit Proposal Candidate</Trans>

@@ -24,7 +24,6 @@ import {
 } from '@/wrappers/nouns-data';
 import { Link, useParams } from 'react-router';
 
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
 import classes from '@/components/proposal-history-page/vote.module.css';
@@ -79,7 +78,10 @@ const CandidateHistoryPage = () => {
           <Link to={`/candidates/${id}`}>
             <button
               type="button"
-              className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
+              className={cn(
+                headerClasses.backButton,
+                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+              )}
             >
               ←
             </button>

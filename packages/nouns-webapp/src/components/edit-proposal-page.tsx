@@ -43,7 +43,6 @@ import { useCreateProposalCandidate, useGetCreateCandidateCost } from '@/wrapper
 import { Link, useParams } from 'react-router';
 
 import classes from '@/components/create-proposal-page/create-proposal.module.css';
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 
 interface EditProposalProps {
   match: {
@@ -456,7 +455,13 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={`/vote/${id}`}>
-            <button type="button" className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>
+            <button
+              type="button"
+              className={cn(
+                classes.backButton,
+                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+              )}
+            >
               ←
             </button>
           </Link>
