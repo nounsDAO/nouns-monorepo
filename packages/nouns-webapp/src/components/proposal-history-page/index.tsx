@@ -24,7 +24,6 @@ import { Link, useParams } from 'react-router';
 import VersionTab from './version-tab';
 import classes from './vote.module.css';
 
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
 
@@ -80,7 +79,10 @@ const ProposalHistory = () => {
               <Link to={`/vote/${id}`}>
                 <button
                   type="button"
-                  className={cn(headerClasses.backButton, navBarButtonClasses.whiteInfo)}
+                  className={cn(
+                    headerClasses.backButton,
+                    'border border-[rgba(0,0,0,0.1)] bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+                  )}
                 >
                   ←
                 </button>

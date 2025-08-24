@@ -18,8 +18,6 @@ import { Link } from 'react-router';
 
 import classes from './proposal-header.module.css';
 
-import navBarButtonClasses from '@/components/nav-bar-button/nav-bar-button.module.css';
-
 interface CandidateHeaderProps {
   title: string;
   id: string;
@@ -88,7 +86,13 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     <>
       <div className={classes.backButtonWrapper}>
         <Link to={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
-          <button type="button" className={cn(classes.backButton, navBarButtonClasses.whiteInfo)}>
+          <button
+            type="button"
+            className={cn(
+              classes.backButton,
+              'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+            )}
+          >
             ←
           </button>
         </Link>

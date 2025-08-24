@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { cn } from '@/lib/utils';
 
-// Migrated from CSS modules to Tailwind utility classes
-
 export enum NavBarButtonStyle {
   COOL_INFO,
   COOL_WALLET,
@@ -107,7 +105,10 @@ const NavBarButton: FC<NavBarButtonProps> = ({
     'font-pt h-12 rounded-[10px] border border-black/10 px-3 text-[18px] font-bold leading-4 !shadow-none transition-all duration-150 ease-in-out lg:h-10 lg:text-base';
   const baseButton =
     'flex h-full w-full flex-row items-center justify-center text-[18px] lg:text-base';
-  const baseIcon = 'mr-[0.4rem] [&>svg]:max-h-[17px] [&>svg]:opacity-50 lg:[&>svg]:max-h-[14px]';
+  const baseIcon = cn(
+    'mr-[0.4rem] [&>svg]:max-h-[17px] [&>svg]:opacity-50 lg:[&>svg]:max-h-[14px]',
+    buttonStyle === NavBarButtonStyle.WHITE_ACTIVE && 'text-brand-dark-red',
+  );
   const dropdownWrapper = 'pl-1';
   const dropdownIcon =
     'mr-[0.2rem] block w-[30px] [&>svg]:relative [&>svg]:top-[1px] [&>svg]:max-h-10 [&>svg]:w-full';
