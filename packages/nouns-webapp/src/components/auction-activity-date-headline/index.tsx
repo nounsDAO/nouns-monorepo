@@ -6,8 +6,6 @@ import utc from 'dayjs/plugin/utc';
 
 import { useAppSelector } from '@/hooks';
 
-import classes from './auction-activity-date-headline.module.css';
-
 dayjs.extend(utc);
 
 type AuctionActivityDateHeadlineProps = { startTime: bigint };
@@ -18,9 +16,9 @@ const AuctionActivityDateHeadline: React.FC<AuctionActivityDateHeadlineProps> = 
     .utc()
     .format('MMMM DD, YYYY');
   return (
-    <div className={classes.wrapper}>
+    <div className="ml-20 w-auto">
       <h4
-        className={classes.date}
+        className="font-pt mt-[0.22rem] text-[17px] font-bold leading-[27px]"
         style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
       >
         {i18n.date(auctionStartTimeUTC, { month: 'long', year: 'numeric', day: '2-digit' })}

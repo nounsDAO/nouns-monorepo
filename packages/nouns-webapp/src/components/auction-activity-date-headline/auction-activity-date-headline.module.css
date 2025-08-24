@@ -1,7 +1,0 @@
-.date {
-  @apply font-pt mt-[0.22rem] text-[17px] font-bold leading-[27px];
-}
-
-.wrapper {
-  @apply ml-20 w-auto;
-}
