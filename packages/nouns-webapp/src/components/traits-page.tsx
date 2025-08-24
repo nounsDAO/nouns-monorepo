@@ -281,7 +281,7 @@ const TraitsPage: React.FC = () => {
               <Dialog key={trait.filename}>
                 <DialogTrigger asChild>
                   <div className="flex h-full cursor-pointer flex-col rounded-lg border border-gray-200 bg-white p-2 transition-shadow hover:shadow-md">
-                    <div className="bg-checkerboard mb-2 flex aspect-square items-center justify-center overflow-hidden rounded-lg shadow-inner">
+                    <div className="checkerboard-bg mb-2 flex aspect-square items-center justify-center overflow-hidden rounded-lg shadow-inner">
                       <img
                         src={`data:image/svg+xml;base64,${btoa(trait.svg)}`}
                         alt={trait.name}
@@ -302,7 +302,7 @@ const TraitsPage: React.FC = () => {
                     </DialogTitle>
                   </DialogHeader>
                   <div className="flex flex-col items-center space-y-4">
-                    <div className="bg-checkerboard flex aspect-square max-w-96 items-center justify-center overflow-hidden rounded-lg shadow-inner">
+                    <div className="checkerboard-bg flex aspect-square max-w-96 items-center justify-center overflow-hidden rounded-lg shadow-inner">
                       <img
                         src={`data:image/svg+xml;base64,${btoa(trait.svg)}`}
                         alt={trait.name}

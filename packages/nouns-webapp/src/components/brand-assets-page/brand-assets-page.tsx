@@ -36,7 +36,7 @@ const AssetCard: React.FC<AssetCardProps> = ({ title, imageSrc, pngHref, svgHref
         <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
 
         {/* Checkerboard background container */}
-        <div className="bg-checkerboard relative mb-6 flex aspect-square items-center justify-center rounded-lg bg-white p-8 shadow-inner">
+        <div className="checkerboard-bg relative mb-6 flex aspect-square items-center justify-center rounded-lg bg-white p-8 shadow-inner">
           <img
             src={imageSrc}
             alt={title}
@@ -78,7 +78,7 @@ const SectionCard: React.FC<{
   return (
     <div className="flex flex-col justify-between overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
       <div>
-        <div className="bg-checkerboard relative flex aspect-square items-center justify-center rounded-lg shadow-inner">
+        <div className="checkerboard-bg relative flex aspect-square items-center justify-center rounded-lg shadow-inner">
           <img src={resolvedSrc} alt={title} className="object-contain drop-shadow" />
         </div>
 

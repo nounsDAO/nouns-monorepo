@@ -146,7 +146,7 @@
 }
 
 @layer utilities {
-  .bg-checkerboard {
+  .checkerboard-bg {
     @apply bg-checkerboard bg-size-checkerboard bg-pos-checkerboard;
   }
 }
