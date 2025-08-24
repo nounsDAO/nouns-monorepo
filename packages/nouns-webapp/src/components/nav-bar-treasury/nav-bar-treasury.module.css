@@ -1,5 +1,5 @@
 .wrapper {
-  @apply h-10 rounded-[10px] text-[16px] font-pt font-bold px-[10px] py-0 transition-all duration-[125ms] ease-in-out shadow-none border border-black/10;
+  @apply h-10 rounded-[10px] text-[16px] font-pt font-bold px-[10px] py-0 transition-all duration-150 ease-in-out shadow-none border border-black/10;
 }
 
 .button {

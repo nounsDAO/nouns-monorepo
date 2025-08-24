@@ -31,7 +31,7 @@
 }
 
 .closeBtn {
-  @apply fixed z-[100] h-10 w-10 rounded-full border-0 transition-all duration-[125ms] ease-in-out hover:bg-white/50 hover:cursor-pointer;
+  @apply fixed z-[100] h-10 w-10 rounded-full border-0 transition-all duration-150 ease-in-out hover:bg-white/50 hover:cursor-pointer;
 }
 
 .icon {

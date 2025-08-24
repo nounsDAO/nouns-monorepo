@@ -1,5 +1,5 @@
 .wrapper {
-  @apply h-10 rounded-[10px] text-base leading-4 font-pt font-bold p-0 transition-all duration-[125ms] ease-in-out shadow-none;
+  @apply h-10 rounded-[10px] text-base leading-4 font-pt font-bold p-0 transition-all duration-150 ease-in-out shadow-none;
 }
 
 .menu {

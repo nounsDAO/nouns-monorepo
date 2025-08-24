@@ -19,7 +19,7 @@
 }
 
 .linkIcon {
-  @apply text-[var(--brand-gray-light-text)] transition-all duration-[125ms] ease-in-out mb-[0.1rem];
+  @apply text-[var(--brand-gray-light-text)] transition-all duration-150 ease-in-out mb-[0.1rem];
 }
 
 .linkIcon:hover {
