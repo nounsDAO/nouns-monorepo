@@ -1,83 +1,29 @@
 .nounButtonCool {
-  height: 40px;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
-  border-radius: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  cursor: pointer;
-  vertical-align: middle;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 10px;
-  transition: all 0.15s ease-in-out;
+  @apply mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] bg-[var(--brand-cool-accent)] px-[10px] py-0 text-center align-middle font-['PT_Root_UI'] font-bold text-[var(--brand-cool-dark-text)] transition-all duration-150 ease-in-out;
 }
 
 .nounButtonWarm {
-  height: 40px;
-  color: var(--brand-warm-dark-text);
-  background-color: var(--brand-warm-accent);
-  border-radius: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  cursor: pointer;
-  vertical-align: middle;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 10px;
-  transition: all 0.15s ease-in-out;
+  @apply mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] bg-[var(--brand-warm-accent)] px-[10px] py-0 text-center align-middle font-['PT_Root_UI'] font-bold text-[var(--brand-warm-dark-text)] transition-all duration-150 ease-in-out;
 }
 
 .nounButton {
-  height: 40px;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
-  border-radius: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  cursor: pointer;
-  vertical-align: middle;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 10px;
-  transition: all 0.15s ease-in-out;
+  @apply mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] bg-[var(--brand-cool-accent)] px-[10px] py-0 text-center align-middle font-['PT_Root_UI'] font-bold text-[var(--brand-cool-dark-text)] transition-all duration-150 ease-in-out;
 }
 
 .nounButtonCool:hover,
 .nounButtonWarm:hover,
 .nounButton:hover {
-  text-decoration: none;
-  background-color: var(--brand-gray-hover);
+  @apply bg-[var(--brand-gray-hover)] no-underline;
 }
 
 .nounButton:active {
-  color: black;
+  @apply text-black;
 }
 
 .nounButtonContents {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  @apply flex flex-row justify-between;
 }
 
 .buttonIcon {
-  margin-right: 5px;
+  @apply mr-[5px];
 }

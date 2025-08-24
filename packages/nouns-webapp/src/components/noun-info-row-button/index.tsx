@@ -4,8 +4,6 @@ import { Image } from 'react-bootstrap';
 
 import { useAppSelector } from '@/hooks';
 
-import classes from './noun-info-row-button.module.css';
-
 interface NounInfoRowButtonProps {
   iconImgSource: string;
   btnText: React.ReactNode;
@@ -15,12 +13,18 @@ interface NounInfoRowButtonProps {
 const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
   const { iconImgSource, btnText, onClickHandler } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
+
+  const baseBtnClasses =
+    "mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] px-[10px] py-0 text-center align-middle font-['PT_Root_UI'] font-bold transition-all duration-150 ease-in-out hover:bg-[var(--brand-gray-hover)] no-underline active:text-black";
+  const coolClasses = 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]';
+  const warmClasses = 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]';
+
   return (
     <div
-      className={isCool ? classes.nounButtonCool : classes.nounButtonWarm}
+      className={`${baseBtnClasses} ${isCool ? coolClasses : warmClasses}`}
       onClick={onClickHandler}
     >
-      <div className={classes.nounButtonContents}>
+      <div className="flex flex-row justify-between">
         <Image src={iconImgSource} className="my-auto mr-1.5 size-5" />
         {btnText}
       </div>
