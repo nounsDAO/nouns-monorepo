@@ -1,7 +1,0 @@
-.wrapper {
-  @apply max-lg:p-8;
-}
-
-.wrapper h1 {
-  @apply font-londrina text-[3.75rem] lg:ml-8 lg:text-[6rem];
-}

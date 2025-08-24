@@ -5,14 +5,12 @@ import calendar_noun from '@/assets/calendar_noun.png';
 import LegacyNoun from '@/components/legacy-noun';
 import Section from '@/components/section';
 
-import classes from './banner.module.css';
-
 const Banner = () => {
   return (
-    <Section fullWidth={false} className={classes.bannerSection}>
+    <Section fullWidth={false}>
       <Col lg={6}>
-        <div className={classes.wrapper}>
-          <h1>
+        <div className="max-lg:p-8">
+          <h1 className="font-londrina text-[3.75rem] lg:ml-8 lg:text-[6rem]">
             <Trans>ONE NOUN,</Trans>
             <br />
             <Trans>EVERY DAY,</Trans>
