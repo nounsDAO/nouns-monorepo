@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { useAuctionBids } from '@/wrappers/on-display-auction';
 
-import BidHistory from './index';
+import BidHistory from './bid-history';
 
 // Mock dependencies
 vi.mock('@/hooks', () => ({
