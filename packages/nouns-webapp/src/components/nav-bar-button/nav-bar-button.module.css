@@ -1,230 +1,141 @@
 .wrapper {
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  line-height: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  padding: 0px 12px 0px 12px;
-  transition: all 0.125s ease-in-out;
-  box-shadow: none !important;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply font-pt h-12 rounded-[10px] border border-black/10 px-3 text-[18px] font-bold leading-4 !shadow-none transition-all duration-150 ease-in-out lg:h-10 lg:text-base;
 }
 
 .button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
+  @apply flex h-full w-full flex-row items-center justify-center text-[18px] lg:text-base;
 }
 
 .icon {
-  margin-right: 0.4rem;
+  @apply mr-[0.4rem];
 }
 
 .icon > svg {
-  max-height: 14px;
-  opacity: 0.5;
+  @apply max-h-[17px] opacity-50 lg:max-h-[14px];
 }
 
 .wrapper.dropdown {
-  padding-left: 4px;
+  @apply pl-1;
 }
 
 .icon.dropdown {
-  margin-right: 0.2rem;
-  width: 30px;
-  display: block;
+  @apply mr-[0.2rem] block w-[30px];
 }
 
 .icon.dropdown > svg {
-  width: 100%;
-  max-height: 40px;
-  position: relative;
-  top: 1px;
-}
-
-@media (max-width: 992px) {
-  .icon > svg {
-    max-height: 17px;
-  }
+  @apply relative top-[1px] max-h-10 w-full;
 }
 
 .btnEnabled {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .btnDisabled {
-  cursor: not-allowed;
+  @apply cursor-not-allowed;
 }
 
 .coolInfo {
-  border: 1px solid var(--brand-cool-border);
-  border-radius: 10px;
-  color: var(--brand-cool-dark-text);
+  @apply rounded-[10px] border border-[var(--brand-cool-border)] text-[var(--brand-cool-dark-text)];
 }
 
 .coolInfo:hover {
-  background-color: var(--brand-cool-accent);
-  color: black;
+  @apply bg-[var(--brand-cool-accent)] text-black;
 }
 
 .coolWallet {
-  background-color: var(--brand-cool-accent);
-  border: 1px solid var(--brand-cool-border);
-  border-radius: 10px;
-  color: var(--brand-warm-dark-text);
-  padding: 0px 12px 0px 12px;
-  transition: all 0.2s ease-in-out;
+  @apply rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out;
 }
 
 .coolWallet:hover {
-  background-color: var(--brand-color-blue);
-  color: white;
-  filter: brightness(110%);
+  @apply bg-[var(--brand-color-blue)] text-white brightness-110;
 }
 
 .warmInfo {
-  border: 1px solid var(--brand-warm-border);
-  border-radius: 10px;
-  color: var(--brand-warm-dark-text);
+  @apply rounded-[10px] border border-[var(--brand-warm-border)] text-[var(--brand-warm-dark-text)];
 }
 
 .warmInfo:hover {
-  background-color: var(--brand-warm-accent);
-  color: black;
+  @apply bg-[var(--brand-warm-accent)] text-black;
 }
 
 .warmWallet {
-  background-color: var(--brand-warm-accent);
-  border: 1px solid var(--brand-warm-border);
-  border-radius: 10px;
-  color: var(--brand-warm-dark-text);
-  padding: 0px 12px 0px 12px;
-  transition: all 0.2s ease-in-out;
+  @apply rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-[200ms] ease-in-out;
 }
 
 .warmWallet:hover {
-  background-color: var(--brand-color-red);
-  color: white;
-  filter: brightness(110%);
+  @apply bg-[var(--brand-color-red)] text-white brightness-110;
 }
 
 .whiteInfo,
 .whiteWallet {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgb(95, 95, 95);
+  @apply border border-black/10 bg-white text-[rgb(95,95,95)];
 }
 
 .whiteInfo:hover,
 .whiteWallet:hover {
-  background-color: #e2e3e8;
-  color: black;
+  @apply bg-[#e2e3e8] text-black;
 }
 
 .whiteActive {
-  background-color: #f4f4f8;
-  color: black;
+  @apply bg-[#f4f4f8] text-black;
 }
 
 .whiteActive .icon {
-  color: #d63c5e;
+  @apply text-[#d63c5e];
 }
 
 .whiteActiveVoteSubmit {
-  background-color: #e2e3e8;
-  color: black;
-}
-
-@media (max-width: 992px) {
-  .wrapper,
-  .button {
-    height: 48px;
-    font-size: 18px;
-  }
+  @apply bg-[#e2e3e8] text-black;
 }
 
 .delegateBack {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: var(--brand-cool-dark-text);
-  width: 100px;
+  @apply w-[100px] border border-black/10 bg-white text-[var(--brand-cool-dark-text)];
 }
 
 .delegateBack:hover {
-  background-color: #e2e3e8;
-  color: var(--brand-cool-dark-text);
+  @apply bg-[#e2e3e8] text-[var(--brand-cool-dark-text)];
 }
 
 .delegatePrimary {
-  background-color: var(--brand-cool-dark-text);
-  color: white;
-  width: 315px;
+  @apply w-[210px] bg-[var(--brand-cool-dark-text)] text-white lg:w-[315px];
 }
 
 .delegatePrimary:hover {
-  filter: brightness(200%);
+  @apply brightness-200;
 }
 
 .delegateSecondary {
-  background-color: var(--brand-color-blue);
-  color: white;
-  width: 315px;
-  border: none;
+  @apply w-[210px] border-0 bg-[var(--brand-color-blue)] text-white lg:w-[315px];
 }
 
 .delegateSecondary:hover {
-  background-color: var(--brand-color-blue-darker);
+  @apply bg-[var(--brand-color-blue-darker)];
 }
 
 .delegateDisabled {
-  background-color: var(--brand-color-blue);
-  opacity: 0.5;
-  color: white;
-  width: 315px;
-  border: none;
-}
-
-@media (max-width: 992px) {
-  .delegatePrimary {
-    width: 210px;
-  }
-
-  .delegateSecondary {
-    width: 210px;
-  }
-
-  .delegateDisabled {
-    width: 210px;
-  }
+  @apply w-[210px] border-0 bg-[var(--brand-color-blue)] text-white opacity-50 lg:w-[315px];
 }
 
 .forVoteSubmit {
-  background-color: var(--brand-color-green-translucent);
-  color: var(--brand-color-green);
+  @apply bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)];
 }
 
 .forVoteSubmit:hover {
-  filter: brightness(80%);
+  @apply brightness-[.8];
 }
 
 .againstVoteSubmit {
-  background-color: var(--brand-color-red-translucent);
-  color: var(--brand-color-red);
+  @apply bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)];
 }
 
 .againstVoteSubmit:hover {
-  filter: brightness(80%);
+  @apply brightness-[.8];
 }
 
 .abstainVoteSubmit {
-  background-color: var(--brand-gray-light-text-translucent);
-  color: var(--brand-gray-light-text);
+  @apply bg-[var(--brand-gray-light-text-translucent)] text-[var(--brand-gray-light-text)];
 }
 
 .abstainVoteSubmit:hover {
-  filter: brightness(80%);
+  @apply brightness-[.8];
 }

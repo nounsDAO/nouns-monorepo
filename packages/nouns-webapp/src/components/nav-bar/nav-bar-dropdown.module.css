@@ -1,168 +1,120 @@
 .wrapper {
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  line-height: 16px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  padding: 0px 0px 0px 14px;
-  transition: all 0.125s ease-in-out;
-  box-shadow: none;
+  @apply font-pt h-10 rounded-[10px] py-0 pl-[14px] pr-0 text-base font-bold leading-[16px] shadow-none transition-all duration-150 ease-in-out;
 }
 
 .whiteInfo {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgb(95, 95, 95);
+  @apply border border-black/10 bg-white text-[#5f5f5f];
 }
 
 .whiteInfo:hover {
-  background-color: #e2e3e8;
-  color: black;
+  @apply bg-[#e2e3e8] text-black;
 }
 
 .coolInfo {
-  color: #79809c;
-  background-color: #e9ebf3;
+  @apply bg-[#e9ebf3] text-[#79809c];
 }
 
 .coolInfo:hover {
-  background-color: white;
-  color: black;
+  @apply bg-white text-black;
 }
 
 .warmInfo {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  @apply bg-[#fdf9f9] text-[#b6a9a7];
 }
 
 .warmInfo:hover {
-  background-color: white;
-  color: black;
+  @apply bg-white text-black;
 }
 
 .whiteInfoSelected {
-  background-color: #f4f4f8;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #8c8d92;
+  @apply border border-black/10 bg-[#f4f4f8] text-[#8c8d92];
 }
 
 .whiteInfoSelectedTop {
-  background-color: #f4f4f8;
-  border-top: 1.5px solid #e2e3e8;
-  border-right: 1.5px solid #e2e3e8;
-  border-left: 1.5px solid #e2e3e8;
-  color: #8c8d92;
+  @apply border-l-[1.5px] border-r-[1.5px] border-t-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92];
 }
 
 .whiteInfoSelectedBottom {
-  background-color: #f4f4f8;
-  border-bottom: 1.5px solid #e2e3e8;
-  border-right: 1.5px solid #e2e3e8;
-  border-left: 1.5px solid #e2e3e8;
-  color: #8c8d92;
+  @apply border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92];
 }
 
 .dropdownActive {
-  background-color: white;
-  color: black;
+  @apply bg-white text-black;
 }
+
 .coolInfoSelected {
-  color: #79809c;
-  background-color: #e9ebf3;
+  @apply bg-[#e9ebf3] text-[#79809c];
 }
 
 .warmInfoSelected {
-  background-color: #fdf9f9;
-  color: rgba(142, 129, 127, 1);
+  @apply bg-[#fdf9f9] text-[rgba(142,129,127,1)];
 }
 
 .button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-  width: 100%;
-  padding-right: 14px;
+  @apply flex h-full w-full flex-row items-center justify-start pr-[14px];
 }
 
 .dropdownBtnContent {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  min-height: 18px;
-  line-height: 20px;
-  color: black !important;
+  @apply min-h-[18px] overflow-hidden text-ellipsis whitespace-nowrap leading-5 !text-black;
 }
 
 .dropdownBtnIcon {
-  margin-right: 0.4rem;
+  @apply mr-[0.4rem];
 }
 
 .dropdownBtnIcon > svg {
-  max-height: 14px;
-  opacity: 0.5;
+  @apply max-h-[14px] opacity-50;
 }
 
 .arrowDown {
-  margin-bottom: 0.25rem;
-  margin-left: 0.5rem;
+  @apply mb-1 ml-2;
 }
 
 .arrowUp {
-  margin-left: 0.5rem;
-  margin-top: 0.5rem;
+  @apply ml-2 mt-2;
 }
 
 .button:hover {
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 0.9rem;
-  padding: 0.3rem 0.3rem !important;
-  color: var(--brand-black) !important;
-  transition: all 0.125s ease-in-out;
+  @apply !p-[0.3rem] font-['PT_Root_UI'] text-[0.9rem] font-bold !text-[var(--brand-black)] transition-all duration-150 ease-in-out;
 }
 
 .dropdownPrimaryText:hover {
-  background-color: white;
-  transition: all 0.125s ease-in-out;
-  cursor: pointer;
+  @apply cursor-pointer bg-white transition-all duration-150 ease-in-out;
 }
 
 .desktopDropdown {
-  background-color: inherit !important;
-  border: 0px !important;
+  @apply !border-0 !bg-inherit;
 }
 
 @media (max-width: 992px) {
-  .wrapper,
+  .wrapper {
+    @apply h-12 text-[18px];
+  }
   .button {
-    height: 48px;
-    font-size: 18px;
+    @apply h-12 text-[18px];
   }
 }
 
 @media (max-width: 330px) {
   .button {
-    width: 70px;
+    @apply w-[70px];
   }
 }
 
 @media (max-width: 370px) {
   .button {
-    width: 90px;
+    @apply w-[90px];
   }
 }
 
 @media (min-width: 400px) {
   .button {
-    width: auto;
+    @apply w-auto;
   }
 }
