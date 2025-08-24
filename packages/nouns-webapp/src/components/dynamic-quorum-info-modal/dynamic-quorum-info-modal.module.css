@@ -27,7 +27,7 @@
 }
 
 .underline {
-  @apply cursor-pointer underline;
+  @apply cursor-pointer tw-underline;
 }
 
 .graphWrapper {
