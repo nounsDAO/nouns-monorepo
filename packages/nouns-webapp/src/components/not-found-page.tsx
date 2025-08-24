@@ -5,8 +5,6 @@ import { Trans } from '@lingui/react/macro';
 import _404img from '@/assets/404noun.png';
 import Section from '@/components/section';
 
-import classes from './not-found.module.css';
-
 const NotFoundPage = () => {
   return (
     <Section fullWidth={false}>
@@ -19,7 +17,7 @@ const NotFoundPage = () => {
           />
         </div>
         <div className="lg:col-span-8">
-          <h1 className={classes.heading}>
+          <h1 className="inline-block text-5xl font-bold">
             <Trans>404: This is not the person, place, or thing you&apos;re looking for...</Trans>
           </h1>
         </div>
