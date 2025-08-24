@@ -14,26 +14,28 @@
   @apply pl-0 pr-0;
 }
 
-.section h4 {
-  @apply max-[992px]:text-[18px] max-[992px]:mb-0 max-[992px]:mt-[6px];
-}
+@media (max-width: 992px) {
+  .section h4 {
+    @apply text-[18px] mb-0 mt-[6px];
+  }
 
-.section h2 {
-  @apply max-[992px]:text-[23px];
-}
+  .section h2 {
+    @apply text-[23px];
+  }
 
-.section {
-  @apply max-[992px]:justify-between;
-}
+  .section {
+    @apply justify-between;
+  }
 
-.currentBid {
-  @apply max-[992px]:mr-2;
-}
+  .currentBid {
+    @apply mr-2;
+  }
 
-.wrapper {
-  @apply max-[992px]:w-full max-[992px]:ml-0 max-[992px]:mr-0;
-}
+  .wrapper {
+    @apply w-full ml-0 mr-0;
+  }
 
-.leftCol {
-  @apply max-[992px]:pl-2;
+  .leftCol {
+    @apply pl-2;
+  }
 }

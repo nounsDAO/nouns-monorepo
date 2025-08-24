@@ -36,26 +36,28 @@
   @apply whitespace-nowrap;
 }
 
-.section h4 {
-  @apply max-[992px]:text-[18px];
-}
+@media (max-width: 992px) {
+  .section h4 {
+    @apply text-[18px];
+  }
 
-.section h2 {
-  @apply max-[992px]:text-[23px];
-}
+  .section h2 {
+    @apply text-[23px];
+  }
 
-.section {
-  @apply max-[992px]:justify-between;
-}
+  .section {
+    @apply justify-between;
+  }
 
-.wrapper {
-  @apply max-[992px]:mt-0 max-[992px]:w-full max-[992px]:ml-0 max-[992px]:mr-0 max-[992px]:pl-0 max-[992px]:pr-0;
-}
+  .wrapper {
+    @apply mt-0 w-full ml-0 mr-0 pl-0 pr-0;
+  }
 
-.leftCol {
-  @apply max-[992px]:pl-2;
-}
+  .leftCol {
+    @apply pl-2;
+  }
 
-.holderContent {
-  @apply max-[992px]:mr-2;
+  .holderContent {
+    @apply mr-2;
+  }
 }

@@ -10,13 +10,26 @@
   @apply min-h-[558px] self-end pb-0 pr-20;
 }
 
-.nounWrapper {
-  @apply max-[992px]:ml-[15%] max-[992px]:mr-[15%] max-[992px]:w-[70%] max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%];
-}
-.auctionActivityCol {
-  @apply max-[992px]:w-full max-[992px]:bg-white max-[992px]:pl-[5%] max-[992px]:pr-[5%] max-[992px]:pt-[5%] max-[568px]:ml-0 max-[568px]:mr-0 max-[568px]:w-full max-[568px]:pl-0 max-[568px]:pr-0 max-[568px]:pt-8;
+@media (max-width: 992px) {
+  .nounWrapper {
+    @apply ml-[15%] mr-[15%] w-[70%];
+  }
+
+  .auctionActivityCol {
+    @apply w-full bg-white pl-[5%] pr-[5%] pt-[5%];
+  }
 }
 
-.nounContentCol {
-  @apply max-[568px]:p-0;
+@media (max-width: 568px) {
+  .nounWrapper {
+    @apply ml-[10%] mr-[10%] mt-8 w-[80%];
+  }
+
+  .auctionActivityCol {
+    @apply ml-0 mr-0 w-full pl-0 pr-0 pt-8;
+  }
+
+  .nounContentCol {
+    @apply p-0;
+  }
 }
