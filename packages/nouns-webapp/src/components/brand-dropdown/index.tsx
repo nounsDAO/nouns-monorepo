@@ -2,8 +2,6 @@ import React from 'react';
 
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
-import classes from './brand-dropdown.module.css';
-
 interface BrandDropdownProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   label?: string;
@@ -22,19 +20,23 @@ const BrandDropdown: React.FC<BrandDropdownProps> = ({
   chevronTop = 10,
 }) => {
   return (
-    <div className={classes.dropdownContainer}>
-      {label && <span className={classes.label}>{label}</span>}
-      <select onChange={onChange} className={classes.select} value={value}>
+    <div className="relative mt-4 w-full cursor-pointer">
+      {label && <span className="opacity-50">{label}</span>}
+      <select
+        onChange={onChange}
+        className="h-12 w-full cursor-pointer appearance-none rounded-[15px] border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)] outline-none"
+        value={value}
+      >
         {children}
       </select>
       <div
-        className={classes.chevronWrapper}
+        className="absolute"
         style={{
           right: `${chevonRight}px`,
           top: `${chevronTop}px`,
         }}
       >
-        <ChevronDownIcon className={classes.chevron} />
+        <ChevronDownIcon className="size-7 text-[var(--brand-cool-dark-text)]" />
       </div>
     </div>
   );
