@@ -5,15 +5,24 @@ export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      xs: '425px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1440px',
+    },
     extend: {
       fontFamily: {
+        sans: ['PT Root UI', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
         londrina: ['Londrina Solid', 'sans-serif'],
         pt: ['PT Root UI', 'sans-serif'],
       },
-      screens: {
-        xs: '425px',
-        '2xl': '1440px',
-        'lg-max': { max: '992px' },
+      backgroundImage: {
+        checkerboard:
+          'linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -87,7 +96,42 @@ export default {
         'quorum-modal': '0 0 24px rgba(0,0,0,0.05)',
         'bid-wrapper': 'inset 0 -12px 16px rgba(0,0,0,0.08)',
       },
+      spacing: {
+        18: '4.5rem',
+      },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [
+    tailwindcssAnimate,
+    // @ts-ignore
+    function ({ addUtilities, addVariant }) {
+      // Custom lg-max variant to re-enable built-in min-/max- arbitrary variants
+      addVariant('lg-max', '@media (max-width: 992px)');
+
+      // Custom utilities for checkerboard background sizing and positioning
+      addUtilities({
+        '.bg-size-checkerboard': {
+          'background-size': '3.125% 3.125%',
+        },
+        '.bg-pos-checkerboard': {
+          'background-position': '0 0, 0 1.5625%, 1.5625% -1.5625%, -1.5625% 0px',
+        },
+        '.tw-underline': {
+          'text-decoration-line': 'underline',
+        },
+      });
+
+      // Container max-width adjustment at 1400px
+      addVariant('min-1400', '@media (min-width: 1400px)');
+      addUtilities(
+        {
+          '.container': { 'max-width': '1140px !important' },
+          '.container-lg': { 'max-width': '1140px !important' },
+          '.container-xl': { 'max-width': '1140px !important' },
+          '.container-xxl': { 'max-width': '1140px !important' },
+        },
+        { variants: ['min-1400'] }
+      );
+    },
+  ],
 } satisfies Config;
