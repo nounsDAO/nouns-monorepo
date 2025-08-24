@@ -1,11 +1,27 @@
 .mobileOnly {
-  @apply !hidden max-[1200px]:!block;
+  @apply !hidden;
+}
+
+@media (max-width: 1200px) {
+  .mobileOnly {
+    @apply !block;
+  }
 }
 
 .desktopOnly {
-  @apply max-[1200px]:hidden;
+}
+
+@media (max-width: 1200px) {
+  .desktopOnly {
+    @apply hidden;
+  }
 }
 
 .disableSmallScreens {
-  @apply max-[414px]:hidden;
+}
+
+@media (max-width: 414px) {
+  .disableSmallScreens {
+    @apply hidden;
+  }
 }

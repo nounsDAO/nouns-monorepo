@@ -59,7 +59,13 @@
 }
 
 .nextNounLink {
-  @apply mb-4 mt-0 transition duration-200 ease-in-out lg-max:pl-3.5 max-[400px]:text-sm;
+  @apply mb-4 mt-0 transition duration-200 ease-in-out lg-max:pl-3.5;
+}
+
+@media (max-width: 400px) {
+  .nextNounLink {
+    @apply text-sm;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
