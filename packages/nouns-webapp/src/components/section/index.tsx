@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 import { CSSProperties } from 'react';
 
-import { Container, Row } from 'react-bootstrap';
-
-import classes from './section.module.css';
+import { cn } from '@/lib/utils';
 
 const Section: React.FC<{
   fullWidth: boolean;
@@ -13,10 +11,10 @@ const Section: React.FC<{
 }> = props => {
   const { fullWidth, className, children, style } = props;
   return (
-    <div className={`${classes.container} ${className}`} style={style}>
-      <Container fluid={fullWidth ? true : 'lg'}>
-        <Row className="align-items-center">{children}</Row>
-      </Container>
+    <div className={cn('pt-8', className)} style={style}>
+      <div className={cn('w-full', fullWidth ? '' : 'mx-auto px-4 lg:max-w-screen-lg')}>
+        <div className="flex flex-wrap items-center">{children}</div>
+      </div>
     </div>
   );
 };
