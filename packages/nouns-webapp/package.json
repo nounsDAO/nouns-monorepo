@@ -150,6 +150,7 @@
     "path-browserify": "^1.0.1",
     "postcss": "^8.5.3",
     "process": "^0.11.10",
+    "shadcn": "^2.10.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tailwindcss": "catalog:",
