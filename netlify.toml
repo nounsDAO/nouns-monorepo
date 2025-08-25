@@ -1,8 +1,7 @@
 [build]
+  base = "packages/nouns-webapp"
   command = "pnpm build"
-  publish = "packages/nouns-webapp/dist"
+  publish = ".next"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

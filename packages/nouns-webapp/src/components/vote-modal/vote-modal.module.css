@@ -1,0 +1,101 @@
+.voteModalTitle {
+  @apply text-center font-londrina text-[36px];
+}
+
+.voteModalSubtitle {
+  @apply mb-4 text-center font-medium text-[18px];
+}
+
+.bold {
+  @apply font-bold;
+}
+
+.voteModal {
+  @apply font-pt;
+}
+
+.propTitle {
+  @apply font-londrina text-[32px] mb-[5px];
+}
+
+.voteIcon {
+  @apply w-[38px] mr-0 mb-1 ml-[6px];
+}
+
+.submitBtn {
+  @apply w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] !bg-[var(--brand-color-green)] !border !border-[var(--brand-color-green)] !text-white focus:!bg-[var(--brand-color-green)] hover:!bg-[var(--brand-color-green)] focus:!border-[var(--brand-color-green)] focus:ring-[rgba(67,179,105,0.75)] focus:ring-[3.2px];
+}
+
+.submitBtn:active {
+  @apply !bg-[var(--brand-color-green)];
+}
+
+.submitBtnDisabled {
+  @apply !bg-[var(--brand-gray-light-text)] w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] border border-[var(--brand-gray-light-text)] opacity-50 !shadow-none;
+}
+
+.submitBtnDisabled:hover,
+.submitBtnDisabled:active,
+.submitBtnDisabled:focus {
+  @apply cursor-not-allowed !shadow-none !text-white;
+}
+
+.header {
+  @apply border-b-0;
+}
+
+.votingButtonsWrapper {
+  @apply transition-all duration-150 ease-in-out;
+}
+
+.loadingSpinner {
+  @apply text-[18px] mb-8 text-center text-[var(--brand-gray-light-text)];
+}
+
+.transactionStatus {
+  @apply text-[18px] mb-8 text-center font-pt font-bold;
+}
+
+.disabled {
+  @apply opacity-50;
+}
+
+.voteSuccessBody {
+  @apply mt-4;
+}
+
+.voteFailureTitle {
+  @apply font-normal w-full;
+}
+
+.voteFailureBody {
+  @apply mt-4 font-bold;
+}
+
+.voteFailureErrorMessage {
+  @apply font-bold text-[var(--brand-color-red)];
+}
+
+.voteReasonTextarea {
+  @apply !pt-8 !h-[6.5rem] rounded-[10px] font-bold text-[1rem] border border-[rgba(0,0,0,0.1)];
+}
+
+.voteReasonTextarea:focus {
+  @apply shadow-none !border-[rgba(0,0,0,0.25)];
+}
+
+.inactive {
+  @apply !scale-95;
+}
+
+.unselected {
+  @apply scale-90 opacity-50;
+}
+
+.gasFreeVotingWrapper {
+  @apply flex w-full justify-center mt-2;
+}
+
+.gasFreeVotingCopy {
+  @apply font-pt text-[14px] text-[var(--brand-gray-light-text)] opacity-75 w-fit text-center;
+}

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as types from './graphql.js';
+import * as types from './graphql';
 
 
 

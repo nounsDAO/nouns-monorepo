@@ -34,21 +34,26 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = import.meta.env.VITE_CHAIN_ID ?? sepolia.id;
+const ENV_CHAIN_ID = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
+export const CHAIN_ID: SupportedChains =
+  ENV_CHAIN_ID === mainnet.id || ENV_CHAIN_ID === hardhat.id || ENV_CHAIN_ID === sepolia.id
+    ? (ENV_CHAIN_ID as SupportedChains)
+    : sepolia.id;
 
-export const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY ?? '';
+export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY ?? '';
 
-export const WALLET_CONNECT_V2_PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_V2_PROJECT_ID ?? '';
+export const WALLET_CONNECT_V2_PROJECT_ID =
+  process.env.NEXT_PUBLIC_WALLET_CONNECT_V2_PROJECT_ID ?? '';
 
-const INFURA_PROJECT_ID = import.meta.env.VITE_INFURA_PROJECT_ID;
+const INFURA_PROJECT_ID = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
-  const custom = import.meta.env.VITE_MAINNET_JSONRPC as string;
+  const custom = process.env.NEXT_PUBLIC_MAINNET_JSONRPC as string;
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
 };
 
 export const createNetworkWsUrl = (network: string): string => {
-  const custom = import.meta.env.VITE_MAINNET_WSRPC as string;
+  const custom = process.env.NEXT_PUBLIC_MAINNET_WSRPC as string;
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
@@ -56,20 +61,20 @@ const app: Record<SupportedChains, AppConfig> = {
   [sepolia.id]: {
     jsonRpcUri: createNetworkHttpUrl('sepolia'),
     wsRpcUri: createNetworkWsUrl('sepolia'),
-    subgraphApiUri: import.meta.env.VITE_SEPOLIA_SUBGRAPH ?? '',
-    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
+    subgraphApiUri: process.env.NEXT_PUBLIC_SEPOLIA_SUBGRAPH ?? '',
+    enableHistory: process.env.NEXT_PUBLIC_ENABLE_HISTORY === 'true',
   },
   [mainnet.id]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri: import.meta.env.VITE_MAINNET_SUBGRAPH ?? '',
-    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
+    subgraphApiUri: process.env.NEXT_PUBLIC_MAINNET_SUBGRAPH ?? '',
+    enableHistory: process.env.NEXT_PUBLIC_ENABLE_HISTORY === 'true',
   },
   [hardhat.id]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
     subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
-    enableHistory: import.meta.env.VITE_ENABLE_HISTORY === 'true',
+    enableHistory: process.env.NEXT_PUBLIC_ENABLE_HISTORY === 'true',
   },
 };
 
