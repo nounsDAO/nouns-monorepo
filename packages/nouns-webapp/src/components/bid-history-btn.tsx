@@ -22,7 +22,11 @@ const BidHistoryBtn: React.FC<BidHistoryBtnProps> = ({ onClick }) => {
       )}
       onClick={onClick}
     >
-      <div className={cn('font-pt text-brand-color-blue ml-2 pb-4 text-[16px] font-bold')}>
+      <div
+        className={cn(
+          'font-pt text-brand-cool-light-text hover:text-brand-color-blue ml-2 pb-4 text-[16px] font-bold',
+        )}
+      >
         <Trans>View all bids</Trans>
       </div>
     </div>
