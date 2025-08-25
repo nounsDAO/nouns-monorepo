@@ -21,7 +21,7 @@ describe('BrandSpinner', () => {
     const { container } = render(<BrandSpinner />);
     const pathElement = container.querySelector('path');
     expect(pathElement).toBeInTheDocument();
-    expect(pathElement).toHaveClass('animate-[spin_1.25s_linear_infinite]');
+    expect(pathElement).toHaveClass('animate-spin-1250');
   });
 
   it('includes a circle with opacity and stroke attributes', () => {

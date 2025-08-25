@@ -154,9 +154,9 @@ function VoteSignals({
       You provided{' '}
       <span
         className={cn(
-          userVoteSupport?.supportDetailed === 1 && 'text-[var(--brand-color-green)]',
-          userVoteSupport?.supportDetailed === 0 && 'text-[var(--brand-color-red)]',
-          userVoteSupport?.supportDetailed === 2 && 'text-[var(--brand-gray-light-text)]',
+          userVoteSupport?.supportDetailed === 1 && 'text-brand-color-green',
+          userVoteSupport?.supportDetailed === 0 && 'text-brand-color-red',
+          userVoteSupport?.supportDetailed === 2 && 'text-brand-gray-light-text',
         )}
       >
         {userVoteSupport && supportText[userVoteSupport.supportDetailed].toLowerCase()}
@@ -182,7 +182,7 @@ function VoteSignals({
               {title}
             </h2>
             {isCandidate !== true && (
-              <p className="font-pt m-0 p-0 text-base text-[var(--brand-gray-light-text)]">
+              <p className="font-pt text-brand-gray-light-text m-0 p-0 text-base">
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
                   idea of how they intend to vote and helpful guidance on proposal changes to change
@@ -193,7 +193,7 @@ function VoteSignals({
           </div>
           <div
             className={cn(
-              'flex flex-col items-center justify-between overflow-hidden rounded-xl border border-[#e6e6e6]',
+              'border-brand-border-light flex flex-col items-center justify-between overflow-hidden rounded-xl border',
               isCandidate !== true && 'lg:sticky lg:top-5',
             )}
           >
@@ -223,7 +223,7 @@ function VoteSignals({
                 {isFeedbackClosed !== true && userVotes !== undefined && userVotes > 0 && (
                   <div
                     className={cn(
-                      'flex w-full flex-col items-center justify-center gap-2.5 border-t border-[#e6e6e6] bg-[#f4f4f8] p-5',
+                      'border-brand-border-light bg-brand-surface flex w-full flex-col items-center justify-center gap-2.5 border-t p-5',
                       userVoteSupport && 'block',
                     )}
                   >
@@ -237,7 +237,7 @@ function VoteSignals({
                             <img
                               src="/loading-noggles.svg"
                               alt="loading"
-                              className="mx-auto max-w-[60px] p-2.5"
+                              className="max-w-15 mx-auto p-2.5"
                             />
                           </>
                         ) : (
@@ -249,13 +249,13 @@ function VoteSignals({
                               <button
                                 type="button"
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-green)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 rounded-10 bg-brand-color-green cursor-pointer border-2 border-transparent px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 1
                                     ? 'border-2 border-white outline-2 outline-black'
                                     : 'opacity-40',
                                   support === undefined && 'opacity-100',
-                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-black/5',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -267,13 +267,13 @@ function VoteSignals({
                               <button
                                 type="button"
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-color-red)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 rounded-10 bg-brand-color-red cursor-pointer border-2 border-transparent px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 0
                                     ? 'border-2 border-white outline-2 outline-black'
                                     : 'opacity-40',
                                   support === undefined && 'opacity-100',
-                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-black/5',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() =>
@@ -285,13 +285,13 @@ function VoteSignals({
                               <button
                                 type="button"
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-[var(--brand-gray-light-text)] px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 rounded-10 bg-brand-gray-light-text cursor-pointer border-2 border-transparent px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   support === undefined && 'opacity-100',
                                   support !== undefined && support === 2
                                     ? 'border-2 border-white outline-2 outline-black'
                                     : 'opacity-40',
                                   support === undefined && 'opacity-100',
-                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-[rgba(0,0,0,0.05)]',
+                                  'hover:border-2 hover:border-white hover:opacity-80 hover:outline-2 hover:outline-black/5',
                                 )}
                                 disabled={isTransactionPending || isTransactionWaiting}
                                 onClick={() => {
@@ -307,7 +307,7 @@ function VoteSignals({
                             </div>
                             <>
                               <FormControl
-                                className="mb-0 w-full rounded-lg border border-[#aaa] p-2.5 text-sm"
+                                className="border-brand-border-muted mb-0 w-full rounded-lg border p-2.5 text-sm"
                                 placeholder="Optional reason"
                                 value={reasonText}
                                 disabled={isTransactionPending || isTransactionWaiting}
@@ -317,7 +317,7 @@ function VoteSignals({
                               <button
                                 type="button"
                                 className={cn(
-                                  'duration-125 cursor-pointer rounded-[10px] border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
+                                  'duration-125 rounded-10 cursor-pointer border-2 border-transparent bg-black px-4 py-2.5 text-sm font-bold leading-none text-white outline-2 outline-transparent transition-all ease-in-out md:w-full',
                                   'disabled:cursor-not-allowed disabled:opacity-20',
                                   'disabled:hover:border-2 disabled:hover:border-transparent disabled:hover:opacity-20 disabled:hover:outline-2 disabled:hover:outline-transparent',
                                 )}
@@ -350,7 +350,7 @@ function VoteSignals({
                         <p>{userFeedbackAdded}</p>
                         {userVoteSupport?.reason && (
                           <div className="">
-                            <p className="text-left text-sm font-normal italic text-[var(--brand-gray-light-text)]">
+                            <p className="text-brand-gray-light-text text-left text-sm font-normal italic">
                               &ldquo;{userVoteSupport.reason}&rdquo;
                             </p>
                           </div>
@@ -363,7 +363,7 @@ function VoteSignals({
             )}
           </div>
           {isCandidate === true && (
-            <p className="font-pt m-0 mt-2 p-0 text-sm leading-tight text-[var(--brand-gray-light-text)]">
+            <p className="font-pt text-brand-gray-light-text m-0 mt-2 p-0 text-sm leading-tight">
               <Trans>
                 Nouns voters can cast voting signals to give proposers of pending proposals an idea
                 of how they intend to vote and helpful guidance on proposal changes to change their

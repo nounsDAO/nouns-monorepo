@@ -64,7 +64,7 @@ const EnsAwareShortAddress: React.FC<ShortAddressProps> = ({
         src={ensAvatar ?? TRANSPARENT_PIXEL}
         style={{ width: size, height: size, backgroundImage: `url(${blo(address)})` }}
       />
-      <span className="font-pt font-bold tracking-[0.2px]">{displayName}</span>
+      <span className="font-pt font-bold">{displayName}</span>
     </div>
   );
 };
@@ -91,7 +91,7 @@ const ShortAddress: React.FC<ShortAddressProps> = ({ address, avatar = false, si
             src={blo(address)}
             style={{ width: size, height: size, backgroundImage: `url(${blo(address)})` }}
           />
-          <span className="font-pt font-bold tracking-[0.2px]">{shortAddress}</span>
+          <span className="font-pt font-bold">{shortAddress}</span>
         </div>
       }
     >

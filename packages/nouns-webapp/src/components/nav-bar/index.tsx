@@ -55,9 +55,9 @@ const NavBar = () => {
 
   const closeNav = () => setIsNavExpanded(false);
   const buttonClasses = usePickByState(
-    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
-    'bg-[#e9ebf3] text-[#79809c]',
-    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
+    'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+    'bg-brand-surface-cool text-brand-cool-muted',
+    'bg-brand-surface-warm text-brand-warm-muted',
   );
   const candidatesNavItem = config.featureToggles.candidates ? (
     <Dropdown.Item className={buttonClasses} href="/vote#candidates">
@@ -73,9 +73,9 @@ const NavBar = () => {
     >
       <Dropdown.Item
         className={usePickByState(
-          'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
-          'bg-[#e9ebf3] text-[#79809c]',
-          'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
+          'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+          'bg-brand-surface-cool text-brand-cool-muted',
+          'bg-brand-surface-warm text-brand-warm-muted',
         )}
         href="/vote"
       >
@@ -100,14 +100,11 @@ const NavBar = () => {
               href="/"
               className="relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95"
             >
-              <NogglesLogo
-                className="size-20 max-[992px]:size-[75px]"
-                aria-label="Nouns DAO noggles"
-              />
+              <NogglesLogo className="lg-max:size-18 size-20" aria-label="Nouns DAO noggles" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className="h-[45px] w-auto" src={testnetNoun.src} alt="testnet noun" />
+                <img className="h-11 w-auto" src={testnetNoun.src} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
             )}
@@ -115,7 +112,7 @@ const NavBar = () => {
               {treasuryBalance !== undefined ? (
                 <Nav.Link
                   href={daoEtherscanLink}
-                  className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                  className="font-pt p-0.3 text-15 font-bold text-black"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -128,16 +125,16 @@ const NavBar = () => {
             </Nav.Item>
           </div>
           <Navbar.Toggle
-            className="mr-3 h-[44px] rounded-[10px] px-2 py-1"
+            className="rounded-10 mr-3 h-11 px-2 py-1"
             aria-controls="basic-navbar-nav"
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end z-10">
-            <div className="hidden max-[1200px]:block">
+            <div className="xl-max:block hidden">
               <Nav.Link
                 as={Link}
                 href="/vote"
-                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                className="font-pt p-0.3 text-15 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -152,7 +149,7 @@ const NavBar = () => {
                     <Nav.Link
                       as={Link}
                       href="/vote#candidates"
-                      className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                      className="font-pt p-0.3 text-15 font-bold text-black"
                       onClick={closeNav}
                     >
                       <NavBarButton
@@ -165,14 +162,14 @@ const NavBar = () => {
                 </>
               )}
             </div>
-            <div className="max-[1200px]:hidden">
+            <div className="xl-max:hidden">
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
                 <Nav.Link
                   as={Link}
                   href="/vote"
-                  className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                  className="font-pt p-0.3 text-15 font-bold text-black"
                   onClick={closeNav}
                 >
                   <NavBarButton
@@ -183,11 +180,11 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <div className="hidden max-[1200px]:block">
+            <div className="xl-max:block hidden">
               <Nav.Link
                 as={Link}
                 href="/playground"
-                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black"
+                className="font-pt p-0.3 text-15 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -199,7 +196,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/nouns"
-                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black max-[992px]:[&_svg]:max-h-none max-[992px]:[&_svg]:min-h-[40px] max-[992px]:[&_svg]:max-w-[40px]"
+                className="font-pt p-0.3 text-15 lg-max:[&_svg]:max-h-none lg-max:[&_svg]:min-h-10 lg-max:[&_svg]:max-w-10 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -211,7 +208,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/traits"
-                className="font-pt p-[0.3rem] text-[0.9rem] font-bold text-black max-[992px]:[&_svg]:max-h-none max-[992px]:[&_svg]:min-h-[40px] max-[992px]:[&_svg]:max-w-[40px]"
+                className="font-pt p-0.3 text-15 lg-max:[&_svg]:max-h-none lg-max:[&_svg]:min-h-10 lg-max:[&_svg]:max-w-10 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -221,7 +218,7 @@ const NavBar = () => {
                 />
               </Nav.Link>
             </div>
-            <div className="max-[1200px]:hidden">
+            <div className="xl-max:hidden">
               <NavDropdown
                 buttonText="Explore"
                 buttonIcon={<NogglesIcon />}
@@ -229,9 +226,9 @@ const NavBar = () => {
               >
                 <Dropdown.Item
                   className={usePickByState(
-                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
-                    'bg-[#e9ebf3] text-[#79809c]',
-                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
+                    'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+                    'bg-brand-surface-cool text-brand-cool-muted',
+                    'bg-brand-surface-warm text-brand-warm-muted',
                   )}
                   href="/nouns"
                 >
@@ -239,9 +236,9 @@ const NavBar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={usePickByState(
-                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
-                    'bg-[#e9ebf3] text-[#79809c]',
-                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
+                    'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+                    'bg-brand-surface-cool text-brand-cool-muted',
+                    'bg-brand-surface-warm text-brand-warm-muted',
                   )}
                   href="/traits"
                 >
@@ -249,9 +246,9 @@ const NavBar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={usePickByState(
-                    'border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92]',
-                    'bg-[#e9ebf3] text-[#79809c]',
-                    'bg-[#fdf9f9] text-[rgba(142,129,127,1)]',
+                    'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+                    'bg-brand-surface-cool text-brand-cool-muted',
+                    'bg-brand-surface-warm text-brand-warm-muted',
                   )}
                   href="/playground"
                 >

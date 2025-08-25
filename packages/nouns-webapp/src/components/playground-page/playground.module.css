@@ -2,48 +2,48 @@
   @apply my-8;
 }
 .headerRow span {
-  @apply text-[#8c8d92] text-2xl font-londrina;
+  @apply text-brand-text-muted-600 text-2xl font-londrina;
 }
 .headerRow h1 {
-  @apply text-[#14161b] text-[56px] font-londrina;
+  @apply text-brand-gray-dark-text text-56 font-londrina;
 }
 .headerRow p {
-  @apply text-[#14161b];
+  @apply text-brand-gray-dark-text;
 }
 
 .primaryBtn {
-  @apply w-full h-16 font-bold mb-2 rounded-[12px] bg-[var(--brand-dark-red)] border border-[var(--brand-dark-red)];
+  @apply w-full h-16 font-bold mb-2 rounded-xl bg-brand-dark-red border border-brand-dark-red;
 }
 .primaryBtn:focus,
 .primaryBtn:hover {
-  @apply bg-[var(--brand-dark-red)] shadow-[0_0_0_0.2rem_rgba(214,60,94,0.75)];
+  @apply bg-brand-dark-red ring-4 ring-brand-dark-red/75;
 }
 .primaryBtn:active {
-  @apply bg-[var(--brand-dark-red)];
+  @apply bg-brand-dark-red;
 }
 .traitForm {
   @apply h-16;
 }
 .traitFormBtn {
-  @apply h-full w-full my-2 rounded-[12px] bg-white border border-[#e2e3e8] text-[18px] font-bold text-[#14161b];
+  @apply h-full w-full my-2 rounded-xl bg-white border border-brand-border-ui text-lg font-bold text-brand-gray-dark-text;
 }
 .traitFormBtn:hover,
 .traitFormBtn:focus {
-  @apply border-[#e2e3e8] bg-[#f4f4f8] shadow-none;
+  @apply border-brand-border-ui bg-brand-surface shadow-none;
 }
 .floatingLabel,
 .fileUpload {
-  @apply text-[15px] text-[#8c8d92];
+  @apply text-15 text-brand-text-muted-600;
 }
 .nounYearsFooter {
   @apply italic;
 }
 .nounImg {
-  @apply rounded-[16px];
+  @apply rounded-2xl;
 }
 .nounImg:hover {
-  @apply cursor-pointer scale-[1.01];
+  @apply cursor-pointer scale-105;
 }
 .nounWrapper {
-  @apply mb-4 bg-[var(--brand-gray-background)] rounded-[16px];
+  @apply mb-4 bg-brand-gray-background rounded-2xl;
 }

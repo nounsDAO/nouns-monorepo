@@ -9,7 +9,7 @@ const Banner = () => {
     <Section fullWidth={false}>
       <div className="w-full lg:w-1/2">
         <div className="max-lg:p-8">
-          <h1 className="font-londrina text-[3.75rem] lg:ml-8 lg:text-[6rem]">
+          <h1 className="font-londrina text-6xl lg:ml-8 lg:text-8xl">
             <Trans>ONE NOUN,</Trans>
             <br />
             <Trans>EVERY DAY,</Trans>

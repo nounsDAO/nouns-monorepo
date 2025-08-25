@@ -29,14 +29,14 @@ const VoteSignalGroup = (props: Props) => {
   }, [props.support, props.voteSignals.length, props.isExpanded]);
 
   return (
-    <div className="border-b border-[#e6e6e6] py-2.5 last:border-none">
+    <div className="border-brand-border-light border-b py-2.5 last:border-none">
       <button
         type="button"
         className={cn(
           'flex w-full flex-row items-center justify-between gap-2.5 border-none bg-transparent',
-          props.support === 1 && '[&>p]:text-[var(--brand-color-green)]',
-          props.support === 0 && '[&>p]:text-[var(--brand-color-red)]',
-          props.support === 2 && '[&>p]:text-[var(--brand-gray-light-text)]',
+          props.support === 1 && '[&>p]:text-brand-color-green',
+          props.support === 0 && '[&>p]:text-brand-color-red',
+          props.support === 2 && '[&>p]:text-brand-gray-light-text',
           props.voteSignals.length > 0 && 'cursor-default',
         )}
         onClick={() => props.voteSignals.length > 0 && setIsExpanded(!isExpanded)}

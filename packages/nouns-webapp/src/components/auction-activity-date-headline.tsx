@@ -18,7 +18,7 @@ const AuctionActivityDateHeadline: React.FC<AuctionActivityDateHeadlineProps> = 
   return (
     <div className="ml-20 w-auto">
       <h4
-        className="font-pt mt-[0.22rem] text-[17px] font-bold leading-[27px]"
+        className="font-pt text-17 leading-27 mt-1 font-bold"
         style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
       >
         {i18n.date(auctionStartTimeUTC, { month: 'long', year: 'numeric', day: '2-digit' })}

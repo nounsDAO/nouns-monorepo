@@ -2,12 +2,14 @@
   @apply relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95;
 }
 
+
 .navBarLogo {
-  @apply h-20 w-20 max-[992px]:h-[75px] max-[992px]:w-[75px];
+  @apply h-20 w-20 lg-max:h-18 lg-max:w-18;
 }
 
+
 .navBarCustom {
-  @apply pb-4 max-[992px]:mb-[-1px] max-[992px]:mr-[-5px] max-[992px]:pb-0;
+  @apply pb-4 lg-max:-mb-px lg-max:-mr-1 lg-max:pb-0;
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
@@ -29,23 +31,25 @@
   @apply cursor-pointer;
 }
 
+
 .greenStatusCircle {
-  @apply relative z-[3] ml-[20px] mr-[-30px] mt-[-20px] h-[10px] w-[10px] rounded-full bg-[#7fc59c];
+  @apply relative z-10 ml-5 -mr-7.5 -mt-5 h-2.5 w-2.5 rounded-full bg-brand-color-green;
 }
 
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited,
 .nounsNavDropdownButton > button {
-  @apply font-pt px-[0.3rem] py-[0.3rem] text-[0.9rem] font-bold text-black;
+  @apply font-pt px-0.3 py-0.3 text-15 font-bold text-black;
 }
 
 .nounsNavDropdownButton > button {
   @apply bg-transparent;
 }
 
+
 .testnetImg {
-  @apply h-[45px] w-auto;
+  @apply h-11 w-auto;
 }
 
 .addressNavLink {
@@ -56,18 +60,21 @@
   @apply flex flex-row flex-nowrap items-center justify-center;
 }
 
+
 .navBarToggle {
-  @apply mr-3 h-[44px] rounded-[10px] px-2 py-1;
+  @apply mr-3 h-11 rounded-10 px-2 py-1;
 }
 
+
 .nounsNavDropdownButton {
-  @apply font-pt h-[40px] rounded-[10px] border border-[rgba(0,0,0,0.1)] px-[12px] text-[16px] font-bold leading-[16px] shadow-none transition-all duration-150 ease-in-out;
+  @apply font-pt h-10 rounded-10 border border-black/10 px-3 text-base font-bold leading-4 shadow-none transition-all duration-150 ease-in-out;
 }
 .nounsNavDropdownButton button {
   @apply flex h-full w-full flex-row items-center justify-center border-0;
 }
 
 /* Unique styling for non-fa icon on Explore button */
+
 .exploreButton svg {
-  @apply max-[992px]:max-h-none max-[992px]:min-h-[40px] max-[992px]:max-w-[40px];
+  @apply lg-max:max-h-none lg-max:min-h-10 lg-max:max-w-10;
 }

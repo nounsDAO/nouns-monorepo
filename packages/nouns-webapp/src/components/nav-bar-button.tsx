@@ -65,13 +65,13 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
       return 'border border-black/10 bg-white text-brand-cool-dark-text hover:bg-brand-border-ui hover:text-brand-cool-dark-text';
     }
     case NavBarButtonStyle.DELEGATE_PRIMARY: {
-      return 'w-[210px] bg-brand-cool-dark-text text-white hover:brightness-200 lg:w-[315px]';
+      return 'w-210 bg-brand-cool-dark-text text-white hover:brightness-200 lg:w-315';
     }
     case NavBarButtonStyle.DELEGATE_SECONDARY: {
-      return 'w-[210px] border-0 bg-brand-color-blue text-white hover:bg-brand-color-blue-darker lg:w-[315px]';
+      return 'w-210 border-0 bg-brand-color-blue text-white hover:bg-brand-color-blue-darker lg:w-315';
     }
     case NavBarButtonStyle.DELEGATE_DISABLED: {
-      return 'w-[210px] border-0 bg-brand-color-blue text-white opacity-50 lg:w-[315px]';
+      return 'w-210 border-0 bg-brand-color-blue text-white opacity-50 lg:w-315';
     }
     case NavBarButtonStyle.FOR_VOTE_SUBMIT: {
       return 'bg-brand-color-green-translucent text-brand-color-green hover:brightness-90';
@@ -103,15 +103,14 @@ const NavBarButton: FC<NavBarButtonProps> = ({
 
   const baseWrapper =
     'font-pt h-12 rounded-10 border border-black/10 px-3 text-lg font-bold leading-4 !shadow-none transition-all duration-150 ease-in-out lg:h-10 lg:text-base';
-  const baseButton =
-    'flex h-full w-full flex-row items-center justify-center text-[18px] lg:text-base';
+  const baseButton = 'flex h-full w-full flex-row items-center justify-center text-lg lg:text-base';
   const baseIcon = cn(
-    'mr-[0.4rem] [&>svg]:max-h-[17px] [&>svg]:opacity-50 lg:[&>svg]:max-h-[14px]',
+    'mr-1.5 [&>svg]:max-h-4 [&>svg]:opacity-50 lg:[&>svg]:max-h-3.5',
     buttonStyle === NavBarButtonStyle.WHITE_ACTIVE && 'text-brand-dark-red',
   );
   const dropdownWrapper = 'pl-1';
   const dropdownIcon =
-    'mr-[0.2rem] block w-[30px] [&>svg]:relative [&>svg]:top-[1px] [&>svg]:max-h-10 [&>svg]:w-full';
+    'mr-1 block w-7.5 [&>svg]:relative [&>svg]:top-px [&>svg]:max-h-10 [&>svg]:w-full';
   const stateCursor = isDisabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
   return (

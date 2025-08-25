@@ -1,9 +1,9 @@
 .voteModalTitle {
-  @apply text-center font-londrina text-[36px];
+  @apply text-center font-londrina text-4xl;
 }
 
 .voteModalSubtitle {
-  @apply mb-4 text-center font-medium text-[18px];
+  @apply mb-4 text-center font-medium text-lg;
 }
 
 .bold {
@@ -15,23 +15,23 @@
 }
 
 .propTitle {
-  @apply font-londrina text-[32px] mb-[5px];
+  @apply font-londrina text-32 mb-1;
 }
 
 .voteIcon {
-  @apply w-[38px] mr-0 mb-1 ml-[6px];
+  @apply w-10 mr-0 mb-1 ml-1.5;
 }
 
 .submitBtn {
-  @apply w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] !bg-[var(--brand-color-green)] !border !border-[var(--brand-color-green)] !text-white focus:!bg-[var(--brand-color-green)] hover:!bg-[var(--brand-color-green)] focus:!border-[var(--brand-color-green)] focus:ring-[rgba(67,179,105,0.75)] focus:ring-[3.2px];
+  @apply w-full min-w-32 h-10 font-bold mb-2 rounded-xl !bg-brand-color-green !border !border-brand-color-green !text-white focus:!bg-brand-color-green hover:!bg-brand-color-green focus:!border-brand-color-green focus:ring-brand-color-green-translucent focus:ring-4;
 }
 
 .submitBtn:active {
-  @apply !bg-[var(--brand-color-green)];
+  @apply !bg-brand-color-green;
 }
 
 .submitBtnDisabled {
-  @apply !bg-[var(--brand-gray-light-text)] w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] border border-[var(--brand-gray-light-text)] opacity-50 !shadow-none;
+  @apply !bg-brand-gray-light-text w-full min-w-32 h-10 font-bold mb-2 rounded-xl border border-brand-gray-light-text opacity-50 !shadow-none;
 }
 
 .submitBtnDisabled:hover,
@@ -49,11 +49,11 @@
 }
 
 .loadingSpinner {
-  @apply text-[18px] mb-8 text-center text-[var(--brand-gray-light-text)];
+  @apply text-lg mb-8 text-center text-brand-gray-light-text;
 }
 
 .transactionStatus {
-  @apply text-[18px] mb-8 text-center font-pt font-bold;
+  @apply text-lg mb-8 text-center font-pt font-bold;
 }
 
 .disabled {
@@ -73,15 +73,15 @@
 }
 
 .voteFailureErrorMessage {
-  @apply font-bold text-[var(--brand-color-red)];
+  @apply font-bold text-brand-color-red;
 }
 
 .voteReasonTextarea {
-  @apply !pt-8 !h-[6.5rem] rounded-[10px] font-bold text-[1rem] border border-[rgba(0,0,0,0.1)];
+  @apply !pt-8 !h-26 rounded-10 font-bold text-base border border-black/10;
 }
 
 .voteReasonTextarea:focus {
-  @apply shadow-none !border-[rgba(0,0,0,0.25)];
+  @apply shadow-none !border-black/25;
 }
 
 .inactive {
@@ -97,5 +97,5 @@
 }
 
 .gasFreeVotingCopy {
-  @apply font-pt text-[14px] text-[var(--brand-gray-light-text)] opacity-75 w-fit text-center;
+  @apply font-pt text-sm text-brand-gray-light-text opacity-75 w-fit text-center;
 }

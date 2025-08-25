@@ -21,7 +21,7 @@ const VoteSignal: React.FC<VoteSignalProps> = ({ address, reason, voteCount }) =
       <div>
         <div className="mb-1 flex gap-2.5 leading-none">
           {!!ensName && (
-            <div className="max-w-[30px]">
+            <div className="max-w-7.5">
               <img
                 alt={address}
                 src={blo(address)}
@@ -35,13 +35,13 @@ const VoteSignal: React.FC<VoteSignalProps> = ({ address, reason, voteCount }) =
             <strong className="text-base font-bold leading-tight">
               <ShortAddress address={address} size={10} />
             </strong>
-            <span className="text-[13px] font-bold leading-tight text-[var(--brand-gray-light-text)]">
+            <span className="text-13 text-brand-gray-light-text font-bold leading-tight">
               {voteCount} vote{voteCount === 1 ? '' : 's'}
             </span>
           </div>
         </div>
 
-        <p className="m-0 p-0 pl-10 text-sm text-[var(--brand-gray-light-text)]">{reason}</p>
+        <p className="text-brand-gray-light-text m-0 p-0 pl-10 text-sm">{reason}</p>
       </div>
     </div>
   );

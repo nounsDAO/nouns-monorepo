@@ -9,22 +9,22 @@ const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
-      return 'bg-[var(--brand-color-green)]';
+      return 'bg-brand-color-green';
     case ProposalState.OBJECTION_PERIOD:
-      return 'border-2 border-[var(--brand-color-red)] bg-white text-[var(--brand-color-red)]';
+      return 'border-2 border-brand-color-red bg-white text-brand-color-red';
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
-      return 'bg-[var(--brand-color-blue)]';
+      return 'bg-brand-color-blue';
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
-      return 'bg-[var(--brand-color-red)]';
+      return 'bg-brand-color-red';
     case ProposalState.UPDATABLE:
-      return 'border-2 border-[#f0ad4e] bg-white text-[#dc9e46]';
+      return 'border-2 border-brand-warning-border bg-white text-brand-warning-text';
     case ProposalState.QUEUED:
     case ProposalState.CANCELLED:
     case ProposalState.EXPIRED:
     default:
-      return 'bg-[var(--brand-gray-light-text)]';
+      return 'bg-brand-gray-light-text';
   }
 };
 
@@ -67,7 +67,7 @@ const ProposalStatus: React.FC<ProposalStateProps> = props => {
   return (
     <div
       className={cn(
-        'font-pt rounded-lg border-2 border-transparent px-[0.65rem] py-[0.36rem] text-[14px] font-bold text-white',
+        'font-pt rounded-lg border-2 border-transparent px-2.5 py-1.5 text-sm font-bold text-white',
         statusVariant(status),
         className,
       )}
