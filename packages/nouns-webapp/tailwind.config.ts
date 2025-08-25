@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 
 export default {
@@ -16,7 +16,16 @@ export default {
     extend: {
       fontFamily: {
         sans: ['PT Root UI', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+        mono: [
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          '"Liberation Mono"',
+          '"Courier New"',
+          'monospace',
+        ],
         londrina: ['Londrina Solid', 'sans-serif'],
         pt: ['PT Root UI', 'sans-serif'],
       },
@@ -66,32 +75,32 @@ export default {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        'brand-black': 'var(--brand-black)',
-        'brand-dark-red': 'var(--brand-dark-red)',
-        'brand-dark-green': 'var(--brand-dark-green)',
-        'brand-color-green': 'var(--brand-color-green)',
-        'brand-color-green-translucent': 'var(--brand-color-green-translucent)',
-        'brand-color-red': 'var(--brand-color-red)',
-        'brand-color-red-translucent': 'var(--brand-color-red-translucent)',
-        'brand-color-blue': 'var(--brand-color-blue)',
-        'brand-color-blue-darker': 'var(--brand-color-blue-darker)',
-        'brand-gray-dark-text': 'var(--brand-gray-dark-text)',
-        'brand-gray-light-text': 'var(--brand-gray-light-text)',
-        'brand-gray-light-text-translucent': 'var(--brand-gray-light-text-translucent)',
-        'brand-gray-background': 'var(--brand-gray-background)',
-        'brand-cool-dark-text': 'var(--brand-cool-dark-text)',
-        'brand-cool-light-text': 'var(--brand-cool-light-text)',
-        'brand-warm-light-text': 'var(--brand-warm-light-text)',
+        ...Object.fromEntries(
+          [
+            'black',
+            'dark-red',
+            'dark-green',
+            'color-green',
+            'color-green-translucent',
+            'color-red',
+            'color-red-translucent',
+            'color-blue',
+            'color-blue-darker',
+            'gray-dark-text',
+            'gray-light-text',
+            'gray-light-text-translucent',
+            'gray-background',
+            'cool-dark-text',
+            'cool-light-text',
+            'warm-light-text',
+          ].map(name => [`brand-${name}`, `var(--brand-${name})`]),
+        ),
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        chart: {
-          1: 'hsl(var(--chart-1))',
-          2: 'hsl(var(--chart-2))',
-          3: 'hsl(var(--chart-3))',
-          4: 'hsl(var(--chart-4))',
-          5: 'hsl(var(--chart-5))',
-        },
+        chart: Object.fromEntries(
+          Array.from({ length: 5 }, (_, i) => [i + 1, `hsl(var(--chart-${i + 1}))`]),
+        ),
       },
       boxShadow: {
         'quorum-modal': '0 0 24px rgba(0,0,0,0.05)',
@@ -105,7 +114,7 @@ export default {
   plugins: [
     tailwindcssAnimate,
     // @ts-ignore
-    function ({ addUtilities, addVariant }) {
+    function ({ addUtilities, addVariant, matchUtilities, theme }) {
       // Custom lg-max variant to re-enable built-in min-/max- arbitrary variants
       addVariant('lg-max', '@media (max-width: 992px)');
 
@@ -125,13 +134,37 @@ export default {
       // Container max-width adjustment at 1400px
       addVariant('min-1400', '@media (min-width: 1400px)');
       addUtilities(
+        Object.fromEntries(
+          ['.container', '.container-lg', '.container-xl', '.container-xxl'].map(cls => [
+            cls,
+            { 'max-width': '1140px !important' },
+          ]),
+        ),
+        { variants: ['min-1400'] },
+      );
+
+      // Brand CSS variable helpers generated from existing brand-* colors
+      const colors = theme('colors') || {};
+      const brandValues = Object.keys(colors)
+        .filter(k => typeof k === 'string' && k.startsWith('brand-'))
+        .reduce(
+          (acc, k) => {
+            const mod = k.replace(/^brand-/, '');
+            acc[mod] = mod;
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
+      matchUtilities(
         {
-          '.container': { 'max-width': '1140px !important' },
-          '.container-lg': { 'max-width': '1140px !important' },
-          '.container-xl': { 'max-width': '1140px !important' },
-          '.container-xxl': { 'max-width': '1140px !important' },
+          'text-brand': (value: string) => ({ color: `var(--brand-${value})` }),
+          'bg-brand': (value: string) => ({ backgroundColor: `var(--brand-${value})` }),
+          'border-brand': (value: string) => ({ borderColor: `var(--brand-${value})` }),
+          'fill-brand': (value: string) => ({ fill: `var(--brand-${value})` }),
+          'stroke-brand': (value: string) => ({ stroke: `var(--brand-${value})` }),
         },
-        { variants: ['min-1400'] }
+        { values: brandValues },
       );
     },
   ],
