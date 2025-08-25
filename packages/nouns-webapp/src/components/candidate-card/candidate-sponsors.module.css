@@ -1,39 +1,23 @@
 .sponsorsWrap {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: row;
+  @apply flex gap-2 flex-row;
 }
+
 .sponsorsWrapOverflow {
-  @media screen and (min-width: 992px) {
-    max-width: 200px;
-    overflow: visible;
-  }
+  @apply lg:max-w-[200px] lg:overflow-visible;
 }
+
 .sponsors {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  gap: 5px;
-  @media screen and (min-width: 992px) {
-    justify-content: flex-start;
-  }
+  @apply flex flex-row flex-wrap justify-center items-center content-center gap-[5px] lg:justify-start;
 }
+
 .sponsorAvatar {
-  width: 32px;
-  height: 32px;
+  @apply w-8 h-8;
 }
+
 .sponsorAvatar img {
-  width: 100%;
-  border-radius: 100%;
-  display: block;
+  @apply w-full rounded-full block;
 }
+
 .emptySponsorSpot {
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-  background: #e8e8ec;
-  border: 1px dashed #a7a7aa;
+  @apply w-8 h-8 rounded-full bg-[#e8e8ec] border border-dashed border-[#a7a7aa];
 }

@@ -1,12 +1,7 @@
 .wrapper {
-  position: relative !important;
-  margin-bottom: 50px;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  @apply !relative mb-[50px] mt-[10px] mx-auto w-full;
 }
 
 .nounWrapper {
-  position: absolute;
+  @apply absolute;
 }

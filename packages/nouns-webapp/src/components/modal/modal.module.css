@@ -1,90 +1,39 @@
 .backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
+  @apply fixed inset-0 w-full h-full z-10 bg-black/60 backdrop-blur-[10px];
 }
 
 .modal {
-  font-family: 'PT Root UI', sans-serif;
-  font-weight: bold;
-  position: fixed;
-  top: 30vh;
-  left: 10%;
-  z-index: 100;
-  background-color: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 3rem 2rem;
-  text-align: center;
-  border-radius: 15px;
-  left: calc(50% - 17.5rem);
-  width: 35rem;
+  @apply font-['PT_Root_UI'] font-bold fixed top-auto left-0 bottom-0 w-full max-h-full bg-white/60 backdrop-blur-[10px] py-12 px-8 text-center rounded-b-none lg:top-[30vh] lg:left-[calc(50%-17.5rem)] lg:w-[35rem] lg:rounded-[15px];
 }
 
 .modal button {
-  border-radius: 10px;
-  min-height: 44px;
-  padding-top: 7px;
-  background-color: rgba(255, 255, 255, 0.7);
+  @apply rounded-[10px] min-h-[44px] pt-[7px] bg-white/70;
 }
 
 .modal button:hover {
-  color: black;
-  background-color: rgba(255, 255, 255, 1);
+  @apply text-black bg-white;
 }
 
 .modal h3 {
-  font-size: xx-large;
-  font-weight: bold;
+  @apply text-2xl font-bold;
 }
 
 .content {
-  padding: 1rem;
-  max-height: 50vh;
-  overflow-y: auto;
+  @apply p-4 max-h-[50vh] overflow-y-auto;
 }
 
 .modal .closeButton {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  border: 0 none;
-  background-color: transparent;
-  width: 40px;
-  height: 40px;
-  padding-top: 2px;
+  @apply absolute top-8 right-8 border-0 bg-transparent w-[40px] h-[40px] pt-[2px];
 }
 
 .modal .closeButton img {
-  height: 1rem;
-  width: 1rem;
-  opacity: 0.5;
-  transition: all 0.125s ease-in-out;
-  margin-top: -4px;
+  @apply h-4 w-4 opacity-50 transition-all duration-150 ease-in-out mt-[-4px];
 }
 
 .modal .closeButton img:hover {
-  opacity: 1;
+  @apply opacity-100;
 }
 
 .modal button img {
-  margin-top: -2px;
-  width: 1.5rem;
-  height: auto;
-}
-
-@media (max-width: 992px) {
-  .modal {
-    top: auto;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    max-height: 100%;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+  @apply mt-[-2px] w-6 h-auto;
 }

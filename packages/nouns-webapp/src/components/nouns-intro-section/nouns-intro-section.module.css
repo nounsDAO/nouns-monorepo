@@ -1,129 +1,63 @@
 .videoSection {
-  padding-top: 4rem !important;
-  padding-bottom: 2rem 0 !important;
-  margin-bottom: 60px;
+  @apply !p-0 mb-[60px] lg:!pt-16 lg:!pb-8;
 }
 
 .textWrapper {
-  padding-right: 2rem;
+  @apply lg:pr-8 ml-[20px] p-8 lg:ml-0 lg:px-0;
 }
 
 .textWrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 5rem;
+  @apply font-['Londrina_Solid'] text-[3.75rem] lg:text-[5rem];
 }
 
 .textWrapper p {
-  font-size: 1.2rem;
+  @apply text-[1.2rem];
 }
 
 .youtubeSectionText {
-  margin-left: 20px;
-  padding-right: 0px;
+  @apply ml-[20px] pr-0;
 }
 
 .embedContainer {
-  padding: 36% 0 0 0;
-  position: relative;
+  @apply relative pt-[56.25%] lg:pt-[36%] lg:mb-0 mb-[60px];
 }
 
 .youtubeEmbedContainer {
-  padding: 32% 0 0 0;
-  position: relative;
+  @apply relative pt-[56.25%] lg:pt-[32%] lg:mb-0 mb-[60px];
 }
 
 .embedContainer iframe {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  height: 350px;
+  @apply absolute top-0 left-0 w-full h-full lg:top-[20px] lg:h-[350px];
 }
 
 .youtubeEmbedContainer iframe {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  height: 320px;
-  width: 100%;
+  @apply absolute top-0 left-0 w-full h-full lg:top-[20px] lg:h-[320px];
 }
 
 .videoSubtitle {
-  position: absolute;
-  top: 365px;
+  @apply absolute lg:top-[365px] lg:bottom-auto bottom-[-40px] px-[2.5rem];
 }
 
 .youtubeVideoSubtitle {
-  position: absolute;
-  top: 350px;
+  @apply absolute top-[350px];
 }
 
 .videoSubtitle a {
-  display: inline-block;
-  text-decoration: underline;
-  color: #6c757d;
-  padding: 0;
+  @apply inline-block underline text-[#6c757d] p-0;
 }
 
 .dlFromAppStoreImg {
-  margin-top: 2rem;
-  width: 10rem;
+  @apply mt-8 w-[10rem];
 }
 
-@media (max-width: 992px) {
-  .videoSection {
-    padding: 0 !important;
-  }
-
-  .textWrapper {
-    margin-left: 20px;
-    padding: 2rem;
-  }
-
-  .textWrapper h1 {
-    font-size: 3.75rem;
-  }
-
-  .embedContainer {
-    padding: 56.25% 0 0 0 !important;
-    margin-bottom: 60px;
-  }
-
-  .youtubeEmbedContainer {
-    padding: 56.25% 0 0 0 !important;
-    margin-bottom: 60px;
-  }
-
-  .embedContainer iframe {
-    top: 0;
-    height: 100%;
-  }
-  .youtubeEmbedContainer iframe {
-    top: 0;
-    height: 100%;
-  }
-
-  .videoSubtitle {
-    top: unset;
-    bottom: -40px;
-    padding: 0 2.5rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .videoSubtitle {
-    bottom: -30px;
-  }
-
-  .videoMintedSubtitle {
-    display: none;
-  }
+.videoMintedSubtitle {
+  @apply sm:block;
 }
 
 .nounsIntroLinks {
-  color: #d63c5e;
+  @apply text-[#d63c5e];
 }
 
 .nounsIntroLinks:hover {
-  color: #d63c5e;
+  @apply text-[#d63c5e];
 }

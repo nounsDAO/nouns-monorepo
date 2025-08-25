@@ -1,161 +1,101 @@
 .voteModalTitle {
-  text-align: center;
-  font-family: 'Londrina Solid';
-  font-size: 36px;
+  @apply text-center font-['Londrina_Solid'] text-[36px];
 }
 
 .voteModalSubtitle {
-  margin-bottom: 1rem;
-  text-align: center;
-  font-weight: 500;
-  font-size: 18px;
+  @apply mb-4 text-center font-medium text-[18px];
 }
 
 .bold {
-  font-weight: bold;
+  @apply font-bold;
 }
 
 .voteModal {
-  font-family: 'PT Root UI';
+  @apply font-['PT_Root_UI'];
 }
 
 .propTitle {
-  font-family: 'Londrina Solid';
-  font-size: 32px;
-  margin-bottom: 5px;
+  @apply font-['Londrina_Solid'] text-[32px] mb-[5px];
 }
 
 .voteIcon {
-  width: 38px;
-  margin-right: 0px;
-  margin-bottom: 4px;
-  margin-left: 6px;
+  @apply w-[38px] mr-0 mb-1 ml-[6px];
 }
 
 .submitBtn {
-  width: 100%;
-  min-width: 8rem;
-  height: 40px;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  background-color: var(--brand-color-green) !important;
-  border: var(--brand-color-green) !important;
-  color: white !important;
+  @apply w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] !bg-[var(--brand-color-green)] !border !border-[var(--brand-color-green)] !text-white focus:!bg-[var(--brand-color-green)] hover:!bg-[var(--brand-color-green)] focus:!border-[var(--brand-color-green)] focus:ring-[rgba(67,179,105,0.75)] focus:ring-[3.2px];
 }
-.submitBtn:focus,
-.submitBtn:hover {
-  background-color: var(--brand-color-green) !important;
-  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
-  border: var(--brand-color-green) !important;
-}
+
 .submitBtn:active {
-  background-color: var(--brand-color-green) !important;
+  @apply !bg-[var(--brand-color-green)];
 }
 
 .submitBtnDisabled {
-  background-color: var(--brand-gray-light-text) !important;
-  width: 100%;
-  min-width: 8rem;
-  height: 40px;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  border-radius: 12px;
-  border: var(--brand-gray-light-text);
-  opacity: 0.5;
-  box-shadow: none !important;
+  @apply !bg-[var(--brand-gray-light-text)] w-full min-w-[8rem] h-10 font-bold mb-2 rounded-[12px] border border-[var(--brand-gray-light-text)] opacity-50 !shadow-none;
 }
 
 .submitBtnDisabled:hover,
 .submitBtnDisabled:active,
 .submitBtnDisabled:focus {
-  cursor: not-allowed;
-  box-shadow: none !important;
-  color: white !important;
+  @apply cursor-not-allowed !shadow-none !text-white;
 }
 
 .header {
-  border-bottom: 0px;
+  @apply border-b-0;
 }
 
 .votingButtonsWrapper {
-  transition: all 0.125s ease-in-out;
+  @apply transition-all duration-150 ease-in-out;
 }
 
 .loadingSpinner {
-  font-size: 18px;
-  margin-bottom: 2rem;
-  text-align: center;
-  color: var(--brand-gray-light-text);
+  @apply text-[18px] mb-8 text-center text-[var(--brand-gray-light-text)];
 }
 
 .transactionStatus {
-  font-size: 18px;
-  margin-bottom: 2rem;
-  text-align: center;
-  font-family: 'PT Root UI';
-  font-weight: bold;
+  @apply text-[18px] mb-8 text-center font-['PT_Root_UI'] font-bold;
 }
 
 .disabled {
-  opacity: 0.5;
+  @apply opacity-50;
 }
 
 .voteSuccessBody {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .voteFailureTitle {
-  font-weight: normal;
-  width: 100%;
+  @apply font-normal w-full;
 }
 
 .voteFailureBody {
-  margin-top: 1rem;
-  font-weight: bold;
+  @apply mt-4 font-bold;
 }
 
 .voteFailureErrorMessage {
-  font-weight: bold;
-  color: var(--brand-color-red);
+  @apply font-bold text-[var(--brand-color-red)];
 }
 
 .voteReasonTextarea {
-  padding-top: 2rem !important;
-  height: 6.5rem !important;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  font-size: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  @apply !pt-8 !h-[6.5rem] rounded-[10px] font-bold text-[1rem] border border-[rgba(0,0,0,0.1)];
 }
 
 .voteReasonTextarea:focus {
-  box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.25) !important;
+  @apply shadow-none !border-[rgba(0,0,0,0.25)];
 }
 
 .inactive {
-  transform: scale(95%) !important;
+  @apply !scale-95;
 }
 
 .unselected {
-  transform: scale(90%);
-  opacity: 0.5;
+  @apply scale-90 opacity-50;
 }
 
 .gasFreeVotingWrapper {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  margin-top: 0.5rem;
+  @apply flex w-full justify-center mt-2;
 }
 
 .gasFreeVotingCopy {
-  font-family: 'PT Root UI';
-  font-size: 14px;
-  color: var(--brand-gray-light-text);
-  opacity: 0.75;
-  width: fit-content;
-  text-align: center;
+  @apply font-['PT_Root_UI'] text-[14px] text-[var(--brand-gray-light-text)] opacity-75 w-fit text-center;
 }

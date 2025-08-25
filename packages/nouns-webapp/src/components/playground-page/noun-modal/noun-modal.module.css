@@ -1,47 +1,26 @@
 .modal {
-  position: fixed;
-  top: 15vh;
-  z-index: 100;
-  padding: 2rem;
-  text-align: center;
-  border-radius: 15px;
-  left: calc(50% - 12.5rem);
-  width: 25rem;
+  @apply fixed top-[15vh] z-[100] p-8 text-center rounded-[15px] left-1/2 -translate-x-1/2 w-[25rem] max-[992px]:w-[80%] max-[992px]:left-[10%] max-[992px]:translate-x-0;
 }
 
 .displayNounFooter {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @apply flex flex-col items-center;
 }
 .displayNounFooter span {
-  color: white;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  @apply text-white font-bold mb-4;
 }
 .displayNounFooter button {
-  width: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
+  @apply w-1/2 bg-white/30 border-none;
 }
 
 .displayNounFooter button:hover,
 .displayNounFooter button:active,
 .displayNounFooter button:focus {
-  background: rgba(255, 255, 255, 0.4) !important;
-  box-shadow: none !important;
+  @apply bg-white/40 shadow-none;
 }
 
 .nounImg {
-  border-radius: 16px;
+  @apply rounded-[16px];
 }
 .nounWrapper {
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 992px) {
-  .modal {
-    width: 80% !important;
-    left: 10% !important;
-  }
+  @apply mb-4;
 }

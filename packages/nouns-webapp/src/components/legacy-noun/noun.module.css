@@ -1,53 +1,31 @@
 .img {
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  vertical-align: middle;
+  @apply [image-rendering:pixelated] [image-rendering:-moz-crisp-edges] absolute top-0 left-0 w-full h-auto align-middle;
 }
 
 .imgWrapper {
-  position: relative;
-  padding-top: 100%;
-  width: 100%;
-  height: 0;
+  @apply relative pt-[100%] w-full h-0;
 }
 
 .circular {
-  border-radius: 50%;
+  @apply rounded-full;
 }
 
 .delegateViewCircular {
-  border-radius: 50%;
-  margin-top: 13px;
+  @apply rounded-full mt-[13px];
 }
 
 .circleWithBorder {
-  border-radius: 50%;
-  border: 2px solid #ffffff;
+  @apply rounded-full border-2 border-[#ffffff];
 }
 
 .rounded {
-  border-radius: 15px;
+  @apply rounded-[15px];
 }
 
 .circularNounWrapper {
-  width: 42px;
-  height: 42px;
+  @apply w-[42px] h-[42px] max-[1200px]:w-[70%] max-[1200px]:h-[70%];
 }
 
 .delegateViewCircularNounWrapper {
-  width: 42px;
-  height: 42px;
-  margin-left: 12px;
-}
-
-@media (max-width: 1200px) {
-  .circularNounWrapper {
-    height: 70%;
-    width: 70%;
-  }
+  @apply w-[42px] h-[42px] ml-[12px];
 }

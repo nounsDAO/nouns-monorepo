@@ -1,108 +1,63 @@
 .delegateInput {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  width: 100%;
-  height: 54px;
-  color: black;
-  border-radius: 12px !important;
-  box-shadow: inset 0px 0px 0px 1px #fff;
-  background-color: white;
-  outline: none !important;
-  box-shadow: none !important;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 25px;
-  transition: all 0.2s ease-in-out;
+  @apply w-full h-[54px] text-black !rounded-[12px] bg-white outline-none !shadow-none font-['PT_Root_UI'] font-bold text-[25px] transition-all duration-200 ease-in-out;
 }
 
 .delegteDeepLinkSpinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  @apply flex justify-center my-4;
 }
 
 .delegateInput:focus {
-  box-shadow: none !important;
+  @apply !shadow-none;
 }
 
 .nonEnBottomMargin {
-  margin-bottom: 2.1rem;
-}
-
-@media (max-width: 992px) {
-  .nonEnBottomMargin {
-    margin-bottom: 3.5rem;
-  }
+  @apply mb-[3.5rem] lg:mb-[2.1rem];
 }
 
 .empty {
-  border: none;
+  @apply border-0;
 }
 
 .valid {
-  border: 2px solid var(--brand-color-green);
+  @apply border-2 border-[var(--brand-color-green)];
 }
 
 .invalid {
-  border: 2px solid var(--brand-color-red);
+  @apply border-2 border-[var(--brand-color-red)];
 }
 
 .buttonWrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
+  @apply flex justify-between mt-2;
 }
 
 .btnVoteCount {
-  align-items: center;
-  margin: auto;
+  @apply items-center m-auto;
 }
 
 .delegateKVotesBtn {
-  z-index: 101;
+  @apply z-[101];
 }
 
 .delegateKVotesBtn span {
-  margin-right: 0.3rem;
+  @apply mr-[0.3rem];
 }
 
 .highlightCircle {
-  width: 22px;
-  line-height: 22px;
-  border-radius: 50%;
-  text-align: center;
-  background-image: radial-gradient(#ffffff70 15%, rgba(0, 0, 0, 0) 75%);
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 8px;
-  padding-right: 8px;
-  font-size: 20px;
+  @apply w-[22px] leading-[22px] rounded-full text-center bg-[radial-gradient(#ffffff70_15%,rgba(0,0,0,0)_75%)] pt-[6px] pb-[6px] px-[8px] text-[20px];
 }
 
 .delegateCandidateInfoWrapper {
-  padding: 0rem 0.25rem 0.25rem 0rem;
-  margin-top: 0.5rem;
+  @apply pr-1 pb-1 pt-0 pl-0 mt-2;
 }
 
-@media (max-width: 992px) {
-  .customButtonHighlighter {
-    top: 24.15%;
-    left: 81.115%;
-  }
+.customButtonHighlighter {
+  @apply top-[24.15%] left-[81.115%];
 }
 
 .alreadyDelegatedCopy {
-  margin-left: 0.25rem;
-  color: var(--brand-cool-light-text);
+  @apply ml-1 text-[var(--brand-cool-light-text)];
 }
 
 .changeDelegateWarning {
-  border: 1px solid var(--brand-color-red);
-  background-color: var(--brand-color-red-translucent);
-  color: var(--brand-color-red);
-  padding: 0.25rem 1rem;
-  border-radius: 14px;
-  margin-top: -0.5rem;
+  @apply border border-[var(--brand-color-red)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)] py-1 px-4 rounded-[14px] mt-[-0.5rem];
 }

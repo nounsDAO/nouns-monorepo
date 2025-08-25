@@ -1,26 +1,19 @@
 .label {
-  opacity: 0.5;
+  @apply opacity-50;
 }
 
 .argument {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.25rem;
+  @apply flex justify-between mb-1;
 }
 
 .row {
-  display: flex;
+  @apply flex;
 }
 
 .value {
-  font-size: 22px;
-  font-weight: bold;
-  color: var(--brand-cool-dark-text);
-  margin-bottom: 0.5rem;
-  word-break: break-all;
+  @apply text-[22px] font-bold text-[var(--brand-cool-dark-text)] mb-2 break-all;
 }
 
 .argValue {
-  max-width: 50%;
-  word-break: break-all;
+  @apply max-w-[50%] break-all;
 }

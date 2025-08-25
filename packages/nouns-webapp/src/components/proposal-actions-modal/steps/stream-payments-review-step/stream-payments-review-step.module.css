@@ -1,8 +1,3 @@
 .hover {
-  border-radius: 8px !important;
-  background-color: var(--brand-gray-dark-text) !important;
-  color: white;
-  opacity: 0.75 !important;
-  font-weight: 500;
-  transition: ease-in-out 125ms;
+  @apply !rounded-lg !bg-[var(--brand-gray-dark-text)] text-white !opacity-75 font-medium ease-in-out duration-150 transition;
 }
