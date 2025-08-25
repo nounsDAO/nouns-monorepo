@@ -2,7 +2,7 @@ import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import AuctionTitleAndNavWrapper from './index';
+import { default as AuctionTitleAndNavWrapper } from './auction-title-and-nav-wrapper';
 
 describe('AuctionTitleAndNavWrapper Component', () => {
   it('should render children correctly', () => {
