@@ -11,7 +11,9 @@
 }
 
 .warmInfo .icon {
-  @apply text-brand-warm-muted border-l border-brand-warm-border;
+  @apply border-l;
+  color: var(--brand-warm-muted);
+  border-left-color: var(--brand-warm-border);
 }
 
 .treasuryBalance {
@@ -26,11 +28,11 @@
 }
 
 .warmInfo .treasuryBalance {
-  @apply text-brand-warm-dark-text;
+  color: var(--brand-warm-dark-text);
 }
 
 .coolInfo .treasuryBalance {
-  @apply text-brand-cool-dark-text;
+  color: var(--brand-cool-dark-text);
 }
 
 .button:hover {
@@ -38,19 +40,25 @@
 }
 
 .coolInfo {
-  @apply border border-brand-cool-border rounded-10 text-brand-cool-dark-text;
+  @apply border rounded-10;
+  color: var(--brand-cool-dark-text);
+  border-color: var(--brand-cool-border);
 }
 
 .coolInfo:hover {
-  @apply bg-brand-cool-accent text-black;
+  @apply text-black;
+  background-color: var(--brand-cool-accent);
 }
 
 .warmInfo {
-  @apply border border-brand-warm-border rounded-10 text-brand-warm-light-text;
+  @apply border rounded-10;
+  color: var(--brand-warm-light-text);
+  border-color: var(--brand-warm-border);
 }
 
 .warmInfo:hover {
-  @apply bg-brand-warm-accent text-black;
+  @apply text-black;
+  background-color: var(--brand-warm-accent);
 }
 
 .whiteInfo {
@@ -62,5 +70,5 @@
 }
 
 .whiteInfo:hover {
-  @apply bg-brand-border-ui;
+  background-color: var(--brand-border-ui);
 }
