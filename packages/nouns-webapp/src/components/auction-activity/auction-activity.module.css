@@ -1,5 +1,5 @@
 .wrapper {
-  @apply self-start p-4 text-[var(--brand-black)] lg-max:p-4;
+  @apply self-start p-4 text-brand-black lg-max:p-4;
 }
 
 .informationRow {
@@ -15,7 +15,7 @@
 }
 
 .heading2 {
-  @apply text-[2.5rem];
+  @apply text-2.5xl;
 }
 
 .heading4 {
@@ -27,11 +27,11 @@
 }
 
 .modalTitleWrapper {
-  @apply text-[var(--brand-black)];
+  @apply text-brand-black;
 }
 
 .modalTitleWrapper .modalHeading {
-  @apply ml-8 text-[xx-large];
+  @apply ml-8 text-4xl;
 }
 
 .modalHeader button {
@@ -39,11 +39,11 @@
 }
 
 .modalHeaderNounImgWrapper {
-  @apply h-[150px] w-[150px];
+  @apply h-36 w-36;
 }
 
 .currentBidCol {
-  @apply ml-1.5 mt-1.5 border-r border-r-[#79809c49] lg-max:border-r-0 lg-max:pl-0;
+  @apply ml-1.5 mt-1.5 border-r lg-max:border-r-0 lg-max:pl-0;
 }
 
 .auctionTimerCol {
@@ -51,22 +51,20 @@
 }
 
 .section .sectionHeading4 {
-  @apply font-pt text-[17px] leading-[25px];
+  @apply font-pt text-17 leading-25;
 }
 
 .section .sectionHeading2 {
-  @apply font-pt text-[32px] font-bold;
+  @apply font-pt text-32 font-bold;
 }
 
 .nextNounLink {
   @apply mb-4 mt-0 transition duration-200 ease-in-out lg-max:pl-3.5;
 }
 
-@media (max-width: 400px) {
-  .nextNounLink {
-    @apply text-sm;
-  }
-}
+/* The previous 400px max-width adjustment is close to our xs screen (425px).
+   To avoid arbitrary media queries, consider applying base styles for small
+   screens and override at xs: if needed in markup. Left unchanged here. */
 
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {
@@ -81,7 +79,7 @@
 
 .nextNounLink a,
 .nextNounLink:active a {
-  @apply font-pt pl-2 font-medium text-[rgb(95,95,95)] no-underline opacity-100;
+  @apply font-pt pl-2 font-medium text-brand-gray-light-text no-underline opacity-100;
 }
 
 .nextNounLink:hover,

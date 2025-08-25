@@ -1,5 +1,5 @@
 .bidRow {
-  @apply rounded-[14px] h-18 w-full p-4 mt-3 border-b-0 bg-white;
+  @apply rounded-14 h-18 w-full p-4 mt-3 border-b-0 bg-white;
 }
 
 .bidderInfoWrapper {
@@ -7,19 +7,19 @@
 }
 
 .bidderInfoText {
-  @apply ml-2 inline-block p-0 leading-[23px];
+  @apply ml-2 inline-block p-0 leading-6;
 }
 
 .bidDate {
-  @apply text-[rgba(140,141,146,1)] font-pt font-medium text-[13px];
+  @apply text-brand-gray-light-text font-pt font-medium text-13;
 }
 
 .trophy {
-  @apply ml-2 mb-[0.1rem];
+  @apply ml-2 mb-px;
 }
 
 .linkIcon {
-  @apply text-[var(--brand-gray-light-text)] transition-all duration-150 ease-in-out mb-[0.1rem];
+  @apply text-brand-gray-light-text transition-all duration-150 ease-in-out mb-px;
 }
 
 .linkIcon:hover {

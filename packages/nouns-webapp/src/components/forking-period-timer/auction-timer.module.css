@@ -3,11 +3,11 @@
 }
 
 .section h4 {
-  @apply font-pt text-[18px] font-bold;
+  @apply font-pt text-lg font-bold;
 }
 
 .section h2 {
-  @apply font-pt mb-0 mt-[3px] text-[32px] font-bold;
+  @apply font-pt mb-0 mt-[3px] text-32 font-bold;
 }
 
 .wrapper {
@@ -40,11 +40,11 @@
 
 @media (max-width: 992px) {
   .section h4 {
-    @apply mb-0 mt-[6px] text-[18px];
+    @apply mb-0 mt-1.5 text-lg;
   }
 
   .section h2 {
-    @apply text-[23px];
+    @apply text-23;
   }
 
   .section {

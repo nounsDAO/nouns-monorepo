@@ -40,11 +40,11 @@
 }
 
 .sponsorCount.sponsorCountOverflow {
-  @apply [@media(min-width:992px)]:h-full [@media(min-width:992px)]:py-2.5 [@media(min-width:992px)]:px-10 [@media(min-width:992px)]:-ml-6 [@media(min-width:992px)]:bg-[linear-gradient(90deg,rgba(244,244,248,0)_0%,rgba(244,244,248,0.9)_15%,rgba(244,244,248,1)_25%,rgba(244,244,248,1)_100%)];
+  @apply mdLg:h-full mdLg:py-2.5 mdLg:px-10 mdLg:-ml-6 mdLg:bg-sponsor-fade;
 }
 
 .candidateLink:hover .sponsorCount.sponsorCountOverflow {
-  @apply [@media(min-width:992px)]:bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.9)_15%,rgba(255,255,255,1)_25%,rgba(255,255,255,1)_100%)];
+  @apply mdLg:bg-sponsor-fade-hover;
 }
 
 .naVotesLabel {

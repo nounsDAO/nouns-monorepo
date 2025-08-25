@@ -11,7 +11,7 @@
 }
 
 .nounsRepresented {
-  @apply text-brand-gray-dark-text flex mt-1 font-medium text-[15px] max-w-[11rem];
+  @apply text-brand-gray-dark-text flex mt-1 font-medium text-15 max-w-11rem;
 }
 
 .bold {
@@ -19,7 +19,7 @@
 }
 
 .spinnerWrapper {
-  @apply text-brand-gray-light-text w-full h-[120px] flex flex-col justify-center;
+  @apply text-brand-gray-light-text w-full h-30 flex flex-col justify-center;
 }
 
 .spinner {
@@ -27,5 +27,5 @@
 }
 
 .icon {
-  @apply mb-[5px] mr-[6px];
+  @apply mb-1.5 mr-1.5;
 }

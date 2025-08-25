@@ -10,14 +10,12 @@
   @apply min-h-[558px] self-end pb-0 pr-20;
 }
 
-@media (max-width: 992px) {
-  .nounWrapper {
-    @apply ml-[15%] mr-[15%] w-[70%];
-  }
+.nounWrapper {
+  @apply lg-max:ml-[15%] lg-max:mr-[15%] lg-max:w-[70%];
+}
 
-  .auctionActivityCol {
-    @apply w-full bg-white pl-[5%] pr-[5%] pt-[5%];
-  }
+.auctionActivityCol {
+  @apply lg-max:w-full lg-max:bg-white lg-max:pl-[5%] lg-max:pr-[5%] lg-max:pt-[5%];
 }
 
 @media (max-width: 568px) {
