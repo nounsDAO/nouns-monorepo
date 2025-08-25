@@ -81,6 +81,7 @@ export default {
         'brand-gray-background': 'var(--brand-gray-background)',
         'brand-cool-dark-text': 'var(--brand-cool-dark-text)',
         'brand-cool-light-text': 'var(--brand-cool-light-text)',
+        'brand-warm-light-text': 'var(--brand-warm-light-text)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
