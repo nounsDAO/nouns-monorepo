@@ -1,5 +1,5 @@
 .wrapper {
-  @apply h-10 rounded-[10px] text-[16px] font-pt font-bold px-[10px] py-0 transition-all duration-150 ease-in-out shadow-none border border-black/10;
+  @apply h-10 rounded-10 text-base font-pt font-bold px-2.5 py-0 transition-all duration-150 ease-in-out shadow-none border border-black/10;
 }
 
 .button {
@@ -7,32 +7,30 @@
 }
 
 .treasuryHeader {
-  @apply text-[16px] ml-1 mr-[0.4rem] mt-[1px] opacity-50;
+  @apply text-base ml-1 mr-0.4 mt-px opacity-50;
 }
 
 .warmInfo .icon {
-  @apply text-[#b6a9a7] border-l border-l-[#e1d7d5];
+  @apply text-[#b6a9a7] border-l border-l-brand-warm-border;
 }
 
 .treasuryBalance {
-  @apply text-[16.5px] tracking-[0.3px] ml-[0.4rem] mr-1;
+  @apply text-base tracking-wide ml-0.4 mr-1;
 }
 
-@media (max-width: 400px) {
-  .wrapper {
-    @apply ml-[-0.5rem] pl-[6px] pr-[7px];
-  }
-  .treasuryHeader {
-    @apply hidden;
-  }
+.wrapper {
+  @apply -ml-2 pl-1.5 pr-1.5 xs:ml-0 xs:px-2.5;
+}
+.treasuryHeader {
+  @apply block xs:block;
 }
 
 .warmInfo .treasuryBalance {
-  @apply text-[var(--brand-warm-dark-text)];
+  @apply text-brand-warm-dark-text;
 }
 
 .coolInfo .treasuryBalance {
-  @apply text-[var(--brand-cool-dark-text)];
+  @apply text-brand-cool-dark-text;
 }
 
 .button:hover {
@@ -40,11 +38,11 @@
 }
 
 .coolInfo {
-  @apply border border-[var(--brand-cool-border)] rounded-[10px] text-[var(--brand-cool-dark-text)];
+  @apply border border-brand-cool-border rounded-10 text-brand-cool-dark-text;
 }
 
 .coolInfo:hover {
-  @apply bg-[var(--brand-cool-accent)] text-black;
+  @apply bg-brand-cool-accent text-black;
 }
 
 .warmInfo {

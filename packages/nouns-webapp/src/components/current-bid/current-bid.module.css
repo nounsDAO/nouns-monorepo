@@ -7,7 +7,7 @@
 }
 
 .section h2 {
-  @apply font-pt font-bold text-32 mb-0 mt-[3px] lg-max:text-23;
+  @apply font-pt font-bold text-32 mb-0 mt-0.75 lg-max:text-23;
 }
 
 .wrapper {

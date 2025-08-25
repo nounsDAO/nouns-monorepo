@@ -3,15 +3,15 @@
 }
 
 .section h4 {
-  @apply font-pt text-lg font-bold;
+  @apply font-pt text-lg font-bold lg-max:mb-0 lg-max:mt-1.5;
 }
 
 .section h2 {
-  @apply font-pt mb-0 mt-[3px] text-32 font-bold;
+  @apply font-pt mb-0 mt-0.75 text-32 font-bold lg-max:text-23;
 }
 
 .wrapper {
-  @apply mt-[0.3rem] w-max cursor-pointer pl-10 pr-0;
+  @apply mt-1 w-max cursor-pointer pl-10 pr-0 lg-max:ml-0 lg-max:mr-0 lg-max:w-auto lg-max:pl-0;
 }
 
 .timerWrapper {
@@ -19,59 +19,37 @@
 }
 
 .timerSection span {
-  @apply font-pt text-[32px] font-bold;
+  @apply font-pt text-32 font-bold lg-max:text-lg;
 }
 
 .timerSection {
-  @apply mr-2 text-center leading-[0.7];
+  @apply mr-2 text-center leading-tight-3;
 }
 
 .timerSectionFinal {
-  @apply mr-0 text-center leading-[0.7];
+  @apply mr-0 text-center leading-tight-3;
 }
 
 .timerSectionFinal span {
-  @apply font-pt text-[32px] font-bold;
+  @apply font-pt text-32 font-bold lg-max:text-lg;
 }
 
 .leftCol {
-  @apply mt-[1px];
+  @apply mt-px;
 }
 
-@media (max-width: 992px) {
-  .section h4 {
-    @apply mb-0 mt-1.5 text-lg;
-  }
+.section {
+  @apply lg-max:justify-between;
+}
 
-  .section h2 {
-    @apply text-23;
-  }
+.leftCol {
+  @apply lg-max:mt-0 lg-max:pl-2;
+}
 
-  .section {
-    @apply justify-between;
-  }
+.title {
+  @apply lg-max:mt-5.6 lg-max:text-lg;
+}
 
-  .wrapper {
-    @apply ml-0 mr-0 w-auto pl-0;
-  }
-
-  .leftCol {
-    @apply mt-0 pl-2;
-  }
-
-  .timerSection span {
-    @apply text-[18px];
-  }
-
-  .timerSectionFinal span {
-    @apply text-[18px];
-  }
-
-  .title {
-    @apply mt-[1.4rem] text-[18px];
-  }
-
-  .timeLeft {
-    @apply pr-2;
-  }
+.timeLeft {
+  @apply lg-max:pr-2;
 }

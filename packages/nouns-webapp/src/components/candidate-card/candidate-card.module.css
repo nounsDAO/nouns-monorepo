@@ -40,11 +40,11 @@
 }
 
 .sponsorCount.sponsorCountOverflow {
-  @apply mdLg:h-full mdLg:py-2.5 mdLg:px-10 mdLg:-ml-6 mdLg:bg-sponsor-fade;
+  @apply md-lg:h-full md-lg:py-2.5 md-lg:px-10 md-lg:-ml-6 md-lg:bg-sponsor-fade;
 }
 
 .candidateLink:hover .sponsorCount.sponsorCountOverflow {
-  @apply mdLg:bg-sponsor-fade-hover;
+  @apply md-lg:bg-sponsor-fade-hover;
 }
 
 .naVotesLabel {
