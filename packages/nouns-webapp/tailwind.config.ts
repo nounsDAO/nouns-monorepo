@@ -118,12 +118,19 @@ export default {
         'brand-surface-cool': '#e9ebf3', // cool background chips
         'brand-surface-warm': '#fdf9f9', // warm background chips
         'brand-text-muted-600': '#8c8d92', // muted text
+        'brand-border-light': '#e6e6e6', // light border used in feedback modules
+        'brand-border-muted': '#aaaaaa', // muted border for inputs
         'brand-warm-muted': '#b6a9a7', // warm muted text
         'brand-cool-muted': '#79809c', // cool muted text
+        'brand-warning-border': '#f0ad4e', // warning border
+        'brand-warning-text': '#dc9e46', // warning text
       },
       boxShadow: {
         'quorum-modal': '0 0 24px rgba(0,0,0,0.05)',
         'bid-wrapper': 'inset 0 -12px 16px rgba(0,0,0,0.08)',
+      },
+      animation: {
+        'spin-1250': 'spin 1.25s linear infinite',
       },
       spacing: {
         18: '4.5rem',
@@ -133,6 +140,10 @@ export default {
         '4.5': '1.125rem', // to replace min-h-[18px] and similar precise heights
         '5.6': '1.4rem', // used for title spacing in timers
         '12.5': '3.125rem', // used for consistent 50px heights (e.g., buttons)
+        '7.5': '1.875rem', // 30px for avatars and icons
+        15: '3.75rem', // 60px max widths
+        210: '13.125rem', // 210px delegate buttons
+        315: '19.6875rem', // 315px lg delegate buttons
       },
       maxWidth: {
         // For by-line-hover-card max-w-[11rem]
@@ -147,6 +158,7 @@ export default {
       lineHeight: {
         // Preserve 25px line-height used alongside 17px text for headings
         25: '25px',
+        27: '27px', // used in winner and auction headlines
         'tight-3': '.7', // used in timers where leading-[0.7] was applied
       },
       fontSize: {
@@ -160,6 +172,7 @@ export default {
         '2.7xl': '1.7rem', // used in many headings
         '2.5xl': '2.5rem', // used in auction-activity and documentation
         42: '42px', // used in vote modal titles
+        56: '56px', // used in governance, playground, fork pages
       },
     },
   },
@@ -167,8 +180,9 @@ export default {
     tailwindcssAnimate,
     // @ts-ignore
     function ({ addUtilities, addVariant, matchUtilities, theme }) {
-      // Custom lg-max variant to re-enable built-in min-/max- arbitrary variants
+      // Custom max-width variants to replace max-[...] utilities
       addVariant('lg-max', '@media (max-width: 992px)');
+      addVariant('xl-max', '@media (max-width: 1200px)');
 
       // Custom utilities for checkerboard background sizing and positioning
       addUtilities({
