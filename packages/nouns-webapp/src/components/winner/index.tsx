@@ -9,10 +9,7 @@ import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
-import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-
-import classes from './winner.module.css';
 
 interface WinnerProps {
   winner: Address;
@@ -31,10 +28,10 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeLocale = useActiveLocale();
 
   const nonNounderNounContent = isWinnerYou ? (
-    <Row className={classes.youSection}>
-      <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
+    <Row>
+      <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className="lg-max:pr-1 mt-1">
         <h2
-          className={classes.winnerContent}
+          className="font-pt lg-max:text-[23px] lg-max:mr-2 text-[32px] font-bold"
           style={{
             color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
           }}
@@ -52,7 +49,7 @@ const Winner: React.FC<WinnerProps> = props => {
       href={buildEtherscanAddressLink('nounders.eth')}
       target={'_blank'}
       rel="noreferrer"
-      className={classes.link}
+      className="text-brand-black hover:text-brand-black active:text-brand-black flex cursor-pointer no-underline hover:no-underline active:no-underline"
     >
       <Tooltip>
         <TooltipContent id="holder-etherscan-tooltip">
@@ -65,20 +62,20 @@ const Winner: React.FC<WinnerProps> = props => {
 
   return (
     <>
-      <Row className={cn(classes.wrapper, classes.section)}>
-        <Col xs={1} lg={12} className={classes.leftCol}>
+      <Row className="lg-max:mt-0 lg-max:w-full lg-max:mx-0 lg-max:px-0 lg-max:justify-between ml-2 mt-[2px] pl-6">
+        <Col xs={1} lg={12} className="font-pt lg-max:pl-2">
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
             }}
-            className={classes.winnerCopy}
+            className="font-pt min-w-[250px] text-[18px] font-bold leading-[27px]"
           >
             <Trans>Winner</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>
           <h2
-            className={classes.winnerContent}
+            className="font-pt lg-max:text-[23px] lg-max:mr-2 text-[32px] font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
