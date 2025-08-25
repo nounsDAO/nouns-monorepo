@@ -47,6 +47,7 @@ export default {
         // Commonly used custom radii across CSS modules
         10: '10px', // used in nav-bar, vote-modal, and various buttons
         14: '14px', // used in bid-history rows and panels
+        15: '15px', // used widely across inputs/buttons
       },
       colors: {
         cool: {
@@ -111,6 +112,14 @@ export default {
         chart: Object.fromEntries(
           Array.from({ length: 5 }, (_, i) => [i + 1, `hsl(var(--chart-${i + 1}))`]),
         ),
+        // Static hex tokens to replace repeated arbitrary color values across CSS modules
+        'brand-border-ui': '#e2e3e8', // used for subtle borders (nav, proposals)
+        'brand-surface': '#f4f4f8', // light gray surface
+        'brand-surface-cool': '#e9ebf3', // cool background chips
+        'brand-surface-warm': '#fdf9f9', // warm background chips
+        'brand-text-muted-600': '#8c8d92', // muted text
+        'brand-warm-muted': '#b6a9a7', // warm muted text
+        'brand-cool-muted': '#79809c', // cool muted text
       },
       boxShadow: {
         'quorum-modal': '0 0 24px rgba(0,0,0,0.05)',
@@ -118,14 +127,19 @@ export default {
       },
       spacing: {
         18: '4.5rem',
+        '0.3': '0.3rem', // used for p/m-[0.3rem] across nav components
         '0.4': '0.1rem', // used for subtle +/- 0.1rem offsets in proposal header, vote modules
         '0.75': '0.1875rem', // used for mt-[3px] adjustments
+        '4.5': '1.125rem', // to replace min-h-[18px] and similar precise heights
         '5.6': '1.4rem', // used for title spacing in timers
         '12.5': '3.125rem', // used for consistent 50px heights (e.g., buttons)
       },
       maxWidth: {
         // For by-line-hover-card max-w-[11rem]
         '11rem': '11rem',
+      },
+      borderWidth: {
+        '1.5': '1.5px', // replaces border-*[1.5px] in nav bar dropdowns
       },
       minHeight: {
         85: '21.25rem', // 340px used in proposal-editor bodyInput
