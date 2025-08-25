@@ -358,6 +358,10 @@ export default defineConfig([
               name: 'react-bootstrap',
               message: 'Use tailwindcss instead',
             },
+            {
+              name: 'react-router',
+              message: 'Use Next.js App Router instead',
+            },
           ],
           patterns: [
             {
