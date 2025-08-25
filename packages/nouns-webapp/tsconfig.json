@@ -17,7 +17,7 @@
     "types": ["jest", "@testing-library/jest-dom"],
     "paths": {
       "@/*": ["./src/*"],
-      "react-router": ["./src/utils/react-router-shim"]
+      "react-router": ["./src/shims/react-router-shim"]
     },
 
     "plugins": [
