@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Col } from 'react-bootstrap';
+import { cn } from '@/lib/utils';
 
 import classes from './auction-title-and-nav-wrapper.module.css';
 
@@ -9,10 +9,6 @@ interface AuctionTitleAndNavWrapperProps {
 }
 
 const AuctionTitleAndNavWrapper: React.FC<AuctionTitleAndNavWrapperProps> = props => {
-  return (
-    <Col lg={12} className={classes.auctionTitleAndNavContainer}>
-      {props.children}
-    </Col>
-  );
+  return <div className={cn(`w-full`, classes.auctionTitleAndNavContainer)}>{props.children}</div>;
 };
 export default AuctionTitleAndNavWrapper;
