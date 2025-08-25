@@ -16,8 +16,6 @@ import { INounSeed } from '@/wrappers/noun-token';
 import { Auction as IAuction } from '@/wrappers/nouns-auction';
 import { useNavigate } from 'react-router';
 
-import classes from './auction.module.css';
-
 interface AuctionProps {
   auction?: IAuction;
 }
@@ -46,7 +44,7 @@ const Auction: React.FC<AuctionProps> = props => {
   };
 
   const nounContent = currentAuction && (
-    <div className={classes.nounWrapper}>
+    <div className="w-full self-end md:mx-[10%] md:mt-8 md:w-4/5 lg:mx-[15%] lg:w-[70%]">
       <StandaloneNounWithSeed
         nounId={BigInt(currentAuction.nounId)}
         onLoadSeed={loadedNounHandler}
@@ -56,7 +54,7 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   const loadingNoun = (
-    <div className={classes.nounWrapper}>
+    <div className="w-full self-end md:mx-[10%] md:mt-8 md:w-4/5 lg:mx-[15%] lg:w-[70%]">
       <LoadingNoun />
     </div>
   );
@@ -83,13 +81,16 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
+    <div style={{ backgroundColor: stateBgColor }}>
       <Container fluid="xl">
         <Row>
-          <Col lg={{ span: 6 }} className={classes.nounContentCol}>
+          <Col lg={{ span: 6 }} className="flex md:p-0">
             {currentAuction ? nounContent : loadingNoun}
           </Col>
-          <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
+          <Col
+            lg={{ span: 6 }}
+            className="min-h-[558px] self-end pb-0 pr-20 md:mx-0 md:w-full md:px-0 md:pt-8 lg:w-full lg:bg-white lg:px-[5%] lg:pt-[5%]"
+          >
             {currentAuction &&
               (isNounderNoun(BigInt(currentAuction.nounId))
                 ? nounderNounContent
