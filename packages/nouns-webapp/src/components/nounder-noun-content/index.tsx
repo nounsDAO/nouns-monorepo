@@ -11,13 +11,13 @@ import AuctionTitleAndNavWrapper from '@/components/auction-title-and-nav-wrappe
 import CurrentBid, { BID_N_A } from '@/components/current-bid';
 import Winner from '@/components/winner';
 import { useAppSelector } from '@/hooks';
+import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
 import nounContentClasses from './nounder-noun-content.module.css';
 
 import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
 import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
-import bidBtnClasses from '@/components/bid-history-btn/bid-history-btn.module.css';
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;
@@ -87,7 +87,11 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
           </Col>
           <Col
             lg={5}
-            className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
+            className={cn(
+              auctionActivityClasses.currentBidCol,
+              nounContentClasses.currentBidCol,
+              auctionActivityClasses.auctionTimerCol,
+            )}
           >
             <div className={auctionActivityClasses.section}>
               <Winner winner={'0x'} isNounders={true} />
@@ -99,10 +103,10 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
         <Col lg={12}>
           <ul className={auctionBidClasses.bidCollection}>
             <li
-              className={
-                (isCool ? `${auctionBidClasses.bidRowCool}` : `${auctionBidClasses.bidRowWarm}`) +
-                ` ${nounContentClasses.bidRow}`
-              }
+              className={cn(
+                isCool ? auctionBidClasses.bidRowCool : auctionBidClasses.bidRowWarm,
+                nounContentClasses.bidRow,
+              )}
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
               <Link to="/vote" className={nounContentClasses.link}>
@@ -118,13 +122,19 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             </li>
           </ul>
           <div
-            className={
-              isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
-            }
+            className={cn(
+              'flex cursor-pointer justify-center rounded-[10px] transition-all duration-200 ease-in-out',
+              isCool ? 'text-brand-cool-light-text' : 'text-brand-warm-light-text',
+            )}
           >
             <Link
               to="/nounders"
-              className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
+              className={cn(
+                'font-pt ml-2 text-[16px] font-bold no-underline transition-all duration-200 ease-in-out hover:brightness-110',
+                isCool
+                  ? 'text-brand-color-blue hover:text-brand-color-blue'
+                  : 'text-brand-color-red hover:text-brand-color-red',
+              )}
             >
               <Trans>Learn more</Trans> →
             </Link>
