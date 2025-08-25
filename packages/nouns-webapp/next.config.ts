@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import * as path from 'path';
+import { fileURLToPath } from 'node:url';
 
 const nextConfig: NextConfig = {
   // Enable experimental features
@@ -41,6 +42,15 @@ const nextConfig: NextConfig = {
 
   // Webpack configuration
   webpack: (config, { isServer }) => {
+    // Enable caching for faster builds
+    const filename = fileURLToPath(import.meta.url);
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [filename],
+      },
+    };
+
     // SVGR support for SVG imports
     config.module.rules.push({
       test: /\.svg$/,
