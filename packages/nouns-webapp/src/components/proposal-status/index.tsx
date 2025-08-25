@@ -5,28 +5,26 @@ import { Trans } from '@lingui/react/macro';
 import { cn } from '@/lib/utils';
 import { ProposalState } from '@/wrappers/nouns-dao';
 
-import classes from './proposal-status.module.css';
-
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
-      return classes.primary;
+      return 'bg-[var(--brand-color-green)]';
     case ProposalState.OBJECTION_PERIOD:
-      return classes.objection;
+      return 'border-2 border-[var(--brand-color-red)] bg-white text-[var(--brand-color-red)]';
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
-      return classes.success;
+      return 'bg-[var(--brand-color-blue)]';
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
-      return classes.danger;
+      return 'bg-[var(--brand-color-red)]';
     case ProposalState.UPDATABLE:
-      return classes.updatable;
+      return 'border-2 border-[#f0ad4e] bg-white text-[#dc9e46]';
     case ProposalState.QUEUED:
     case ProposalState.CANCELLED:
     case ProposalState.EXPIRED:
     default:
-      return classes.secondary;
+      return 'bg-[var(--brand-gray-light-text)]';
   }
 };
 
@@ -67,7 +65,13 @@ interface ProposalStateProps {
 const ProposalStatus: React.FC<ProposalStateProps> = props => {
   const { status, className } = props;
   return (
-    <div className={cn(statusVariant(status), classes.proposalStatus, className)}>
+    <div
+      className={cn(
+        'font-pt rounded-lg border-2 border-transparent px-[0.65rem] py-[0.36rem] text-[14px] font-bold text-white',
+        statusVariant(status),
+        className,
+      )}
+    >
       {statusText(status)}
     </div>
   );
