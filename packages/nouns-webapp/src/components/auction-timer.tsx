@@ -71,7 +71,7 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
 
   return (
     <div
-      className="lg-max:mx-0 lg-max:w-auto lg-max:pl-0 lg-max:justify-between mt-[0.3rem] w-max cursor-pointer pl-10 pr-0"
+      className="lg-max:mx-0 lg-max:w-auto lg-max:pl-0 lg-max:justify-between mt-[0.3rem] flex w-max cursor-pointer flex-wrap pl-10 pr-0"
       onClick={() => setTimerToggle(!timerToggle)}
     >
       <div className="lg-max:mt-0 lg-max:pl-2 mt-px">
