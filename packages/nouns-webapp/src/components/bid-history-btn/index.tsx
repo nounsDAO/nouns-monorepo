@@ -17,12 +17,12 @@ const BidHistoryBtn: React.FC<BidHistoryBtnProps> = ({ onClick }) => {
       className={cn(
         'flex cursor-pointer justify-center rounded-[10px] transition-all duration-200 ease-in-out',
         isCool
-          ? 'text-[var(--brand-cool-light-text)] hover:text-[var(--brand-color-blue)]'
-          : 'text-[var(--brand-warm-light-text)] hover:text-[var(--brand-color-red)]',
+          ? 'text-brand-cool-light-text hover:text-brand-color-blue'
+          : 'text-brand-warm-light-text hover:text-brand-color-red',
       )}
       onClick={onClick}
     >
-      <div className={cn('font-pt ml-2 pb-4 text-[16px] font-bold text-[var(--brand-color-blue)]')}>
+      <div className={cn('font-pt text-brand-color-blue ml-2 pb-4 text-[16px] font-bold')}>
         <Trans>View all bids</Trans>
       </div>
     </div>
