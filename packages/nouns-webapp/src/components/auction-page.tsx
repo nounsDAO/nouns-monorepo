@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { isNumber } from 'remeda';
 
 import Auction from '@/components/auction';
@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
 import { nounPath } from '@/utils/history';
 import useOnDisplayAuction from '@/wrappers/on-display-auction';
-import { useParams } from 'react-router';
 
 type AuctionPageProps = object;
 
