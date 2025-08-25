@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
-// eslint-disable-next-line no-restricted-imports
-import { Col, Row } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
@@ -105,7 +103,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
-          <Row className={classes.activityRow}>
+          <div className={`${classes.activityRow} flex flex-col gap-4`}>
             <AuctionTitleAndNavWrapper>
               {displayGraphDepComps && (
                 <AuctionNavigation
@@ -117,47 +115,47 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               )}
               <AuctionActivityDateHeadline startTime={BigInt(auction.startTime)} />
             </AuctionTitleAndNavWrapper>
-            <Col lg={12}>
+            <div className="w-full">
               <AuctionActivityNounTitle isCool={isCool} nounId={BigInt(auction.nounId)} />
-            </Col>
-          </Row>
-          <Row className={classes.activityRow}>
-            <Col lg={4} className={classes.currentBidCol}>
+            </div>
+          </div>
+          <div className={`${classes.activityRow} flex flex-col gap-4 lg:flex-row`}>
+            <div className={`${classes.currentBidCol} w-full lg:basis-1/3`}>
               <CurrentBid
                 currentBid={BigInt(auction.amount?.toString() ?? '0')}
                 auctionEnded={auctionEnded}
               />
-            </Col>
-            <Col lg={6} className={classes.auctionTimerCol}>
+            </div>
+            <div className={`${classes.auctionTimerCol} w-full lg:basis-1/2`}>
               {auctionEnded ? (
                 renderAuctionWinner()
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
               )}
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
         {auctionEnded && (
-          <Row className={classes.activityRow}>
-            <Col lg={12} className={classes.nextNounLink}>
+          <div className={`${classes.activityRow} flex w-full`}>
+            <div className={`${classes.nextNounLink} w-full`}>
               <FontAwesomeIcon icon={faInfoCircle} />
               <a href={'https://www.nouns.game/crystal-ball'} target={'_blank'} rel="noreferrer">
                 <Trans>Help mint the next Noun</Trans>
               </a>
-            </Col>
-          </Row>
+            </div>
+          </div>
         )}
         {isLastAuction && (
           <>
-            <Row className={classes.activityRow}>
-              <Col lg={12}>
+            <div className={`${classes.activityRow} flex w-full`}>
+              <div className="w-full">
                 <Bid auction={auction} auctionEnded={auctionEnded} />
-              </Col>
-            </Row>
+              </div>
+            </div>
           </>
         )}
-        <Row className={classes.activityRow}>
-          <Col lg={12}>
+        <div className={`${classes.activityRow} flex w-full`}>
+          <div className="w-full">
             {!isLastAuction ? (
               <NounInfoCard
                 nounId={BigInt(auction.nounId)}
@@ -181,8 +179,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               ) : (
                 <BidHistoryBtn onClick={openEtherscanBidHistory} />
               ))}
-          </Col>
-        </Row>
+          </div>
+        </div>
       </AuctionActivityWrapper>
     </>
   );
