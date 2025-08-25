@@ -12,7 +12,7 @@ const AuctionActivityNounTitle: React.FC<AuctionActivityNounTitleProps> = props 
   return (
     <div className="inline-block">
       <h1
-        className="mb-2.5 font-londrina text-[68px] md:text-[56px] lg:text-[68px]"
+        className="font-londrina mb-2.5 text-[68px] md:text-[56px] lg:text-[68px]"
         style={{
           color: isCool === true ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
         }}

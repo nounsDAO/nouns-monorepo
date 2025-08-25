@@ -37,7 +37,7 @@
 }
 
 .forkCard {
-  @apply p-4 mt-[0.4rem] flex justify-between gap-4 border border-[#e2e3e8] rounded-[16px] bg-[#f4f4f8] text-[22px] font-pt font-bold no-underline text-inherit mb-4;
+  @apply p-4 mt-[0.4rem] flex justify-between gap-4 border border-brand-gray-border rounded-2xl bg-brand-gray-background text-22 font-pt font-bold no-underline text-inherit mb-4;
 }
 
 .forkCard:hover {

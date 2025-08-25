@@ -1,29 +1,29 @@
 .voteCardHeaderTextEn {
-  @apply font-londrina text-[22px];
+  @apply font-londrina text-22;
 }
 
 .voteCardHeaderTextNonEn {
-  @apply font-londrina text-[16px];
+  @apply font-londrina text-base;
 }
 
 .voteCardVoteCount {
-  @apply font-pt mt-[0.15rem] text-[22px] font-bold;
+  @apply font-pt mt-[0.15rem] text-22 font-bold;
 }
 
 .for {
-  @apply text-[var(--brand-color-green)];
+  @apply text-brand-color-green;
 }
 
 .against {
-  @apply text-[var(--brand-color-red)];
+  @apply text-brand-color-red;
 }
 
 .abstain {
-  @apply text-[var(--brand-gray-light-text)];
+  @apply text-brand-gray-light-text;
 }
 
 .voteCountCard {
-  @apply mt-4 min-h-[18rem] rounded-[12px] bg-[#f4f4f8] p-2;
+  @apply mt-4 min-h-72 rounded-xl bg-brand-gray-background p-2;
 }
 
 .voteCountCard p {
@@ -39,15 +39,15 @@
 }
 
 .unitTextEn {
-  @apply text-[18px] font-medium opacity-50;
+  @apply text-lg font-medium opacity-50;
 }
 
 .unitTextNonEn {
-  @apply text-[14px] font-medium opacity-50;
+  @apply text-sm font-medium opacity-50;
 }
 
 .smallerVoteCountText {
-  @apply text-[16px];
+  @apply text-base;
 }
 
 @media (max-width: 1200px) {
@@ -56,11 +56,11 @@
   }
 
   .unitTextEn {
-    @apply text-[16px];
+    @apply text-base;
   }
 
   .unitTextNonEn {
-    @apply text-[13px];
+    @apply text-13;
   }
 
   .mobileVoteCountWrapper {
@@ -80,7 +80,7 @@
   }
 
   .voteCardHeaderTextNonEn {
-    @apply mx-auto text-[16px];
+    @apply mx-auto text-base;
   }
 
   .nounProfilePics {

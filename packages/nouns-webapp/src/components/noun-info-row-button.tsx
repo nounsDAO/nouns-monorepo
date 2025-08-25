@@ -15,7 +15,7 @@ const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   const baseBtnClasses =
-    "mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] px-[10px] py-0 text-center align-middle font-pt font-bold transition-all duration-150 ease-in-out hover:bg-[var(--brand-gray-hover)] no-underline active:text-black";
+    'mb-[5px] mr-[10px] mt-[5px] flex h-10 cursor-pointer flex-row items-center justify-center rounded-[10px] px-[10px] py-0 text-center align-middle font-pt font-bold transition-all duration-150 ease-in-out hover:bg-[var(--brand-gray-hover)] no-underline active:text-black';
   const coolClasses = 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]';
   const warmClasses = 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]';
 

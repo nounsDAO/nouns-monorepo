@@ -15,9 +15,9 @@
 }
 
 .ensText {
-  @apply text-brand-cool-dark-text font-bold text-[22px];
+  @apply text-brand-cool-dark-text font-bold text-22;
 }
 
 .shortAddress {
-  @apply font-medium text-[13px] text-brand-cool-light-text;
+  @apply font-medium text-13 text-brand-cool-light-text;
 }
