@@ -35,9 +35,14 @@ const nextConfig: NextConfig = {
     rules: {
       '*.po': {
         loaders: ['@lingui/loader'],
-        as: '*.js'
-      }
-    }
+        as: '*.js',
+      },
+      // Turn *.svg files into React components via SVGR
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js', // tell Turbopack the output is JS
+      },
+    },
   },
 
   // Webpack configuration
