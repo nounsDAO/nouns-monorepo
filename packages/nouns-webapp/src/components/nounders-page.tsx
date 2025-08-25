@@ -68,7 +68,7 @@ const bios = [
 
 const NoundersPage = () => {
   return (
-    <div className="[&_a]:text-foreground mx-auto max-w-3xl p-4 [&_a:hover]:text-red-600 [&_h1]:font-['Londrina_Solid'] [&_h2]:font-['Londrina_Solid'] [&_h3]:font-['Londrina_Solid'] [&_img]:w-1/2 [&_img]:rounded-full">
+    <div className="[&_a]:text-foreground mx-auto max-w-3xl p-4 [&_a:hover]:text-red-600 [&_h1]:font-londrina [&_h2]:font-londrina [&_h3]:font-londrina [&_img]:w-1/2 [&_img]:rounded-full">
       <h2 className="mb-8">
         <Trans>The Nounders</Trans>
       </h2>

@@ -187,7 +187,7 @@ const Bid: React.FC<BidProps> = props => {
         {!auctionEnded && (
           <>
             <div className="relative flex flex-1">
-              <span className="pointer-events-none absolute left-[3%] top-[15%] z-[1] font-['PT_Root_UI'] text-[25px] font-bold text-[var(--brand-cool-light-text)] opacity-30">
+              <span className="pointer-events-none absolute left-[3%] top-[15%] z-[1] font-pt text-[25px] font-bold text-[var(--brand-cool-light-text)] opacity-30">
                 {!auctionEnded && !bidInput ? (
                   <>
                     Ξ {minBidEth(minBid)}{' '}
@@ -204,7 +204,7 @@ const Bid: React.FC<BidProps> = props => {
                 )}
               </span>
               <Input
-                className="h-[54px] w-auto grow appearance-none rounded-[12px] border-0 !bg-white font-['PT_Root_UI'] text-[25px] font-bold text-black shadow-none outline-none ring-1 ring-inset ring-white transition-all duration-200 ease-in-out focus:ring-1 focus:ring-inset focus:ring-[var(--brand-cool-dark-text)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="h-[54px] w-auto grow appearance-none rounded-[12px] border-0 !bg-white font-pt text-[25px] font-bold text-black shadow-none outline-none ring-1 ring-inset ring-white transition-all duration-200 ease-in-out focus:ring-1 focus:ring-inset focus:ring-[var(--brand-cool-dark-text)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
                 min="0"
                 onChange={bidInputHandler}
@@ -235,7 +235,7 @@ const Bid: React.FC<BidProps> = props => {
             <div className="w-full">
               <Button
                 type="button"
-                className="h-12 w-full rounded-[10px] border border-transparent bg-[var(--brand-black)] font-['PT_Root_UI'] text-[18px] font-bold text-white hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-500 disabled:bg-gray-500 disabled:text-[rgb(209,207,207)]"
+                className="h-12 w-full rounded-[10px] border border-transparent bg-[var(--brand-black)] font-pt text-[18px] font-bold text-white hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-500 disabled:bg-gray-500 disabled:text-[rgb(209,207,207)]"
                 onClick={voteForNextNounOnClickHandler}
               >
                 <Trans>Vote for the next Noun</Trans> ⌐◧-◧

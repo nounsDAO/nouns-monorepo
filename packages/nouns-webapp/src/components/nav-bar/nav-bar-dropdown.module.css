@@ -81,7 +81,7 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  @apply !p-[0.3rem] font-['PT_Root_UI'] text-[0.9rem] font-bold !text-[var(--brand-black)] transition-all duration-150 ease-in-out;
+  @apply !p-[0.3rem] font-pt text-[0.9rem] font-bold !text-[var(--brand-black)] transition-all duration-150 ease-in-out;
 }
 
 .dropdownPrimaryText:hover {

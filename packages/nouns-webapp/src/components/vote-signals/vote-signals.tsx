@@ -182,7 +182,7 @@ function VoteSignals({
               {title}
             </h2>
             {isCandidate !== true && (
-              <p className="m-0 p-0 text-base font-[PT_Root_UI] text-[var(--brand-gray-light-text)]">
+              <p className="m-0 p-0 text-base font-pt text-[var(--brand-gray-light-text)]">
                 <Trans>
                   Nouns voters can cast voting signals to give proposers of pending proposals an
                   idea of how they intend to vote and helpful guidance on proposal changes to change
