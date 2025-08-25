@@ -3,7 +3,7 @@
 }
 
 .modal {
-  @apply font-['PT_Root_UI'] font-bold fixed top-auto left-0 bottom-0 w-full max-h-full bg-white/60 backdrop-blur-[10px] py-12 px-8 text-center rounded-b-none lg:top-[30vh] lg:left-[calc(50%-17.5rem)] lg:w-[35rem] lg:rounded-[15px];
+  @apply font-pt font-bold fixed top-auto left-0 bottom-0 w-full max-h-full bg-white/60 backdrop-blur-[10px] py-12 px-8 text-center rounded-b-none lg:top-[30vh] lg:left-[calc(50%-17.5rem)] lg:w-[35rem] lg:rounded-[15px];
 }
 
 .modal button {

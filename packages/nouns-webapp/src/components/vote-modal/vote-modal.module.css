@@ -1,5 +1,5 @@
 .voteModalTitle {
-  @apply text-center font-['Londrina_Solid'] text-[36px];
+  @apply text-center font-londrina text-[36px];
 }
 
 .voteModalSubtitle {
@@ -11,11 +11,11 @@
 }
 
 .voteModal {
-  @apply font-['PT_Root_UI'];
+  @apply font-pt;
 }
 
 .propTitle {
-  @apply font-['Londrina_Solid'] text-[32px] mb-[5px];
+  @apply font-londrina text-[32px] mb-[5px];
 }
 
 .voteIcon {
@@ -53,7 +53,7 @@
 }
 
 .transactionStatus {
-  @apply text-[18px] mb-8 text-center font-['PT_Root_UI'] font-bold;
+  @apply text-[18px] mb-8 text-center font-pt font-bold;
 }
 
 .disabled {
@@ -97,5 +97,5 @@
 }
 
 .gasFreeVotingCopy {
-  @apply font-['PT_Root_UI'] text-[14px] text-[var(--brand-gray-light-text)] opacity-75 w-fit text-center;
+  @apply font-pt text-[14px] text-[var(--brand-gray-light-text)] opacity-75 w-fit text-center;
 }

@@ -1,5 +1,5 @@
 .delegateInput {
-  @apply w-full h-[54px] text-black !rounded-[12px] bg-white outline-none !shadow-none font-['PT_Root_UI'] font-bold text-[25px] transition-all duration-200 ease-in-out;
+  @apply w-full h-[54px] text-black !rounded-[12px] bg-white outline-none !shadow-none font-pt font-bold text-[25px] transition-all duration-200 ease-in-out;
 }
 
 .delegteDeepLinkSpinner {

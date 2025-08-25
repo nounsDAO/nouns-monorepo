@@ -3,11 +3,11 @@
 }
 
 .title {
-  @apply font-['Londrina_Solid'] flex flex-col leading-[42px] h-8 text-[42px] text-[var(--brand-cool-dark-text)];
+  @apply font-londrina flex flex-col leading-[42px] h-8 text-[42px] text-[var(--brand-cool-dark-text)];
 }
 
 .copy {
-  @apply font-medium font-['PT_Root_UI'] text-[var(--brand-cool-dark-text)];
+  @apply font-medium font-pt text-[var(--brand-cool-dark-text)];
 }
 
 .copy .emph {

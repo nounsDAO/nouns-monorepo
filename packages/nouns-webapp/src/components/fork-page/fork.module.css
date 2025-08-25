@@ -1,5 +1,5 @@
 .title {
-  @apply text-[42px] font-['Londrina_Solid'] text-[#14161b] mt-1;
+  @apply text-[42px] font-londrina text-[#14161b] mt-1;
 }
 
 .pageHeader {
@@ -35,7 +35,7 @@
 }
 
 .pageHeader .status .backButton {
-  @apply appearance-none p-0 inline-block w-8 h-8 rounded-full leading-[1.85] font-bold bg-white border border-[rgba(0,0,0,0.1)] transition-[border] duration-125 ease-in-out text-[rgb(95,95,95)] no-underline;
+  @apply appearance-none p-0 inline-block w-8 h-8 rounded-full leading-[1.85] font-bold bg-white border border-[rgba(0,0,0,0.1)] transition-[border] duration-150 ease-in-out text-[rgb(95,95,95)] no-underline;
 }
 .pageHeader.emptyState .status .spacer {
   /* spacer to keep label centered */
@@ -60,7 +60,7 @@
 }
 
 .button {
-  @apply rounded-[8px] font-['PT_Root_UI'] font-bold transition-all duration-125 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-[1] py-[10px] px-[16px] h-fit border-2 border-black;
+  @apply rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out bg-[#faf4f8] text-[var(--brand-gray-dark-text)] leading-[1] py-[10px] px-[16px] h-fit border-2 border-black;
 }
 
 .primaryButton {
@@ -129,11 +129,11 @@
 }
 
 .timestamp a span {
-  @apply opacity-0 transition-opacity duration-200 ease-in-out ml-2 font-['PT_Root_UI'] text-[13px];
+  @apply opacity-0 transition-opacity duration-200 ease-in-out ml-2 font-pt text-[13px];
 }
 
 .summary strong {
-  @apply font-['Londrina_Solid'] text-[42px];
+  @apply font-londrina text-[42px];
 }
 .nounsInFork {
   @apply flex flex-row flex-wrap gap-[10px] justify-between max-[991px]:hidden;
@@ -192,7 +192,7 @@
 /* timeline item */
 .timestamp,
 .timestamp a {
-  @apply font-['Londrina_Solid'] text-[#14161b] no-underline transition-all duration-200 ease-in-out;
+  @apply font-londrina text-[#14161b] no-underline transition-all duration-200 ease-in-out;
 }
 
 .eventTitle {
@@ -285,7 +285,7 @@
 }
 
 .transactionStatus {
-  @apply text-[15px] mb-4 p-4 text-center font-['PT_Root_UI'] font-bold bg-white border border-[#e6e6e6] rounded-[8px];
+  @apply text-[15px] mb-4 p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-[8px];
 }
 .transactionStatus.withdrawStatus {
   @apply mb-0;

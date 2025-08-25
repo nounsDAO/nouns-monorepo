@@ -7,7 +7,7 @@
 }
 
 .textWrapper h1 {
-  @apply font-['Londrina_Solid'] text-[3.75rem] lg:text-[5rem];
+  @apply font-londrina text-[3.75rem] lg:text-[5rem];
 }
 
 .textWrapper p {

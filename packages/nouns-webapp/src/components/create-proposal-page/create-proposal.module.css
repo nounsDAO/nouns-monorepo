@@ -1,5 +1,5 @@
 .createProposalPage {
-  @apply font-['PT_Root_UI'];
+  @apply font-pt;
 }
 
 .createProposalPage a {
@@ -11,7 +11,7 @@
 }
 
 .heading {
-  @apply my-4 font-['Londrina_Solid'] text-[42px];
+  @apply my-4 font-londrina text-[42px];
 }
 
 .section {
@@ -28,7 +28,7 @@
 }
 
 .proposalActionButton {
-  @apply h-[50px] rounded-[8px] font-['PT_Root_UI'] font-bold text-[24px] transition-all ease-in-out duration-150;
+  @apply h-[50px] rounded-[8px] font-pt font-bold text-[24px] transition-all ease-in-out duration-150;
 }
 
 .proposalActionButton:hover {
@@ -48,7 +48,7 @@
 }
 
 .createProposalButton {
-  @apply h-[50px] rounded-[8px] font-['PT_Root_UI'] font-bold text-[18px] transition-all ease-in-out duration-150;
+  @apply h-[50px] rounded-[8px] font-pt font-bold text-[18px] transition-all ease-in-out duration-150;
 }
 
 .wrapper {

@@ -3,15 +3,15 @@
 }
 
 .headerWrapper h1 {
-  @apply font-['Londrina_Solid'] text-[4rem];
+  @apply font-londrina text-[4rem];
 }
 
 .headerWrapper p {
-  @apply font-['PT_Root_UI'] font-medium tracking-[-0.25px] leading-7 my-12;
+  @apply font-pt font-medium tracking-[-0.25px] leading-7 my-12;
 }
 
 .accordionItem {
-  @apply font-['PT_Root_UI'] font-medium tracking-[-0.25px] leading-7 text-[1.2rem] bg-transparent mb-10 border-0;
+  @apply font-pt font-medium tracking-[-0.25px] leading-7 text-[1.2rem] bg-transparent mb-10 border-0;
 }
 
 /* Mobile adjustments (max-width: 992px) translated to base styles with lg overrides */
@@ -31,7 +31,7 @@
 }
 
 .accordionHeader button {
-  @apply border-0 bg-transparent font-['Londrina_Solid'] text-[2.5rem] cursor-pointer leading-normal pt-0 pb-0 pl-5 lg:pl-0;
+  @apply border-0 bg-transparent font-londrina text-[2.5rem] cursor-pointer leading-normal pt-0 pb-0 pl-5 lg:pl-0;
 }
 
 .accordionHeader button:not(.collapsed) {

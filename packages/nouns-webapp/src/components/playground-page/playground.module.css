@@ -2,10 +2,10 @@
   @apply my-8;
 }
 .headerRow span {
-  @apply text-[#8c8d92] text-2xl font-['Londrina_Solid'];
+  @apply text-[#8c8d92] text-2xl font-londrina;
 }
 .headerRow h1 {
-  @apply text-[#14161b] text-[56px] font-['Londrina_Solid'];
+  @apply text-[#14161b] text-[56px] font-londrina;
 }
 .headerRow p {
   @apply text-[#14161b];

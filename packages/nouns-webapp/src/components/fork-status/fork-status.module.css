@@ -1,9 +1,9 @@
 .proposalStatus {
-  @apply font-['PT_Root_UI'] font-bold text-white rounded-lg text-sm px-[0.65rem] py-[0.36rem] border-2 border-transparent;
+  @apply font-pt font-bold text-white rounded-lg text-sm px-[0.65rem] py-[0.36rem] border-2 border-transparent;
 }
 
 .forkStatus {
-  @apply font-['PT_Root_UI'] font-bold text-white rounded-lg text-sm px-[0.65rem] py-[0.36rem] border-2 border-transparent;
+  @apply font-pt font-bold text-white rounded-lg text-sm px-[0.65rem] py-[0.36rem] border-2 border-transparent;
 }
 
 .primary {

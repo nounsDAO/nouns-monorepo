@@ -7,7 +7,7 @@
 }
 
 .address {
-  @apply font-['Londrina_Solid'] text-[24px] w-full text-left;
+  @apply font-londrina text-[24px] w-full text-left;
 }
 
 .nounsRepresented {
