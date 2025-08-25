@@ -3,15 +3,15 @@
 }
 
 .section h4 {
-  @apply font-pt text-[18px] font-bold;
+  @apply font-pt lg-max:mb-0 lg-max:mt-[6px] text-[18px] font-bold;
 }
 
 .section h2 {
-  @apply font-pt mb-0 mt-[3px] text-[32px] font-bold;
+  @apply font-pt lg-max:text-[23px] mb-0 mt-[3px] text-[32px] font-bold;
 }
 
 .wrapper {
-  @apply mt-[0.3rem] w-max cursor-pointer pl-10 pr-0;
+  @apply lg-max:ml-0 lg-max:mr-0 lg-max:w-auto lg-max:pl-0 mt-[0.3rem] w-max cursor-pointer pl-10 pr-0;
 }
 
 .timerWrapper {
@@ -19,7 +19,7 @@
 }
 
 .timerSection span {
-  @apply font-pt text-[32px] font-bold;
+  @apply font-pt lg-max:text-[23px] text-[32px] font-bold;
 }
 
 .timerSection {
@@ -31,47 +31,21 @@
 }
 
 .timerSectionFinal span {
-  @apply font-pt text-[32px] font-bold;
+  @apply font-pt lg-max:text-[23px] text-[32px] font-bold;
 }
 
 .leftCol {
-  @apply mt-[1px];
+  @apply lg-max:mt-0 lg-max:pl-2 mt-[1px];
 }
 
-@media (max-width: 992px) {
-  .section h4 {
-    @apply mb-0 mt-[6px] text-[18px];
-  }
+.section {
+  @apply lg-max:justify-between;
+}
 
-  .section h2 {
-    @apply text-[23px];
-  }
+.title {
+  @apply lg-max:mt-[1.4rem] lg-max:text-[18px];
+}
 
-  .section {
-    @apply justify-between;
-  }
-
-  .wrapper {
-    @apply ml-0 mr-0 w-auto pl-0;
-  }
-
-  .leftCol {
-    @apply mt-0 pl-2;
-  }
-
-  .timerSection span {
-    @apply text-[23px];
-  }
-
-  .timerSectionFinal span {
-    @apply text-[23px];
-  }
-
-  .title {
-    @apply mt-[1.4rem] text-[18px];
-  }
-
-  .timeLeft {
-    @apply pr-2;
-  }
+.timeLeft {
+  @apply lg-max:pr-2;
 }

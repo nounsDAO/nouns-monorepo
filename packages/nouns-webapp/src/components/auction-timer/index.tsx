@@ -6,10 +6,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
 import { useAppSelector } from '@/hooks';
-import { cn } from '@/lib/utils';
 import { Auction } from '@/wrappers/nouns-auction';
-
-import classes from './auction-timer.module.css';
 
 dayjs.extend(duration);
 
@@ -74,11 +71,12 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
 
   return (
     <div
-      className={cn(classes.wrapper, classes.section)}
+      className="lg-max:mx-0 lg-max:w-auto lg-max:pl-0 lg-max:justify-between mt-[0.3rem] w-max cursor-pointer pl-10 pr-0"
       onClick={() => setTimerToggle(!timerToggle)}
     >
-      <div className={classes.leftCol}>
+      <div className="lg-max:mt-0 lg-max:pl-2 mt-px">
         <h4
+          className="font-pt lg-max:mb-0 lg-max:mt-[6px] text-[18px] font-bold"
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
           }}
@@ -100,31 +98,31 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
       <div>
         {timerToggle ? (
           <h2
-            className={cn(classes.timerWrapper, classes.timeLeft)}
+            className="font-pt lg-max:text-[23px] lg-max:pr-2 mb-0 mt-px flex text-[32px] font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            <div className={classes.timerSection}>
-              <span>
+            <div className="mr-2">
+              <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                 {`${Math.floor(timerDuration.hours())}`}
-                <span className={classes.small}>
+                <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                   <Trans>h</Trans>
                 </span>
               </span>
             </div>
-            <div className={classes.timerSection}>
-              <span>
+            <div className="mr-2">
+              <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                 {`${flooredMinutes}`}
-                <span className={classes.small}>
+                <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                   <Trans>m</Trans>
                 </span>
               </span>
             </div>
-            <div className={classes.timerSectionFinal}>
-              <span>
+            <div className="mr-0">
+              <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                 {`${flooredSeconds}`}
-                <span className={classes.small}>
+                <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
                   <Trans>s</Trans>
                 </span>
               </span>
@@ -132,13 +130,15 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
           </h2>
         ) : (
           <h2
-            className={classes.timerWrapper}
+            className="font-pt lg-max:text-[23px] mb-0 mt-px flex text-[32px] font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            <div className={cn(classes.timerSection, classes.clockSection)}>
-              <span>{i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}</span>
+            <div className="mr-2">
+              <span className="font-pt lg-max:text-[23px] text-[32px] font-bold">
+                {i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}
+              </span>
             </div>
           </h2>
         )}
