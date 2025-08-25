@@ -11,7 +11,7 @@
 }
 
 .warmInfo .icon {
-  @apply text-brand-warm-muted border-l border-l-brand-warm-border;
+  @apply text-brand-warm-muted border-l border-brand-warm-border;
 }
 
 .treasuryBalance {
