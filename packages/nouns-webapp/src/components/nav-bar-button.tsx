@@ -35,52 +35,52 @@ interface NavBarButtonProps extends HTMLAttributes<HTMLDivElement> {
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
   const whiteInfo =
-    'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black';
+    'border border-black/10 bg-white text-brand-gray-light-text hover:bg-brand-border-ui hover:text-black';
   switch (buttonStyle) {
     case NavBarButtonStyle.COOL_INFO: {
-      return 'rounded-[10px] border border-[var(--brand-cool-border)] text-[var(--brand-cool-dark-text)] hover:bg-[var(--brand-cool-accent)] hover:text-black';
+      return 'rounded-10 border border-brand-cool-border text-brand-cool-dark-text hover:bg-brand-cool-accent hover:text-black';
     }
     case NavBarButtonStyle.COOL_WALLET: {
-      return 'rounded-[10px] border border-[var(--brand-cool-border)] bg-[var(--brand-cool-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out hover:bg-[var(--brand-color-blue)] hover:text-white hover:brightness-110';
+      return 'rounded-10 border border-brand-cool-border bg-brand-cool-accent px-3 py-0 text-brand-warm-dark-text transition-all duration-200 ease-in-out hover:bg-brand-color-blue hover:text-white hover:brightness-110';
     }
     case NavBarButtonStyle.WARM_INFO: {
-      return 'rounded-[10px] border border-[var(--brand-warm-border)] text-[var(--brand-warm-dark-text)] hover:bg-[var(--brand-warm-accent)] hover:text-black';
+      return 'rounded-10 border border-brand-warm-border text-brand-warm-dark-text hover:bg-brand-warm-accent hover:text-black';
     }
     case NavBarButtonStyle.WARM_WALLET: {
-      return 'rounded-[10px] border border-[var(--brand-warm-border)] bg-[var(--brand-warm-accent)] px-3 py-0 text-[var(--brand-warm-dark-text)] transition-all duration-200 ease-in-out hover:bg-[var(--brand-color-red)] hover:text-white hover:brightness-110';
+      return 'rounded-10 border border-brand-warm-border bg-brand-warm-accent px-3 py-0 text-brand-warm-dark-text transition-all duration-200 ease-in-out hover:bg-brand-color-red hover:text-white hover:brightness-110';
     }
     case NavBarButtonStyle.WHITE_INFO: {
       return whiteInfo;
     }
     case NavBarButtonStyle.WHITE_ACTIVE: {
-      return 'bg-[#f4f4f8] text-black';
+      return 'bg-brand-surface text-black';
     }
     case NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT: {
-      return 'bg-[#e2e3e8] text-black';
+      return 'bg-brand-border-ui text-black';
     }
     case NavBarButtonStyle.WHITE_WALLET: {
       return whiteInfo;
     }
     case NavBarButtonStyle.DELEGATE_BACK: {
-      return 'w-[100px] border border-black/10 bg-white text-[var(--brand-cool-dark-text)] hover:bg-[#e2e3e8] hover:text-[var(--brand-cool-dark-text)]';
+      return 'border border-black/10 bg-white text-brand-cool-dark-text hover:bg-brand-border-ui hover:text-brand-cool-dark-text';
     }
     case NavBarButtonStyle.DELEGATE_PRIMARY: {
-      return 'w-[210px] bg-[var(--brand-cool-dark-text)] text-white hover:brightness-200 lg:w-[315px]';
+      return 'w-[210px] bg-brand-cool-dark-text text-white hover:brightness-200 lg:w-[315px]';
     }
     case NavBarButtonStyle.DELEGATE_SECONDARY: {
-      return 'w-[210px] border-0 bg-[var(--brand-color-blue)] text-white hover:bg-[var(--brand-color-blue-darker)] lg:w-[315px]';
+      return 'w-[210px] border-0 bg-brand-color-blue text-white hover:bg-brand-color-blue-darker lg:w-[315px]';
     }
     case NavBarButtonStyle.DELEGATE_DISABLED: {
-      return 'w-[210px] border-0 bg-[var(--brand-color-blue)] text-white opacity-50 lg:w-[315px]';
+      return 'w-[210px] border-0 bg-brand-color-blue text-white opacity-50 lg:w-[315px]';
     }
     case NavBarButtonStyle.FOR_VOTE_SUBMIT: {
-      return 'bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)] hover:brightness-[.8]';
+      return 'bg-brand-color-green-translucent text-brand-color-green hover:brightness-90';
     }
     case NavBarButtonStyle.AGAINST_VOTE_SUBMIT: {
-      return 'bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)] hover:brightness-[.8]';
+      return 'bg-brand-color-red-translucent text-brand-color-red hover:brightness-90';
     }
     case NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT: {
-      return 'bg-[var(--brand-gray-light-text-translucent)] text-[var(--brand-gray-light-text)] hover:brightness-[.8]';
+      return 'bg-brand-gray-light-text-translucent text-brand-gray-light-text hover:brightness-90';
     }
     default: {
       // default "info" state maps to neutral/white button
@@ -102,7 +102,7 @@ const NavBarButton: FC<NavBarButtonProps> = ({
   const isDisabled = disabled ?? false;
 
   const baseWrapper =
-    'font-pt h-12 rounded-[10px] border border-black/10 px-3 text-[18px] font-bold leading-4 !shadow-none transition-all duration-150 ease-in-out lg:h-10 lg:text-base';
+    'font-pt h-12 rounded-10 border border-black/10 px-3 text-lg font-bold leading-4 !shadow-none transition-all duration-150 ease-in-out lg:h-10 lg:text-base';
   const baseButton =
     'flex h-full w-full flex-row items-center justify-center text-[18px] lg:text-base';
   const baseIcon = cn(

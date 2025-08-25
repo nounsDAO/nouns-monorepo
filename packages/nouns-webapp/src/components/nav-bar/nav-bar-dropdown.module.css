@@ -1,17 +1,17 @@
 .wrapper {
-  @apply font-pt h-10 rounded-[10px] py-0 pl-[14px] pr-0 text-base font-bold leading-[16px] shadow-none transition-all duration-150 ease-in-out;
+  @apply font-pt h-10 rounded-10 py-0 pl-3.5 pr-0 text-base font-bold leading-4 shadow-none transition-all duration-150 ease-in-out;
 }
 
 .whiteInfo {
-  @apply border border-black/10 bg-white text-[#5f5f5f];
+  @apply border border-black/10 bg-white text-brand-gray-light-text;
 }
 
 .whiteInfo:hover {
-  @apply bg-[#e2e3e8] text-black;
+  @apply bg-brand-border-ui text-black;
 }
 
 .coolInfo {
-  @apply bg-[#e9ebf3] text-[#79809c];
+  @apply bg-brand-surface-cool text-brand-cool-muted;
 }
 
 .coolInfo:hover {
@@ -19,7 +19,7 @@
 }
 
 .warmInfo {
-  @apply bg-[#fdf9f9] text-[#b6a9a7];
+  @apply bg-brand-surface-warm text-brand-warm-muted;
 }
 
 .warmInfo:hover {
@@ -27,15 +27,15 @@
 }
 
 .whiteInfoSelected {
-  @apply border border-black/10 bg-[#f4f4f8] text-[#8c8d92];
+  @apply border border-black/10 bg-brand-surface text-brand-text-muted-600;
 }
 
 .whiteInfoSelectedTop {
-  @apply border-l-[1.5px] border-r-[1.5px] border-t-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92];
+  @apply border-l-1.5 border-r-1.5 border-t-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600;
 }
 
 .whiteInfoSelectedBottom {
-  @apply border-b-[1.5px] border-l-[1.5px] border-r-[1.5px] border-[#e2e3e8] bg-[#f4f4f8] text-[#8c8d92];
+  @apply border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600;
 }
 
 .dropdownActive {
@@ -43,27 +43,27 @@
 }
 
 .coolInfoSelected {
-  @apply bg-[#e9ebf3] text-[#79809c];
+  @apply bg-brand-surface-cool text-brand-cool-muted;
 }
 
 .warmInfoSelected {
-  @apply bg-[#fdf9f9] text-[rgba(142,129,127,1)];
+  @apply bg-brand-surface-warm text-brand-warm-light-text;
 }
 
 .button {
-  @apply flex h-full w-full flex-row items-center justify-start pr-[14px];
+  @apply flex h-full w-full flex-row items-center justify-start pr-3.5;
 }
 
 .dropdownBtnContent {
-  @apply min-h-[18px] overflow-hidden text-ellipsis whitespace-nowrap leading-5 !text-black;
+  @apply min-h-4.5 overflow-hidden text-ellipsis whitespace-nowrap leading-5 !text-black;
 }
 
 .dropdownBtnIcon {
-  @apply mr-[0.4rem];
+  @apply mr-1.5;
 }
 
 .dropdownBtnIcon > svg {
-  @apply max-h-[14px] opacity-50;
+  @apply max-h-3.5 opacity-50;
 }
 
 .arrowDown {
@@ -81,7 +81,7 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  @apply !p-[0.3rem] font-pt text-[0.9rem] font-bold !text-[var(--brand-black)] transition-all duration-150 ease-in-out;
+  @apply !p-0.3 font-pt text-sm font-bold !text-brand-black transition-all duration-150 ease-in-out;
 }
 
 .dropdownPrimaryText:hover {
@@ -94,22 +94,22 @@
 
 @media (max-width: 992px) {
   .wrapper {
-    @apply h-12 text-[18px];
+    @apply h-12 text-lg;
   }
   .button {
-    @apply h-12 text-[18px];
+    @apply h-12 text-lg;
   }
 }
 
 @media (max-width: 330px) {
   .button {
-    @apply w-[70px];
+    width: 70px;
   }
 }
 
 @media (max-width: 370px) {
   .button {
-    @apply w-[90px];
+    width: 90px;
   }
 }
 

@@ -11,7 +11,7 @@
 }
 
 .warmInfo .icon {
-  @apply text-[#b6a9a7] border-l border-l-brand-warm-border;
+  @apply text-brand-warm-muted border-l border-l-brand-warm-border;
 }
 
 .treasuryBalance {
@@ -46,11 +46,11 @@
 }
 
 .warmInfo {
-  @apply border border-[var(--brand-warm-border)] rounded-[10px] text-[var(--brand-warm-light-text)];
+  @apply border border-brand-warm-border rounded-10 text-brand-warm-light-text;
 }
 
 .warmInfo:hover {
-  @apply bg-[var(--brand-warm-accent)] text-black;
+  @apply bg-brand-warm-accent text-black;
 }
 
 .whiteInfo {
@@ -62,5 +62,5 @@
 }
 
 .whiteInfo:hover {
-  @apply bg-[#e2e3e8];
+  @apply bg-brand-border-ui;
 }
