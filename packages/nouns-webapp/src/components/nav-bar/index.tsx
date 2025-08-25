@@ -90,7 +90,7 @@ const NavBar = () => {
       <Navbar
         expand="xl"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
-        className="pb-4 max-[992px]:-mb-px max-[992px]:mr-[-5px] max-[992px]:pb-0"
+        className="lg:mb-0 lg:mr-0 lg:pb-4"
         expanded={isNavExpanded}
       >
         <Container style={{ maxWidth: 'unset' }}>
