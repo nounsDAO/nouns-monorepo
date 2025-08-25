@@ -3,12 +3,12 @@ import type { Address } from '@/utils/types';
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
+import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
 interface WinnerProps {
@@ -28,18 +28,16 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeLocale = useActiveLocale();
 
   const nonNounderNounContent = isWinnerYou ? (
-    <Row>
-      <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className="lg-max:pr-1 mt-1">
-        <h2
-          className="font-pt lg-max:text-[23px] lg-max:mr-2 text-[32px] font-bold"
-          style={{
-            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-          }}
-        >
-          <Trans>You</Trans>
-        </h2>
-      </Col>
-    </Row>
+    <div className={cn('lg-max:pr-1 mt-1', activeLocale === 'ja-JP' ? 'lg:w-8/12' : 'lg:w-4/12')}>
+      <h2
+        className="font-pt lg-max:text-[23px] lg-max:mr-2 text-[32px] font-bold"
+        style={{
+          color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+        }}
+      >
+        <Trans>You</Trans>
+      </h2>
+    </div>
   ) : (
     <ShortAddress size={40} address={winner} avatar={true} />
   );
@@ -62,8 +60,8 @@ const Winner: React.FC<WinnerProps> = props => {
 
   return (
     <>
-      <Row className="lg-max:mt-0 lg-max:w-full lg-max:mx-0 lg-max:px-0 lg-max:justify-between ml-2 mt-[2px] pl-6">
-        <Col xs={1} lg={12} className="font-pt lg-max:pl-2">
+      <div className="lg-max:mt-0 lg-max:w-full lg-max:mx-0 lg-max:px-0 lg-max:justify-between ml-2 mt-[2px] flex flex-wrap pl-6">
+        <div className="font-pt lg-max:pl-2 w-auto lg:w-full">
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -72,8 +70,8 @@ const Winner: React.FC<WinnerProps> = props => {
           >
             <Trans>Winner</Trans>
           </h4>
-        </Col>
-        <Col xs="auto" lg={12}>
+        </div>
+        <div className="flex-1 lg:w-full">
           <h2
             className="font-pt lg-max:text-[23px] lg-max:mr-2 text-[32px] font-bold"
             style={{
@@ -82,8 +80,8 @@ const Winner: React.FC<WinnerProps> = props => {
           >
             {isNounders === true ? nounderNounContent : nonNounderNounContent}
           </h2>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 };
