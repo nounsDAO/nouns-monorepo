@@ -99,7 +99,7 @@ const nextConfig: NextConfig = {
       '@nouns/sdk': path.resolve(__dirname, '../nouns-sdk/dist'),
       '@nouns/contracts': path.resolve(__dirname, '../nouns-contracts/dist'),
       '@': path.resolve(__dirname, './src'),
-      'react-router': path.resolve(__dirname, './src/utils/react-router-shim'),
+      'react-router': path.resolve(__dirname, './shims/utils/react-router-shim'),
     };
 
     // Allow generated subgraph code to import .js while using .ts files
