@@ -217,7 +217,7 @@ const Bid: React.FC<BidProps> = props => {
         {!auctionEnded ? (
           <Button
             type="button"
-            className="bg-brand-black ml-2 mt-[3px] h-12 w-auto rounded-[12px] border border-transparent px-4 font-bold leading-none tracking-normal text-white transition-all duration-200 ease-in-out hover:bg-[#2125298a] focus:bg-[#2125298a] active:bg-[#2125298a] disabled:cursor-not-allowed disabled:bg-gray-500"
+            className="bg-brand-black ml-2 mt-[3px] h-12 w-auto rounded-[12px] border border-transparent px-4 text-lg font-bold leading-none tracking-normal text-white transition-all duration-200 ease-in-out hover:bg-[#2125298a] focus:bg-[#2125298a] active:bg-[#2125298a] disabled:cursor-not-allowed disabled:bg-gray-500"
             onClick={placeBidHandler}
             disabled={isDisabled}
           >
