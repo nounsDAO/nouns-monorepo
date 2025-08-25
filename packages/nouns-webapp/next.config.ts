@@ -105,9 +105,6 @@ const nextConfig: NextConfig = {
     // Path aliases
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@nouns/assets': path.resolve(__dirname, '../nouns-assets/dist'),
-      '@nouns/sdk': path.resolve(__dirname, '../nouns-sdk/dist'),
-      '@nouns/contracts': path.resolve(__dirname, '../nouns-contracts/dist'),
       '@': path.resolve(__dirname, './src'),
       'react-router': path.resolve(__dirname, './shims/utils/react-router-shim'),
     };
