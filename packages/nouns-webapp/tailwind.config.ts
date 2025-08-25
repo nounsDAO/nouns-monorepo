@@ -9,6 +9,8 @@ export default {
       xs: '425px',
       sm: '640px',
       md: '768px',
+      // Named breakpoint for 992px used widely in legacy styles
+      mdLg: '992px',
       lg: '1024px',
       xl: '1280px',
       '2xl': '1440px',
@@ -32,11 +34,19 @@ export default {
       backgroundImage: {
         checkerboard:
           'linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%)',
+        // Sponsor fade backgrounds to replace arbitrary bg-[linear-gradient(...)] in candidate-card.module.css
+        'sponsor-fade':
+          'linear-gradient(90deg, rgba(244,244,248,0) 0%, rgba(244,244,248,0.9) 15%, rgba(244,244,248,1) 25%, rgba(244,244,248,1) 100%)',
+        'sponsor-fade-hover':
+          'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 100%)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        // Commonly used custom radii across CSS modules
+        10: '10px', // used in nav-bar, vote-modal, and various buttons
+        14: '14px', // used in bid-history rows and panels
       },
       colors: {
         cool: {
@@ -109,9 +119,22 @@ export default {
       spacing: {
         18: '4.5rem',
       },
+      maxWidth: {
+        // For by-line-hover-card max-w-[11rem]
+        '11rem': '11rem',
+      },
+      lineHeight: {
+        // Preserve 25px line-height used alongside 17px text for headings
+        25: '25px',
+      },
       fontSize: {
         13: '13px',
+        15: '15px', // used 10+ times across CSS modules
         22: '22px',
+        23: '23px', // used in current-bid, forking timer, holder
+        32: '32px', // used in multiple headings
+        '2.5xl': '2.5rem', // used in auction-activity and documentation
+        42: '42px', // used in vote modal titles
       },
     },
   },
