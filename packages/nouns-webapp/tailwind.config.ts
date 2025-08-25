@@ -109,6 +109,10 @@ export default {
       spacing: {
         18: '4.5rem',
       },
+      fontSize: {
+        13: '13px',
+        22: '22px',
+      },
     },
   },
   plugins: [
