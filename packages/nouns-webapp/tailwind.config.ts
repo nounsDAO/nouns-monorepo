@@ -10,7 +10,7 @@ export default {
       sm: '640px',
       md: '768px',
       // Named breakpoint for 992px used widely in legacy styles
-      mdLg: '992px',
+      'md-lg': '992px',
       lg: '1024px',
       xl: '1280px',
       '2xl': '1440px',
@@ -118,21 +118,32 @@ export default {
       },
       spacing: {
         18: '4.5rem',
+        '0.4': '0.1rem', // used for subtle +/- 0.1rem offsets in proposal header, vote modules
+        '0.75': '0.1875rem', // used for mt-[3px] adjustments
+        '5.6': '1.4rem', // used for title spacing in timers
+        '12.5': '3.125rem', // used for consistent 50px heights (e.g., buttons)
       },
       maxWidth: {
         // For by-line-hover-card max-w-[11rem]
         '11rem': '11rem',
       },
+      minHeight: {
+        85: '21.25rem', // 340px used in proposal-editor bodyInput
+      },
       lineHeight: {
         // Preserve 25px line-height used alongside 17px text for headings
         25: '25px',
+        'tight-3': '.7', // used in timers where leading-[0.7] was applied
       },
       fontSize: {
         13: '13px',
         15: '15px', // used 10+ times across CSS modules
+        17: '17px', // used in auction-activity headings
         22: '22px',
         23: '23px', // used in current-bid, forking timer, holder
         32: '32px', // used in multiple headings
+        '1.3xl': '1.3rem', // used in documentation and editor h3
+        '2.7xl': '1.7rem', // used in many headings
         '2.5xl': '2.5rem', // used in auction-activity and documentation
         42: '42px', // used in vote modal titles
       },
