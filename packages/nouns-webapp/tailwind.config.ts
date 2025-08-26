@@ -114,6 +114,7 @@ export default {
         ),
         // Static hex tokens to replace repeated arbitrary color values across CSS modules
         'brand-border-ui': '#e2e3e8', // used for subtle borders (nav, proposals)
+        'brand-gray-border': '#e2e3e8', // alias for legacy border-brand-gray-border usage
         'brand-surface': '#f4f4f8', // light gray surface
         'brand-surface-cool': '#e9ebf3', // cool background chips
         'brand-surface-warm': '#fdf9f9', // warm background chips
@@ -134,6 +135,8 @@ export default {
       },
       spacing: {
         18: '4.5rem',
+        26: '6.5rem', // support h-26 (104px) used in voteReasonTextarea
+        30: '7.5rem', // support h-30 (120px) used in spinnerWrapper
         '0.3': '0.3rem', // used for p/m-[0.3rem] across nav components
         '0.4': '0.1rem', // used for subtle +/- 0.1rem offsets in proposal header, vote modules
         '0.75': '0.1875rem', // used for mt-[3px] adjustments
