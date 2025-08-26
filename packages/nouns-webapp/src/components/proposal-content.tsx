@@ -19,7 +19,7 @@ import { processProposalDescriptionText } from '@/utils/process-proposal-descrip
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nouns-dao';
 
-import ProposalTransactions from './proposal-transactions';
+import ProposalTransactions from './proposal-content/proposal-transactions';
 
 interface ProposalContentProps {
   description: string;

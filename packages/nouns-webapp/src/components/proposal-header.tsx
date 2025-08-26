@@ -28,8 +28,6 @@ import {
 } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
- 
-
 interface ProposalHeaderProps {
   title?: string;
   proposal: Proposal;
@@ -106,21 +104,29 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       {isWalletConnected ? (
         <>
           {!availableVotes && (
-            <div className={"text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] mb-[1.15rem] min-w-[9.5rem]"}>
+            <div
+              className={
+                'font-pt mb-[1.15rem] min-w-[9.5rem] text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+              }
+            >
               <Trans>You have no votes.</Trans>
             </div>
           )}
         </>
       ) : (
-        <div className={"text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] min-w-[12rem] mb-[1.15rem]"}>
+        <div
+          className={
+            'font-pt mb-[1.15rem] min-w-48 text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+          }
+        >
           <Trans>Connect a wallet to vote.</Trans>
         </div>
       )}
       <Button
         className={cn(
           disableVoteButton
-            ? 'w-full max-w-[8rem] min-w-[8rem] h-12 font-bold mb-2 rounded-[12px] border border-[var(--brand-dark-red)] bg-[var(--brand-gray-light-text)] opacity-50 shadow-none cursor-not-allowed'
-            : 'w-full max-w-[8rem] min-w-[8rem] h-12 font-bold mb-2 rounded-[12px] bg-[var(--brand-color-green)] border border-[var(--brand-color-green)] hover:bg-[var(--brand-color-green)] focus:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)]',
+            ? 'mb-2 h-12 w-full min-w-32 max-w-32 cursor-not-allowed rounded-[12px] border border-[var(--brand-dark-red)] bg-[var(--brand-gray-light-text)] font-bold opacity-50 shadow-none'
+            : 'mb-2 h-12 w-full min-w-32 max-w-32 rounded-[12px] border border-[var(--brand-color-green)] bg-[var(--brand-color-green)] font-bold hover:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:bg-[var(--brand-color-green)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)]',
           'lg-max:max-w-full',
         )}
         disabled={disableVoteButton}
@@ -136,7 +142,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       href={buildEtherscanAddressLink(proposal.proposer || '')}
       target="_blank"
       rel="noreferrer"
-      className={"mr-1"}
+      className={'mr-1'}
     >
       <ShortAddress
         address={proposal.proposer || '0x0000000000000000000000000000000000000000'}
@@ -151,7 +157,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         href={buildEtherscanAddressLink(sponsor)}
         target="_blank"
         rel="noreferrer"
-        className={"mr-1"}
+        className={'mr-1'}
       >
         <ShortAddress address={sponsor as `0x${string}`} avatar={false} />
       </a>
@@ -161,12 +167,12 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
   return (
     <>
-      <div className={"relative"}>
+      <div className={'relative'}>
         <Link to={'/vote'}>
           <button
             type="button"
             className={cn(
-              'appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem]',
+              'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
               'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
               'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
             )}
@@ -178,7 +184,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
           <div>
-            <span className="text-[#8c8d92] text-[24px] font-londrina">
+            <span className="font-londrina text-[24px] text-[#8c8d92]">
               <div className="d-flex">
                 <div>
                   <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
@@ -190,7 +196,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             </span>
             <div className={'flex pr-8'}>
               <div className={'mr-2'}>
-                <h1 className="text-[#14161b] text-[42px] font-londrina">{title ? title : proposal.title} </h1>
+                <h1 className="font-londrina text-[42px] text-[#14161b]">
+                  {title ? title : proposal.title}{' '}
+                </h1>
               </div>
             </div>
           </div>
@@ -210,7 +218,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               tip={proposal?.proposer ?? ''}
               id="byLineHoverCard"
             >
-              <div className={'font-medium ml-10'}>
+              <div className={'ml-10 font-medium'}>
                 <Trans>
                   <span className={'text-[var(--brand-gray-light-text)]'}>Proposed by: </span>
                   <span>{proposer}</span>
@@ -245,14 +253,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           </>
         ) : (
           <>
-            <h3 className={'font-londrina text-[var(--brand-gray-light-text)] text-[18px]'}>Proposed by</h3>
-            <div className={'flex flex-row ml-0'}>
+            <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
+              Proposed by
+            </h3>
+            <div className={'ml-0 flex flex-row'}>
               <HoverCard
                 hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
                 tip={proposal?.proposer ?? ''}
                 id="byLineHoverCard"
               >
-                <h3 className={'font-londrina text-[var(--brand-gray-light-text)] text-[18px]'}>{proposer}</h3>
+                <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
+                  {proposer}
+                </h3>
               </HoverCard>
             </div>
             <span className={'my-auto'}>{transactionLink}</span>
@@ -286,7 +298,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         <p className={'inline-block text-[12px]'}>
           {hasManyVersions ? (
             <Link to={`/vote/${proposal.id}/history/`}>
-              <strong className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}>
+              <strong
+                className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}
+              >
                 Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}
               </strong>{' '}
               <span className={'opacity-70'}>
@@ -296,7 +310,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             </Link>
           ) : (
             <>
-              <strong className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}>
+              <strong
+                className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}
+              >
                 Version {hasManyVersions ? props?.versionNumber?.toString() : '1'}
               </strong>{' '}
               <span className={'opacity-70'}>
@@ -309,13 +325,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       )}
 
       {isMobile && (
-        <div className={'px-[3rem]'}>
+        <div className={'px-12'}>
           {isActiveForVoting === true && props.isObjectionPeriod !== true && voteButton}
         </div>
       )}
 
       {proposal != null && isActiveForVoting === true && hasVoted === true && (
-        <Alert variant="success" className={'font-pt font-medium bg-[#e2e3e8] text-black border border-[rgba(0,0,0,0.1)] mt-2'}>
+        <Alert
+          variant="success"
+          className={
+            'font-pt mt-2 border border-[rgba(0,0,0,0.1)] bg-[#e2e3e8] font-medium text-black'
+          }
+        >
           {getTranslatedVoteCopyFromString(proposalVote)}
         </Alert>
       )}
@@ -326,7 +347,12 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         Number.isFinite(proposalCreationTimestamp) &&
         availableVotes > 0 &&
         hasVoted !== true && (
-          <Alert variant="success" className={'font-pt font-medium bg-[#e2e3e8] text-black border border-[rgba(0,0,0,0.1)] mt-2'}>
+          <Alert
+            variant="success"
+            className={
+              'font-pt mt-2 border border-[rgba(0,0,0,0.1)] bg-[#e2e3e8] font-medium text-black'
+            }
+          >
             <Trans>
               Only Nouns you owned or were delegated to you before{' '}
               {i18n.date(new Date(proposalCreationTimestamp * 1000), {

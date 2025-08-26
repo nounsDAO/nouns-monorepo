@@ -31,7 +31,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import VoteCard, { VoteCardVariant } from '@/components/vote-card';
 import VoteModal from '@/components/vote-modal';
-import VoteSignals from '@/components/vote-signals/vote-signals';
+import VoteSignals from '@/components/vote-signals';
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';

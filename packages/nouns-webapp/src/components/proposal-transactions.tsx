@@ -1,4 +1,3 @@
-// react-bootstrap removed; using native title attribute for hover details
 import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 
 import xIcon from '@/assets/x-icon.png';

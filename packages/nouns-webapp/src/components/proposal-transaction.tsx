@@ -4,12 +4,11 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { formatUnits } from 'viem';
 
+import { linkIfAddress } from '@/components/proposal-content';
 import ShortAddress from '@/components/short-address';
 import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nouns-dao';
-
-import { linkIfAddress } from '.';
 
 type ProposalTransactionProps = {
   transaction: ProposalDetail;

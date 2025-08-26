@@ -16,8 +16,6 @@ import { relativeTimestamp } from '@/utils/time-utils';
 import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
- 
-
 interface CandidateHeaderProps {
   title: string;
   id: string;
@@ -54,13 +52,21 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       {isWalletConnected ? (
         <>
           {!availableVotes && (
-            <div className={"text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] mb-[1.15rem] min-w-[9.5rem]"}>
+            <div
+              className={
+                'font-pt mb-[1.15rem] min-w-[9.5rem] text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+              }
+            >
               <Trans>You have no votes.</Trans>
             </div>
           )}
         </>
       ) : (
-        <div className={"text-[var(--brand-gray-light-text)] font-pt font-medium text-[16px] min-w-[12rem] mb-[1.15rem]"}>
+        <div
+          className={
+            'font-pt mb-[1.15rem] min-w-48 text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+          }
+        >
           <Trans>Connect a wallet to vote.</Trans>
         </div>
       )}
@@ -72,7 +78,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       href={buildEtherscanAddressLink(proposer || '')}
       target="_blank"
       rel="noreferrer"
-      className={"mr-1"}
+      className={'mr-1'}
     >
       <ShortAddress address={(proposer as `0x${string}`) || '0x'} avatar={false} />
     </a>
@@ -84,12 +90,12 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   const transactionLink = transactionIconLink(createdTransactionHash);
   return (
     <>
-      <div className={"relative"}>
+      <div className={'relative'}>
         <Link to={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
           <button
             type="button"
             className={cn(
-              'appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem]',
+              'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
               'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
               'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
             )}
@@ -101,14 +107,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
           <div>
-            <span className="text-[#8c8d92] text-[24px] font-londrina">
+            <span className="font-londrina text-[24px] text-[#8c8d92]">
               <div className="d-flex">
                 <div>{subHead}</div>
               </div>
             </span>
             <div className={'flex pr-8'}>
               <div className={'mr-2'}>
-                <h1 className="text-[#14161b] text-[42px] font-londrina">{title} </h1>
+                <h1 className="font-londrina text-[42px] text-[#14161b]">{title} </h1>
               </div>
             </div>
           </div>
@@ -127,7 +133,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             tip={proposer || ''}
             id="byLineHoverCard"
           >
-            <div className={'font-medium ml-10'}>
+            <div className={'ml-10 font-medium'}>
               <Trans>
                 <span className={'text-[var(--brand-gray-light-text)]'}>Proposed by: </span>
                 <span>{proposerLink}</span>
@@ -137,15 +143,17 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           </HoverCard>
         ) : (
           <>
-            <h3 className={'font-londrina text-[var(--brand-gray-light-text)] text-[18px]'}>Proposed by</h3>
+            <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
+              Proposed by
+            </h3>
 
-            <div className={'flex flex-row ml-0'}>
+            <div className={'ml-0 flex flex-row'}>
               <HoverCard
                 hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
                 tip={proposer || ''}
                 id="byLineHoverCard"
               >
-                <h3 className={'font-londrina text-[var(--brand-gray-light-text)] text-[18px]'}>
+                <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
                   {proposerLink}
                   {transactionLink}
                 </h3>
@@ -179,11 +187,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
         )}
       </p>
 
-      {isMobile && (
-        <div className={'px-[3rem]'}>
-          {isActiveForVoting === true && voteButton}
-        </div>
-      )}
+      {isMobile && <div className={'px-12'}>{isActiveForVoting === true && voteButton}</div>}
     </>
   );
 };

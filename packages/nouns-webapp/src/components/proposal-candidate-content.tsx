@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
 
-import ProposalTransactions from './proposal-transactions';
+import ProposalTransactions from './proposal-content/proposal-transactions';
 
 interface ProposalCandidateContentProps {
   proposal?: ProposalCandidate;

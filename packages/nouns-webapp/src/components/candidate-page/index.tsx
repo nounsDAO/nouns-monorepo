@@ -14,11 +14,11 @@ import { first, isNullish, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
 
+import CandidateHeader from '@/components/candidate-header';
 import CandidateSponsors from '@/components/candidate-sponsors';
-import ProposalCandidateContent from '@/components/proposal-content/proposal-candidate-content';
-import CandidateHeader from '@/components/proposal-header/candidate-header';
+import ProposalCandidateContent from '@/components/proposal-candidate-content';
 import Section from '@/components/section';
-import VoteSignals from '@/components/vote-signals/vote-signals';
+import VoteSignals from '@/components/vote-signals';
 import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
@@ -241,7 +241,7 @@ const CandidatePage = () => {
                 <Link
                   to={`/candidates/${id}/edit`}
                   className={cn(
-                    'font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+                    'font-pt h-fit rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
                     'bg-black text-white no-underline hover:opacity-75',
                   )}
                 >

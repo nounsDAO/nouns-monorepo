@@ -12,8 +12,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
 import ProposalContent from '@/components/proposal-content';
-import ProposalTransactionsDiffs from '@/components/proposal-content/proposal-transactions-diffs';
 import ProposalStatus from '@/components/proposal-status';
+import ProposalTransactionsDiffs from '@/components/proposal-transactions-diffs';
 import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
@@ -21,8 +21,6 @@ import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
 import { Link, useParams } from 'react-router';
 
 import VersionTab from './version-tab';
-
- 
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -57,15 +55,15 @@ const ProposalHistory = () => {
     return (
       <ReactMarkdown
         className={cn(
-          'font-pt text-[1.1rem] [&_h1]:text-[1.7rem] [&_h1]:mt-4 [&_h1]:font-bold [&_h2]:text-[1.5rem] [&_h2]:mt-4 [&_h2]:font-bold [&_h3]:text-[1.3rem] [&_img]:max-w-full [&_img]:h-auto',
-          '[&_.section]:break-words [&_.section]:pt-8 [&_.section]:mt-8',
-          '[&_.section_h5]:text-[1.7rem] [&_.section_h5]:mt-4 [&_.section_h5]:font-londrina',
-          '[&_.txnInfoText]:text-[var(--brand-gray-light-text)] [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:mt-1 [&_.txnInfoText]:mb-1 [&_.txnInfoText]:font-medium [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center',
+          'font-pt text-[1.1rem] [&_h1]:mt-4 [&_h1]:text-[1.7rem] [&_h1]:font-bold [&_h2]:mt-4 [&_h2]:text-[1.5rem] [&_h2]:font-bold [&_h3]:text-[1.3rem] [&_img]:h-auto [&_img]:max-w-full',
+          '[&_.section]:mt-8 [&_.section]:break-words [&_.section]:pt-8',
+          '[&_.section_h5]:font-londrina [&_.section_h5]:mt-4 [&_.section_h5]:text-[1.7rem]',
+          '[&_.txnInfoText]:my-1 [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:font-medium [&_.txnInfoText]:text-[var(--brand-gray-light-text)]',
           'lg-max:[&_.txnInfoText]:items-start lg-max:[&_.txnInfoText]:mt-4',
-          '[&_.txnInfoIcon]:h-[18px] [&_.txnInfoIcon]:w-[18px] [&_.txnInfoIcon]:opacity-50',
+          '[&_.txnInfoIcon]:size-[18px] [&_.txnInfoIcon]:opacity-50',
           'lg-max:[&_.txnInfoIcon]:mt-1 lg-max:[&_.txnInfoIcon]:mr-2',
-          '[&_.txnInfoIconWrapper]:w-[25px] [&_.txnInfoIconWrapper]:flex [&_.txnInfoIconWrapper]:items-center',
-          '[&_.v3Proposal\.section]:pt-0 [&_.v3Proposal\.section]:mt-0',
+          '[&_.txnInfoIconWrapper]:flex [&_.txnInfoIconWrapper]:w-[25px] [&_.txnInfoIconWrapper]:items-center',
+          '[&_.v3Proposal.section]:mt-0 [&_.v3Proposal.section]:pt-0',
         )}
         remarkPlugins={[remarkBreaks]}
       >
@@ -91,7 +89,7 @@ const ProposalHistory = () => {
                 <button
                   type="button"
                   className={cn(
-                    'appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem]',
+                    'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
                     'border border-[rgba(0,0,0,0.1)] bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
                     'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
                   )}
@@ -101,16 +99,13 @@ const ProposalHistory = () => {
               </Link>
             </div>
             <div>
-              <span className={'text-[#8c8d92] text-[24px] font-londrina'}>
+              <span className={'font-londrina text-[24px] text-[#8c8d92]'}>
                 <div className="d-flex">
                   <div>
                     <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
                   </div>
                   <div>
-                    <ProposalStatus
-                      status={proposal?.status}
-                      className={'ml-3 mt-[0.1rem]'}
-                    />
+                    <ProposalStatus status={proposal?.status} className={'ml-3 mt-[0.1rem]'} />
                   </div>
                 </div>
               </span>
@@ -130,7 +125,7 @@ const ProposalHistory = () => {
                       />
                     </div>
                   ) : (
-                    <h1 className={'text-[#14161b] text-[42px] font-londrina'}>
+                    <h1 className={'font-londrina text-[42px] text-[#14161b]'}>
                       {proposalVersions &&
                         activeVersion &&
                         proposalVersions[activeVersion - 1].title}{' '}
