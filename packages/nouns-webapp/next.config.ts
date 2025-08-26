@@ -33,6 +33,7 @@ const nextConfig: NextConfig = {
   // Turbopack configuration
   turbopack: {
     rules: {
+      // Load .po gettext catalogs with Lingui and treat the generated output as JS so Turbopack can bundle them
       '*.po': {
         loaders: ['@lingui/loader'],
         as: '*.js',
@@ -41,6 +42,12 @@ const nextConfig: NextConfig = {
       '*.svg': {
         loaders: ['@svgr/webpack'],
         as: '*.js', // tell Turbopack the output is JS
+      },
+    },
+    // Turbopack: alias Node's 'fs' to an empty browser shim so client bundles don't include server-only APIs
+    resolveAlias: {
+      fs: {
+        browser: './src/shims/empty.ts',
       },
     },
   },
