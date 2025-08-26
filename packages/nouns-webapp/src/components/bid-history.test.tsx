@@ -36,11 +36,6 @@ vi.mock('@/components/bid-history-item', () => ({
 }));
 
 describe('BidHistory Component', () => {
-  const mockClasses = {
-    bidCollection: 'bidCollection',
-    otherClass: 'otherClass',
-  };
-
   const mockBids: {
     extended: boolean;
     nounId: bigint;
@@ -82,17 +77,16 @@ describe('BidHistory Component', () => {
   it('renders nothing when no bids are available', () => {
     vi.mocked(useAuctionBids).mockReturnValue(undefined);
 
-    render(<BidHistory auctionId="1" max={10} classes={mockClasses} />);
+    render(<BidHistory auctionId="1" max={10} />);
 
     const bidCollection = screen.getByRole('list');
     expect(bidCollection).toBeEmptyDOMElement();
-    expect(bidCollection).toHaveClass(mockClasses.bidCollection);
   });
 
   it('renders bids sorted by timestamp in descending order', () => {
     vi.mocked(useAuctionBids).mockReturnValue(mockBids);
 
-    render(<BidHistory auctionId="1" max={10} classes={mockClasses} />);
+    render(<BidHistory auctionId="1" max={10} />);
 
     const bidItems = screen.getAllByTestId('bid-history-item');
     expect(bidItems).toHaveLength(3);
@@ -106,7 +100,7 @@ describe('BidHistory Component', () => {
   it('limits the number of displayed bids to the max prop', () => {
     vi.mocked(useAuctionBids).mockReturnValue(mockBids);
 
-    render(<BidHistory auctionId="1" max={2} classes={mockClasses} />);
+    render(<BidHistory auctionId="1" max={2} />);
 
     const bidItems = screen.getAllByTestId('bid-history-item');
     expect(bidItems).toHaveLength(2);
@@ -119,7 +113,7 @@ describe('BidHistory Component', () => {
   it('passes the correct props to BidHistoryItem', () => {
     vi.mocked(useAuctionBids).mockReturnValue([mockBids[0]]);
 
-    render(<BidHistory auctionId="1" max={10} classes={mockClasses} />);
+    render(<BidHistory auctionId="1" max={10} />);
 
     const bidItem = screen.getByTestId('bid-history-item');
     expect(bidItem).toHaveTextContent(`Bid: ${mockBids[0].value.toString()}`);
@@ -130,7 +124,7 @@ describe('BidHistory Component', () => {
   it('converts auctionId from string to BigInt when calling useAuctionBids', () => {
     vi.mocked(useAuctionBids).mockReturnValue([]);
 
-    render(<BidHistory auctionId="42" max={10} classes={mockClasses} />);
+    render(<BidHistory auctionId="42" max={10} />);
 
     expect(useAuctionBids).toHaveBeenCalledWith(BigInt(42));
   });

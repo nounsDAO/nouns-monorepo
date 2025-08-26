@@ -26,9 +26,6 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { defaultChain } from '@/wagmi';
 import { Auction } from '@/wrappers/nouns-auction';
 
-import classes from './auction-activity.module.css';
-import bidHistoryClasses from './bid-history.module.css';
-
 const openEtherscanBidHistory = () => {
   const chainId = defaultChain.id;
   const url = buildEtherscanAddressLink(nounsAuctionHouseAddress[chainId]);
@@ -102,8 +99,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       )}
 
       <AuctionActivityWrapper>
-        <div className={classes.informationRow}>
-          <div className={`${classes.activityRow} flex flex-col gap-4`}>
+        <div className="mb-2">
+          <div className="mb-0 flex flex-col gap-4">
             <AuctionTitleAndNavWrapper>
               {displayGraphDepComps && (
                 <AuctionNavigation
@@ -119,14 +116,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityNounTitle isCool={isCool} nounId={BigInt(auction.nounId)} />
             </div>
           </div>
-          <div className={`${classes.activityRow} flex flex-col gap-4 lg:flex-row`}>
-            <div className={`${classes.currentBidCol} w-full lg:basis-1/3`}>
+          <div className="mb-0 flex flex-col gap-4 lg:flex-row">
+            <div className="lg-max:border-r-0 lg-max:pl-0 ml-1.5 mt-1.5 w-full border-r lg:basis-1/3">
               <CurrentBid
                 currentBid={BigInt(auction.amount?.toString() ?? '0')}
                 auctionEnded={auctionEnded}
               />
             </div>
-            <div className={`${classes.auctionTimerCol} w-full lg:basis-1/2`}>
+            <div className="lg-max:ml-1.5 lg-max:mt-1.5 lg-max:pl-0 w-full pl-0 lg:basis-1/2">
               {auctionEnded ? (
                 renderAuctionWinner()
               ) : (
@@ -136,10 +133,15 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           </div>
         </div>
         {auctionEnded && (
-          <div className={`${classes.activityRow} flex w-full`}>
-            <div className={`${classes.nextNounLink} w-full`}>
-              <FontAwesomeIcon icon={faInfoCircle} />
-              <a href={'https://www.nouns.game/crystal-ball'} target={'_blank'} rel="noreferrer">
+          <div className="mb-0 flex w-full">
+            <div className="lg-max:pl-3.5 group mb-4 mt-0 w-full transition duration-200 ease-in-out hover:text-black">
+              <FontAwesomeIcon icon={faInfoCircle} className="opacity-60" />
+              <a
+                href={'https://www.nouns.game/crystal-ball'}
+                target={'_blank'}
+                rel="noreferrer"
+                className="font-pt text-brand-gray-light-text pl-2 font-medium no-underline opacity-100 hover:no-underline group-hover:text-black"
+              >
                 <Trans>Help mint the next Noun</Trans>
               </a>
             </div>
@@ -147,14 +149,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         )}
         {isLastAuction && (
           <>
-            <div className={`${classes.activityRow} flex w-full`}>
+            <div className="mb-0 flex w-full">
               <div className="w-full">
                 <Bid auction={auction} auctionEnded={auctionEnded} />
               </div>
             </div>
           </>
         )}
-        <div className={`${classes.activityRow} flex w-full`}>
+        <div className="mb-0 flex w-full">
           <div className="w-full">
             {!isLastAuction ? (
               <NounInfoCard
@@ -162,13 +164,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (
-              displayGraphDepComps && (
-                <BidHistory
-                  auctionId={auction.nounId.toString()}
-                  max={3}
-                  classes={bidHistoryClasses}
-                />
-              )
+              displayGraphDepComps && <BidHistory auctionId={auction.nounId.toString()} max={3} />
             )}
             {/* If no bids, show nothing. If bids avail:graph is stable? Show bid history modal,
             else show etherscan contract link */}

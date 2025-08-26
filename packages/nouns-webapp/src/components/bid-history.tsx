@@ -8,11 +8,10 @@ import { useAuctionBids } from '@/wrappers/on-display-auction';
 interface BidHistoryProps {
   auctionId: string;
   max: number;
-  classes: Record<string, string>;
 }
 
 const BidHistory: React.FC<BidHistoryProps> = props => {
-  const { auctionId, max, classes } = props;
+  const { auctionId, max } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const bids = useAuctionBids(BigInt(auctionId));
   const bidContent =
@@ -20,13 +19,11 @@ const BidHistory: React.FC<BidHistoryProps> = props => {
     bids
       .toSorted((bid1: Bid, bid2: Bid) => -1 * Number(bid1.timestamp - bid2.timestamp))
       .map((bid: Bid) => {
-        return (
-          <BidHistoryItem key={bid.transactionHash} bid={bid} classes={classes} isCool={isCool} />
-        );
+        return <BidHistoryItem key={bid.transactionHash} bid={bid} isCool={isCool} />;
       })
       .slice(0, max);
 
-  return <ul className={classes.bidCollection}>{bidContent}</ul>;
+  return <ul className="mt-4 grid list-none gap-y-2 p-0 text-left">{bidContent}</ul>;
 };
 
 export default BidHistory;

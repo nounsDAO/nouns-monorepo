@@ -31,18 +31,6 @@ vi.mock('@/utils/etherscan', () => ({
 }));
 
 describe('BidHistoryItem Component', () => {
-  const mockClasses = {
-    bidRowCool: 'bidRowCool',
-    bidRowWarm: 'bidRowWarm',
-    bidItem: 'bidItem',
-    leftSectionWrapper: 'leftSectionWrapper',
-    bidder: 'bidder',
-    bidDate: 'bidDate',
-    rightSectionWrapper: 'rightSectionWrapper',
-    bidAmount: 'bidAmount',
-    linkSymbol: 'linkSymbol',
-  };
-
   const mockBid = {
     nounId: 1n,
     sender: '0x123456789abcdef123456789abcdef123456789a' as Address,
@@ -61,7 +49,7 @@ describe('BidHistoryItem Component', () => {
   });
 
   it('renders the bid information correctly', () => {
-    render(<BidHistoryItem bid={mockBid} classes={mockClasses} />);
+    render(<BidHistoryItem bid={mockBid} />);
 
     // Check address is rendered
     expect(screen.getByTestId('short-address')).toBeInTheDocument();
@@ -86,34 +74,36 @@ describe('BidHistoryItem Component', () => {
   });
 
   it('applies warm style when isCool is false', () => {
-    render(<BidHistoryItem bid={mockBid} classes={mockClasses} isCool={false} />);
+    render(<BidHistoryItem bid={mockBid} isCool={false} />);
 
     const bidRow = screen.getByRole('listitem');
-    expect(bidRow).toHaveClass(mockClasses.bidRowWarm);
-    expect(bidRow).not.toHaveClass(mockClasses.bidRowCool);
+    expect(bidRow).toHaveClass('text-[0.95rem]');
+    expect(bidRow).toHaveClass('pt-1', 'pr-3', 'pb-2', 'pl-3');
+    expect(bidRow).not.toHaveClass('text-[1.1rem]');
   });
 
   it('applies cool style when isCool is true', () => {
-    render(<BidHistoryItem bid={mockBid} classes={mockClasses} isCool={true} />);
+    render(<BidHistoryItem bid={mockBid} isCool={true} />);
 
     const bidRow = screen.getByRole('listitem');
-    expect(bidRow).toHaveClass(mockClasses.bidRowCool);
-    expect(bidRow).not.toHaveClass(mockClasses.bidRowWarm);
+    expect(bidRow).toHaveClass('text-[1.1rem]');
+    expect(bidRow).toHaveClass('p-3');
+    expect(bidRow).not.toHaveClass('text-[0.95rem]');
   });
 
   it('defaults to warm style when isCool is not provided', () => {
-    render(<BidHistoryItem bid={mockBid} classes={mockClasses} />);
+    render(<BidHistoryItem bid={mockBid} />);
 
     const bidRow = screen.getByRole('listitem');
-    expect(bidRow).toHaveClass(mockClasses.bidRowWarm);
-    expect(bidRow).not.toHaveClass(mockClasses.bidRowCool);
+    expect(bidRow).toHaveClass('text-[0.95rem]');
+    expect(bidRow).not.toHaveClass('text-[1.1rem]');
   });
 
   it('handles mobile view correctly', () => {
     // Set window width to mobile size
     window.innerWidth = 800;
 
-    render(<BidHistoryItem bid={mockBid} classes={mockClasses} />);
+    render(<BidHistoryItem bid={mockBid} />);
 
     // Check ShortAddress is rendered without an avatar
     expect(screen.getByTestId('short-address')).not.toHaveTextContent('(with avatar)');
