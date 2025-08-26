@@ -12,7 +12,7 @@ import { Delegate, Maybe } from '@/subgraphs/graphql';
 import { Address } from '@/utils/types';
 import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
 
-import classes from './by-line-hover-card.module.css';
+// Replaced CSS module with inline Tailwind classes
 
 interface ByLineHoverCardProps {
   proposerAddress: string;
@@ -28,8 +28,8 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
   if (loading || (data && data?.delegates?.length === 0)) {
     return (
-      <div className={classes.spinnerWrapper}>
-        <div className={classes.spinner}>
+      <div className="text-brand-gray-light-text h-30 flex w-full flex-col justify-center">
+        <div className="flex w-full justify-center">
           <Spinner animation="border" />
         </div>
       </div>
@@ -48,8 +48,8 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     });
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.stackedNounWrapper}>
+    <div className="flex flex-col">
+      <div className="flex">
         <HorizontalStackedNouns
           nounIds={map(
             data?.delegates?.[0]?.nounsRepresented ?? [],
@@ -58,13 +58,13 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
         />
       </div>
 
-      <div className={classes.address}>
+      <div className="font-londrina w-full text-left text-2xl">
         <ShortAddress address={data?.delegates?.[0]?.id as Address} />
       </div>
 
-      <div className={classes.nounsRepresented}>
+      <div className="text-brand-gray-dark-text text-15 max-w-11rem mt-1 flex font-medium">
         <div>
-          <ScaleIcon height={15} width={15} className={classes.icon} />
+          <ScaleIcon height={15} width={15} className="mb-1.5 mr-1.5" />
           {sortedNounIds?.length === 1 ? (
             <Trans>
               <span>Delegated Noun: </span>
@@ -77,7 +77,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
           {sortedNounIds?.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
             return (
-              <span className={classes.bold} key={nounId.toString()}>
+              <span className="font-bold" key={nounId.toString()}>
                 {nounId}
                 {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds?.length) - 1 && ', '}{' '}
               </span>

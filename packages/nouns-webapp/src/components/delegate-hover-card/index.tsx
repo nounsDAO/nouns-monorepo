@@ -9,7 +9,7 @@ import HorizontalStackedNouns from '@/components/horizontal-stacked-nouns';
 import ShortAddress from '@/components/short-address';
 import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
-import classes from './delegate-hover-card.module.css';
+// Replaced CSS module with inline Tailwind classes
 
 interface DelegateHoverCardProps {
   delegateId: string;
@@ -29,8 +29,8 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
 
   if (loading || data == null || data.delegates.length === 0) {
     return (
-      <div className={classes.spinnerWrapper}>
-        <div className={classes.spinner}>
+      <div className="flex h-[185px] w-full flex-col justify-center text-[var(--brand-gray-light-text)]">
+        <div className="flex w-full justify-center">
           <Spinner animation="border" />
         </div>
       </div>
@@ -44,26 +44,26 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
   const numVotesForProp = data.delegates[0].nounsRepresented.length;
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.stackedNounWrapper}>
+    <div className="max-w-11rem flex flex-col">
+      <div className="flex">
         <HorizontalStackedNouns
           nounIds={data.delegates[0].nounsRepresented.map((noun: { id: string }) => noun.id)}
         />
       </div>
 
-      <div className={classes.address}>
+      <div className="font-londrina w-full text-left text-[24px]">
         <ShortAddress address={data?.delegates?.[0]?.id ?? ''} />
       </div>
 
-      <div className={classes.nounInfoWrapper}>
-        <ScaleIcon height={20} width={20} className={classes.icon} />
+      <div className="mb-3 mt-1 flex items-center text-[15px] font-medium not-italic leading-[1.4] text-[var(--brand-gray-dark-text)] [font-feature-settings:'tnum'_on,'lnum'_on,'ss06'_on,'ss01'_on,'liga'_off]">
+        <ScaleIcon height={20} width={20} className="mb-[5px] mr-[6px]" />
         {numVotesForProp === 1 ? (
           <Trans>
-            Voted with<span className={classes.bold}>{numVotesForProp}</span>Noun
+            Voted with<span className="mx-1 font-bold">{numVotesForProp}</span>Noun
           </Trans>
         ) : (
           <Trans>
-            Voted with<span className={classes.bold}>{numVotesForProp}</span>Nouns
+            Voted with<span className="mx-1 font-bold">{numVotesForProp}</span>Nouns
           </Trans>
         )}
       </div>

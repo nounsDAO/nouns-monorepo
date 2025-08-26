@@ -5,18 +5,16 @@ import { Trans } from '@lingui/react/macro';
 import { cn } from '@/lib/utils';
 import { ForkState } from '@/wrappers/nouns-dao';
 
-import classes from './fork-status.module.css';
-
 const statusVariant = (status: ForkState | undefined) => {
   switch (status) {
     case ForkState.ESCROW:
-      return classes.escrow;
+      return 'border-2 border-brand-warning-border bg-white text-brand-warning-text';
     case ForkState.ACTIVE:
-      return classes.primary;
+      return 'bg-brand-color-green';
     case ForkState.EXECUTED:
-      return classes.success;
+      return 'bg-brand-color-blue';
     default:
-      return classes.secondary;
+      return 'bg-brand-gray-light-text';
   }
 };
 
@@ -41,7 +39,13 @@ interface ForkStateProps {
 const ForkStatus: React.FC<ForkStateProps> = props => {
   const { status, className } = props;
   return (
-    <div className={cn(statusVariant(status), classes.proposalStatus, className)}>
+    <div
+      className={cn(
+        'font-pt rounded-lg border-2 border-transparent px-2.5 py-1.5 text-sm font-bold text-white',
+        statusVariant(status),
+        className,
+      )}
+    >
       {statusText(status)}
     </div>
   );

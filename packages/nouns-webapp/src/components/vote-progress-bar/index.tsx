@@ -3,8 +3,6 @@ import { cn } from '@/lib/utils';
 
 import { VoteCardVariant } from '../vote-card';
 
-import classes from './vote-progress-bar.module.css';
-
 const VoteProgressBar: React.FC<{
   variant: VoteCardVariant;
   percentage: number;
@@ -15,26 +13,26 @@ const VoteProgressBar: React.FC<{
   let wrapperClass;
   switch (variant) {
     case VoteCardVariant.FOR:
-      progressBarClass = classes.forProgressBar;
-      wrapperClass = classes.forWrapper;
+      progressBarClass = 'bg-brand-color-green';
+      wrapperClass = 'bg-brand-color-green-translucent';
       break;
     case VoteCardVariant.AGAINST:
-      progressBarClass = classes.againstProgressBar;
-      wrapperClass = classes.againstWrapper;
+      progressBarClass = 'bg-brand-color-red';
+      wrapperClass = 'bg-brand-color-red-translucent';
       break;
     default:
-      progressBarClass = classes.abstainProgressBar;
-      wrapperClass = classes.abstainWrapper;
+      progressBarClass = 'bg-brand-gray-light-text';
+      wrapperClass = 'bg-brand-gray-light-text-translucent';
       break;
   }
 
   return (
-    <div className={cn(classes.wrapper, wrapperClass)}>
+    <div className={cn('h-4 rounded-md', wrapperClass)}>
       <div
         style={{
           width: `${percentage}%`,
         }}
-        className={cn(classes.progressBar, progressBarClass)}
+        className={cn('h-full rounded-md', progressBarClass)}
       ></div>
     </div>
   );

@@ -9,8 +9,6 @@ import Modal from '@/components/modal';
 import { activeLocaleAtom } from '@/i18n/active-locale-atom';
 import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales';
 
-import classes from './language-selection-modal.module.css';
-
 interface LanguageSelectionModalProps {
   onDismiss: () => void;
 }
@@ -22,11 +20,11 @@ const LanguageSelectionModal: FC<LanguageSelectionModalProps> = ({ onDismiss }) 
   const [activeLocale, setActiveLocale] = useAtom(activeLocaleAtom);
 
   const modalContent = (
-    <div className={classes.LanguageSelectionModal}>
+    <div className="max-h-[40vh] overflow-y-scroll">
       {SUPPORTED_LOCALES.map((locale: SupportedLocale) => {
         return (
           <div
-            className={classes.languageButton}
+            className="text-brand-black m-[5px] flex justify-between rounded-[5px] border-0 bg-[rgba(211,211,211,0.664)] px-[20px] py-[5px] outline-none hover:bg-[lightgray] hover:text-white focus:bg-[lightgray] focus:shadow-none focus:outline-none active:bg-[lightgray] active:shadow-none disabled:bg-[lightgray]"
             key={locale}
             onClick={() => {
               setActiveLocale(locale);
@@ -35,7 +33,7 @@ const LanguageSelectionModal: FC<LanguageSelectionModalProps> = ({ onDismiss }) 
           >
             {LOCALE_LABEL[locale]}
             {locale === activeLocale && (
-              <FontAwesomeIcon icon={faCheck} height={24} width={24} className={classes.icon} />
+              <FontAwesomeIcon icon={faCheck} height={24} width={24} className="mt-1" />
             )}
           </div>
         );

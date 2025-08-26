@@ -1,7 +1,0 @@
-.minBidWrapper {
-  @apply mt-4 flex;
-}
-
-.minBid {
-  @apply font-londrina ml-4 cursor-pointer text-xl font-normal text-[var(--brand-black)];
-}

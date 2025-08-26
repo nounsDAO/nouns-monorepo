@@ -4,8 +4,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 
 import { cn } from '@/lib/utils';
 
-import classes from './vote-card-pager.module.css';
-
 interface VoteCardPagerProps {
   onRightArrowClick: () => void;
   onLeftArrowClick: () => void;
@@ -30,31 +28,36 @@ const VoteCardPager: React.FC<VoteCardPagerProps> = props => {
   return (
     <>
       {/* Dots */}
-      <div className={cn(classes.pageDots, isOnePage ? classes.disabled : '')}>
+      <div
+        className={cn(
+          'text-brand-gray-light-text text-center text-[24px] font-bold',
+          isOnePage ? 'opacity-25' : '',
+        )}
+      >
         {Array.from(Array(numPages).keys()).map((n: number) => {
           return (
-            <span className={n === currentPage ? '' : classes.disabledPageDot} key={n}>
+            <span className={n === currentPage ? '' : 'opacity-50'} key={n}>
               •
             </span>
           );
         })}
       </div>
       {/* Arrows */}
-      <div className={cn(classes.paginationArrowsWrapper, isOnePage ? classes.disabled : '')}>
+      <div className={cn('flex justify-center', isOnePage ? 'opacity-25' : '')}>
         <button
-          className={classes.paginationArrowBtnWrapper}
+          className="border-0 bg-transparent disabled:opacity-50"
           disabled={isLeftArrowDisabled || isOnePage}
           onClick={onLeftArrowClick}
         >
-          <ChevronLeftIcon className={classes.paginationArrow} />
+          <ChevronLeftIcon className="text-brand-gray-light-text size-7" />
         </button>
 
         <button
           disabled={isRightArrowDisabled || isOnePage}
           onClick={onRightArrowClick}
-          className={classes.paginationArrowBtnWrapper}
+          className="border-0 bg-transparent disabled:opacity-50"
         >
-          <ChevronRightIcon className={classes.paginationArrow} />
+          <ChevronRightIcon className="text-brand-gray-light-text size-7" />
         </button>
       </div>
     </>

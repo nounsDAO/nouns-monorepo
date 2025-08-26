@@ -65,8 +65,6 @@ import {
 } from '@/wrappers/subgraph';
 import { Link, useParams } from 'react-router';
 
-import classes from './vote.module.css';
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
@@ -480,7 +478,7 @@ const VotePage = () => {
 
   if (!proposal || loading || !data || loadingDQInfo || dqInfo === undefined) {
     return (
-      <div className={classes.spinner}>
+      <div className="mx-auto max-w-[30px] text-[--brand-gray-light-text]">
         <LoadingSpinner />
       </div>
     );
@@ -493,7 +491,7 @@ const VotePage = () => {
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
-    <Section fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className="text-[--brand-dark-red]">
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
@@ -518,7 +516,7 @@ const VotePage = () => {
         availableVotes={userVotes ?? 0}
         isObjectionPeriod={isObjectionPeriod}
       />
-      <div className={cn(classes.wrapper, 'w-full', isUpdateable() ? 'lg:w-full' : 'lg:w-5/6')}>
+      <div className={cn('mx-auto', 'w-full', isUpdateable() ? 'lg:w-full' : 'lg:w-5/6')}>
         {proposal !== undefined && (
           <ProposalHeader
             proposal={proposal}
@@ -537,8 +535,8 @@ const VotePage = () => {
       </div>
       <div
         className={cn(
-          classes.proposal,
-          classes.wrapper,
+          'mt-4 bg-white',
+          'mx-auto',
           'w-full',
           isUpdateable() ? 'lg:w-full' : 'lg:w-5/6',
         )}

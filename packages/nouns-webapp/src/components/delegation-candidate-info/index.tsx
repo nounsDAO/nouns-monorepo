@@ -13,8 +13,6 @@ import { useAccountVotes } from '@/wrappers/noun-token';
 
 import { ChangeDelegateState } from '../change-delegate-panel';
 
-import classes from './delegation-candidate-info.module.css';
-
 interface DelegationCandidateInfoProps {
   address: Address;
   changeModalState: ChangeDelegateState;
@@ -67,16 +65,16 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
 
   if (votes == null) {
     return (
-      <div className={classes.spinner}>
+      <div className="flex justify-center">
         <BrandSpinner />
       </div>
     );
   }
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.delegateCandidateInfoWrapper}>
-        <div className={classes.avatarWrapper}>
+    <div className="mt-3 flex justify-between px-2">
+      <div className="flex">
+        <div className="mr-4">
           <img
             alt={address}
             src={blo(address as Address)}
@@ -86,10 +84,10 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
           />
         </div>
         <div>
-          <div className={classes.ensText}>
+          <div className="text-22 text-brand-cool-dark-text font-bold">
             <ShortAddress address={address} />
           </div>
-          <div className={classes.shortAddress}>{shortAddress}</div>
+          <div className="text-13 text-brand-cool-light-text font-medium">{shortAddress}</div>
         </div>
       </div>
 

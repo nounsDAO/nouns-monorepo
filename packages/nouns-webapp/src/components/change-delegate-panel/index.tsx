@@ -23,7 +23,7 @@ import { useProposalThreshold } from '@/wrappers/nouns-dao';
 
 import classes from './change-delegate-panel.module.css';
 
-import currentDelegatePannelClasses from '@/components/current-delegate-pannel/current-delegate-pannel.module.css';
+// Inlined styles from current-delegate-pannel
 
 interface ChangeDelegatePanelProps {
   onDismiss: () => void;
@@ -215,13 +215,13 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
       <div className={'flex h-fit flex-col gap-3'}>
         <h1
           className={cn(
-            currentDelegatePannelClasses.title,
+            'font-londrina text-brand-cool-dark-text flex h-8 flex-col text-[42px] leading-[42px]',
             locale !== 'en-US' ? classes.nonEnBottomMargin : '',
           )}
         >
           {getTitleFromState(changeDelegateState)}
         </h1>
-        <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
+        <p className="font-pt text-brand-cool-dark-text font-medium">{primaryCopy}</p>
         {availableVotes > 0 && accountVotes - availableVotes < (proposalThreshold ?? 0) + 1 && (
           <div className={classes.changeDelegateWarning}>
             <Trans>

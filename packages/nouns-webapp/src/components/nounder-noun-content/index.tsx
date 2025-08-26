@@ -13,7 +13,7 @@ import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-import nounContentClasses from './nounder-noun-content.module.css';
+// Replaced CSS module with inline Tailwind classes
 
 import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
 import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
@@ -92,7 +92,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
           <div
             className={cn(
               auctionActivityClasses.currentBidCol,
-              nounContentClasses.currentBidCol,
+              'border-r-0',
               auctionActivityClasses.auctionTimerCol,
               'lg:col-span-5',
             )}
@@ -109,11 +109,14 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             <li
               className={cn(
                 isCool ? auctionBidClasses.bidRowCool : auctionBidClasses.bidRowWarm,
-                nounContentClasses.bidRow,
+                'text-[15.5px] font-medium leading-[21px]',
               )}
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
-              <Link to="/vote" className={nounContentClasses.link}>
+              <Link
+                to="/vote"
+                className="text-brand-dark-green visited:text-brand-dark-green active:text-brand-dark-green hover:text-brand-dark-red underline"
+              >
                 <Trans>Nouns DAO</Trans>
               </Link>
               .{' '}

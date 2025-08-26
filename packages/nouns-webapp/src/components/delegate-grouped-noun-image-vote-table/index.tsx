@@ -7,8 +7,6 @@ import TightStackedCircleNouns from '@/components/tight-stacked-circle-nouns';
 import VoteCardPager from '@/components/vote-card-pager';
 import { pseudoRandomPredictableShuffle } from '@/utils/pseudo-random-predictable-shuffle';
 
-import classes from './delegate-grouped-noun-image-vote-table.module.css';
-
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
     | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
@@ -62,7 +60,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td className={classes.nounCell} key={j}>
+              <td className="w-[55px] text-center" key={j}>
                 {paddedNounIds[i * rowLength + j]}
               </td>
             ))}
@@ -72,7 +70,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
 
   return (
     <>
-      <table className={classes.wrapper}>
+      <table className="mx-auto -mt-5">
         <tbody>{content(page)}</tbody>
       </table>
       <VoteCardPager

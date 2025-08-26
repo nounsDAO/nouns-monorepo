@@ -13,7 +13,7 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 import { Address, Bid } from '@/utils/types';
 
-import classes from './bid-history-modal-row.module.css';
+// Replaced CSS module with inline Tailwind classes
 
 import auctionActivityClasses from '@/components/auction-activity/bid-history.module.css';
 
@@ -32,17 +32,22 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
   const shortAddress = formatShortAddress(bid.sender);
 
   return (
-    <li className={cn(auctionActivityClasses.bidRowCool, classes.bidRow)}>
+    <li
+      className={cn(
+        auctionActivityClasses.bidRowCool,
+        'rounded-14 h-18 mt-3 w-full border-b-0 bg-white p-4',
+      )}
+    >
       <div className={auctionActivityClasses.bidItem}>
         <div className={auctionActivityClasses.leftSectionWrapper}>
           <div className={auctionActivityClasses.bidder}>
-            <div className={classes.bidderInfoWrapper}>
+            <div className="flex">
               <img
                 alt={bid.sender}
                 src={blo(bid.sender as Address)}
                 className="size-10 rounded-full"
               />
-              <div className={classes.bidderInfoText}>
+              <div className="ml-2 inline-block p-0 leading-6">
                 <span>
                   {ens && !ensMatchesBlocklistRegex ? shortENS(ens) : shortAddress}
                   {index === 0 && (
@@ -52,7 +57,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
                       className={'ml-1 inline-block size-4'}
                     />
                   )}
-                  <div className={classes.bidDate}>
+                  <div className="text-brand-gray-light-text font-pt text-13 font-medium">
                     {i18n.date(new Date(Number(bid.timestamp) * 1000), {
                       dateStyle: 'medium',
                       timeStyle: 'short',
@@ -64,10 +69,12 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
           </div>
         </div>
         <div className={auctionActivityClasses.rightSectionWrapper}>
-          <div className={cn(classes.bidAmount, auctionActivityClasses.bidAmount)}>{bidAmount}</div>
+          <div className={cn('whitespace-nowrap', auctionActivityClasses.bidAmount)}>
+            {bidAmount}
+          </div>
           <div className={auctionActivityClasses.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
-              <div className={classes.linkIcon}>
+              <div className="text-brand-gray-light-text mb-px transition-all duration-150 ease-in-out hover:cursor-pointer hover:text-black">
                 <ExternalLinkIcon height={24} width={24} />
               </div>
             </a>

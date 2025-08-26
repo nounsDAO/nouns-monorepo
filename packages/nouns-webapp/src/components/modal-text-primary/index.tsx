@@ -1,10 +1,10 @@
-import classes from './modal-text-primary.module.css';
+import React from 'react';
 
 interface ModalTextPrimaryProps {
   children?: React.ReactNode;
 }
 
 const ModalTextPrimary = ({ children }: Readonly<ModalTextPrimaryProps>) => (
-  <div className={classes.text}>{children}</div>
+  <div className="text-22 text-brand-cool-dark-text mb-2 font-bold">{children}</div>
 );
 export default ModalTextPrimary;

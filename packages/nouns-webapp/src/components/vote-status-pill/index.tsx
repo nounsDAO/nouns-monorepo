@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import classes from './vote-status-pill.module.css';
 
 interface VoteStatusPillProps {
   status: string;
@@ -8,13 +7,25 @@ interface VoteStatusPillProps {
 
 const VoteStatusPill: React.FC<VoteStatusPillProps> = props => {
   const { status, text } = props;
+  const base =
+    'font-pt my-[5px] flex h-7 w-fit items-center justify-center rounded-[8px] px-2 text-center align-middle text-[14px] font-bold';
   switch (status) {
     case 'success':
-      return <div className={`${classes.pass} ${classes.nounButton}`}>{text}</div>;
+      return (
+        <div className={`${base} bg-brand-color-blue-translucent text-brand-color-blue`}>
+          {text}
+        </div>
+      );
     case 'failure':
-      return <div className={`${classes.fail} ${classes.nounButton}`}>{text}</div>;
+      return (
+        <div className={`${base} bg-brand-color-red-translucent text-brand-color-red`}>{text}</div>
+      );
     default:
-      return <div className={`${classes.pending} ${classes.nounButton}`}>{text}</div>;
+      return (
+        <div className={`${base} bg-brand-color-green-translucent text-brand-color-green`}>
+          {text}
+        </div>
+      );
   }
 };
 

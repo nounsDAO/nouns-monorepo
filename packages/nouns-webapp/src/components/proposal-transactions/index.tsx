@@ -4,8 +4,6 @@ import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 import xIcon from '@/assets/x-icon.png';
 import { ProposalTransaction } from '@/wrappers/nouns-dao';
 
-import classes from './proposal-transactions.module.css';
-
 interface ProposalTransactionsProps {
   className?: string;
   proposalTransactions: ProposalTransaction[];
@@ -55,7 +53,9 @@ const ProposalTransactions = ({
         <div
           key={`${tx.signature}-${tx.calldata}`}
           title={getHoverText(tx)}
-          className={`${classes.transactionDetails} flex items-center justify-between`}
+          className={
+            'mt-4 flex items-center justify-between rounded-[8px] border border-[#aaa] px-4 py-2'
+          }
         >
           <div>
             <span>Transaction #{i + 1} - </span>
@@ -65,10 +65,10 @@ const ProposalTransactions = ({
           </div>
           <button
             type="button"
-            className={classes.removeTransactionButton}
+            className="border-0 bg-transparent shadow-none outline-none"
             onClick={() => onRemoveProposalTransaction(i)}
           >
-            <img src={xIcon.src} alt="Remove Transaction" />
+            <img className="w-4" src={xIcon.src} alt="Remove Transaction" />
           </button>
         </div>
       ))}

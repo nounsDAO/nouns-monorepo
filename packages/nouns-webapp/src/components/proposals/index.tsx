@@ -37,8 +37,6 @@ import { Link, useLocation, useNavigate } from 'react-router';
 
 import classes from './proposals.module.css';
 
-import proposalStatusClasses from '@/components/proposal-status/proposal-status.module.css';
-
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (
@@ -286,7 +284,10 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   const countdownPill = (
                     <div className={classes.proposalStatusWrapper}>
                       <div
-                        className={cn(proposalStatusClasses.proposalStatus, classes.countdownPill)}
+                        className={cn(
+                          'font-pt rounded-lg border-2 border-transparent px-2.5 py-1.5 text-sm font-bold text-white',
+                          classes.countdownPill,
+                        )}
                       >
                         <div className={classes.countdownPillContentWrapper}>
                           <span className={classes.countdownPillClock}>

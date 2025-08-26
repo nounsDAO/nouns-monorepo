@@ -1,7 +1,0 @@
-.wrapper {
-  @apply mx-auto -mt-5;
-}
-
-.nounCell {
-  @apply w-[55px] text-center;
-}

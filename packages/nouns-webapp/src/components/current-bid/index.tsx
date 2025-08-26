@@ -6,8 +6,6 @@ import TruncatedAmount from '@/components/truncated-amount';
 import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 
-import classes from './current-bid.module.css';
-
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that
  * the bid amount is not applicable to this auction. (Nounder Noun)
@@ -32,14 +30,13 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
   return (
     <div
       className={cn(
-        classes.wrapper,
-        classes.container,
-        classes.section,
+        'lg-max:w-full lg-max:mx-0 lg-max:justify-between px-0',
         'flex flex-row items-end justify-between gap-2 lg:flex-col',
       )}
     >
-      <div className={cn(classes.leftCol, 'basis-5/12 lg:w-full lg:basis-auto')}>
+      <div className={cn('lg-max:pl-2', 'basis-5/12 lg:w-full lg:basis-auto')}>
         <h4
+          className="font-pt lg-max:mb-0 lg-max:mt-1.5 text-lg font-bold"
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
           }}
@@ -49,7 +46,7 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
       </div>
       <div className="lg:w-full">
         <h2
-          className={classes.currentBid}
+          className="font-pt text-32 mt-0.75 lg-max:text-23 lg-max:mr-2 mb-0 font-bold"
           style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid} />}

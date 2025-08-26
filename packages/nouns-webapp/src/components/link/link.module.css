@@ -1,8 +1,0 @@
-.link,
-.link:hover,
-.link:active {
-  @apply text-[var(--brand-dark-red)];
-}
-.link:hover {
-  @apply underline;
-}

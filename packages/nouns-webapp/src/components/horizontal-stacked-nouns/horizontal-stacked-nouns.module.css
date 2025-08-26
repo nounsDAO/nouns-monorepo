@@ -1,7 +1,0 @@
-.wrapper {
-  @apply !relative mb-[50px] mt-[10px] mx-auto w-full;
-}
-
-.nounWrapper {
-  @apply absolute;
-}

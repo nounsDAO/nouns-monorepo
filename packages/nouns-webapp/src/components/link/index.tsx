@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
 
-import classes from './link.module.css';
-
 interface LinkProps {
   text: ReactNode;
   url: string;
@@ -11,7 +9,7 @@ interface LinkProps {
 const Link: React.FC<LinkProps> = ({ leavesPage, text, url }) => {
   return (
     <a
-      className={classes.link}
+      className="text-brand-dark-red hover:underline"
       href={url}
       target={leavesPage ? '_blank' : '_self'}
       rel="noreferrer"

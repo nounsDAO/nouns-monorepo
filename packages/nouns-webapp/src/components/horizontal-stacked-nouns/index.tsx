@@ -2,15 +2,13 @@ import React from 'react';
 
 import { StandaloneNounCircular } from '@/components/standalone-noun';
 
-import classes from './horizontal-stacked-nouns.module.css';
-
 interface HorizontalStackedNounsProps {
   nounIds: string[];
 }
 
 const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = ({ nounIds }) => {
   return (
-    <div className={classes.wrapper}>
+    <div className="relative mx-auto mb-[50px] mt-[10px] w-full">
       {nounIds
         .slice(0, 6)
         .map((nounId: string, i: number) => {
@@ -21,7 +19,7 @@ const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = ({ nounIds
                 top: '0px',
                 left: `${25 * i}px`,
               }}
-              className={classes.nounWrapper}
+              className="absolute"
             >
               <StandaloneNounCircular nounId={BigInt(nounId)} border={true} />
             </div>

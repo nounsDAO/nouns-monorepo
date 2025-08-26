@@ -12,7 +12,7 @@ import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
-import classes from './nav-local-switcher.module.css';
+// Replaced CSS module with inline Tailwind classes
 
 import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
@@ -83,15 +83,17 @@ const CustomMenu = ({
 
         switch (index) {
           case 0:
-            dropDownStyle = classes.dropDownTop;
+            dropDownStyle =
+              'ml-1 rounded-t-[10px] border-b border-b-[rgba(0,0,0,0.06)] pb-2 pl-4 pt-[0.65rem] transition-all duration-150 ease-in-out hover:text-black';
             buttonStyle = buttonStyleTop;
             break;
           case SUPPORTED_LOCALES.length - 1:
-            dropDownStyle = classes.dropDownBottom;
+            dropDownStyle = 'ml-1 rounded-b-[10px] pb-[0.65rem] pl-4 pt-2 hover:text-black';
             buttonStyle = buttonStyleBottom;
             break;
           default:
-            dropDownStyle = classes.dropDownInterior;
+            dropDownStyle =
+              'ml-1 border-b border-b-[rgba(0,0,0,0.06)] pb-[0.65rem] pl-4 pt-2 hover:text-black';
             buttonStyle = buttonStyleBottom;
         }
 
@@ -103,7 +105,7 @@ const CustomMenu = ({
               navDropdownClasses.dropdownPrimaryText,
               buttonStyle,
               dropDownStyle,
-              classes.desktopLanguageButton,
+              'justify-between',
             )}
             onClick={() => setActiveLocale(locale)}
           >
