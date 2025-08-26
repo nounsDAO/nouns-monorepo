@@ -4,7 +4,6 @@ import type { AbiFunction } from 'viem';
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 import { encodeAbiParameters, getAbiItem, parseEther, toFunctionSignature } from 'viem';
 
 import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
@@ -111,16 +110,16 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
         </div>
       )}
 
-      <Row>
-        <Col sm="3" className={classes.label}>
+      <div className="grid grid-cols-12 gap-3">
+        <div className={'col-span-12 sm:col-span-3 ' + classes.label}>
           <b>
             <Trans>Arguments</Trans>
           </b>
-        </Col>
-        <Col sm="9">
+        </div>
+        <div className="col-span-12 sm:col-span-9">
           <hr />
-        </Col>
-        <Col sm="9">
+        </div>
+        <div className="col-span-12 sm:col-span-9">
           {(() => {
             if (!state.abi || !state.function) {
               return <Trans>None</Trans>;
@@ -136,15 +135,15 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
 
             return <></>;
           })()}
-        </Col>
-      </Row>
+        </div>
+      </div>
       {(functionAbiItem?.inputs ?? []).map((input, i) => (
-        <Row key={i}>
+        <div className="grid grid-cols-12 gap-3" key={i}>
           <div className={classes.argument}>
             <div className={classes.argValue}>{input.name}</div>
             <div className={classes.argValue}>{args[i]}</div>
           </div>
-        </Row>
+        </div>
       ))}
 
       <ModalBottomButtonRow

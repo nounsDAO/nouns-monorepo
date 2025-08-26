@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Alert, Col, Row } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { isAddress } from 'viem';
@@ -63,9 +63,10 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
 
   return (
     <>
-      <Row>
-        <Col
+      <div className="grid grid-cols-12 gap-3">
+        <div
           className={cn(
+            'col-span-12',
             classes.section,
             props.hasSidebar === true ? classes.hasSidebar : undefined,
           )}
@@ -78,11 +79,11 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               {processProposalDescriptionText(description, title)}
             </ReactMarkdown>
           ) : null}
-        </Col>
-      </Row>
+        </div>
+      </div>
       {details.length > 0 ? (
-        <Row>
-          <Col className={classes.section}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className={cn('col-span-12', classes.section)}>
             <h5>
               <Trans>Proposed Transactions</Trans>
             </h5>
@@ -97,8 +98,8 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               </Alert>
             )}
             <ProposalTransactions details={details} />
-          </Col>
-        </Row>
+          </div>
+        </div>
       ) : null}
     </>
   );

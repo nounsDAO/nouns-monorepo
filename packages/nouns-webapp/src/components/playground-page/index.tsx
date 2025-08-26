@@ -6,17 +6,7 @@ import { Trans } from '@lingui/react/macro';
 import { getNounData, getRandomNounSeed, ImageData } from '@noundry/nouns-assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
 import { PNG } from 'pngjs';
-import {
-  Button,
-  Col,
-  Container,
-  FloatingLabel,
-  Form,
-  Image,
-  OverlayTrigger,
-  Popover,
-  Row,
-} from 'react-bootstrap';
+import { Button, FloatingLabel, Form, Image, OverlayTrigger, Popover } from 'react-bootstrap';
 
 import InfoIcon from '@/assets/icons/Info.svg';
 import Noun from '@/components/legacy-noun';
@@ -285,9 +275,9 @@ const Playground: React.FC = () => {
         />
       )}
 
-      <Container fluid="lg">
-        <Row>
-          <Col lg={10} className={classes.headerRow}>
+      <div className="container mx-auto max-w-screen-lg px-4">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="lg:col-span-10">
             <span>
               <Trans>Explore</Trans>
             </span>
@@ -301,11 +291,11 @@ const Playground: React.FC = () => {
                 rendered using the {nounsSDKLink}.
               </Trans>
             </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={3}>
-            <Col lg={12}>
+          </div>
+        </div>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="lg:col-span-3">
+            <div className="lg:col-span-12">
               <Button
                 onClick={() => {
                   generateNounSvg();
@@ -314,12 +304,12 @@ const Playground: React.FC = () => {
               >
                 <Trans>Generate Nouns</Trans>
               </Button>
-            </Col>
-            <Row>
+            </div>
+            <div className="grid grid-cols-12 gap-3">
               {traits &&
                 traits.map((trait, index) => {
                   return (
-                    <Col lg={12} xs={6} key={trait.title}>
+                    <div className="col-span-6 lg:col-span-12" key={trait.title}>
                       <Form className={classes.traitForm}>
                         <FloatingLabel
                           controlId="floatingSelect"
@@ -344,10 +334,10 @@ const Playground: React.FC = () => {
                           </Form.Select>
                         </FloatingLabel>
                       </Form>
-                    </Col>
+                    </div>
                   );
                 })}
-            </Row>
+            </div>
             <label style={{ margin: '1rem 0 .25rem 0' }} htmlFor="custom-trait-upload">
               <Trans>Upload Custom Trait</Trans>
               <OverlayTrigger
@@ -407,13 +397,13 @@ const Playground: React.FC = () => {
                 worth of Nouns
               </Trans>
             </p>
-          </Col>
-          <Col lg={9}>
-            <Row>
+          </div>
+          <div className="lg:col-span-9">
+            <div className="grid grid-cols-12 gap-3">
               {nounSvgs &&
                 nounSvgs.map((svg, i) => {
                   return (
-                    <Col xs={4} lg={3} key={i}>
+                    <div className="col-span-4 lg:col-span-3" key={i}>
                       <div
                         onClick={() => {
                           setIndexOfNounToDisplay(i);
@@ -427,13 +417,13 @@ const Playground: React.FC = () => {
                           wrapperClassName={classes.nounWrapper}
                         />
                       </div>
-                    </Col>
+                    </div>
                   );
                 })}
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

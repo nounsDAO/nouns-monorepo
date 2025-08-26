@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
-import { Col, Container, Row } from 'react-bootstrap';
 import { map } from 'remeda';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
@@ -197,10 +196,10 @@ const ForkPage = () => {
   return (
     <>
       <Section fullWidth={false} className="h-100">
-        <Row>
+        <div className="grid grid-cols-12 gap-3">
           {isNewForkPage ? (
             <div className={cn(classes.pageHeader, classes.emptyState)}>
-              <Col lg={12}>
+              <div className="lg:col-span-12">
                 <header>
                   <div className={classes.status}>
                     <Link className={classes.backButton} to="/fork">
@@ -231,7 +230,7 @@ const ForkPage = () => {
                 >
                   {addNounsButtonLabel}
                 </button>
-              </Col>
+              </div>
             </div>
           ) : (
             <div
@@ -241,7 +240,7 @@ const ForkPage = () => {
                 isForked && classes.isForked,
               )}
             >
-              <Col lg={6}>
+              <div className="lg:col-span-6">
                 <div className={classes.status}>
                   <Link className={classes.backButton} to="/fork">
                     ←
@@ -261,10 +260,9 @@ const ForkPage = () => {
                     </Trans>
                   </p>
                 )}
-              </Col>
+              </div>
               {!isForked && (
-                <Col
-                  lg={6}
+                <div
                   className={cn(classes.buttons, escrowEvents.data == null && classes.emptyState)}
                 >
                   {!isForkPeriodActive &&
@@ -292,15 +290,15 @@ const ForkPage = () => {
                   >
                     {addNounsButtonLabel}
                   </button>
-                </Col>
+                </div>
               )}
             </div>
           )}
-        </Row>
+        </div>
       </Section>
       {(isForked || isForkPeriodActive) && (
         <Section fullWidth={false}>
-          <Col>
+          <div className="col-span-12">
             <div className={classes.callout}>
               {forkDetails.data.forkingPeriodEndTimestamp &&
                 +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
@@ -353,7 +351,7 @@ const ForkPage = () => {
                 <p>Fork treasury balance: Ξ{Number(formatEther(forkTreasuryBalance)).toFixed(2)}</p>
               </div>
             </div>
-          </Col>
+          </div>
         </Section>
       )}
 
@@ -365,9 +363,9 @@ const ForkPage = () => {
             isForked && classes.isForked,
           )}
         >
-          <Container>
-            <Row className={classes.forkTimeline}>
-              <Col lg={3} className={classes.sidebar}>
+          <div className="container mx-auto px-4">
+            <div className={cn('grid grid-cols-12 gap-3', classes.forkTimeline)}>
+              <div className={cn('lg:col-span-3', classes.sidebar)}>
                 <div className={classes.summary}>
                   <span>{isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}</span>
                   <strong>
@@ -425,8 +423,8 @@ const ForkPage = () => {
                     ))}
                   </div>
                 )}
-              </Col>
-              <Col lg={9} className={classes.events}>
+              </div>
+              <div className={cn('lg:col-span-9', classes.events)}>
                 {!isForked &&
                   userEscrowedNounIds.data != null &&
                   userEscrowedNounIds.data.length > 0 && (
@@ -457,9 +455,9 @@ const ForkPage = () => {
                     />
                   );
                 })}
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       )}
       {account && (

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
 import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';
@@ -67,7 +66,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
   return (
     <AuctionActivityWrapper>
       <div className={auctionActivityClasses.informationRow}>
-        <Row className={auctionActivityClasses.activityRow}>
+        <div className={cn(auctionActivityClasses.activityRow, 'grid grid-cols-1 gap-4')}>
           <AuctionTitleAndNavWrapper>
             <AuctionNavigation
               isFirstAuction={isFirstAuction}
@@ -77,30 +76,35 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             />
             <AuctionActivityDateHeadline startTime={mintTimestamp} />
           </AuctionTitleAndNavWrapper>
-          <Col lg={12}>
+          <div className="w-full">
             <AuctionActivityNounTitle nounId={nounId} />
-          </Col>
-        </Row>
-        <Row className={auctionActivityClasses.activityRow}>
-          <Col lg={4} className={auctionActivityClasses.currentBidCol}>
+          </div>
+        </div>
+        <div
+          className={cn(
+            auctionActivityClasses.activityRow,
+            'grid grid-cols-1 gap-4 lg:grid-cols-12',
+          )}
+        >
+          <div className={cn(auctionActivityClasses.currentBidCol, 'lg:col-span-4')}>
             <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
-          </Col>
-          <Col
-            lg={5}
+          </div>
+          <div
             className={cn(
               auctionActivityClasses.currentBidCol,
               nounContentClasses.currentBidCol,
               auctionActivityClasses.auctionTimerCol,
+              'lg:col-span-5',
             )}
           >
             <div className={auctionActivityClasses.section}>
               <Winner winner={'0x'} isNounders={true} />
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
-      <Row className={auctionActivityClasses.activityRow}>
-        <Col lg={12}>
+      <div className={cn(auctionActivityClasses.activityRow, 'grid grid-cols-1')}>
+        <div className="w-full">
           <ul className={auctionBidClasses.bidCollection}>
             <li
               className={cn(
@@ -139,8 +143,8 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
               <Trans>Learn more</Trans> →
             </Link>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </AuctionActivityWrapper>
   );
 };

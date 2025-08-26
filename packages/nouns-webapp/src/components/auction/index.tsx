@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Col, Container, Row } from 'react-bootstrap';
-
 import AuctionActivity from '@/components/auction-activity';
 import { LoadingNoun } from '@/components/legacy-noun';
 import NounderNounContent from '@/components/nounder-noun-content';
@@ -84,19 +82,17 @@ const Auction: React.FC<AuctionProps> = props => {
 
   return (
     <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
-      <Container fluid="xl">
-        <Row>
-          <Col lg={{ span: 6 }} className={classes.nounContentCol}>
-            {currentAuction ? nounContent : loadingNoun}
-          </Col>
-          <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
+      <div className="mx-auto max-w-screen-xl px-4">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className={classes.nounContentCol}>{currentAuction ? nounContent : loadingNoun}</div>
+          <div className={classes.auctionActivityCol}>
             {currentAuction &&
               (isNounderNoun(BigInt(currentAuction.nounId))
                 ? nounderNounContent
                 : currentAuctionActivityContent)}
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

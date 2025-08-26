@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 
 import TruncatedAmount from '@/components/truncated-amount';
 import { useAppSelector } from '@/hooks';
@@ -31,8 +30,15 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
   const titleContent = auctionEnded ? <Trans>Winning bid</Trans> : <Trans>Current bid</Trans>;
 
   return (
-    <Row className={cn(classes.wrapper, classes.container, classes.section)}>
-      <Col xs={5} lg={12} className={classes.leftCol}>
+    <div
+      className={cn(
+        classes.wrapper,
+        classes.container,
+        classes.section,
+        'flex flex-row items-end justify-between gap-2 lg:flex-col',
+      )}
+    >
+      <div className={cn(classes.leftCol, 'basis-5/12 lg:w-full lg:basis-auto')}>
         <h4
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -40,16 +46,16 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
         >
           {titleContent}
         </h4>
-      </Col>
-      <Col xs="auto" lg={12}>
+      </div>
+      <div className="lg:w-full">
         <h2
           className={classes.currentBid}
           style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid} />}
         </h2>
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 

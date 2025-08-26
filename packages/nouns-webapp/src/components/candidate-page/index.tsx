@@ -9,7 +9,7 @@ import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 // eslint-disable-next-line no-restricted-imports
-import { Alert, Button, Col, Row, Spinner } from 'react-bootstrap';
+import { Alert, Button, Spinner } from 'react-bootstrap';
 import { first, isNullish, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
@@ -187,7 +187,7 @@ const CandidatePage = () => {
           )}
         </Alert>
       )}
-      <Col lg={12} className={classes.wrapper}>
+      <div className={cn('col-span-12 lg:col-span-12', classes.wrapper)}>
         {isNullish(candidate) && (
           <div
             className="d-flex justify-content-center align-items-center"
@@ -210,10 +210,10 @@ const CandidatePage = () => {
             submitButtonClickHandler={() => {}}
           />
         )}
-      </Col>
+      </div>
       {isProposer && isProposal === false && (
-        <Row>
-          <Col lg={12}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-12 lg:col-span-12">
             <div className={classes.editCandidate}>
               <p>
                 <span className={classes.proposerOptionsHeader}>
@@ -245,21 +245,21 @@ const CandidatePage = () => {
                 </Link>
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
 
       {isNonNullish(candidate) && (
-        <Row>
-          <Col lg={12}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-12 lg:col-span-12">
             <a className={classes.jump} href="#feedback">
               Jump to Sponsored Votes and Feedback
             </a>
-          </Col>
-          <Col lg={8} className={cn(classes.proposal, classes.wrapper)}>
+          </div>
+          <div className={cn('col-span-12 lg:col-span-8', classes.proposal, classes.wrapper)}>
             <ProposalCandidateContent proposal={candidate} />
-          </Col>
-          <Col id="feedback" lg={4} className={classes.sidebar}>
+          </div>
+          <div id="feedback" className={cn('col-span-12 lg:col-span-4', classes.sidebar)}>
             {currentBlock != null &&
               threshold != null &&
               userVotes != null &&
@@ -299,8 +299,8 @@ const CandidatePage = () => {
               handleRefetch={handleRefetchData}
               isFeedbackClosed={isUpdateToProposal && !isParentProposalUpdatable}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
     </Section>
   );

@@ -9,7 +9,7 @@ import { useReadNounsTreasuryBalancesInEth } from '@nouns/sdk/react/treasury';
 import { ConnectKitButton } from 'connectkit';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { formatEther } from 'viem';
 
 import NogglesIcon from '@/assets/icons/Noggles.svg?react';
@@ -93,7 +93,7 @@ const NavBar = () => {
         className="lg:mb-0 lg:mr-0 lg:pb-4"
         expanded={isNavExpanded}
       >
-        <Container style={{ maxWidth: 'unset' }}>
+        <div className="w-full max-w-none px-4">
           <div className="flex flex-row flex-nowrap items-center justify-center">
             <Navbar.Brand
               as={Link}
@@ -277,7 +277,7 @@ const NavBar = () => {
               }}
             </ConnectKitButton.Custom>
           </Navbar.Collapse>
-        </Container>
+        </div>
       </Navbar>
     </>
   );

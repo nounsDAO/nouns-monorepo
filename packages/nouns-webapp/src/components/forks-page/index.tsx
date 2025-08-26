@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 
 import ForkStatus from '@/components/fork-status';
 import Section from '@/components/section';
@@ -28,15 +27,15 @@ const ForksPage: React.FC = () => {
   return (
     <div>
       <Section fullWidth={false} className={classes.section}>
-        <Col lg={10} className={classes.wrapper}>
-          <Row className={classes.headerRow}>
+        <div className={`mx-auto w-full lg:w-10/12 ${classes.wrapper}`}>
+          <div className={`${classes.headerRow} flex flex-col gap-2`}>
             <span>
               <Trans>Governance</Trans>
             </span>
             <h1>
               <Trans>Fork</Trans>
             </h1>
-          </Row>
+          </div>
           <p className={cn(classes.subheading, 'm-0')}>
             <Trans>
               Forking is the crypto-native way for groups of token holders to exit together into a
@@ -53,12 +52,14 @@ const ForksPage: React.FC = () => {
               Learn more about Nouns Fork
             </a>
           </p>
-        </Col>
+        </div>
       </Section>
       {/* if the latest fork id is finished forking, display a callout with an option to start a new fork. */}
       <Section fullWidth={false} className={classes.section}>
-        <Col lg={10} className={classes.wrapper}>
-          <Row className={classes.forksList}>
+        <div className={`mx-auto w-full lg:w-10/12 ${classes.wrapper}`}>
+          <div
+            className={`${classes.forksList} grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`}
+          >
             {Array.isArray(forks.data) && forks.data.length > 0
               ? forks.data
                   .map((fork: Fork, i: number) => {
@@ -83,8 +84,8 @@ const ForksPage: React.FC = () => {
                   })
                   .reverse()
               : null}
-          </Row>
-          <Row>
+          </div>
+          <div className="mt-4">
             {((Array.isArray(forks.data) && forks.data.length === 0) ||
               (isLatestForkFinished && typeof nextForkId === 'number')) && (
               <div>
@@ -96,8 +97,8 @@ const ForksPage: React.FC = () => {
                 </p>
               </div>
             )}
-          </Row>
-        </Col>
+          </div>
+        </div>
       </Section>
     </div>
   );

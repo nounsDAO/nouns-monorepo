@@ -6,7 +6,6 @@ import {
   useReadNounsTreasuryBalancesInEth,
   useReadNounsTreasuryBalancesInUsd,
 } from '@nouns/sdk/react/treasury';
-import { Col, Row } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { formatEther, formatUnits } from 'viem';
 
@@ -65,33 +64,33 @@ const GovernancePage = () => {
   return (
     <>
       <Section fullWidth={false} className={classes.section}>
-        <Col lg={10} className={classes.wrapper}>
-          <Row className={classes.headerRow}>
+        <div className={classes.wrapper}>
+          <div className={classes.headerRow}>
             <span>
               <Trans>Governance</Trans>
             </span>
             <h1>
               <Trans>Nouns DAO</Trans>
             </h1>
-          </Row>
+          </div>
           <p className={classes.subheading}>{subHeading}</p>
 
-          <Row className={classes.treasuryInfoCard}>
-            <Col lg={8} className={classes.treasuryAmtWrapper}>
-              <Row className={classes.headerRow}>
+          <div className={cn(classes.treasuryInfoCard, 'grid grid-cols-1 gap-6 lg:grid-cols-12')}>
+            <div className={cn(classes.treasuryAmtWrapper, 'lg:col-span-8')}>
+              <div className={classes.headerRow}>
                 <span>
                   <Trans>Treasury</Trans>
                 </span>
-              </Row>
-              <Row>
-                <Col className={cn(classes.ethTreasuryAmt)} lg={3}>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12">
+                <div className={cn(classes.ethTreasuryAmt, 'lg:col-span-3')}>
                   <h1 className={classes.ethSymbol}>Ξ</h1>
                   <h1>
                     {treasuryBalance != undefined &&
                       i18n.number(Number(Number(formatEther(treasuryBalance)).toFixed(0)))}
                   </h1>
-                </Col>
-                <Col className={classes.usdTreasuryAmt}>
+                </div>
+                <div className={classes.usdTreasuryAmt}>
                   <h1 className={classes.usdBalance}>
                     {treasuryBalanceUSD !== undefined
                       ? i18n.number(Number(formatUnits(treasuryBalanceUSD, 6)), {
@@ -100,18 +99,18 @@ const GovernancePage = () => {
                         })
                       : null}
                   </h1>
-                </Col>
-              </Row>
-            </Col>
-            <Col className={classes.treasuryInfoText}>
+                </div>
+              </div>
+            </div>
+            <div className={classes.treasuryInfoText}>
               <Trans>
                 This treasury exists for <span className={classes.boldText}>Nouns DAO</span>{' '}
                 participants to allocate resources for the long-term growth and prosperity of the
                 Nouns project.
               </Trans>
-            </Col>
-          </Row>
-        </Col>
+            </div>
+          </div>
+        </div>
       </Section>
 
       <Proposals proposals={proposals ?? []} nounsRequired={nounsRequired} />

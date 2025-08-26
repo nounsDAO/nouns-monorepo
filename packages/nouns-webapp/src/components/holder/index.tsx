@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 
 import ShortAddress from '@/components/short-address';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -60,8 +59,8 @@ const Holder: React.FC<HolderProps> = props => {
 
   return (
     <>
-      <Row className={cn(classes.wrapper, classes.section)}>
-        <Col xs={1} lg={12} className={classes.leftCol}>
+      <div className={cn('grid grid-cols-12 gap-3', classes.wrapper, classes.section)}>
+        <div className={cn('col-span-1 lg:col-span-12', classes.leftCol)}>
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -70,8 +69,8 @@ const Holder: React.FC<HolderProps> = props => {
           >
             <Trans>Held by</Trans>
           </h4>
-        </Col>
-        <Col xs="auto" lg={12}>
+        </div>
+        <div className="col-auto lg:col-span-12">
           <h2
             className={classes.holderContent}
             style={{
@@ -80,8 +79,8 @@ const Holder: React.FC<HolderProps> = props => {
           >
             {isNounders === true ? nounderNounContent : nonNounderNounContent}
           </h2>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 };

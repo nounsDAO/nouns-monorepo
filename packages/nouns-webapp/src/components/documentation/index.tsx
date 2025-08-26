@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Col } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 
 import Link from '@/components/link';
@@ -75,7 +74,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
       className={cn(classes.documentationSection, '-mb-10 sm:-mb-20')}
       style={{ background: props.backgroundColor }}
     >
-      <Col lg={{ span: 10, offset: 1 }}>
+      <div className="lg:col-span-10 lg:col-start-2">
         <div className={classes.headerWrapper}>
           <h1>
             <Trans>WTF?</Trans>
@@ -437,7 +436,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
-      </Col>
+      </div>
     </Section>
   );
 };

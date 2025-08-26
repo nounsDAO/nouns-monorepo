@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans, Plural } from '@lingui/react/macro';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { usePublicClient } from 'wagmi';
 
 import VoteProgressBar from '@/components/vote-progress-bar';
@@ -102,7 +102,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   }, [publicClient, ensCached, delegateGroupedVoteData]);
 
   return (
-    <Col lg={4} className={classes.wrapper}>
+    <div className={cn('lg:col-span-4', classes.wrapper)}>
       <Card className={classes.voteCountCard}>
         <Card.Body className="p-2">
           <Card.Text className="m-0 py-2">
@@ -152,16 +152,16 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
-          <Row className={classes.nounProfilePics}>
+          <div className={cn('flex flex-wrap', classes.nounProfilePics)}>
             <DelegateGroupedNounImageVoteTable
               filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
               propId={Number(proposal.id || '0')}
               proposalCreationBlock={proposal.createdBlock}
             />
-          </Row>
+          </div>
         </Card.Body>
       </Card>
-    </Col>
+    </div>
   );
 };
 

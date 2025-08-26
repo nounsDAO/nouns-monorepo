@@ -8,7 +8,7 @@ import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Button, Spinner } from 'react-bootstrap';
 import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -167,9 +167,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
       <div className={classes.sectionWrapper}>
         <Section fullWidth={false} className={classes.section}>
-          <Col
-            lg={10}
+          <div
             className={cn(
+              'mx-auto w-full lg:w-10/12',
               classes.headerWrapper,
               !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
             )}
@@ -230,20 +230,20 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 )}
               </div>
             )}
-          </Col>
+          </div>
         </Section>
       </div>
 
       {isMobile && hasNounBalance && (
-        <Container>
+        <div className="container mx-auto px-4">
           <div className="w-100">
-            <Row>
-              <Col>
+            <div className="w-full">
+              <div>
                 <div className={classes.nullStateCopy}>{nullStateCopy()}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
                 <div className={classes.nounInWalletBtnWrapper}>
                   <div className={classes.submitProposalButtonWrapper}>
                     <Button
@@ -264,14 +264,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     </div>
                   )}
                 </div>
-              </Col>
-            </Row>
+              </div>
+            </div>
           </div>
-        </Container>
+        </div>
       )}
       <Section fullWidth={false} className={classes.section}>
         {activeTab === 0 && (
-          <Col lg={10} className={classes.proposalsList}>
+          <div className={`mx-auto w-full lg:w-10/12 ${classes.proposalsList}`}>
             {proposals && proposals.length > 0 ? (
               proposals
                 .slice(0)
@@ -338,12 +338,12 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 </p>
               </Alert>
             )}
-          </Col>
+          </div>
         )}
         {activeTab === 1 && (
-          <Col lg={10} className={classes.proposalsList}>
-            <Row>
-              <Col lg={9}>
+          <div className={`mx-auto w-full lg:w-10/12 ${classes.proposalsList}`}>
+            <div className="w-full lg:flex lg:gap-6">
+              <div className="w-full lg:w-9/12">
                 {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
                   candidates
                     .slice(0)
@@ -390,8 +390,8 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     )}
                   </>
                 )}
-              </Col>
-              <Col lg={3} className={classes.candidatesSidebar}>
+              </div>
+              <div className={`w-full lg:w-3/12 ${classes.candidatesSidebar}`}>
                 <h4>
                   <strong>
                     <Trans>About Proposal Candidates</Trans>
@@ -406,9 +406,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 <Link to="/create-candidate" className={cn(classes.button)}>
                   Create a candidate
                 </Link>
-              </Col>
-            </Row>
-          </Col>
+              </div>
+            </div>
+          </div>
         )}
       </Section>
     </div>

@@ -6,8 +6,6 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-// eslint-disable-next-line no-restricted-imports
-import { Col, Row } from 'react-bootstrap';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -73,7 +71,7 @@ const CandidateHistoryPage = () => {
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
-      <Col lg={12} className={classes.wrapper}>
+      <div className={classes.wrapper}>
         <div className={headerClasses.backButtonWrapper}>
           <Link to={`/candidates/${id}`}>
             <button
@@ -120,10 +118,10 @@ const CandidateHistoryPage = () => {
             </div>
           </div>
         </div>
-      </Col>
-      <Col lg={12} className={cn(classes.proposal, classes.wrapper)}>
-        <Row>
-          <Col lg={8} md={12}>
+      </div>
+      <div className={cn(classes.proposal, classes.wrapper)}>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-8">
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
               <ProposalContent
@@ -135,11 +133,11 @@ const CandidateHistoryPage = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
-                <Col className={cn(classes.section, 'm-0 p-0')}>
+                <div className={cn(classes.section, 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
-                </Col>
+                </div>
                 <ReactDiffViewer
                   oldValue={processProposalDescriptionText(
                     proposalVersions[activeVersion - 2].description,
@@ -155,8 +153,8 @@ const CandidateHistoryPage = () => {
                   renderContent={highlightSyntax}
                   showDiffOnly={false}
                 />
-                <Row>
-                  <Col className={classes.section}>
+                <div>
+                  <div className={classes.section}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
@@ -165,12 +163,12 @@ const CandidateHistoryPage = () => {
                       oldTransactions={proposalVersions[activeVersion - 2].details}
                       newTransactions={proposalVersions[activeVersion - 1].details}
                     />
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </div>
             )}
-          </Col>
-          <Col lg={4} md={12}>
+          </div>
+          <div className="lg:col-span-4">
             <div className={classes.versionHistory}>
               <div className={classes.versionHistoryHeader}>
                 <h2>
@@ -204,9 +202,9 @@ const CandidateHistoryPage = () => {
                 </button>
               )}
             </div>
-          </Col>
-        </Row>
-      </Col>
+          </div>
+        </div>
+      </div>
     </Section>
   );
 };

@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import { Col, Nav } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 
 import Section from '@/components/section';
 import { Link } from 'react-router';
@@ -10,7 +10,7 @@ const NounsIntroSection = () => {
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6}>
+        <div className="lg:col-span-6">
           <div className={classes.textWrapper}>
             <h1>
               <Trans>One Noun, Every Day, Forever.</Trans>
@@ -23,8 +23,8 @@ const NounsIntroSection = () => {
               </Trans>
             </p>
           </div>
-        </Col>
-        <Col lg={6} className={classes.youtubeEmbedContainer}>
+        </div>
+        <div className="lg:col-span-6">
           <iframe
             src="https://www.youtube.com/embed/lOzCA7bZG_k"
             title="YouTube video player"
@@ -45,10 +45,10 @@ const NounsIntroSection = () => {
               </Nav.Link>
             </span>
           </small>
-        </Col>
+        </div>
       </Section>
       <Section fullWidth={false} className={classes.videoSection}>
-        <Col lg={6} className={`${classes.youtubeEmbedContainer} order-lg-1 order-2`}>
+        <div className="order-lg-1 order-2 lg:col-span-6">
           <iframe
             src="https://www.youtube.com/embed/oa79nN4gMPs"
             title="YouTube video player"
@@ -58,14 +58,11 @@ const NounsIntroSection = () => {
           ></iframe>
 
           <small className={`${classes.videoSubtitle} ${classes.youtubeVideoSubtitle} text-muted`}>
-            This video was produced as part of{' '}
-            <Nav.Link as={Link} to="/vote/143">
-              Prop 143
-            </Nav.Link>
+            This video was produced as part of <Link to="/vote/143">Prop 143</Link>
           </small>
-        </Col>
+        </div>
 
-        <Col lg={6} className={`order-lg-2 order-1`}>
+        <div className="order-lg-2 order-1 lg:col-span-6">
           <div className={`${classes.textWrapper} ${classes.youtubeSectionText}`}>
             <h1>
               <Trans>Build With Nouns. Get Funded.</Trans>
@@ -79,7 +76,7 @@ const NounsIntroSection = () => {
               </Trans>
             </p>
           </div>
-        </Col>
+        </div>
       </Section>
     </>
   );
