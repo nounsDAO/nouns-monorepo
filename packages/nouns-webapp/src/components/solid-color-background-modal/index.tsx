@@ -13,7 +13,7 @@ import {
 } from '@/utils/css-transition-utils';
 import { isMobileScreen } from '@/utils/is-mobile';
 
-// Inlined former CSS module styles with Tailwind
+ 
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);

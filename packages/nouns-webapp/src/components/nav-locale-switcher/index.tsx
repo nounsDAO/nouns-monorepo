@@ -12,8 +12,7 @@ import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
-import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
-// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
+ 
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -44,7 +43,7 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
 }) => (
   <div
     className={cn(
-      navDropdownClasses.wrapper,
+      'font-pt h-10 rounded-[10px] p-0 text-base font-bold leading-4 shadow-none transition-all duration-150 ease-in-out',
       'lg-max:h-12 lg-max:text-lg',
       buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
     )}
@@ -53,11 +52,11 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
       onClick?.(e);
     }}
   >
-    <div className={cn(navDropdownClasses.button, 'lg-max:h-12 lg-max:text-lg', 'max-[330px]:w-[70px] max-[370px]:w-[90px] min-[400px]:w-auto')}>
-      <div className={navDropdownClasses.dropdownBtnContent}>
+    <div className={cn('flex h-full w-full flex-row items-center justify-start pr-3.5', 'lg-max:h-12 lg-max:text-lg', 'max-[330px]:w-[70px] max-[370px]:w-[90px] min-[400px]:w-auto')}>
+      <div className={'min-h-4.5 overflow-hidden text-ellipsis whitespace-nowrap leading-5 text-black'}>
         <FontAwesomeIcon icon={faGlobe} />
       </div>
-      <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
+      <div className={buttonUp ? 'ml-2 mt-2' : 'ml-2 mb-1'}>
         <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />
       </div>
     </div>
@@ -100,9 +99,9 @@ const CustomMenu = ({
           <div
             key={locale}
             className={cn(
-              navDropdownClasses.button,
+              'flex h-full w-full flex-row items-center justify-start pr-3.5',
               'lg-max:h-12 lg-max:text-lg',
-              navDropdownClasses.dropdownPrimaryText,
+              'hover:cursor-pointer hover:bg-white transition-all duration-150 ease-in-out',
               buttonStyle,
               dropDownStyle,
               'justify-between',
@@ -129,27 +128,27 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const [activeLocale, setActiveLocale] = useAtom(activeLocaleAtom);
 
   const statePrimaryButtonClass = usePickByState(
-    navDropdownClasses.whiteInfo,
-    navDropdownClasses.coolInfo,
-    navDropdownClasses.warmInfo,
+    'border border-black/10 bg-white text-brand-gray-light-text',
+    'bg-brand-surface-cool text-brand-cool-muted',
+    'bg-brand-surface-warm text-brand-warm-muted',
   );
 
   const stateSelectedDropdownClass = usePickByState(
-    navDropdownClasses.whiteInfoSelected,
-    navDropdownClasses.dropdownActive,
-    navDropdownClasses.dropdownActive,
+    'border border-black/10 bg-brand-surface text-brand-text-muted-600',
+    'bg-white text-black',
+    'bg-white text-black',
   );
 
   const buttonStyleTop = usePickByState(
-    navDropdownClasses.whiteInfoSelectedTop,
-    navDropdownClasses.coolInfoSelected,
-    navDropdownClasses.warmInfoSelected,
+    'border-l-1.5 border-r-1.5 border-t-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+    'bg-brand-surface-cool text-brand-cool-muted',
+    'bg-brand-surface-warm text-brand-warm-light-text',
   );
 
   const buttonStyleBottom = usePickByState(
-    navDropdownClasses.whiteInfoSelectedBottom,
-    navDropdownClasses.coolInfoSelected,
-    navDropdownClasses.warmInfoSelected,
+    'border-b-1.5 border-l-1.5 border-r-1.5 border-brand-border-ui bg-brand-surface text-brand-text-muted-600',
+    'bg-brand-surface-cool text-brand-cool-muted',
+    'bg-brand-surface-warm text-brand-warm-light-text',
   );
 
   return (
@@ -159,7 +158,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={cn(navDropdownClasses.nounsNavLink, 'xl-max:block hidden')}
+        className={cn('font-pt p-0.3 text-sm font-bold text-brand-black transition-all duration-150 ease-in-out', 'xl-max:block hidden')}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -169,7 +168,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
       </div>
 
-      <div className={cn(navDropdownClasses.nounsNavLink, 'xl-max:hidden')}>
+      <div className={cn('font-pt p-0.3 text-sm font-bold text-brand-black transition-all duration-150 ease-in-out', 'xl-max:hidden')}>
         <CustomDropdownToggle
           buttonUp={buttonUp}
           stateSelectedDropdownClass={stateSelectedDropdownClass}
@@ -178,7 +177,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
         {buttonUp && (
           <CustomMenu
-            className={`${navDropdownClasses.desktopDropdown}`}
+            className={`border-0 bg-inherit`}
             buttonStyleTop={buttonStyleTop}
             buttonStyleBottom={buttonStyleBottom}
             activeLocale={activeLocale}

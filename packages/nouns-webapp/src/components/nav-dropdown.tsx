@@ -6,8 +6,7 @@ import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
-import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
-// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
+ 
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
@@ -22,15 +21,15 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   const [buttonUp, setButtonUp] = useState(false);
 
   const statePrimaryButtonClass = usePickByState(
-    navDropdownClasses.whiteInfo,
-    navDropdownClasses.coolInfo,
-    navDropdownClasses.warmInfo,
+    'border border-black/10 bg-white text-brand-gray-light-text',
+    'bg-brand-surface-cool text-brand-cool-muted',
+    'bg-brand-surface-warm text-brand-warm-muted',
   );
 
   const stateSelectedDropdownClass = usePickByState(
-    navDropdownClasses.whiteInfoSelected,
-    navDropdownClasses.dropdownActive,
-    navDropdownClasses.dropdownActive,
+    'border border-black/10 bg-brand-surface text-brand-text-muted-600',
+    'bg-white text-black',
+    'bg-white text-black',
   );
 
   const customDropdownToggle = ({
@@ -64,7 +63,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={cn(navDropdownClasses.nounsNavLink, 'xl-max:hidden')}
+        className={cn('font-pt p-0.3 text-sm font-bold text-brand-black transition-all duration-150 ease-in-out', 'xl-max:hidden')}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >

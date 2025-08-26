@@ -34,7 +34,6 @@ import {
 } from '@/wrappers/nouns-dao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nouns-data';
 import { Link, useLocation, useNavigate } from 'react-router';
-// Inlined former CSS module styles with Tailwind
 
 dayjs.extend(relativeTime);
 

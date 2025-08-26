@@ -13,7 +13,6 @@ import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-// Inlined former bid history module styles with Tailwind
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;

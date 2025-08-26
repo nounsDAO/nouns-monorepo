@@ -26,7 +26,7 @@ import {
   useWithdrawTokens,
 } from '@/wrappers/nouns-stream';
 
-// Inlined former CSS module styles with Tailwind
+ 
 
 dayjs.extend(relativeTime);
 

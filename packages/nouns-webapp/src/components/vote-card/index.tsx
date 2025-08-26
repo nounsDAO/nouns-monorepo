@@ -15,9 +15,7 @@ import { Proposal } from '@/wrappers/nouns-dao';
 
 import DelegateGroupedNounImageVoteTable from '../delegate-grouped-noun-image-vote-table';
 
-// Inlined former CSS module styles with Tailwind
 
-// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 export enum VoteCardVariant {
   FOR,

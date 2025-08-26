@@ -9,7 +9,6 @@ import dayjs from 'dayjs';
 import { CHAIN_ID } from '@/config';
 import { Auction } from '@/wrappers/nouns-auction';
 
-// Inlined former CSS module styles with Tailwind
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;

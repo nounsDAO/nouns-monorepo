@@ -16,7 +16,7 @@ import { relativeTimestamp } from '@/utils/time-utils';
 import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
-// Inlined former CSS module styles with Tailwind
+ 
 
 interface CandidateHeaderProps {
   title: string;

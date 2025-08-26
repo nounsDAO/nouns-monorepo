@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks';
 import useOnDisplayAuction from '@/wrappers/on-display-auction';
 
-// Inlined former CSS module styles with Tailwind
 
 interface AuctionNavigationProps {
   isFirstAuction: boolean;

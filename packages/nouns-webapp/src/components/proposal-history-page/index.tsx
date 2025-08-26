@@ -22,8 +22,7 @@ import { Link, useParams } from 'react-router';
 
 import VersionTab from './version-tab';
 
-import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
-// Inlined former header module styles with Tailwind
+ 
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -57,7 +56,17 @@ const ProposalHistory = () => {
   const highlightSyntax = (markdownText: string) => {
     return (
       <ReactMarkdown
-        className={cn(editorClasses.markdown, editorClasses.diffs)}
+        className={cn(
+          'font-pt text-[1.1rem] [&_h1]:text-[1.7rem] [&_h1]:mt-4 [&_h1]:font-bold [&_h2]:text-[1.5rem] [&_h2]:mt-4 [&_h2]:font-bold [&_h3]:text-[1.3rem] [&_img]:max-w-full [&_img]:h-auto',
+          '[&_.section]:break-words [&_.section]:pt-8 [&_.section]:mt-8',
+          '[&_.section_h5]:text-[1.7rem] [&_.section_h5]:mt-4 [&_.section_h5]:font-londrina',
+          '[&_.txnInfoText]:text-[var(--brand-gray-light-text)] [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:mt-1 [&_.txnInfoText]:mb-1 [&_.txnInfoText]:font-medium [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center',
+          'lg-max:[&_.txnInfoText]:items-start lg-max:[&_.txnInfoText]:mt-4',
+          '[&_.txnInfoIcon]:h-[18px] [&_.txnInfoIcon]:w-[18px] [&_.txnInfoIcon]:opacity-50',
+          'lg-max:[&_.txnInfoIcon]:mt-1 lg-max:[&_.txnInfoIcon]:mr-2',
+          '[&_.txnInfoIconWrapper]:w-[25px] [&_.txnInfoIconWrapper]:flex [&_.txnInfoIconWrapper]:items-center',
+          '[&_.v3Proposal\.section]:pt-0 [&_.v3Proposal\.section]:mt-0',
+        )}
         remarkPlugins={[remarkBreaks]}
       >
         {markdownText}

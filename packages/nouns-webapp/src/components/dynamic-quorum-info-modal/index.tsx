@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nouns-dao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 
-// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
+ 
 
 const PLOTTING_CONSTANTS = {
   width: 950,
@@ -274,15 +274,15 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
               </div>
             </div>
 
-            <div className={classes.xAxisText}>
+            <div className={"mt-2 text-center font-medium text-[var(--brand-gray-light-text)]"}>
               <Trans>% of Nouns Currently Against</Trans>
             </div>
           </div>
 
-          <p className={classes.moreDetailsCopy}>
+          <p className={"mt-2 text-sm font-medium text-[var(--brand-gray-light-text)]"}>
             <Trans>
               More details on how the dynamic threshold works can be found{' '}
-              <span className={classes.underline}>here</span>.
+              <span className={"underline"}>here</span>.
             </Trans>
           </p>
         </div>

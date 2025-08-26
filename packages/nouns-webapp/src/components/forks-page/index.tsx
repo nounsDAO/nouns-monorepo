@@ -76,8 +76,8 @@ const ForksPage: React.FC = () => {
                         className="border-brand-gray-border bg-brand-gray-background font-pt text-22 mb-4 mt-[0.4rem] flex justify-between gap-4 rounded-2xl border p-4 font-bold text-inherit no-underline hover:cursor-pointer hover:bg-white"
                         key={i}
                       >
-                        <div className={classes.title}>Nouns DAO Fork #{fork.id}</div>
-                        <div className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}>
+                        <div className={"font-londrina text-brand-gray-dark-text text-23"}>Nouns DAO Fork #{fork.id}</div>
+                        <div className={cn('ml-2 min-w-max max-w-[5rem]')}>
                           <ForkStatus status={status} />
                         </div>
                       </Link>

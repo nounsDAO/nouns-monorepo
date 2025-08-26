@@ -28,7 +28,7 @@ import {
 } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
-// Inlined former CSS module styles with Tailwind
+ 
 
 interface ProposalHeaderProps {
   title?: string;

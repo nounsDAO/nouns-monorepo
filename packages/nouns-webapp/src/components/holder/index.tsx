@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { nounQuery } from '@/wrappers/subgraph';
 
-// Inlined former CSS module styles with Tailwind
 
 interface HolderProps {
   nounId: bigint;

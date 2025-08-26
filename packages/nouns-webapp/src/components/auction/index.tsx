@@ -14,7 +14,6 @@ import { INounSeed } from '@/wrappers/noun-token';
 import { Auction as IAuction } from '@/wrappers/nouns-auction';
 import { useNavigate } from 'react-router';
 
-// Inlined former CSS module styles with Tailwind
 
 interface AuctionProps {
   auction?: IAuction;

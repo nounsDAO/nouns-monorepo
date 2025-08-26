@@ -17,7 +17,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Auction } from '@/wrappers/nouns-auction';
 
-// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
+ 
 
 const computeMinimumNextBid = (
   currentBid: bigint,
