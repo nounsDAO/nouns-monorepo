@@ -66,7 +66,7 @@ const ProposalHistory = () => {
   };
   const headerDiffs = (str: string) => {
     return (
-      <h1 className="mt-4 font-londrina text-[1.7rem] text-[var(--brand-gray-light-text)]">
+      <h1 className="font-londrina mt-4 text-[1.7rem] text-[var(--brand-gray-light-text)]">
         {str}
       </h1>
     );
@@ -105,9 +105,9 @@ const ProposalHistory = () => {
                 </div>
               </span>
               <div className={headerClasses.proposalTitleWrapper}>
-                <div className={cn(headerClasses.proposalTitle, classes.proposalTitle)}>
+                <div className={cn(headerClasses.proposalTitle, 'w-full')}>
                   {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
-                    <div className={classes.diffsWrapper}>
+                    <div>
                       <ReactDiffViewer
                         oldValue={proposalVersions[activeVersion - 2].title}
                         newValue={proposalVersions[activeVersion - 1].title}
@@ -146,7 +146,7 @@ const ProposalHistory = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className="[&_table:first-of-type]:ml-[-10px] min-[992px]:[&_table:first-of-type]:ml-[-30px]">
-                <div className={cn('col-span-12', 'break-words pt-8 mt-8', 'm-0 p-0')}>
+                <div className={cn('col-span-12', 'mt-8 break-words pt-8', 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
@@ -168,7 +168,7 @@ const ProposalHistory = () => {
                   showDiffOnly={false}
                 />
                 <div className="grid grid-cols-12 gap-3">
-                  <div className={cn('col-span-12', 'break-words pt-8 mt-8')}>
+                  <div className={cn('col-span-12', 'mt-8 break-words pt-8')}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
