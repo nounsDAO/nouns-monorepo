@@ -35,8 +35,13 @@ const LegacyNoun: React.FC<{
       : (imgPath as StaticImageData | undefined)?.src || (loadingNoun as StaticImageData).src;
 
   return (
-    <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
-      <Image className={`${classes.img} ${className}`} src={resolvedSrc} alt={alt} fluid />
+    <div className={`relative h-0 w-full pt-[100%] ${wrapperClassName ?? ''}`}>
+      <Image
+        className={`absolute left-0 top-0 h-auto w-full align-middle ${className ?? ''}`}
+        src={resolvedSrc}
+        alt={alt}
+        fluid
+      />
     </div>
   );
 };

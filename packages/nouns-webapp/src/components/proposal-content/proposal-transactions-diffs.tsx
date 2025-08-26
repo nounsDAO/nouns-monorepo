@@ -4,7 +4,6 @@ import { Hex } from 'viem';
 import { Address } from '@/utils/types';
 import { ProposalDetail } from '@/wrappers/nouns-dao';
 
-import classes from './proposal-content.module.css';
 import ProposalTransaction from './proposal-transaction';
 
 type Props = {
@@ -60,7 +59,7 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
 
   return (
     <div>
-      <ol className={classes.transactionDiffsList}>
+      <ol className="relative flex list-none flex-col gap-4 p-0">
         {transactions.map(
           (
             tx: {
@@ -72,15 +71,18 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
             const isDiff = stringifyTx(tx.oldTx) !== stringifyTx(tx.newTx);
             if (!isDiff)
               return (
-                <div key={i} className="position-relative">
-                  <div className={classes.listItemNum}>{i + 1}.</div>
+                <div key={i} className="relative">
+                  <div className="absolute -left-6 top-0">{i + 1}.</div>
                   <ProposalTransaction transaction={isEmptyTx(tx.oldTx) ? tx.newTx : tx.oldTx} />
                 </div>
               );
             return (
-              <li key={i} className={classes.transactionDiffsRow}>
+              <li
+                key={i}
+                className="relative [&_table:first-of-type]:ml-0 [&_table]:!m-0 [&_table]:block [&_table]:!w-full [&_table]:!bg-[#fafbfc] [&_tbody]:block [&_td:nth-child(even)]:w-[calc(50%_-_25px)] [&_td:nth-child(odd)]:pr-[5px] [&_tr]:flex [&_tr]:w-full [&_tr]:items-stretch"
+              >
                 {/* manually add num for better css control */}
-                <div className={classes.listItemNum}>{i + 1}.</div>
+                <div className="absolute -left-6 top-0">{i + 1}.</div>
                 <ReactDiffViewer
                   oldValue={isEmptyTx(tx.oldTx) ? '' : stringifyTx(tx.oldTx)}
                   newValue={isEmptyTx(tx.newTx) ? '' : stringifyTx(tx.newTx)}

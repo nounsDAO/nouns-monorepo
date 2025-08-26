@@ -1,13 +1,11 @@
 import { StandaloneNounImage } from '@/components/standalone-noun';
 
-import classes from './candidate-sponsors.module.css';
-
 type CandidateSponsorImageProps = {
   nounId: bigint;
 };
 
 const CandidateSponsorImage = ({ nounId }: CandidateSponsorImageProps) => (
-  <div className={classes.sponsorAvatar}>
+  <div className="size-8 [&_img]:block [&_img]:w-full [&_img]:rounded-full">
     <StandaloneNounImage nounId={nounId} />
   </div>
 );

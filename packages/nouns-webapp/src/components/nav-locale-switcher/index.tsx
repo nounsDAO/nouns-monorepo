@@ -12,8 +12,6 @@ import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from '@/i18n/locales
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
-// Replaced CSS module with inline Tailwind classes
-
 import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 

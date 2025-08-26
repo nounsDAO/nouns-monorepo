@@ -14,8 +14,6 @@ import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalTitle from '@/components/modal-title';
 import { cn } from '@/lib/utils';
 
-import classes from './function-call-enter-args-step.module.css';
-
 const parseArguments = (abi: Abi | undefined, func: string, args: string[]) => {
   return args.map((a, i) => {
     const abiItem = abi != null ? (getAbiItem({ abi, name: func }) as AbiFunction) : undefined;
@@ -92,7 +90,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
       </ModalTitle>
 
       {invalidArgument && (
-        <div className={classes.invalid}>
+        <div className="text-[var(--brand-color-rd)]">
           <Trans>Invalid Arguments</Trans>
         </div>
       )}
@@ -100,12 +98,14 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         <FormGroup as="div" className="grid grid-cols-12 gap-3">
           {inputs.map((input, i) => (
             <React.Fragment key={i}>
-              <span className={cn(classes.label, 'col-span-12')}>{input.name}</span>
+              <span className={cn('opacity-50', 'col-span-12')}>{input.name}</span>
               <div className="col-span-12 sm:col-span-12">
                 <InputGroup className="mb-1">
-                  <InputGroup.Text className={classes.inputGroupText}>{input.type}</InputGroup.Text>
+                  <InputGroup.Text className="rounded-l-15 mb-2 mt-1 h-12 rounded-r-none border-r-0 font-medium opacity-50">
+                    {input.type}
+                  </InputGroup.Text>
                   <FormControl
-                    className={classes.inputGroup}
+                    className="rounded-15 mb-2 mt-1 h-12 w-full border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)] outline-none"
                     value={args[i] ?? ''}
                     onChange={e => setArgument(i, e.target.value)}
                   />

@@ -63,35 +63,46 @@ const GovernancePage = () => {
 
   return (
     <>
-      <Section fullWidth={false} className={classes.section}>
-        <div className={classes.wrapper}>
-          <div className={classes.headerRow}>
-            <span>
+      <Section fullWidth={false} className="lg-max:mx-2">
+        <div className="mx-auto">
+          <div>
+            <span className="font-londrina text-brand-text-muted-600 text-2xl">
               <Trans>Governance</Trans>
             </span>
-            <h1>
+            <h1 className="font-londrina text-56 text-brand-gray-dark-text">
               <Trans>Nouns DAO</Trans>
             </h1>
           </div>
-          <p className={classes.subheading}>{subHeading}</p>
+          <p className="font-pt text-brand-dark-green text-xl font-medium">{subHeading}</p>
 
-          <div className={cn(classes.treasuryInfoCard, 'grid grid-cols-1 gap-6 lg:grid-cols-12')}>
-            <div className={cn(classes.treasuryAmtWrapper, 'lg:col-span-8')}>
-              <div className={classes.headerRow}>
-                <span>
+          <div
+            className={cn(
+              'border-brand-border-ui mb-12 grid grid-cols-1 gap-6 rounded-2xl border lg:grid-cols-12',
+            )}
+          >
+            <div
+              className={cn('border-brand-border-ui md-lg:border-r-2 px-8 py-4', 'lg:col-span-8')}
+            >
+              <div>
+                <span className="font-londrina text-brand-text-muted-600 text-2xl">
                   <Trans>Treasury</Trans>
                 </span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-12">
-                <div className={cn(classes.ethTreasuryAmt, 'lg:col-span-3')}>
-                  <h1 className={classes.ethSymbol}>Ξ</h1>
-                  <h1>
+                <div
+                  className={cn(
+                    'border-brand-border-ui md-lg:border-r-2 flex h-12 min-w-36 pt-1',
+                    'lg:col-span-3',
+                  )}
+                >
+                  <h1 className="font-pt mr-2">Ξ</h1>
+                  <h1 className="font-londrina text-4xl">
                     {treasuryBalance != undefined &&
                       i18n.number(Number(Number(formatEther(treasuryBalance)).toFixed(0)))}
                   </h1>
                 </div>
-                <div className={classes.usdTreasuryAmt}>
-                  <h1 className={classes.usdBalance}>
+                <div className="pt-1">
+                  <h1 className="font-londrina text-brand-gray-light-text text-4xl">
                     {treasuryBalanceUSD !== undefined
                       ? i18n.number(Number(formatUnits(treasuryBalanceUSD, 6)), {
                           style: 'currency',
@@ -102,9 +113,9 @@ const GovernancePage = () => {
                 </div>
               </div>
             </div>
-            <div className={classes.treasuryInfoText}>
+            <div className="font-pt px-8 py-4 font-medium">
               <Trans>
-                This treasury exists for <span className={classes.boldText}>Nouns DAO</span>{' '}
+                This treasury exists for <span className="font-pt font-bold">Nouns DAO</span>{' '}
                 participants to allocate resources for the long-term growth and prosperity of the
                 Nouns project.
               </Trans>

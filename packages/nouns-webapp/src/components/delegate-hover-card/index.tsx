@@ -9,8 +9,6 @@ import HorizontalStackedNouns from '@/components/horizontal-stacked-nouns';
 import ShortAddress from '@/components/short-address';
 import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
-// Replaced CSS module with inline Tailwind classes
-
 interface DelegateHoverCardProps {
   delegateId: string;
   proposalCreationBlock: bigint;

@@ -10,8 +10,6 @@ import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
 import { INounSeed, useNounSeed } from '@/wrappers/noun-token';
 import { Link } from 'react-router';
 
-import nounClasses from '@/components/legacy-noun/noun.module.css';
-
 interface StandaloneNounProps {
   nounId: bigint;
 }
@@ -88,15 +86,21 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   };
 
   if (!seed || nounId == undefined)
-    return <LegacyNoun imgPath="" alt="Noun" wrapperClassName={nounClasses.circularNounWrapper} />;
+    return (
+      <LegacyNoun
+        imgPath=""
+        alt="Noun"
+        wrapperClassName="h-[42px] w-[42px] max-[1200px]:h-[70%] max-[1200px]:w-[70%]"
+      />
+    );
 
   return (
     <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
-        wrapperClassName={nounClasses.circularNounWrapper}
-        className={border === true ? nounClasses.circleWithBorder : nounClasses.circular}
+        wrapperClassName="h-[42px] w-[42px] max-[1200px]:h-[70%] max-[1200px]:w-[70%]"
+        className={border === true ? 'rounded-full border-2 border-[#ffffff]' : 'rounded-full'}
       />
     </Link>
   );
@@ -122,7 +126,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
-        className={nounClasses.rounded}
+        className="rounded-[15px]"
       />
     </Link>
   );

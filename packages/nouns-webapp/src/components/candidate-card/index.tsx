@@ -29,22 +29,25 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
 
   return (
     <Link
-      className={cn(classes.candidateLink, classes.candidateLinkWithCountdown)}
+      className={cn(
+        'border-brand-gray-border bg-brand-gray-background font-pt text-22 group mb-4 mt-1.5 box-border flex flex-col rounded-2xl border p-4 text-center font-bold text-inherit no-underline hover:cursor-pointer hover:bg-white hover:text-inherit md:text-left',
+        classes.candidateLinkWithCountdown,
+      )}
       href={`/candidates/${candidate.id}`}
     >
       <div className={classes.title}>
-        <span className={classes.candidateTitle}>
+        <span className="block w-full">
           <span>{candidate.version.content.title}</span>
         </span>
-        <p className={classes.proposer}>
+        <p className="m-0 p-0 text-base font-normal">
           by{' '}
-          <span className={classes.proposerAddress}>
+          <span className="text-brand-color-red font-bold no-underline">
             <ShortAddress address={candidate.proposer || ''} avatar={false} />
           </span>
         </p>
 
-        <div className={classes.footer}>
-          <div className={classes.candidateSponsors}>
+        <div className="mt-2.5 flex flex-col items-center justify-between border-t border-black/10 pt-2.5 md:flex-row md:items-start">
+          <div className="flex flex-row flex-wrap items-center justify-center gap-1.5 md:justify-start md:overflow-hidden">
             <CandidateSponsors
               signers={signers}
               nounsRequired={candidate.requiredVotes}
@@ -55,14 +58,17 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
             />
             <span
               className={cn(
-                classes.sponsorCount,
-                candidate.voteCount - candidate.requiredVotes > 0 && classes.sponsorCountOverflow,
+                'ml-2.5 block text-base font-normal',
+                candidate.voteCount - candidate.requiredVotes > 0 &&
+                  'md-lg:h-full md-lg:-ml-6 md-lg:px-10 md-lg:py-2.5 md-lg:bg-sponsor-fade group-hover:md-lg:bg-sponsor-fade-hover',
               )}
             >
               <strong>
                 {candidate.voteCount} /{' '}
                 {candidate.proposerVotes > nounsRequired ? (
-                  <em className={classes.naVotesLabel}>n/a</em>
+                  <em className="rounded bg-black/20 p-1 font-mono text-xs font-normal not-italic opacity-50">
+                    n/a
+                  </em>
                 ) : (
                   candidate.requiredVotes
                 )}
@@ -70,7 +76,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
               <Trans>sponsored votes</Trans>
             </span>
           </div>
-          <p className={classes.timestamp}>
+          <p className="m-0 p-0 text-base font-bold">
             {relativeTimestamp(Number(candidate.lastUpdatedTimestamp))}
           </p>
         </div>

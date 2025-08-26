@@ -5,7 +5,6 @@ import { useDelegateNounsAtBlockQuery } from '@/wrappers/noun-token';
 import { CandidateSignature } from '@/wrappers/nouns-data';
 
 import CandidateSponsorImage from './candidate-sponsor-image';
-import classes from './candidate-sponsors.module.css';
 
 type CandidateSponsorsProps = {
   signers: CandidateSignature[];
@@ -52,10 +51,13 @@ const CandidateSponsors = ({
 
   return (
     <div
-      className={cn(classes.sponsorsWrap, signerCountOverflow > 0 && classes.sponsorsWrapOverflow)}
+      className={cn(
+        'flex flex-row gap-2',
+        signerCountOverflow > 0 && 'lg:max-w-[200px] lg:overflow-visible',
+      )}
     >
       {nounIds.length > 0 && (
-        <div className={classes.sponsors}>
+        <div className="flex flex-row flex-wrap place-content-center items-center gap-[5px] lg:justify-start">
           {nounIds.map((nounId, i) => {
             if (i >= maxVisibleSpots) return null;
             return <CandidateSponsorImage nounId={BigInt(nounId)} key={nounId} />;
@@ -63,7 +65,10 @@ const CandidateSponsors = ({
         </div>
       )}
       {placeholderKeys.map(k => (
-        <div className={classes.emptySponsorSpot} key={k} />
+        <div
+          className="size-8 rounded-full border border-dashed border-[#a7a7aa] bg-[#e8e8ec]"
+          key={k}
+        />
       ))}
     </div>
   );
