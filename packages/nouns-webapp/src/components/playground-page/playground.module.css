@@ -16,7 +16,7 @@
 }
 .primaryBtn:focus,
 .primaryBtn:hover {
-  @apply bg-brand-dark-red ring-4 ring-brand-dark-red/75;
+  @apply bg-brand-dark-red ring-4 ring-brand-dark-red ring-opacity-75; /* use ring-opacity for transparency instead of /75 suffix */
 }
 .primaryBtn:active {
   @apply bg-brand-dark-red;
