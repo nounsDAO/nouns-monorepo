@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { Spinner } from 'react-bootstrap';
-import { isNullish } from 'remeda';
+import { isNullish, isTruthy } from 'remeda';
 import {
   encodeAbiParameters,
   encodePacked,
@@ -285,11 +285,11 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
       isWaiting ||
       isLoading ||
       isTxSuccessful ||
-      Boolean(errorMessage) ||
+      isTruthy(errorMessage) ||
       isGetSignatureWaiting ||
       isSignPending || // Using wagmi's isPending instead of custom state
       isGetSignatureTxSuccessful ||
-      Boolean(getSignatureErrorMessage)
+      isTruthy(getSignatureErrorMessage)
     ) {
       setIsOverlayVisible(true);
     }
@@ -396,7 +396,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               {isSignPending && 'Confirming signature'}
               {isLoading && 'Submitting signature'}
             </span>
-            {Boolean(getSignatureErrorMessage || errorMessage) && (
+            {isTruthy(getSignatureErrorMessage || errorMessage) && (
               <p
                 className={cn(
                   'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out',
@@ -467,15 +467,15 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                     {isTxSuccessful && (
                       <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                     )}
-                    {Boolean(getSignatureErrorMessage || errorMessage) && (
+                    {isTruthy(getSignatureErrorMessage || errorMessage) && (
                       <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                     )}
                     {!(
                       isWaiting ||
                       isLoading ||
                       isTxSuccessful ||
-                      Boolean(errorMessage) ||
-                      Boolean(getSignatureErrorMessage)
+                      isTruthy(errorMessage) ||
+                      isTruthy(getSignatureErrorMessage)
                     ) && (
                       <span className="relative top-[3px] inline-block h-[18px] w-[18px] rounded-full bg-[rgba(0,0,0,0.3)] opacity-50 animate-pulse"></span>
                     )}

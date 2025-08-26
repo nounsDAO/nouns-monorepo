@@ -12,6 +12,7 @@ import ShortAddress from '@/components/short-address';
 import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { useCancelSignature } from '@/wrappers/nouns-dao';
+import { isTruthy } from 'remeda';
 
 type CandidateSignatureProps = {
   reason: string;
@@ -82,15 +83,15 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelSigState, setCancelStatusOverlay]);
-  const isInvalid = Boolean(props.signerHasActiveOrPendingProposal);
+  const isInvalid = isTruthy(props.signerHasActiveOrPendingProposal);
   return (
     <li
       className={cn(
         'relative m-0 mb-[10px] list-none rounded-[12px] border border-[#e6e6e6] bg-[#fbfbfc] p-[10px]',
-        Boolean(cancelStatusOverlay?.show) && 'min-h-[75px]',
+        isTruthy(cancelStatusOverlay?.show) && 'min-h-[75px]',
       )}
     >
-      {Boolean(props.signerHasActiveOrPendingProposal) && (
+      {isTruthy(props.signerHasActiveOrPendingProposal) && (
         <div
           className={
             'mb-2 rounded-[8px] bg-[rgba(0,0,0,0.05)] px-4 py-2 text-center text-[13px] leading-none text-[rgba(0,0,0,0.4)]'
@@ -110,7 +111,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               </a>
             </p>
             <p className={'text-[13px] text-[#646465]'}>
-              {(Boolean(props.isUpdateToProposal) && !Boolean(props.isParentProposalUpdatable)) ||
+              {(isTruthy(props.isUpdateToProposal) && !isTruthy(props.isParentProposalUpdatable)) ||
               props.expirationTimestamp < timestampNow
                 ? 'Expired'
                 : 'Expires'}{' '}
@@ -179,7 +180,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             )}
           </div>
         )}
-        {Boolean(props.isUpdateToProposal) && !props.isAccountSigner && (
+        {isTruthy(props.isUpdateToProposal) && !props.isAccountSigner && (
           <p
             className={
               'mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-left text-[12px] leading-[1.1] text-[#646465]'
@@ -192,7 +193,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           </p>
         )}
       </div>
-      {Boolean(cancelStatusOverlay?.show) && (
+      {isTruthy(cancelStatusOverlay?.show) && (
         <div
           className={cn(
             'absolute left-[3px] top-[3px] z-[3] flex size-[calc(100%-6px)] flex-col justify-center border bg-white p-[10px] text-center',

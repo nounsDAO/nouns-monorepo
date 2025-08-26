@@ -14,6 +14,7 @@ import {
 import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';
+import { isTruthy } from 'remeda';
 
 
 type Props = {
@@ -122,7 +123,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         className="font-pt mb-[10px] w-full rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] px-[12px] py-[10px] text-[16px] leading-normal"
       />
       <div className="my-[20px] text-center">
-        {!(Boolean(errorMessage) || isTxSuccessful) && (
+        {!(isTruthy(errorMessage) || isTxSuccessful) && (
           <button
             type="button"
             className={cn(
@@ -151,7 +152,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
           </button>
         )}
 
-        {Boolean(errorMessage) && (
+        {isTruthy(errorMessage) && (
           <p
             className={cn(
               'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',

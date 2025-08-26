@@ -5,6 +5,7 @@ import { useDelegateNounsAtBlockQuery } from '@/wrappers/noun-token';
 import { CandidateSignature } from '@/wrappers/nouns-data';
 
 import CandidateSponsorImage from './candidate-sponsor-image';
+import { isTruthy } from 'remeda';
 
 type CandidateSponsorsProps = {
   signers: CandidateSignature[];
@@ -22,7 +23,7 @@ const CandidateSponsors = ({
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const activeSigners =
-    signers?.filter(s => s.signer.activeOrPendingProposal === false && Boolean(s.signer.id)) ?? [];
+    signers?.filter(s => s.signer.activeOrPendingProposal === false && isTruthy(s.signer.id)) ?? [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
 
   const { data: delegateSnapshot } = useDelegateNounsAtBlockQuery(

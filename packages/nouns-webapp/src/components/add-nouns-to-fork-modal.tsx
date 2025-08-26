@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MinusCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { FormControl, FormSelect, FormText, InputGroup, Spinner } from 'react-bootstrap';
-import { map } from 'remeda';
+import { isTruthy, map } from 'remeda';
 
 import link from '@/assets/icons/Link.svg';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
@@ -59,7 +59,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         <option
           key={i}
           value={proposal.id!}
-          disabled={Boolean(proposal.id) && selectedProposals.includes(+proposal.id!)}
+          disabled={isTruthy(proposal.id) && selectedProposals.includes(+proposal.id!)}
         >
           {proposal.id} - {proposal.title}
         </option>
@@ -363,7 +363,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             <button
               type="button"
               onClick={() => {
-                if (Boolean(approvalErrorMessage)) {
+                if (isTruthy(approvalErrorMessage)) {
                   clearTransactionState();
                 }
                 if (props.ownedNouns && selectedNouns.length === props.ownedNouns.length) {
@@ -384,7 +384,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             <button
               type="button"
               onClick={() => {
-                if (Boolean(approvalErrorMessage) || Boolean(errorMessage) || isTxSuccessful) {
+                if (isTruthy(approvalErrorMessage) || isTruthy(errorMessage) || isTxSuccessful) {
                   clearTransactionState();
                 }
                 if (selectedNouns.includes(nounId)) {
@@ -427,8 +427,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       </div>
       <div className="my-[20px] text-center">
         {!(
-          Boolean(approvalErrorMessage) ||
-          Boolean(errorMessage) ||
+          isTruthy(approvalErrorMessage) ||
+          isTruthy(errorMessage) ||
           isTxSuccessful ||
           isApprovalTxSuccessful
         ) && (
@@ -473,14 +473,14 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </span>
           </button>
         )}
-        {(Boolean(approvalErrorMessage) || Boolean(errorMessage)) && (
+        {(isTruthy(approvalErrorMessage) || isTruthy(errorMessage)) && (
           <p
             className={cn(
               'font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-150 ease-in-out',
               'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
             )}
           >
-            {Boolean(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
+            {isTruthy(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
             <button
               type="button"
               onClick={() => {
@@ -540,7 +540,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                   {isApprovalTxSuccessful && (
                     <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                   )}
-                  {Boolean(approvalErrorMessage) && (
+                  {isTruthy(approvalErrorMessage) && (
                     <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                   )}
                 </strong>
@@ -556,15 +556,15 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                   {isTxSuccessful && (
                     <FontAwesomeIcon icon={faCircleCheck} height={20} width={20} color="green" />
                   )}
-                  {(Boolean(errorMessage) || Boolean(approvalErrorMessage)) && (
+                  {(isTruthy(errorMessage) || isTruthy(approvalErrorMessage)) && (
                     <FontAwesomeIcon icon={faXmark} height={20} width={20} color="red" />
                   )}
                   {!(
                     isWaiting ||
                     isLoading ||
                     isTxSuccessful ||
-                    Boolean(errorMessage) ||
-                    Boolean(approvalErrorMessage)
+                    isTruthy(errorMessage) ||
+                    isTruthy(approvalErrorMessage)
                   ) && (
                     <span className="relative top-[3px] inline-block size-[18px] animate-pulse rounded-full bg-[rgba(0,0,0,0.3)] opacity-50"></span>
                   )}

@@ -20,6 +20,7 @@ import {
   useUserDelegatee,
 } from '@/wrappers/noun-token';
 import { useProposalThreshold } from '@/wrappers/nouns-dao';
+import { isTruthy } from 'remeda';
 
 interface ChangeDelegatePanelProps {
   onDismiss: () => void;
@@ -88,7 +89,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
 
   const { data: resolvedAddress, isFetched } = useEnsAddress({
     name: delegateAddress,
-    query: { enabled: Boolean(delegateAddress) },
+    query: { enabled: isTruthy(delegateAddress) },
   });
 
   useEffect(() => {

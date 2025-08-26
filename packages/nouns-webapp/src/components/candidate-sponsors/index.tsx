@@ -133,7 +133,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                 <>
                   <h4 className={'mb-1 text-[20px]'}>
                     <strong>
-                      {Boolean(props.isUpdateToProposal) ? (
+                      {isTruthy(props.isUpdateToProposal) ? (
                         <>
                           {props.candidate.voteCount >= 0 ? props.candidate.voteCount : '...'} of{' '}
                           {props.originalProposal?.signers
@@ -196,7 +196,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       </Trans>
                     ) : (
                       <>
-                        {Boolean(props.isUpdateToProposal) ? (
+                        {isTruthy(props.isUpdateToProposal) ? (
                           <Trans>
                             Update proposal candidates must be re-signed by the original signers.
                           </Trans>

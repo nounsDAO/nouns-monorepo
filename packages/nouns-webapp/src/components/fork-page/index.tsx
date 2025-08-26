@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
-import { map } from 'remeda';
+import { isTruthy, map } from 'remeda';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -329,7 +329,7 @@ const ForkPage = () => {
                   <div className={cn('mb-4 border-b border-[rgba(0,0,0,0.1)] pb-4 text-center')}>
                     <ForkingPeriodTimer
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
-                      isPeriodEnded={Boolean(
+                      isPeriodEnded={isTruthy(
                         forkDetails?.data?.executed != null &&
                           forkDetails?.data?.executed &&
                           +forkDetails.data.forkingPeriodEndTimestamp < now.getTime() / 1000,

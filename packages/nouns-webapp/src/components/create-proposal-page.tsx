@@ -9,7 +9,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import dynamic from 'next/dynamic';
 import { Alert, Button, Form } from 'react-bootstrap';
-import { filter } from 'remeda';
+import { filter, isTruthy } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
 
@@ -179,7 +179,7 @@ const CreateProposalPage = () => {
     [proposalTransactions, titleValue, bodyValue],
   );
 
-  const hasEnoughVote = Boolean(
+  const hasEnoughVote = isTruthy(
     availableVotes != null && proposalThreshold != null && availableVotes > proposalThreshold,
   );
 
