@@ -23,7 +23,7 @@ import { Link, useParams } from 'react-router';
 import VersionTab from './version-tab';
 
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
-import headerClasses from '@/components/proposal-header/proposal-header.module.css';
+// Inlined former header module styles with Tailwind
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -77,12 +77,12 @@ const ProposalHistory = () => {
       <div className="mx-auto">
         {proposal && (
           <>
-            <div className={headerClasses.backButtonWrapper}>
+            <div className={'relative'}>
               <Link to={`/vote/${id}`}>
                 <button
                   type="button"
                   className={cn(
-                    headerClasses.backButton,
+                    'appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem]',
                     'border border-[rgba(0,0,0,0.1)] bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
                     'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
                   )}
@@ -91,8 +91,8 @@ const ProposalHistory = () => {
                 </button>
               </Link>
             </div>
-            <div className={headerClasses.headerRow}>
-              <span>
+            <div>
+              <span className={'text-[#8c8d92] text-[24px] font-londrina'}>
                 <div className="d-flex">
                   <div>
                     <Trans>Proposal {i18n.number(Number(proposal.id || '0'))}</Trans>
@@ -100,13 +100,13 @@ const ProposalHistory = () => {
                   <div>
                     <ProposalStatus
                       status={proposal?.status}
-                      className={headerClasses.proposalStatus}
+                      className={'ml-3 mt-[0.1rem]'}
                     />
                   </div>
                 </div>
               </span>
-              <div className={headerClasses.proposalTitleWrapper}>
-                <div className={cn(headerClasses.proposalTitle, 'w-full')}>
+              <div className={'flex pr-8'}>
+                <div className={cn('mr-2', 'w-full')}>
                   {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
                     <div>
                       <ReactDiffViewer
@@ -121,7 +121,7 @@ const ProposalHistory = () => {
                       />
                     </div>
                   ) : (
-                    <h1>
+                    <h1 className={'text-[#14161b] text-[42px] font-londrina'}>
                       {proposalVersions &&
                         activeVersion &&
                         proposalVersions[activeVersion - 1].title}{' '}

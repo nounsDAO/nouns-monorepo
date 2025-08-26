@@ -23,7 +23,7 @@ import {
 import { Link, useParams } from 'react-router';
 
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
-import headerClasses from '@/components/proposal-header/proposal-header.module.css';
+// Inlined former header module styles with Tailwind
 import classes from '@/components/proposal-history-page/vote.module.css';
 
 dayjs.extend(utc);
@@ -72,12 +72,12 @@ const CandidateHistoryPage = () => {
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <div className={classes.wrapper}>
-        <div className={headerClasses.backButtonWrapper}>
+        <div className={'relative'}>
           <Link to={`/candidates/${id}`}>
                 <button
                   type="button"
                   className={cn(
-                    headerClasses.backButton,
+                    'appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem]',
                     'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
                     'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
                   )}
@@ -86,16 +86,16 @@ const CandidateHistoryPage = () => {
             </button>
           </Link>
         </div>
-        <div className={headerClasses.headerRow}>
-          <span>
+        <div>
+          <span className={'text-[#8c8d92] text-[24px] font-londrina'}>
             <div className="d-flex">
               <div>
                 <Trans>Proposal Candidate</Trans>
               </div>
             </div>
           </span>
-          <div className={headerClasses.proposalTitleWrapper}>
-            <div className={cn(headerClasses.proposalTitle, classes.proposalTitle)}>
+          <div className={'flex pr-8'}>
+            <div className={cn('mr-2', classes.proposalTitle)}>
               {isDiffsVisible && proposalVersions && activeVersion >= 2 ? (
                 <div className={classes.diffsWrapper}>
                   <ReactDiffViewer
@@ -110,7 +110,7 @@ const CandidateHistoryPage = () => {
                   />
                 </div>
               ) : (
-                <h1>
+                <h1 className={'text-[#14161b] text-[42px] font-londrina'}>
                   {proposalVersions
                     ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
                     : proposal.data?.title}{' '}
