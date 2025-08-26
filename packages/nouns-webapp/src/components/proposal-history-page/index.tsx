@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { Col, Row } from 'react-bootstrap';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -72,7 +71,7 @@ const ProposalHistory = () => {
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
-      <Col lg={12} className={classes.wrapper}>
+      <div className={classes.wrapper}>
         {proposal && (
           <>
             <div className={headerClasses.backButtonWrapper}>
@@ -129,10 +128,10 @@ const ProposalHistory = () => {
             </div>
           </>
         )}
-      </Col>
-      <Col lg={12} className={cn(classes.proposal, classes.wrapper)}>
-        <Row>
-          <Col lg={8} md={12}>
+      </div>
+      <div className={cn(classes.proposal, classes.wrapper)}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-12 md:col-span-12 lg:col-span-8">
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
               (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
               <ProposalContent
@@ -144,11 +143,11 @@ const ProposalHistory = () => {
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
               <div className={classes.diffsWrapper}>
-                <Col className={cn(classes.section, 'm-0 p-0')}>
+                <div className={cn('col-span-12', classes.section, 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
-                </Col>
+                </div>
                 <ReactDiffViewer
                   oldValue={processProposalDescriptionText(
                     proposalVersions[activeVersion - 2].description,
@@ -165,8 +164,8 @@ const ProposalHistory = () => {
                   disableWordDiff={true}
                   showDiffOnly={false}
                 />
-                <Row>
-                  <Col className={classes.section}>
+                <div className="grid grid-cols-12 gap-3">
+                  <div className={cn('col-span-12', classes.section)}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
@@ -175,12 +174,12 @@ const ProposalHistory = () => {
                       oldTransactions={proposalVersions[activeVersion - 2].details}
                       newTransactions={proposalVersions[activeVersion - 1].details}
                     />
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </div>
             )}
-          </Col>
-          <Col lg={4} md={12}>
+          </div>
+          <div className="col-span-12 md:col-span-12 lg:col-span-4">
             <div className={classes.versionHistory}>
               <div className={classes.versionHistoryHeader}>
                 <h2>Version History</h2>
@@ -215,9 +214,9 @@ const ProposalHistory = () => {
                 </button>
               )}
             </div>
-          </Col>
-        </Row>
-      </Col>
+          </div>
+        </div>
+      </div>
     </Section>
   );
 };

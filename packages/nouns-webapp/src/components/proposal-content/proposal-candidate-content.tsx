@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Trans } from '@lingui/react/macro';
-import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
@@ -18,8 +17,8 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
   const { proposal } = props;
   return (
     <>
-      <Row>
-        <Col className={cn(classes.section, classes.v3Proposal, classes.hasSidebar)}>
+      <div className="grid grid-cols-12 gap-3">
+        <div className={cn('col-span-12', classes.section, classes.v3Proposal, classes.hasSidebar)}>
           <h5>
             <Trans>Description</Trans>
           </h5>
@@ -31,17 +30,17 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
               )}
             </ReactMarkdown>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
       {proposal && (
-        <Row>
-          <Col className={classes.section}>
+        <div className="grid grid-cols-12 gap-3">
+          <div className={cn('col-span-12', classes.section)}>
             <h5>
               <Trans>Proposed Transactions</Trans>
             </h5>
             <ProposalTransactions details={proposal.version.content.details} />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
     </>
   );

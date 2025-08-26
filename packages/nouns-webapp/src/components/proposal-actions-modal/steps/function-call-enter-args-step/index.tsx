@@ -4,7 +4,7 @@ import type { Abi, AbiFunction } from 'viem';
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Col, FormControl, FormGroup, InputGroup, Row } from 'react-bootstrap';
+import { FormControl, FormGroup, InputGroup } from 'react-bootstrap';
 import { encodeFunctionData, getAbiItem } from 'viem';
 
 import 'bs-custom-file-input';
@@ -12,6 +12,7 @@ import 'react-stepz/dist/index.css';
 
 import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalTitle from '@/components/modal-title';
+import { cn } from '@/lib/utils';
 
 import classes from './function-call-enter-args-step.module.css';
 
@@ -96,11 +97,11 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         </div>
       )}
       {inputs.length > 0 ? (
-        <FormGroup as={Row}>
+        <FormGroup as="div" className="grid grid-cols-12 gap-3">
           {inputs.map((input, i) => (
             <React.Fragment key={i}>
-              <span className={classes.label}>{input.name}</span>
-              <Col sm="12">
+              <span className={cn(classes.label, 'col-span-12')}>{input.name}</span>
+              <div className="col-span-12 sm:col-span-12">
                 <InputGroup className="mb-1">
                   <InputGroup.Text className={classes.inputGroupText}>{input.type}</InputGroup.Text>
                   <FormControl
@@ -109,7 +110,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
                     onChange={e => setArgument(i, e.target.value)}
                   />
                 </InputGroup>
-              </Col>
+              </div>
             </React.Fragment>
           ))}
         </FormGroup>
