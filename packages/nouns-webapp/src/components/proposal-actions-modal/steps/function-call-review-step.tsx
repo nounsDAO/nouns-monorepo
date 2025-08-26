@@ -8,10 +8,12 @@ import { encodeAbiParameters, getAbiItem, parseEther, toFunctionSignature } from
 
 import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalTitle from '@/components/modal-title';
+import {
+  FinalProposalActionStepProps,
+  ProposalActionModalState,
+} from '@/components/proposal-actions-modal';
 import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
-
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 
 /**
  * @internal

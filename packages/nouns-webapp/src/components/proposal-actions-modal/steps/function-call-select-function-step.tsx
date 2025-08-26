@@ -4,6 +4,7 @@ import type { AbiFunction } from 'viem';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import { isTruthy } from 'remeda';
 import { Abi, isAddress } from 'viem';
 
 import ABIUpload from '@/components/abi-upload';
@@ -13,10 +14,9 @@ import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalTitle from '@/components/modal-title';
 import { buildEtherscanApiQuery } from '@/utils/etherscan';
 
-import { ProposalActionModalStepProps } from '../..';
-
 import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
+import { ProposalActionModalStepProps } from '@/components/proposal-actions-modal';
 
 const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
@@ -61,7 +61,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     if (abi != null) {
       // Find first function in the ABI
       const functions = (abi as Abi).filter(
-        item => item.type === 'function' && Boolean(item.name),
+        item => item.type === 'function' && isTruthy(item.name),
       ) as AbiFunction[];
 
       if (functions.length > 0) {
@@ -178,7 +178,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
       >
         {abi != null
           ? (abi as Abi)
-              .filter(item => item.type === 'function' && Boolean(item.name))
+              .filter(item => item.type === 'function' && isTruthy(item.name))
               .map(item => (
                 <option key={(item as AbiFunction).name} value={(item as AbiFunction).name}>
                   {(item as AbiFunction).name}

@@ -5,13 +5,16 @@ import { encodeFunctionData, parseAbi, parseEther } from 'viem';
 
 import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
 import ModalTitle from '@/components/modal-title';
+import {
+  FinalProposalActionStepProps,
+  ProposalActionModalState,
+} from '@/components/proposal-actions-modal';
 import ShortAddress from '@/components/short-address';
 import { nounsPayerAbi, stEthAddress, nounsPayerAddress } from '@/contracts';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
-import { SupportedCurrency } from '../transfer-funds-details-step';
+import { SupportedCurrency } from './transfer-funds-details-step';
 
 type ProposalAction = {
   address: Address;

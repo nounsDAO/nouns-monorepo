@@ -1,9 +1,8 @@
 import { encodeAbiParameters, getAbiItem } from 'viem';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ProposalActionModalState, ProposalActionType } from '../..';
-
-import { handleActionAdd } from './index';
+import { ProposalActionModalState, ProposalActionType } from '@/components/proposal-actions-modal';
+import { handleActionAdd } from '@/components/proposal-actions-modal/steps/function-call-review-step';
 
 const ensReverseRegistrarAbi = [
   {

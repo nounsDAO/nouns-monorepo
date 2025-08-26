@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 
+import BrandDropdown from '@/components/brand-dropdown';
+import ModalBottomButtonRow from '@/components/modal-bottom-button-row';
+import ModalSubTitle from '@/components/modal-subtitle';
+import ModalTitle from '@/components/modal-title';
 import {
   ProposalActionCreationStep,
   ProposalActionModalStepProps,
   ProposalActionType,
-} from '../..';
-import BrandDropdown from '../../../brand-dropdown';
-import ModalBottomButtonRow from '../../../modal-bottom-button-row';
-import ModalSubTitle from '../../../modal-subtitle';
-import ModalTitle from '../../../modal-title';
+} from '@/components/proposal-actions-modal';
 
 const proposalActionTypeToProposalActionCreationStep = (actionTypeString: string) => {
   if (actionTypeString === ProposalActionType.LUMP_SUM.toString()) {
