@@ -79,6 +79,8 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       false
     );
   }, [signatures, account]);
+  // Local mutable state to reflect account signer status after actions (e.g., cancel)
+  const [, setIsAccountSigner] = useState<boolean>(isAccountSigner);
 
   const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<
     'None' | 'Success' | 'Mining' | 'Fail' | 'Exception'

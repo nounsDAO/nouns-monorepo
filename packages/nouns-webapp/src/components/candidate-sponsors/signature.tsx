@@ -222,9 +222,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             </button>
           )}
           <div className={'text-center text-[18px] font-bold leading-none'}>
-            {cancelStatusOverlay.title}
+            {cancelStatusOverlay!.title}
           </div>
-          <div className={'mt-[4px] text-[14px] font-normal'}>{cancelStatusOverlay.message}</div>
+          <div className={'mt-[4px] text-[14px] font-normal'}>{cancelStatusOverlay!.message}</div>
         </div>
       )}
     </li>

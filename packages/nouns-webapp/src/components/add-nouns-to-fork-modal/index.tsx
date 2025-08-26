@@ -59,8 +59,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       return (
         <option
           key={i}
-          value={proposal.id}
-          disabled={Boolean(proposal.id) && selectedProposals.includes(+proposal.id)}
+          value={proposal.id!}
+          disabled={Boolean(proposal.id) && selectedProposals.includes(+proposal.id!)}
         >
           {proposal.id} - {proposal.title}
         </option>

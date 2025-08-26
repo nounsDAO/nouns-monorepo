@@ -177,7 +177,7 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.STREAM_PAYMENT_REVIEW:
       return (
         <StreamPaymentsReviewStep
-          onNextBtnClick={(e: ProposalTransaction) => {
+          onNextBtnClick={e => {
             if (e !== undefined && typeof e !== 'object') {
               return;
             }

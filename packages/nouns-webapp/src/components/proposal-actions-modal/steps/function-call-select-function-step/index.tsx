@@ -189,7 +189,6 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
 
       <ABIUpload
         abiFileName={abiFileName}
-        isValid={isABIUploadValid}
         isInvalid={isABIUploadValid === false}
         onChange={(e: ChangeEvent<HTMLInputElement>) => validateAndSetABI(e.target.files?.[0])}
       />

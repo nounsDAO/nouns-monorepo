@@ -34,8 +34,7 @@ export const reduxSafeAuction = (auction: IAuction): IAuction => ({
     !isNullish(auction.amount) && auction.amount !== ''
       ? BigInt(auction.amount).toString()
       : undefined,
-  bidder:
-    !isNullish(auction.bidder) && auction.bidder !== '' ? (auction.bidder as Address) : undefined,
+  bidder: !isNullish(auction.bidder) ? (auction.bidder as Address) : undefined,
   startTime: BigInt(auction.startTime).toString(),
   endTime: BigInt(auction.endTime).toString(),
   nounId: BigInt(auction.nounId).toString(),

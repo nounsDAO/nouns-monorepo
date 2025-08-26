@@ -32,7 +32,6 @@ export const useTreasuryBalance = (): bigint => {
   });
 
   // Get Lido (stETH) balance for the main treasury
-  // @ts-expect-error - Return type from contract call needs manual casting
   const { data: lidoBalanceAsETH } = useReadStEthBalanceOf({
     args: nounsLegacyTreasuryAddress[chainId]
       ? [nounsLegacyTreasuryAddress[chainId] as Address]

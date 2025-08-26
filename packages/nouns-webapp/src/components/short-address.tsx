@@ -19,10 +19,10 @@ interface ShortAddressProps {
 
 // Local error boundary to gracefully handle environments without WagmiProvider
 class ShortAddressErrorBoundary extends React.Component<
-  { fallback: React.ReactNode },
+  React.PropsWithChildren<{ fallback: React.ReactNode }>,
   { hasError: boolean }
 > {
-  constructor(props: { fallback: React.ReactNode }) {
+  constructor(props: React.PropsWithChildren<{ fallback: React.ReactNode }>) {
     super(props);
     this.state = { hasError: false };
   }
