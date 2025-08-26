@@ -2,19 +2,20 @@ import type { Abi } from 'viem';
 
 import React, { SetStateAction, useState } from 'react';
 
+import FunctionCallEnterArgsStep from '@/components/proposal-actions-modal/steps/function-call-enter-args-step';
+import FunctionCallReviewStep from '@/components/proposal-actions-modal/steps/function-call-review-step';
+import FunctionCallSelectFunctionStep from '@/components/proposal-actions-modal/steps/function-call-select-function-step';
+import SelectProposalActionStep from '@/components/proposal-actions-modal/steps/select-proposal-action-step';
+import StreamPaymentDateDetailsStep from '@/components/proposal-actions-modal/steps/stream-payments-date-details-step';
+import StreamPaymentsPaymentDetailsStep from '@/components/proposal-actions-modal/steps/stream-payments-payment-details-step';
+import StreamPaymentsReviewStep from '@/components/proposal-actions-modal/steps/stream-payments-review-step';
+import TransferFundsDetailsStep, {
+  SupportedCurrency,
+} from '@/components/proposal-actions-modal/steps/transfer-funds-details-step';
+import TransferFundsReviewStep from '@/components/proposal-actions-modal/steps/transfer-funds-review-step';
 import SolidColorBackgroundModal from '@/components/solid-color-background-modal';
 import { Address } from '@/utils/types';
 import { ProposalTransaction } from '@/wrappers/nouns-dao';
-
-import FunctionCallEnterArgsStep from './steps/function-call-enter-args-step';
-import FunctionCallReviewStep from './steps/function-call-review-step';
-import FunctionCallSelectFunctionStep from './steps/function-call-select-function-step';
-import SelectProposalActionStep from './steps/select-proposal-action-step';
-import StreamPaymentDateDetailsStep from './steps/stream-payments-date-details-step';
-import StreamPaymentsPaymentDetailsStep from './steps/stream-payments-payment-details-step';
-import StreamPaymentsReviewStep from './steps/stream-payments-review-step';
-import TransferFundsDetailsStep, { SupportedCurrency } from './steps/transfer-funds-details-step';
-import TransferFundsReviewStep from './steps/transfer-funds-review-step';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,
@@ -105,7 +106,7 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.LUMP_SUM_REVIEW:
       return (
         <TransferFundsReviewStep
-          onNextBtnClick={e => {
+          onNextBtnClick={(e: ProposalTransaction | undefined) => {
             if (e !== undefined && typeof e !== 'object') {
               return;
             }
@@ -141,7 +142,7 @@ const ModalContent: React.FC<{
     case ProposalActionCreationStep.FUNCTION_CALL_REVIEW:
       return (
         <FunctionCallReviewStep
-          onNextBtnClick={e => {
+          onNextBtnClick={(e: ProposalTransaction | undefined) => {
             if (e !== undefined && typeof e !== 'object') {
               return;
             }

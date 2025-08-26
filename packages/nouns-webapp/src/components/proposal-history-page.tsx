@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 
 import ProposalContent from '@/components/proposal-content';
+import VersionTab from '@/components/proposal-history-page/version-tab';
 import ProposalStatus from '@/components/proposal-status';
 import ProposalTransactionsDiffs from '@/components/proposal-transactions-diffs';
 import Section from '@/components/section';
@@ -19,8 +20,6 @@ import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
 import { Link, useParams } from 'react-router';
-
-import VersionTab from './version-tab';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
