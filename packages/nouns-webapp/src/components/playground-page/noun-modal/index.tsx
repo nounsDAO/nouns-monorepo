@@ -8,8 +8,6 @@ import { Backdrop } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { svg2png } from '@/utils/svg2png';
 
-import classes from './noun-modal.module.css';
-
 const downloadNounPNG = (png: string) => {
   const downloadEl = document.createElement('a');
   downloadEl.href = png;
@@ -63,16 +61,16 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
         document.getElementById('backdrop-root')!,
       )}
       {ReactDOM.createPortal(
-        <div className={classes.modal}>
+        <div className="fixed left-1/2 top-[15vh] z-[100] w-[25rem] -translate-x-1/2 rounded-[15px] p-8 text-center max-[992px]:left-[10%] max-[992px]:w-4/5 max-[992px]:translate-x-0">
           {png && (
             <LegacyNoun
               imgPath={png}
               alt="noun"
-              className={classes.nounImg}
-              wrapperClassName={classes.nounWrapper}
+              className="rounded-[16px]"
+              wrapperClassName="mb-4"
             />
           )}
-          <div className={classes.displayNounFooter}>
+          <div className="flex flex-col items-center">
             {!isMobile && png && (
               <div className="flex gap-3">
                 <Button

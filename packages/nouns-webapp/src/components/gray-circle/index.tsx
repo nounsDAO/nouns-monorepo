@@ -3,10 +3,6 @@ import React from 'react';
 import LegacyNoun from '@/components/legacy-noun';
 import { getGrayBackgroundSVG } from '@/utils/gray-background-svg';
 
-// Replaced CSS module with inline Tailwind classes
-
-import nounClasses from '@/components/legacy-noun/noun.module.css';
-
 interface GrayCircleProps {
   isDelegateView?: boolean;
 }
@@ -19,9 +15,11 @@ export const GrayCircle: React.FC<GrayCircleProps> = ({ isDelegateView }) => {
         imgPath={getGrayBackgroundSVG()}
         alt={''}
         wrapperClassName={
-          isDelegate ? nounClasses.delegateViewCircularNounWrapper : nounClasses.circularNounWrapper
+          isDelegate
+            ? 'h-[42px] w-[42px] ml-[12px]'
+            : 'h-[42px] w-[42px] max-[1200px]:h-[70%] max-[1200px]:w-[70%]'
         }
-        className={isDelegate ? nounClasses.delegateViewCircular : nounClasses.circular}
+        className={isDelegate ? 'mt-[13px] rounded-full' : 'rounded-full'}
       />
     </div>
   );

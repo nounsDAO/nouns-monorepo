@@ -13,8 +13,6 @@ import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-// Replaced CSS module with inline Tailwind classes
-
 import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
 import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
 

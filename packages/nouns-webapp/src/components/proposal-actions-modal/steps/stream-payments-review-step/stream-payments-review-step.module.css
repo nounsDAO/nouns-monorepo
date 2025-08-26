@@ -1,3 +1,0 @@
-.hover {
-  @apply !rounded-lg !bg-[var(--brand-gray-dark-text)] text-white !opacity-75 font-medium ease-in-out duration-150 transition;
-}

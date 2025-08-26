@@ -13,8 +13,6 @@ import { defaultChain } from '@/wagmi';
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import { SupportedCurrency } from '../transfer-funds-details-step';
 
-import classes from './transfer-funds-review-step.module.css';
-
 type ProposalAction = {
   address: Address;
   value: bigint;
@@ -88,13 +86,13 @@ const TransferFundsReviewStep: React.FC<FinalProposalActionStepProps> = props =>
         <Trans>Review Transfer Funds Action</Trans>
       </ModalTitle>
 
-      <span className={classes.label}>Pay</span>
-      <div className={classes.text}>
+      <span className="opacity-50">Pay</span>
+      <div className="text-brand-cool-dark-text mb-2 text-[22px] font-bold">
         {Intl.NumberFormat(undefined, { maximumFractionDigits: 18 }).format(Number(state.amount))}{' '}
         {state.TransferFundsCurrency}
       </div>
-      <span className={classes.label}>To</span>
-      <div className={classes.text}>
+      <span className="opacity-50">To</span>
+      <div className="text-brand-cool-dark-text mb-2 text-[22px] font-bold">
         <ShortAddress address={state.address} />
       </div>
 

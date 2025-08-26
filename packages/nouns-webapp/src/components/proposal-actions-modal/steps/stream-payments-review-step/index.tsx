@@ -21,8 +21,6 @@ import {
 import { unixToDateString } from '@/utils/time-utils';
 import { defaultChain } from '@/wagmi';
 
-import classes from './stream-payments-review-step.module.css';
-
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
@@ -48,7 +46,9 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
       <ReactTooltip
         id={'address-tooltip'}
         effect={'solid'}
-        className={classes.hover}
+        className={
+          '!rounded-lg !bg-[var(--brand-gray-dark-text)] font-medium text-white !opacity-75 transition duration-150 ease-in-out'
+        }
         getContent={() => {
           return state.address;
         }}

@@ -12,8 +12,6 @@ import { Delegate, Maybe } from '@/subgraphs/graphql';
 import { Address } from '@/utils/types';
 import { currentlyDelegatedNouns } from '@/wrappers/subgraph';
 
-// Replaced CSS module with inline Tailwind classes
-
 interface ByLineHoverCardProps {
   proposerAddress: string;
 }

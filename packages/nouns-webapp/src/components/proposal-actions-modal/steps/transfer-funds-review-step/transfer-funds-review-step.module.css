@@ -1,7 +1,0 @@
-.label {
-  @apply opacity-50;
-}
-
-.text {
-  @apply text-[22px] font-bold text-[var(--brand-cool-dark-text)] mb-2;
-}

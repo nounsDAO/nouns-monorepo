@@ -21,10 +21,6 @@ import {
 } from '@/wrappers/noun-token';
 import { useProposalThreshold } from '@/wrappers/nouns-dao';
 
-import classes from './change-delegate-panel.module.css';
-
-// Inlined styles from current-delegate-pannel
-
 interface ChangeDelegatePanelProps {
   onDismiss: () => void;
   delegateTo?: string;
@@ -106,16 +102,16 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
 
   useEffect(() => {
     if (delegateAddress.length === 0) {
-      setDelegateInputClass(classes.empty);
+      setDelegateInputClass('border-0');
       return;
     }
 
     if (isAddress(delegateAddress)) {
-      setDelegateInputClass(classes.valid);
+      setDelegateInputClass('border-2 border-[var(--brand-color-green)]');
       return;
     }
 
-    setDelegateInputClass(classes.invalid);
+    setDelegateInputClass('border-2 border-[var(--brand-color-red)]');
   }, [delegateAddress, delegateTo, hasResolvedDeepLinkedENS]);
 
   const etherscanTxLink = buildEtherscanTxLink(delegateState.transaction?.hash ?? '');
@@ -132,10 +128,13 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
       <NavBarButton
         key="enter-delegate-address"
         buttonText={
-          <div className={classes.delegateKVotesBtn}>
+          <div className="z-[101]">
             {locale === 'en-US' ? (
               <>
-                Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
+                Delegate{' '}
+                <span className="w-[22px] rounded-full bg-[radial-gradient(#ffffff70_15%,rgba(0,0,0,0)_75%)] px-[8px] py-[6px] text-center text-[20px] leading-[22px]">
+                  {availableVotes}
+                </span>
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}
               </>
             ) : (
@@ -216,14 +215,14 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         <h1
           className={cn(
             'font-londrina text-brand-cool-dark-text flex h-8 flex-col text-[42px] leading-[42px]',
-            locale !== 'en-US' ? classes.nonEnBottomMargin : '',
+            locale !== 'en-US' ? 'mb-14 lg:mb-[2.1rem]' : '',
           )}
         >
           {getTitleFromState(changeDelegateState)}
         </h1>
         <p className="font-pt text-brand-cool-dark-text font-medium">{primaryCopy}</p>
         {availableVotes > 0 && accountVotes - availableVotes < (proposalThreshold ?? 0) + 1 && (
-          <div className={classes.changeDelegateWarning}>
+          <div className="-mt-2 rounded-[14px] border border-[var(--brand-color-red)] bg-[var(--brand-color-red-translucent)] px-4 py-1 text-[var(--brand-color-red)]">
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
               {proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'} after this
@@ -236,7 +235,10 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
 
       {changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE && delegateTo === undefined && (
         <FormControl
-          className={cn(classes.delegateInput, delegateInputClass)}
+          className={cn(
+            'font-pt h-[54px] w-full !rounded-[12px] bg-white text-[25px] font-bold text-black !shadow-none outline-none transition-all duration-200 ease-in-out focus:shadow-none',
+            delegateInputClass,
+          )}
           type="string"
           onChange={e => {
             setDelegateAddress(e.target.value);
@@ -248,7 +250,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
       )}
 
       {delegateTo !== undefined && !isAddress(delegateAddress) && (
-        <div className={classes.delegteDeepLinkSpinner}>
+        <div className="my-4 flex justify-center">
           <BrandSpinner />
         </div>
       )}
@@ -258,10 +260,10 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
           isAddress(delegateAddress) && changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE
         }
       >
-        <div className={classes.delegateCandidateInfoWrapper}>
+        <div className="mt-2 pb-1 pr-1">
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           delegateAddress === currentDelegate ? (
-            <span className={classes.alreadyDelegatedCopy}>
+            <span className="ml-1 text-[var(--brand-cool-light-text)]">
               <Trans>You&apos;ve already delegated to this address</Trans>
             </span>
           ) : (
@@ -278,7 +280,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         </div>
       </Collapse>
 
-      <div className={classes.buttonWrapper}>
+      <div className="mt-2 flex justify-between">
         <NavBarButton
           buttonText={
             changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS ? (
@@ -299,12 +301,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
           }
         />
         {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && (
-          <div
-            className={cn(
-              classes.customButtonHighlighter,
-              isAddress(delegateAddress) && classes.extened,
-            )}
-          />
+          <div className={cn('absolute left-[81.115%] top-[24.15%]')} />
         )}
         {primaryButton}
       </div>

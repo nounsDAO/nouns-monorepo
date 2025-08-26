@@ -10,8 +10,6 @@ import { cn } from '@/lib/utils';
 import { Fork, ForkState, useForks } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
-import classes from './forks.module.css';
-
 const ForksPage: React.FC = () => {
   const forks = useForks();
   const now = new Date();
@@ -26,28 +24,29 @@ const ForksPage: React.FC = () => {
 
   return (
     <div>
-      <Section fullWidth={false} className={classes.section}>
-        <div className={`mx-auto w-full lg:w-10/12 ${classes.wrapper}`}>
-          <div className={`${classes.headerRow} flex flex-col gap-2`}>
-            <span>
+      <Section fullWidth={false} className="lg-max:mx-2">
+        <div className={`mx-auto w-full lg:w-10/12`}>
+          <div className={`flex flex-col gap-2`}>
+            <span className="font-londrina text-brand-text-muted-600 text-2xl">
               <Trans>Governance</Trans>
             </span>
-            <h1>
+            <h1 className="font-londrina text-brand-gray-dark-text text-[56px]">
               <Trans>Fork</Trans>
             </h1>
           </div>
-          <p className={cn(classes.subheading, 'm-0')}>
+          <p className={cn('font-pt text-brand-dark-green m-0 text-[1.2rem] font-medium')}>
             <Trans>
               Forking is the crypto-native way for groups of token holders to exit together into a
               new instance of their protocol, resulting in maximal conservation of momentum in the
               ecosystem.
             </Trans>
           </p>
-          <p className={cn(classes.subheading, 'mt-0')}>
+          <p className={cn('font-pt text-brand-dark-green mt-0 text-[1.2rem] font-medium')}>
             <a
               href="https://mirror.xyz/0x10072dfc23771101dC042fD0014f263316a6E400/iN0FKOn_oYVBzlJkwPwK2mhzaeL8K2-W80u82F7fHj8"
               target="_blank"
               rel="noreferrer"
+              className="font-pt text-brand-gray-dark-text font-bold hover:no-underline"
             >
               Learn more about Nouns Fork
             </a>
@@ -55,11 +54,9 @@ const ForksPage: React.FC = () => {
         </div>
       </Section>
       {/* if the latest fork id is finished forking, display a callout with an option to start a new fork. */}
-      <Section fullWidth={false} className={classes.section}>
-        <div className={`mx-auto w-full lg:w-10/12 ${classes.wrapper}`}>
-          <div
-            className={`${classes.forksList} grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`}
-          >
+      <Section fullWidth={false} className="lg-max:mx-2">
+        <div className={`mx-auto w-full lg:w-10/12`}>
+          <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`}>
             {Array.isArray(forks.data) && forks.data.length > 0
               ? forks.data
                   .map((fork: Fork, i: number) => {
@@ -74,7 +71,11 @@ const ForksPage: React.FC = () => {
                     }
 
                     return (
-                      <Link to={`/fork/${fork.id}`} className={classes.forkCard} key={i}>
+                      <Link
+                        to={`/fork/${fork.id}`}
+                        className="border-brand-gray-border bg-brand-gray-background font-pt text-22 mb-4 mt-[0.4rem] flex justify-between gap-4 rounded-2xl border p-4 font-bold text-inherit no-underline hover:cursor-pointer hover:bg-white"
+                        key={i}
+                      >
                         <div className={classes.title}>Nouns DAO Fork #{fork.id}</div>
                         <div className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                           <ForkStatus status={status} />
@@ -89,7 +90,7 @@ const ForksPage: React.FC = () => {
             {((Array.isArray(forks.data) && forks.data.length === 0) ||
               (isLatestForkFinished && typeof nextForkId === 'number')) && (
               <div>
-                <p className={classes.startFork}>
+                <p className="w-full text-center">
                   <Trans>There are no active forks.</Trans>{' '}
                   <Link to={`/fork/${nextForkId}`}>
                     <Trans>Start a new fork</Trans>

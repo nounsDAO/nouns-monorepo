@@ -13,7 +13,6 @@ import Noun from '@/components/legacy-noun';
 import Link from '@/components/link';
 
 import NounModal from './noun-modal';
-import classes from './playground.module.css';
 
 interface Trait {
   title: string;
@@ -300,7 +299,7 @@ const Playground: React.FC = () => {
                 onClick={() => {
                   generateNounSvg();
                 }}
-                className={classes.primaryBtn}
+                className="border-brand-dark-red bg-brand-dark-red focus:bg-brand-dark-red focus:ring-brand-dark-red hover:bg-brand-dark-red active:bg-brand-dark-red mb-2 h-16 w-full rounded-xl border font-bold focus:ring-4 focus:ring-opacity-75"
               >
                 <Trans>Generate Nouns</Trans>
               </Button>
@@ -310,16 +309,16 @@ const Playground: React.FC = () => {
                 traits.map((trait, index) => {
                   return (
                     <div className="col-span-6 lg:col-span-12" key={trait.title}>
-                      <Form className={classes.traitForm}>
+                      <Form className="h-16">
                         <FloatingLabel
                           controlId="floatingSelect"
                           label={traitKeyToLocalizedTraitKeyFirstLetterCapitalized(trait.title)}
                           key={index}
-                          className={classes.floatingLabel}
+                          className="text-15 text-brand-text-muted-600"
                         >
                           <Form.Select
                             aria-label="Floating label select example"
-                            className={classes.traitFormBtn}
+                            className="border-brand-border-ui text-brand-gray-dark-text hover:border-brand-border-ui hover:bg-brand-surface focus:border-brand-border-ui focus:bg-brand-surface my-2 size-full rounded-xl border bg-white text-lg font-bold shadow-none"
                             value={trait.traitNames[selectIndexes?.[trait.title]] ?? -1}
                             onChange={e => {
                               const index = e.currentTarget.selectedIndex;
@@ -354,7 +353,7 @@ const Playground: React.FC = () => {
                 <Image
                   style={{ margin: '0 0 .25rem .25rem', display: 'inline-block' }}
                   src={InfoIcon}
-                  className={classes.voteIcon}
+                  className="mb-1 ml-1.5 mr-0 w-10"
                 />
               </OverlayTrigger>
             </label>
@@ -365,17 +364,20 @@ const Playground: React.FC = () => {
               isValid={isPendingTraitValid}
               isInvalid={isPendingTraitValid === false}
               ref={customTraitFileRef}
-              className={classes.fileUpload}
+              className="text-15 text-brand-text-muted-600"
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 validateAndSetCustomTrait(e.target.files?.[0])
               }
             />
             {pendingTrait && (
               <>
-                <FloatingLabel label="Custom Trait Type" className={classes.floatingLabel}>
+                <FloatingLabel
+                  label="Custom Trait Type"
+                  className="text-15 text-brand-text-muted-600"
+                >
                   <Form.Select
                     aria-label="Custom Trait Type"
-                    className={classes.traitFormBtn}
+                    className="border-brand-border-ui text-brand-gray-dark-text hover:border-brand-border-ui hover:bg-brand-surface focus:border-brand-border-ui focus:bg-brand-surface my-2 size-full rounded-xl border bg-white text-lg font-bold shadow-none"
                     onChange={e => setPendingTrait({ ...pendingTrait, type: e.target.value })}
                   >
                     {Object.entries(traitKeyToTitle).map(([key, title]) => (
@@ -385,12 +387,15 @@ const Playground: React.FC = () => {
                     ))}
                   </Form.Select>
                 </FloatingLabel>
-                <Button onClick={() => uploadCustomTrait()} className={classes.primaryBtn}>
+                <Button
+                  onClick={() => uploadCustomTrait()}
+                  className="border-brand-dark-red bg-brand-dark-red focus:bg-brand-dark-red focus:ring-brand-dark-red hover:bg-brand-dark-red active:bg-brand-dark-red mb-2 h-16 w-full rounded-xl border font-bold focus:ring-4 focus:ring-opacity-75"
+                >
                   <Trans>Upload</Trans>
                 </Button>
               </>
             )}
-            <p className={classes.nounYearsFooter}>
+            <p className="italic">
               <Trans>
                 You&apos;ve generated{' '}
                 {i18n.number(Number(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
@@ -413,8 +418,8 @@ const Playground: React.FC = () => {
                         <Noun
                           imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
                           alt="noun"
-                          className={classes.nounImg}
-                          wrapperClassName={classes.nounWrapper}
+                          className="rounded-2xl hover:scale-105 hover:cursor-pointer"
+                          wrapperClassName="mb-4 rounded-2xl bg-brand-gray-background"
                         />
                       </div>
                     </div>

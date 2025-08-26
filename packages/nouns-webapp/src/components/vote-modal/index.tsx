@@ -9,8 +9,6 @@ import SolidColorBackgroundModal from '@/components/solid-color-background-modal
 import { cn } from '@/lib/utils';
 import { useCastRefundableVote, useCastRefundableVoteWithReason, Vote } from '@/wrappers/nouns-dao';
 
-import classes from './vote-modal.module.css';
-
 interface VoteModalProps {
   show: boolean;
   onHide: () => void;
@@ -106,45 +104,47 @@ const VoteModal = ({
 
   const voteModalContent = (
     <>
-      <div className={classes.voteModalTitle}>
+      <div className="font-londrina text-center text-4xl">
         <Trans>Vote on Prop {i18n.number(Number(proposalId || '0'))}</Trans>
       </div>
-      <div className={classes.voteModalSubtitle}>
+      <div className="mb-4 text-center text-lg font-medium">
         {availableVotes === 1 ? (
           <Trans>
-            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Noun
+            Voting with <span className="font-bold">{i18n.number(availableVotes)}</span> Noun
           </Trans>
         ) : (
           <Trans>
-            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Nouns
+            Voting with <span className="font-bold">{i18n.number(availableVotes)}</span> Nouns
           </Trans>
         )}
       </div>
       {isVoteSucessful && (
-        <div className={classes.transactionStatus}>
+        <div className="font-pt mb-8 text-center text-lg font-bold">
           <p>
             <Trans>
               You&apos;ve successfully voted on on prop {i18n.number(Number(proposalId || '0'))}
             </Trans>
           </p>
 
-          <div className={classes.voteSuccessBody}>
+          <div className="mt-4">
             <Trans>Thank you for voting.</Trans>
           </div>
         </div>
       )}
       {isVoteFailed && (
-        <div className={classes.transactionStatus}>
-          <p className={classes.voteFailureTitle}>
+        <div className="font-pt mb-8 text-center text-lg font-bold">
+          <p className="w-full font-normal">
             <Trans>There was an error voting for your account.</Trans>
           </p>
-          <div className={classes.voteFailureBody}>
-            {failureCopy}: <span className={classes.voteFailureErrorMessage}>{errorMessage}</span>
+          <div className="mt-4 font-bold">
+            {failureCopy}: <span className="text-brand-color-red font-bold">{errorMessage}</span>
           </div>
         </div>
       )}
       {!isVoteFailed && !isVoteSucessful && (
-        <div className={cn(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
+        <div
+          className={cn('transition-all duration-150 ease-in-out', isLoading ? 'opacity-50' : '')}
+        >
           {isObjectionPeriod === false && (
             <>
               <div onClick={() => setVote(Vote.FOR)}>
@@ -153,8 +153,8 @@ const VoteModal = ({
                   buttonIcon={<></>}
                   buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
                   className={cn(
-                    vote === undefined && classes.inactive,
-                    vote !== Vote.FOR && classes.unselected,
+                    vote === undefined && '!scale-95',
+                    vote !== Vote.FOR && 'scale-90 opacity-50',
                   )}
                 />
               </div>
@@ -167,8 +167,8 @@ const VoteModal = ({
               buttonIcon={<></>}
               buttonStyle={NavBarButtonStyle.AGAINST_VOTE_SUBMIT}
               className={cn(
-                vote === undefined && classes.inactive,
-                vote !== Vote.AGAINST && classes.unselected,
+                vote === undefined && '!scale-95',
+                vote !== Vote.AGAINST && 'scale-90 opacity-50',
               )}
             />
           </div>
@@ -181,8 +181,8 @@ const VoteModal = ({
                   buttonIcon={<></>}
                   buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
                   className={cn(
-                    vote === undefined && classes.inactive,
-                    vote !== Vote.ABSTAIN && classes.unselected,
+                    vote === undefined && '!scale-95',
+                    vote !== Vote.ABSTAIN && 'scale-90 opacity-50',
                   )}
                 />
               </div>
@@ -197,7 +197,7 @@ const VoteModal = ({
               }
               value={voteReason}
               onChange={e => setVoteReason(e.target.value)}
-              className={classes.voteReasonTextarea}
+              className="!h-26 rounded-10 border border-black/10 !pt-8 text-base font-bold focus:!border-black/25 focus:shadow-none"
             />
           </FloatingLabel>
           <br />
@@ -214,13 +214,17 @@ const VoteModal = ({
                 castRefundableVoteWithReason({ args: [BigInt(proposalId), vote, voteReason] });
               }
             }}
-            className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
+            className={
+              vote === undefined
+                ? '!bg-brand-gray-light-text border-brand-gray-light-text h-10 w-full min-w-32 rounded-xl border font-bold opacity-50 !shadow-none hover:cursor-not-allowed hover:!text-white focus:!text-white'
+                : '!border-brand-color-green !bg-brand-color-green hover:!bg-brand-color-green focus:!bg-brand-color-green focus:!border-brand-color-green focus:ring-brand-color-green-translucent active:!bg-brand-color-green h-10 w-full min-w-32 rounded-xl !border font-bold !text-white focus:ring-4'
+            }
           >
             {isLoading ? <Spinner animation="border" /> : <Trans>Submit Vote</Trans>}
           </Button>
 
-          <div className={classes.gasFreeVotingWrapper}>
-            <span className={classes.gasFreeVotingCopy}>
+          <div className="mt-2 flex w-full justify-center">
+            <span className="font-pt text-brand-gray-light-text w-fit text-center text-sm opacity-75">
               <Trans>Gas spent on voting will be refunded to you.</Trans>
             </span>
           </div>

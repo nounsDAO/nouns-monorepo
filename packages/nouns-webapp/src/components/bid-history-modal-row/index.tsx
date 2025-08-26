@@ -13,8 +13,6 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 import { Address, Bid } from '@/utils/types';
 
-// Replaced CSS module with inline Tailwind classes
-
 import auctionActivityClasses from '@/components/auction-activity/bid-history.module.css';
 
 interface BidHistoryModalRowProps {
