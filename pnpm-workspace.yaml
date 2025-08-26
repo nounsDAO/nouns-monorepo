@@ -31,6 +31,7 @@ onlyBuiltDependencies:
   - es5-ext
   - esbuild
   - keccak
+  - msw
   - netlify-cli
   - postinstall-postinstall
   - secp256k1
