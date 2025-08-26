@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { CHAIN_ID } from '@/config';
 import { Auction } from '@/wrappers/nouns-auction';
 
-import classes from './settle-manually-btn.module.css';
+// Inlined former CSS module styles with Tailwind
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;
@@ -61,11 +61,11 @@ const SettleManuallyBtn: React.FC<{
   const mins = timerDuration.minutes();
 
   return (
-    <p className={classes.emergencySettleWrapper}>
+    <p className={`lg-max:text-center lg-max:ml-2 max-[660px]:ml-0`}>
       <button
         type="button"
         onClick={settleAuctionHandler}
-        className={classes.emergencySettleButton}
+        className="bg-transparent border-0 cursor-pointer underline inline m-0 p-0 disabled:text-[#8c8d92] disabled:no-underline disabled:cursor-default"
         disabled={!settleEnabled}
       >
         {settleEnabled ? (

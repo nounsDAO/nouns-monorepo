@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nouns-dao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
+// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 const PLOTTING_CONSTANTS = {
   width: 950,
@@ -111,7 +111,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           </p>
 
           {/* Mobile - no graph content */}
-          <div className={cn(responsiveUiUtilsClasses.mobileOnly, 'mt-12')}>
+          <div className={cn('xl-max:block hidden', 'mt-12')}>
             <div className={"flex justify-between text-lg font-medium text-white"}>
               <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns

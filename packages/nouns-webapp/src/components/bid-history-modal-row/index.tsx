@@ -13,7 +13,7 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { containsBlockedText } from '@/utils/moderation/contains-blocked-text';
 import { Address, Bid } from '@/utils/types';
 
-import auctionActivityClasses from '@/components/auction-activity/bid-history.module.css';
+// Inlined former CSS module styles with Tailwind
 
 interface BidHistoryModalRowProps {
   bid: Bid;
@@ -32,13 +32,14 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
   return (
     <li
       className={cn(
-        auctionActivityClasses.bidRowCool,
+        'font-pt p-3 text-[1.1rem] font-bold transition-all duration-200 ease-in-out',
         'rounded-14 h-18 mt-3 w-full border-b-0 bg-white p-4',
+        'border-[var(--brand-cool-border)] hover:brightness-105',
       )}
     >
-      <div className={auctionActivityClasses.bidItem}>
-        <div className={auctionActivityClasses.leftSectionWrapper}>
-          <div className={auctionActivityClasses.bidder}>
+      <div className={cn('flex items-center justify-between')}>
+        <div className={cn('flex flex-col')}>
+          <div className={cn('font-pt font-bold')}>
             <div className="flex">
               <img
                 alt={bid.sender}
@@ -66,11 +67,11 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
             </div>
           </div>
         </div>
-        <div className={auctionActivityClasses.rightSectionWrapper}>
-          <div className={cn('whitespace-nowrap', auctionActivityClasses.bidAmount)}>
+        <div className={cn('flex flex-row items-center justify-center')}>
+          <div className={cn('whitespace-nowrap', 'font-pt font-bold mr-4 text-[18px] pt-[2px]', 'text-[var(--brand-cool-dark-text)]')}>
             {bidAmount}
           </div>
-          <div className={auctionActivityClasses.linkSymbol}>
+          <div className={cn('text-[var(--brand-cool-light-text)] hover:text-[var(--brand-cool-dark-text)]')}>
             <a href={txLink} target="_blank" rel="noreferrer">
               <div className="text-brand-gray-light-text mb-px transition-all duration-150 ease-in-out hover:cursor-pointer hover:text-black">
                 <ExternalLinkIcon height={24} width={24} />

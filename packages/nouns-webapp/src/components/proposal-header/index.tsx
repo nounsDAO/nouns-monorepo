@@ -117,7 +117,10 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </div>
       )}
       <Button
-        className={disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn}
+        className={cn(
+          disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn,
+          'lg-max:max-w-full',
+        )}
         disabled={disableVoteButton}
         onClick={submitButtonClickHandler}
       >
@@ -163,6 +166,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             className={cn(
               classes.backButton,
               'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+              'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
             )}
           >
             ←

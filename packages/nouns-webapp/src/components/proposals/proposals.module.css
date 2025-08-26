@@ -106,47 +106,7 @@
   @apply ml-auto mr-auto;
 }
 
-@media (max-width: 992px) {
-  .headerWrapper {
-    @apply flex flex-col justify-start;
-  }
-
-  .desktopCountdownWrapper {
-    @apply hidden;
-  }
-
-  .mobileCountdownWrapper {
-    @apply flex w-full mt-4;
-  }
-
-  .nullStateCopy {
-    @apply mt-0 mr-0 text-center;
-  }
-
-  .proposalTitle {
-    @apply max-w-[65%] break-words;
-  }
-
-  .nounInWalletBtnWrapper {
-    @apply w-full flex items-center justify-center;
-  }
-
-  .headerWrapper {
-    @apply flex flex-col items-start;
-  }
-
-  .forceFlexRow {
-    @apply flex-row;
-  }
-
-  .heading {
-    @apply w-full;
-  }
-
-  .nullStateSubmitProposalBtnWrapper {
-    @apply text-right;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 
 .nullBtnWrapper {
   @apply min-w-[10rem];

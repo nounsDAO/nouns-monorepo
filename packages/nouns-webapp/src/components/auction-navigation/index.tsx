@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks';
 import useOnDisplayAuction from '@/wrappers/on-display-auction';
 
-import classes from './auction-navigation.module.css';
+// Inlined former CSS module styles with Tailwind
 
 interface AuctionNavigationProps {
   isFirstAuction: boolean;
@@ -67,11 +67,18 @@ const AuctionNavigation: React.FC<AuctionNavigationProps> = props => {
   }, [handleKeyPress]);
 
   return (
-    <div className={classes.navArrowsContainer}>
+    <div className="absolute mb-2 mt-0">
       <button
         type="button"
         onClick={() => onPrevAuctionClick()}
-        className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
+        className={[
+          'inline-block h-8 w-8 appearance-none rounded-full border-0 bg-contain bg-no-repeat p-0 text-[large] font-bold',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          'md-lg:hover:bg-[var(--brand-gray-hover)] md-lg:hover:opacity-90',
+          isCool
+            ? 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]'
+            : 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]',
+        ].join(' ')}
         disabled={isFirstAuction}
       >
         ←
@@ -79,7 +86,14 @@ const AuctionNavigation: React.FC<AuctionNavigationProps> = props => {
       <button
         type="button"
         onClick={() => onNextAuctionClick()}
-        className={isCool ? classes.rightArrowCool : classes.rightArrowWarm}
+        className={[
+          'ml-[0.3rem] inline-block h-8 w-8 appearance-none rounded-full border-0 bg-contain bg-no-repeat p-0 text-[large] font-bold',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          'md-lg:hover:bg-[var(--brand-gray-hover)] md-lg:hover:opacity-90',
+          isCool
+            ? 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]'
+            : 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]',
+        ].join(' ')}
         disabled={isLastAuction}
       >
         →

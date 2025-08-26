@@ -14,7 +14,7 @@ import { INounSeed } from '@/wrappers/noun-token';
 import { Auction as IAuction } from '@/wrappers/nouns-auction';
 import { useNavigate } from 'react-router';
 
-import classes from './auction.module.css';
+// Inlined former CSS module styles with Tailwind
 
 interface AuctionProps {
   auction?: IAuction;
@@ -44,7 +44,16 @@ const Auction: React.FC<AuctionProps> = props => {
   };
 
   const nounContent = currentAuction && (
-    <div className={classes.nounWrapper}>
+    <div className={
+      [
+        // .nounWrapper base
+        'w-full self-end',
+        // <= 992px formerly lg-max
+        'lg-max:ml-[15%] lg-max:mr-[15%] lg-max:w-[70%]',
+        // <= 568px overrides
+        'max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%]',
+      ].join(' ')
+    }>
       <StandaloneNounWithSeed
         nounId={BigInt(currentAuction.nounId)}
         onLoadSeed={loadedNounHandler}
@@ -54,7 +63,15 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   const loadingNoun = (
-    <div className={classes.nounWrapper}>
+    <div
+      className={
+        [
+          'w-full self-end',
+          'lg-max:ml-[15%] lg-max:mr-[15%] lg-max:w-[70%]',
+          'max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%]',
+        ].join(' ')
+      }
+    >
       <LoadingNoun />
     </div>
   );
@@ -81,11 +98,24 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
+    <div style={{ backgroundColor: stateBgColor }}>
       <div className="mx-auto max-w-screen-xl px-4">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className={classes.nounContentCol}>{currentAuction ? nounContent : loadingNoun}</div>
-          <div className={classes.auctionActivityCol}>
+          <div className={["flex", 'max-[568px]:p-0'].join(' ')}>
+            {currentAuction ? nounContent : loadingNoun}
+          </div>
+          <div
+            className={
+              [
+                // .auctionActivityCol base
+                'min-h-[558px] self-end pb-0 pr-20',
+                // <= 992px formerly lg-max
+                'lg-max:w-full lg-max:bg-white lg-max:pl-[5%] lg-max:pr-[5%] lg-max:pt-[5%]',
+                // <= 568px overrides
+                'max-[568px]:ml-0 max-[568px]:mr-0 max-[568px]:w-full max-[568px]:pl-0 max-[568px]:pr-0 max-[568px]:pt-8',
+              ].join(' ')
+            }
+          >
             {currentAuction &&
               (isNounderNoun(BigInt(currentAuction.nounId))
                 ? nounderNounContent

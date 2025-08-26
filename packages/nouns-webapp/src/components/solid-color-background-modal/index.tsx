@@ -13,14 +13,19 @@ import {
 } from '@/utils/css-transition-utils';
 import { isMobileScreen } from '@/utils/is-mobile';
 
-import classes from './solid-color-background-modal.module.css';
+// Inlined former CSS module styles with Tailwind
 
 export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = props => {
   const nodeRef = useRef(null);
 
   return (
     <NounsTransition
-      className={classes.backdrop}
+      className={
+        [
+          'fixed inset-0 z-10 h-full w-full bg-[rgba(75,75,75,0.5)] opacity-0 backdrop-blur-[24px] transition-opacity duration-75 ease-in-out',
+          'lg-max:bg-[rgba(0,0,0,0.74)]',
+        ].join(' ')
+      }
       nodeRef={nodeRef}
       show={props.show}
       timeout={100}
@@ -68,16 +73,25 @@ const SolidColorBackgroundModalOverlay: React.FC<{
         transitionStyes={basicFadeInOut}
         show={show}
       >
-        <div className={classes.closeBtnWrapper}>
-          <button type="button" onClick={onDismiss} className={classes.closeBtn}>
-            <XIcon className={classes.icon} />
+        <div className={['flex justify-end px-8 py-4', 'md-lg:absolute md-lg:left-[96.5%]'].join(' ')}>
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="fixed z-[100] h-10 w-10 rounded-full border-0 transition-all duration-150 ease-in-out hover:cursor-pointer hover:bg-white/50"
+          >
+            <XIcon className="h-6 w-6" />
           </button>
         </div>
       </NounsTransition>
       <NounsTransition
         nodeRef={modalRef}
         show={show}
-        className={classes.modal}
+        className={
+          [
+            'font-pt absolute left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] translate-y-[-1rem] scale-50 rounded-[24px] bg-[rgba(244,244,248,1)] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] transition-all duration-150 ease-in-out',
+            'lg-max:bottom-0 lg-max:left-0 lg-max:top-auto lg-max:max-h-[calc(100%_-_75px)] lg-max:w-full lg-max:overflow-y-scroll lg-max:rounded-b-none lg-max:shadow-none lg-max:translate-y-[20rem] lg-max:scale-100',
+          ].join(' ')
+        }
         timeout={200}
         transitionStyes={isMobile ? mobileModalSlideInFromBottm : desktopModalSlideInFromTopAndGrow}
       >

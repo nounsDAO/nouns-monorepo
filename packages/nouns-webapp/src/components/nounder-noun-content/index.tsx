@@ -13,7 +13,7 @@ import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
+// Inlined former bid history module styles with Tailwind
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;
@@ -98,11 +98,16 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
       </div>
       <div className={cn('mb-0', 'grid grid-cols-1')}>
         <div className="w-full">
-          <ul className={auctionBidClasses.bidCollection}>
+          <ul className={cn('grid text-left list-none gap-y-2 p-0 mt-4')}>
             <li
               className={cn(
-                isCool ? auctionBidClasses.bidRowCool : auctionBidClasses.bidRowWarm,
+                // Base row styles
+                'font-pt font-bold transition-all duration-200 ease-in-out hover:brightness-105',
                 'text-[15.5px] font-medium leading-[21px]',
+                // Padding + border color vary by theme
+                isCool
+                  ? 'p-3 border-b border-[var(--brand-cool-border)]'
+                  : 'pt-1 pr-3 pb-2 pl-3 border-b border-[var(--brand-warm-border)]',
               )}
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}

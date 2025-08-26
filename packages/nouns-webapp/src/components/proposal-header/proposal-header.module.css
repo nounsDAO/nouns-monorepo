@@ -1,16 +1,7 @@
 .backButton {
   @apply appearance-none p-0 inline-block w-8 h-8 rounded-full font-bold mr-4 mt-[0.1rem] absolute left-[-3rem];
 }
-@media (max-width: 1040px) {
-  .backButton {
-    @apply relative left-0;
-  }
-}
-@media (max-width: 414px) {
-  .backButton {
-    @apply hidden;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 .backButtonWrapper {
   @apply relative;
 }
@@ -66,15 +57,7 @@
   @apply px-[3rem];
 }
 
-@media (max-width: 992px) {
-  .submitBtn {
-    @apply max-w-full;
-  }
-
-  .submitBtnDisabled {
-    @apply max-w-full;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 
 .voterIneligibleAlert {
   @apply font-pt font-medium bg-[#e2e3e8] text-black border border-[rgba(0,0,0,0.1)] mt-2;

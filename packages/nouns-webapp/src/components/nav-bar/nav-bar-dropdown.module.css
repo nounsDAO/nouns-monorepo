@@ -92,29 +92,10 @@
   @apply !border-0 !bg-inherit;
 }
 
-@media (max-width: 992px) {
-  .wrapper {
-    @apply h-12 text-lg;
-  }
-  .button {
-    @apply h-12 text-lg;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 
-@media (max-width: 330px) {
-  .button {
-    width: 70px;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 
-@media (max-width: 370px) {
-  .button {
-    width: 90px;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */
 
-@media (min-width: 400px) {
-  .button {
-    @apply w-auto;
-  }
-}
+/* responsive rules migrated to Tailwind in TSX */

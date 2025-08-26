@@ -169,7 +169,8 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             className={cn(
               'mx-auto w-full lg:w-10/12',
               classes.headerWrapper,
-              !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
+              'lg-max:flex-col lg-max:justify-start lg-max:items-start',
+              !hasEnoughVotesToPropose ? 'lg-max:flex-row' : '',
             )}
           >
             <div className={classes.tabs}>
@@ -185,7 +186,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               ))}
             </div>
             {!isMobile && hasEnoughVotesToPropose ? (
-              <div className={classes.nounInWalletBtnWrapper}>
+              <div className={`${classes.nounInWalletBtnWrapper} lg-max:w-full lg-max:flex lg-max:items-center lg-max:justify-center`}>
                 <div className={classes.submitProposalButtonWrapper}>
                   <Button
                     className={classes.generateBtn}
@@ -208,7 +209,11 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               </div>
             ) : (
               <div className={cn('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
-                {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
+                {!isMobile && (
+                  <div className={`${classes.nullStateCopy} lg-max:mt-0 lg-max:mr-0 lg-max:text-center`}>
+                    {nullStateCopy()}
+                  </div>
+                )}
                 {!isMobile && (
                   <div className={classes.nullBtnWrapper}>
                     <Button className={classes.generateBtnDisabled}>
@@ -237,7 +242,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
           <div className="w-100">
             <div className="w-full">
               <div>
-                <div className={classes.nullStateCopy}>{nullStateCopy()}</div>
+                <div className={`${classes.nullStateCopy} lg-max:mt-0 lg-max:mr-0 lg-max:text-center`}>
+                  {nullStateCopy()}
+                </div>
               </div>
             </div>
             <div className="w-full">
@@ -308,7 +315,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       key={i}
                     >
                       <div className={classes.proposalInfoWrapper}>
-                        <span className={classes.proposalTitle}>
+                        <span className={`${classes.proposalTitle} lg-max:max-w-[65%] lg-max:break-words`}>
                           <span className={classes.proposalId}>
                             {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
@@ -316,7 +323,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                         </span>
 
                         {isPropInStateToHaveCountDown && (
-                          <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
+                          <div className={cn(classes.desktopCountdownWrapper, 'lg-max:hidden')}>
+                            {countdownPill}
+                          </div>
                         )}
                         <div className={cn(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                           <ProposalStatus status={p.status}></ProposalStatus>
@@ -324,7 +333,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       </div>
 
                       {isPropInStateToHaveCountDown && (
-                        <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
+                        <div className={cn(classes.mobileCountdownWrapper, 'hidden lg-max:mt-4 lg-max:flex lg-max:w-full')}>
+                          {countdownPill}
+                        </div>
                       )}
                     </a>
                   );

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
 import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
+// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
@@ -64,7 +64,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+        className={cn(navDropdownClasses.nounsNavLink, 'xl-max:hidden')}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >

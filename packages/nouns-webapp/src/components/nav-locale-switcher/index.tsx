@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
 import navDropdownClasses from '@/components/nav-bar/nav-bar-dropdown.module.css';
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
+// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -45,6 +45,7 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
   <div
     className={cn(
       navDropdownClasses.wrapper,
+      'lg-max:h-12 lg-max:text-lg',
       buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
     )}
     onClick={e => {
@@ -52,7 +53,7 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
       onClick?.(e);
     }}
   >
-    <div className={navDropdownClasses.button}>
+    <div className={cn(navDropdownClasses.button, 'lg-max:h-12 lg-max:text-lg', 'max-[330px]:w-[70px] max-[370px]:w-[90px] min-[400px]:w-auto')}>
       <div className={navDropdownClasses.dropdownBtnContent}>
         <FontAwesomeIcon icon={faGlobe} />
       </div>
@@ -100,6 +101,7 @@ const CustomMenu = ({
             key={locale}
             className={cn(
               navDropdownClasses.button,
+              'lg-max:h-12 lg-max:text-lg',
               navDropdownClasses.dropdownPrimaryText,
               buttonStyle,
               dropDownStyle,
@@ -157,7 +159,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
+        className={cn(navDropdownClasses.nounsNavLink, 'xl-max:block hidden')}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -167,7 +169,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
       </div>
 
-      <div className={cn(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}>
+      <div className={cn(navDropdownClasses.nounsNavLink, 'xl-max:hidden')}>
         <CustomDropdownToggle
           buttonUp={buttonUp}
           stateSelectedDropdownClass={stateSelectedDropdownClass}

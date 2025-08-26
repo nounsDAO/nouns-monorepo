@@ -74,13 +74,14 @@ const CandidateHistoryPage = () => {
       <div className={classes.wrapper}>
         <div className={headerClasses.backButtonWrapper}>
           <Link to={`/candidates/${id}`}>
-            <button
-              type="button"
-              className={cn(
-                headerClasses.backButton,
-                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
-              )}
-            >
+                <button
+                  type="button"
+                  className={cn(
+                    headerClasses.backButton,
+                    'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+                    'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
+                  )}
+                >
               ←
             </button>
           </Link>

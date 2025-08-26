@@ -15,9 +15,9 @@ import { Proposal } from '@/wrappers/nouns-dao';
 
 import DelegateGroupedNounImageVoteTable from '../delegate-grouped-noun-image-vote-table';
 
-import classes from './vote-card.module.css';
+// Inlined former CSS module styles with Tailwind
 
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
+// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 export enum VoteCardVariant {
   FOR,
@@ -37,25 +37,25 @@ interface VoteCardProps {
 const VoteCard: React.FC<VoteCardProps> = props => {
   const { proposal, percentage, variant, delegateGroupedVoteData } = props;
 
-  let titleClass;
+  let titleClass: string;
   let titleCopy;
   let voteCount;
   let supportDetailedValue: 0 | 1 | 2;
   switch (variant) {
     case VoteCardVariant.FOR:
-      titleClass = classes.for;
+      titleClass = 'text-brand-color-green';
       titleCopy = <Trans>For</Trans>;
       voteCount = proposal.forCount;
       supportDetailedValue = 1;
       break;
     case VoteCardVariant.AGAINST:
-      titleClass = classes.against;
+      titleClass = 'text-brand-color-red';
       titleCopy = <Trans>Against</Trans>;
       voteCount = proposal.againstCount;
       supportDetailedValue = 0;
       break;
     default:
-      titleClass = classes.abstain;
+      titleClass = 'text-brand-gray-light-text';
       titleCopy = <Trans>Abstain</Trans>;
       voteCount = proposal.abstainCount;
       supportDetailedValue = 2;
@@ -102,23 +102,25 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   }, [publicClient, ensCached, delegateGroupedVoteData]);
 
   return (
-    <div className={cn('lg:col-span-4', classes.wrapper)}>
-      <Card className={classes.voteCountCard}>
+    <div className={cn('lg:col-span-4', 'xl-max:w-1/3')}>
+      <Card className={cn('mt-4 min-h-72 rounded-xl bg-brand-gray-background p-2', 'xl-max:min-h-0')}>
         <Card.Body className="p-2">
           <Card.Text className="m-0 py-2">
             <span
-              className={`${
-                isEnUS ? classes.voteCardHeaderTextEn : classes.voteCardHeaderTextNonEn
-              } ${titleClass}`}
+              className={cn(
+                isEnUS ? 'font-londrina text-22 xl-max:mx-auto' : 'font-londrina text-base xl-max:mx-auto xl-max:text-base',
+                titleClass,
+              )}
             >
               {titleCopy}
             </span>
             <span
               className={cn(
-                classes.voteCardVoteCount,
-                responsiveUiUtilsClasses.desktopOnly,
-                !isEnUS ? classes.smallerVoteCountText : '',
+                'font-pt mt-[0.15rem] text-22 font-bold',
+                'xl-max:hidden',
+                !isEnUS ? 'text-base' : '',
                 'relative',
+                'xl-max:mx-auto',
               )}
             >
               {i18n.number(voteCount)}
@@ -135,8 +137,8 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             </span>
           </Card.Text>
 
-          <Card.Text className={cn('m-0 py-2', classes.mobileVoteCountWrapper)}>
-            <span className={cn(classes.voteCardVoteCount, 'relative')}>
+          <Card.Text className={cn('m-0 py-2', 'hidden xl-max:flex xl-max:flex-col')}>
+            <span className={cn('font-pt mt-[0.15rem] text-22 font-bold', 'relative')}>
               {i18n.number(voteCount)}
               {filteredDelegateGroupedVoteData.length > 0 && (
                 <small className="text-muted-foreground absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 whitespace-nowrap text-xs">
@@ -152,7 +154,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
-          <div className={cn('flex flex-wrap', classes.nounProfilePics)}>
+          <div className={cn('flex flex-wrap', 'mt-6 pl-2 pr-2', 'xl-max:hidden')}>
             <DelegateGroupedNounImageVoteTable
               filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
               propId={Number(proposal.id || '0')}

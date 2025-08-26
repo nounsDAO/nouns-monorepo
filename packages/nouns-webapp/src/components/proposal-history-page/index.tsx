@@ -84,6 +84,7 @@ const ProposalHistory = () => {
                   className={cn(
                     headerClasses.backButton,
                     'border border-[rgba(0,0,0,0.1)] bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+                    'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
                   )}
                 >
                   ←

@@ -26,7 +26,7 @@ import {
   useWithdrawTokens,
 } from '@/wrappers/nouns-stream';
 
-import classes from './stream-withdraw-modal.module.css';
+// Inlined former CSS module styles with Tailwind
 
 dayjs.extend(relativeTime);
 
@@ -84,12 +84,12 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
         <ModalTitle>
           <Trans>Withdraw from Stream</Trans>
         </ModalTitle>
-        <div className={classes.center}>
+        <div className="flex justify-center">
           {(withdrawTokensState.status === 'Mining' ||
             !withdrawableBalance ||
             withdrawTokensState.status === 'PendingSignature') && <BrandSpinner />}
           {withdrawTokensState.status === 'Success' && (
-            <div className={classes.transactionStatus}>
+            <div className="text-[18px] mb-8 text-center font-bold font-pt">
               <p>
                 <Trans>
                   You&apos;ve successfully withdrawn {withdrawAmount} {unitForDisplay} to your
@@ -100,13 +100,13 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
           )}
           {(withdrawTokensState.status === 'Exception' ||
             withdrawTokensState.status === 'Fail') && (
-            <div className={classes.transactionStatus}>
-              <p className={classes.txnFailureTitle}>
+            <div className="text-[18px] mb-8 text-center font-bold font-pt">
+              <p className="font-normal w-full">
                 <Trans>There was an error withdrawing to your wallet.</Trans>
               </p>
-              <div className={classes.txnFailureBody}>
+              <div className="mt-4 font-bold">
                 Error:{' '}
-                <span className={classes.txnFailureErrorMessage}>
+                <span className="font-bold text-[var(--brand-color-red)]">
                   {withdrawTokensState.errorMessage}
                 </span>
               </div>
@@ -132,7 +132,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
       <ModalLabel>
         <Trans>Available to withdraw</Trans>
       </ModalLabel>
-      <h1 className={classes.bold}>
+      <h1 className="font-bold">
         {isUSDC
           ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? ''))
           : parseFloat(
@@ -144,18 +144,18 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
       <ModalLabel>
         <Trans>Streamed so far</Trans>
       </ModalLabel>
-      <h1 className={classes.bold}>{percentStreamedSoFar.toFixed(numDecimalPlaces)}%</h1>
+      <h1 className="font-bold">{percentStreamedSoFar.toFixed(numDecimalPlaces)}%</h1>
 
       <ModalLabel>Total stream value</ModalLabel>
 
-      <h1 className={classes.bold}>
+      <h1 className="font-bold">
         {isUSDC
           ? contract2humanUSDCFormat(streamAmount)
           : formatUnits(BigInt(streamAmount.toString()), 18).toString()}{' '}
         {unitForDisplay}
       </h1>
 
-      <div className={classes.amtEntryWrapper}>
+      <div className="flex justify-end">
         <BrandNumericEntry
           label={'Withdraw amount'}
           value={withdrawAmount}
@@ -167,7 +167,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
         />
         {/* Hover brightness */}
         <div
-          className={classes.amtEntryMax}
+          className="absolute right-10 top-[68%] text-[18px] font-bold cursor-pointer"
           onClick={() =>
             setWithdrawAmount(
               parseFloat(
@@ -197,7 +197,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
         }}
         isNextBtnDisabled={withdrawableBalance !== 0n && humanUnitsStreamRemainingBalance === 0}
       />
-      <div className={classes.streamTimeWrapper}>
+      <div className="opacity-50 font-bold mb-4 mt-4 flex justify-center">
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
       </div>
     </>

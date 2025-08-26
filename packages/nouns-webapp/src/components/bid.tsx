@@ -17,7 +17,7 @@ import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/use-activate-locale';
 import { Auction } from '@/wrappers/nouns-auction';
 
-import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
+// responsiveUiUtilsClasses usage replaced by Tailwind responsive utilities
 
 const computeMinimumNextBid = (
   currentBid: bigint,
@@ -191,11 +191,7 @@ const Bid: React.FC<BidProps> = props => {
                 {!auctionEnded && !bidInput ? (
                   <>
                     Ξ {minBidEth(minBid)}{' '}
-                    <span
-                      className={
-                        activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
-                      }
-                    >
+                    <span className={activeLocale === 'ja-JP' ? 'max-[414px]:hidden' : ''}>
                       <Trans>or more</Trans>
                     </span>
                   </>
