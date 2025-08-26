@@ -11,8 +11,8 @@ import { Trans } from '@lingui/react/macro';
 import { DownloadIcon } from 'lucide-react';
 
 import CCZero from '@/assets/cczero-badge.svg?react';
-import playgroundNouns from '@/components/brand-assets-page/playground-nouns.webp';
-import traitsImage from '@/components/brand-assets-page/traits.webp';
+import playgroundNouns from '@/assets/playground-nouns.webp';
+import traitsImage from '@/assets/traits.webp';
 import { Link } from 'react-router';
 
 interface AssetCardProps {
