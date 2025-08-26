@@ -308,7 +308,7 @@ export default defineConfig([
         },
       },
       react: {
-        version: '19.1.0',
+        version: 'detect',
       }
     },
     languageOptions: {
