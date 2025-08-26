@@ -45,7 +45,7 @@ import {
 } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
-import classes from './create-proposal.module.css';
+// Converted from CSS module to inline Tailwind classes
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -250,31 +250,31 @@ const CreateProposalPage = () => {
   ]);
 
   return (
-    <Section fullWidth={false} className={classes.createProposalPage}>
+    <Section fullWidth={false} className={'font-pt [&_a]:text-[var(--brand-dark-red)]'}>
       <ProposalActionModal
         onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}
         onActionAdd={handleAddProposalAction}
       />
 
-      <div className={'mx-auto w-full lg:w-2/3 ' + classes.createProposalForm}>
-        <div className={classes.wrapper}>
+      <div className={cn('mx-auto w-full lg:w-2/3', 'rounded-[5px] bg-white px-10 py-0')}>
+        <div className={'flex items-center'}>
           <Link to={'/vote'}>
             <button
               type="button"
               className={cn(
-                classes.backButton,
+                'mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
                 'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
               )}
             >
               ←
             </button>
           </Link>
-          <h3 className={classes.heading}>
+          <h3 className={'font-londrina my-4 text-[42px]'}>
             <Trans>Create Proposal</Trans>
           </h3>
         </div>
-        <Alert variant="secondary" className={classes.voterIneligibleAlert}>
+        <Alert variant="secondary" className={'rounded-[8px]'}>
           <b>
             <Trans>Tip</Trans>
           </b>
@@ -293,7 +293,9 @@ const CreateProposalPage = () => {
         </Alert>
         <div className="d-grid">
           <Button
-            className={classes.proposalActionButton}
+            className={
+              'font-pt h-[50px] cursor-pointer rounded-[8px] text-[24px] font-bold transition-all duration-150 ease-in-out hover:opacity-50'
+            }
             variant="dark"
             onClick={() => setShowTransactionFormModal(true)}
           >
@@ -306,7 +308,7 @@ const CreateProposalPage = () => {
         />
 
         {totalUSDCPayment > 0 && tokenBuyerTopUpEth !== '0' && (
-          <Alert variant="secondary" className={classes.tokenBuyerNotif}>
+          <Alert variant="secondary" className={'mt-4 rounded-[8px]'}>
             <b>
               <Trans>Note</Trans>
             </b>
@@ -325,12 +327,12 @@ const CreateProposalPage = () => {
           onBodyInput={handleBodyInput}
         />
         <p className="m-0 p-0">Looking for treasury v1?</p>
-        <p className={classes.note}>
+        <p className={'m-0 p-0 text-[14px] text-[var(--text-light-gray)]'}>
           If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
           can interact with the original treasury{' '}
           <button
             type="button"
-            className={classes.inlineButton}
+            className={'inline border-none bg-transparent p-0 underline hover:no-underline'}
             onClick={() => setIsV1OptionVisible(!isV1OptionVisible)}
           >
             here
@@ -339,8 +341,8 @@ const CreateProposalPage = () => {
         </p>
 
         {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
-          <div className={classes.timelockOption}>
-            <div className={classes.timelockSelect}>
+          <div className={'my-4 border-y border-[rgba(0,0,0,0.1)] pb-2 pt-4 text-[14px]'}>
+            <div>
               <Form.Check
                 type="checkbox"
                 id={`timelockV1Checkbox`}
@@ -348,7 +350,7 @@ const CreateProposalPage = () => {
                 onChange={() => setIsProposeOnV1(!isProposeOnV1)}
               />
             </div>
-            <p className={classes.note}>
+            <p className={'m-0 p-0 text-[14px] text-[var(--text-light-gray)]'}>
               Used to interact with any assets owned by the{' '}
               <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
                 original treasury
@@ -358,7 +360,9 @@ const CreateProposalPage = () => {
           </div>
         )}
         <CreateProposalButton
-          className={classes.createProposalButton}
+          className={
+            'font-pt h-[50px] rounded-[8px] text-[18px] font-bold transition-all duration-150 ease-in-out hover:opacity-50'
+          }
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={

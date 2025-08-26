@@ -13,7 +13,6 @@ import { Proposal, ProposalState } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
 import { Link } from 'react-router';
 
-import classes from './candidate-sponsors.module.css';
 import OriginalSignature from './original-signature';
 import SelectSponsorsToPropose from './select-sponsors-to-propose';
 import Signature from './signature';
@@ -115,23 +114,22 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           proposalIdToUpdate={props.originalProposal?.id ? props.originalProposal?.id : ''}
         />
       )}
-      <div className={classes.wrapper}>
+      <div className={'relative rounded-[12px] border border-[#e6e6e6] text-left'}>
         {isThresholdMet && (
-          <p className={classes.thresholdMet}>
+          <p
+            className={
+              'mb-0 mt-[-4px] border-b border-[rgba(0,0,0,0.1)] px-4 pb-2 pt-[0.7rem] text-[14px] font-bold text-[var(--brand-color-green)] [&_img]:relative [&_img]:top-px'
+            }
+          >
             <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
           </p>
         )}
-        <div
-          className={cn(
-            classes.interiorWrapper,
-            isFormDisplayed ? classes.formOverlayVisible : undefined,
-          )}
-        >
+        <div className={cn('p-4', isFormDisplayed ? 'p-0' : undefined)}>
           {Array.isArray(signatures) ? (
             <>
               {!isFormDisplayed ? (
                 <>
-                  <h4 className={classes.header}>
+                  <h4 className={'mb-1 text-[20px]'}>
                     <strong>
                       {Boolean(props.isUpdateToProposal) ? (
                         <>
@@ -154,7 +152,15 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                               of{' '}
                               {(() => {
                                 if (props.candidate.proposerVotes > props.candidate.requiredVotes) {
-                                  return <em className={classes.naVotesLabel}>n/a</em>;
+                                  return (
+                                    <em
+                                      className={
+                                        'rounded bg-black/20 p-1 font-mono text-xs font-normal not-italic opacity-50'
+                                      }
+                                    >
+                                      n/a
+                                    </em>
+                                  );
                                 } else if (props.candidate.requiredVotes != undefined) {
                                   return <>{props.candidate.requiredVotes}</>;
                                 } else {
@@ -169,14 +175,18 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     </strong>
                   </h4>
                   {props.candidate.proposerVotes > 0 && props.isUpdateToProposal !== true && (
-                    <p className={classes.proposerVotesLabel}>
+                    <p>
                       <Trans>
                         Proposer has {props.candidate.proposerVotes} vote
                         {props.candidate.proposerVotes > 1 ? 's' : ''}
                       </Trans>
                     </p>
                   )}
-                  <p className={classes.subhead}>
+                  <p
+                    className={
+                      'm-0 mb-[10px] pt-0 text-[14px] leading-[1.1] text-[var(--brand-gray-light-text)]'
+                    }
+                  >
                     {isThresholdMet && props.isUpdateToProposal !== true ? (
                       <Trans>
                         This candidate has met the required threshold, but Nouns voters can still
@@ -196,7 +206,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                       </>
                     )}
                   </p>
-                  <ul className={classes.sponsorsList}>
+                  <ul className={'my-[10px] flex flex-col gap-4 p-0 text-left'}>
                     {signatures.map(signature => {
                       const sigVoteCount = signature.signer.voteCount ?? 0;
                       if (sigVoteCount <= 0) return null;
@@ -249,14 +259,19 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                           Array(props.candidate.requiredVotes - props.candidate.voteCount)
                             .fill('')
                             .map((_s, i) => (
-                              <li className={classes.placeholder} key={i}>
+                              <li
+                                className={
+                                  'm-0 mb-[10px] min-h-[40px] list-none rounded-[12px] border-2 border-dashed border-[rgba(0,0,0,0.05)] p-[10px]'
+                                }
+                                key={i}
+                              >
                                 {' '}
                               </li>
                             ))}
                       </>
                     )}
                     {props.isUpdateToProposal === true && !isParentProposalUpdatable ? (
-                      <p className={classes.inactiveCandidate}>
+                      <p>
                         <strong>
                           <Link to={`/vote/${props.originalProposal?.id}`}>
                             Proposal {props.originalProposal?.id}
@@ -271,7 +286,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             {/* no sign button for proposers */}
                             <button
                               type="button"
-                              className={classes.button}
+                              className={
+                                'cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92]'
+                              }
                               onClick={() => {
                                 if (props.isUpdateToProposal === true) {
                                   setIsUpdateModalOpen(true);
@@ -295,13 +312,19 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                                 {!props.isProposer && connectedAccountNounVotes > 0 ? (
                                   <button
                                     type="button"
-                                    className={classes.button}
+                                    className={
+                                      'cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92]'
+                                    }
                                     onClick={() => setIsFormDisplayed(!isFormDisplayed)}
                                   >
                                     {props.isUpdateToProposal === true ? 'Re-sign' : 'Sponsor'}
                                   </button>
                                 ) : (
-                                  <div className={classes.withoutVotesMsg}>
+                                  <div
+                                    className={
+                                      'm-0 mx-auto p-0 px-5 text-center text-[13px] leading-none text-[var(--brand-gray-light-text)]'
+                                    }
+                                  >
                                     <p>
                                       <Trans>
                                         Sponsoring a proposal requires at least one Noun vote
@@ -326,7 +349,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   )}
                   {isFormDisplayed ? (
                     <motion.div
-                      className={classes.formOverlay}
+                      className={
+                        'absolute left-0 top-0 z-[100] flex w-full items-center justify-center rounded-[12px] bg-white'
+                      }
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -334,7 +359,9 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     >
                       <button
                         type="button"
-                        className={classes.closeButton}
+                        className={
+                          'absolute right-[10px] top-0 z-[99] cursor-pointer border-0 bg-transparent text-[20px] text-black'
+                        }
                         onClick={() => {
                           setIsFormDisplayed(false);
                           props.setDataFetchPollInterval(0);
@@ -363,7 +390,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
             <img
               src="/loading-noggles.svg"
               alt="loading"
-              className={classes.transactionModalSpinner}
+              className={'mx-auto mb-2 block max-w-[45px]'}
             />
           )}
         </div>

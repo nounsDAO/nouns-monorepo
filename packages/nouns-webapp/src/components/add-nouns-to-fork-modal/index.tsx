@@ -14,7 +14,6 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useIsApprovedForAll, useSetApprovalForAll } from '@/wrappers/noun-token';
 import { useAllProposals, useEscrowToFork, useJoinFork } from '@/wrappers/nouns-dao';
 
-import classes from './add-nouns-to-fork-modal.module.css';
 
 type AddNounsToForkModalProps = {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -227,15 +226,18 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
   }, [props.isForkingPeriod, escrowToForkState, joinForkState, handleAddToForkStateChange]);
 
   const confirmModalContent = (
-    <div className={classes.confirmModalContent}>
-      <h2 className={classes.modalTitle}>Confirm</h2>
-      <p className={classes.modalDescription}>
+    <div className="font-normal">
+      <h2>Confirm</h2>
+      <p>
         By joining this fork you are giving up your Nouns to be retrieved in the new fork. This
         cannot be undone.
       </p>
       <button
         type="button"
-        className={cn(classes.button, classes.primaryButton)}
+        className={cn(
+          'font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+          'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+        )}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
           props.setIsModalOpen(true);
@@ -245,7 +247,9 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       </button>
       <button
         type="button"
-        className={cn(classes.button, classes.secondaryButton)}
+        className={cn(
+          'font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+        )}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
         }}
@@ -256,12 +260,12 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
   );
 
   const modalContent = (
-    <div className={classes.modalContent}>
-      <h2 className={classes.modalTitle}>
+    <div className="font-normal">
+      <h2>
         {props.isForkingPeriod ? 'Join fork' : 'Add Nouns to escrow'}
       </h2>
 
-      <p className={classes.modalDescription}>
+      <p>
         {!props.isForkingPeriod ? (
           <>
             Nouners can withdraw their tokens from escrow as long as the forking period hasn&apos;t
@@ -275,15 +279,15 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         )}
       </p>
 
-      <div className={classes.fields}>
-        <InputGroup className={classes.inputs}>
+      <div>
+        <InputGroup className={"mb-[10px] flex w-full flex-col gap-[10px]"}>
           <div>
             <FormText>
               <strong>Reason</strong> (optional)
             </FormText>
             <FormControl
               aria-label="Your reason for forking"
-              className={classes.reasonInput}
+              className="w-full rounded-[6px] px-[12px] py-[10px]"
               value={reasonText}
               onChange={e => setReasonText(e.target.value)}
               placeholder={'Your reason for forking'}
@@ -295,7 +299,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </FormText>
             <FormSelect
               aria-label="Select proposal(s)"
-              className={classes.selectMenu}
+              className="w-full rounded-[6px] px-[12px] py-[10px]"
               defaultValue="default"
               onChange={e => {
                 setSelectedProposals([+e.target.value, ...selectedProposals]);
@@ -311,15 +315,15 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           </div>
         </InputGroup>
       </div>
-      <div className={classes.selectedProposals}>
+      <div className="flex flex-col gap-[10px]">
         {selectedProposals.map((proposalId, i) => {
           const prop = proposals?.find(
             proposal => proposal?.id != null && +proposal.id === proposalId,
           );
           return (
-            <div className={classes.selectedProposal} key={i}>
+            <div className="flex flex-row items-center justify-between rounded-[8px] border-2 border-[#d3d3d3] bg-white px-[10px] py-[6px] text-[16px]" key={i}>
               <span>
-                <a href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer">
+                <a className="text-[#14161b] no-underline hover:underline" href={`/vote/${prop?.id}`} target="_blank" rel="noreferrer">
                   <strong>{prop?.id}</strong> {prop?.title}
                 </a>
               </span>
@@ -329,7 +333,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                   const newSelectedProposals = selectedProposals.filter(id => id !== proposalId);
                   setSelectedProposals(newSelectedProposals);
                 }}
-                className={classes.removeButton}
+                className="h-[20px] w-[20px] cursor-pointer border-0 bg-transparent p-0 text-[20px] opacity-20 transition-all duration-200 ease-in-out hover:opacity-100"
               >
                 <MinusCircleIcon />
               </button>
@@ -337,8 +341,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           );
         })}
       </div>
-      <div className={classes.sectionHeader}>
-        <div className={classes.sectionLabel}>
+      <div className="my-[20px] flex flex-row items-end justify-between max-[991px]:flex-col">
+        <div className="w-[70%] max-[991px]:w-full">
           <p>
             <strong>Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}</strong>
           </p>
@@ -369,7 +373,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
             </button>
           )}
       </div>
-      <div className={classes.nounsList}>
+      <div className="mt-[10px] flex flex-row flex-wrap items-center justify-center gap-[10px]">
         {ownedNouns.map((nounId: number) => {
           return (
             <button
@@ -392,18 +396,19 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 (props.userEscrowedNouns?.includes(nounId) ?? false)
               }
               className={cn(
-                classes.nounButton,
-                selectedNouns.includes(nounId) && classes.selectedNounButton,
-                (props.userEscrowedNouns?.includes(nounId) ?? false) && classes.escrowedNoun,
+                'font-londrina relative w-[calc(33%_-_6px)] cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-[1] transition-all duration-200 ease-in-out max-[991px]:w-full hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50',
+                selectedNouns.includes(nounId) && 'border-2 border-[rgba(0,0,0,0.75)]',
+                (props.userEscrowedNouns?.includes(nounId) ?? false) &&
+                  'overflow-hidden border-[#e8e8e8] opacity-100 [&>div]:opacity-[0.65] hover:border-[#e8e8e8] hover:shadow-none',
               )}
               key={nounId}
             >
               <div>
-                <img src={`https://noun.pics/${nounId}`} alt="noun" className={classes.nounImage} />
+                <img src={`https://noun.pics/${nounId}`} alt="noun" className="max-w-[48px] rounded-[6px]" />
                 Noun {nounId}
               </div>
               {(props.userEscrowedNouns?.includes(nounId) ?? false) && (
-                <span className={classes.escrowedNounLabel}>
+                <span className="font-pt absolute left-0 top-0 w-full rounded-[4px] border-b border-[#e6e6e6] bg-white p-0 text-center text-[10px] font-bold">
                   {props.isForkingPeriod ? 'in fork' : 'in escrow'}
                 </span>
               )}
@@ -411,7 +416,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           );
         })}
       </div>
-      <div className={classes.modalActions}>
+      <div className="my-[20px] text-center">
         {!(
           Boolean(approvalErrorMessage) ||
           Boolean(errorMessage) ||
@@ -421,10 +426,10 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           <button
             type="button"
             className={cn(
-              classes.button,
-              classes.primaryButton,
+              'font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+              'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
               (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) &&
-                classes.loadingButton,
+                'mb-5 w-full rounded-[8px] border border-[#e6e6e6] bg-[rgba(0,0,0,0.05)] p-4 text-center text-[15px] font-bold text-[#14161b] font-pt',
             )}
             disabled={
               selectedNouns.length === 0 ||
@@ -449,7 +454,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 <img
                   src="/loading-noggles.svg"
                   alt="loading"
-                  className={classes.transactionModalSpinner}
+                  className="mx-auto mb-2 block max-w-[45px]"
                 />
               )}
               {isApprovalWaiting && 'Awaiting approval'}
@@ -460,7 +465,10 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           </button>
         )}
         {(Boolean(approvalErrorMessage) || Boolean(errorMessage)) && (
-          <p className={cn(classes.statusMessage, classes.errorMessage)}>
+          <p className={cn(
+            'font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-150 ease-in-out',
+            'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+          )}>
             {Boolean(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
             <button
               type="button"
@@ -474,7 +482,12 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         )}
         {isTxSuccessful && (
           <>
-            <p className={cn(classes.statusMessage, classes.successMessage)}>
+            <p
+              className={cn(
+                'font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-150 ease-in-out',
+                'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+              )}
+            >
               <a
                 href={
                   escrowToForkState.transaction?.hash
@@ -505,11 +518,11 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         )}
         {isTwoStepProcess && (
           <>
-            <ul className={classes.steps}>
+            <ul className="m-0 list-none p-0">
               <li>
                 <strong>
                   {(isApprovalWaiting || isApprovalLoading) && (
-                    <span className={classes.spinner}>
+                    <span className={"mr-[3px] inline-block h-[20px] w-[20px]"}>
                       <Spinner animation="border" />
                     </span>
                   )}
@@ -525,7 +538,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
               <li>
                 <strong>
                   {(isWaiting || isLoading) && (
-                    <span className={classes.spinner}>
+                    <span className={"mr-[3px] inline-block h-[20px] w-[20px]"}>
                       <Spinner animation="border" />
                     </span>
                   )}
@@ -541,7 +554,9 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                     isTxSuccessful ||
                     Boolean(errorMessage) ||
                     Boolean(approvalErrorMessage)
-                  ) && <span className={classes.placeholder}></span>}
+                  ) && (
+                    <span className="relative top-[3px] inline-block h-[18px] w-[18px] animate-pulse rounded-full bg-[rgba(0,0,0,0.3)] opacity-50"></span>
+                  )}
                 </strong>
                 <Trans>Add to escrow</Trans>
               </li>
@@ -549,11 +564,11 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           </>
         )}
         {isApprovedForAll === false && (!isApprovalWaiting || !isApprovalLoading) && (
-          <p className={classes.approvalNote}>You&apos;ll be asked to approve access</p>
+          <p>You&apos;ll be asked to approve access</p>
         )}
         {selectedNouns.length > 0 && !isTxSuccessful && (
           <>
-            <p className={classes.selectedNouns}>
+            <p className={"text-[15px] text-[#14161b]"}>
               Adding {selectedNouns.map(nounId => `Noun ${nounId}`).join(', ')}
             </p>
           </>

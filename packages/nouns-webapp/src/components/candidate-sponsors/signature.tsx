@@ -13,8 +13,6 @@ import { cn } from '@/lib/utils';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { useCancelSignature } from '@/wrappers/nouns-dao';
 
-import classes from './candidate-sponsors.module.css';
-
 type CandidateSignatureProps = {
   reason: string;
   expirationTimestamp: number;
@@ -84,33 +82,34 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelSigState, setCancelStatusOverlay]);
+  const isInvalid = Boolean(props.signerHasActiveOrPendingProposal);
   return (
     <li
       className={cn(
-        classes.sponsor,
-        Boolean(cancelStatusOverlay?.show) && classes.cancelOverlay,
-        Boolean(props.signerHasActiveOrPendingProposal) && classes.sponsorInvalid,
+        'relative m-0 mb-[10px] list-none rounded-[12px] border border-[#e6e6e6] bg-[#fbfbfc] p-[10px]',
+        Boolean(cancelStatusOverlay?.show) && 'min-h-[75px]',
       )}
     >
       {Boolean(props.signerHasActiveOrPendingProposal) && (
-        <div className={classes.sponsorInvalidLabel}>
+        <div
+          className={
+            'mb-2 rounded-[8px] bg-[rgba(0,0,0,0.05)] px-4 py-2 text-center text-[13px] leading-none text-[rgba(0,0,0,0.4)]'
+          }
+        >
           <Trans>Signature invalid while signer has an active or pending proposal</Trans>
         </div>
       )}
-      <div
-        className={cn(
-          classes.sponsorInteriorWrapper,
-          cancelSigState.status === 'Success' && classes.hidden,
-        )}
-      >
-        <div className={classes.details}>
-          <div className={classes.sponsorInfo}>
-            <p className={classes.sponsorName}>
+      <div className={cn(cancelSigState.status === 'Success' && 'opacity-0')}>
+        <div className={cn('flex flex-row justify-between', isInvalid && 'opacity-50')}>
+          <div>
+            <p className={'m-0 p-0 leading-[1.1]'}>
               <a href={buildEtherscanAddressLink(props.signer)} target={'_blank'} rel="noreferrer">
-                <ShortAddress address={props.signer} />
+                <span className="text-[14px] font-bold text-black no-underline hover:underline">
+                  <ShortAddress address={props.signer} />
+                </span>
               </a>
             </p>
-            <p className={classes.expiration}>
+            <p className={'text-[13px] text-[#646465]'}>
               {(Boolean(props.isUpdateToProposal) && !Boolean(props.isParentProposalUpdatable)) ||
               props.expirationTimestamp < timestampNow
                 ? 'Expired'
@@ -118,31 +117,52 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               {expiration}
             </p>
           </div>
-          <p className={classes.voteCount}>
+          <p className={'m-0 p-0 text-[13px] font-bold text-[#646465]'}>
             {props.voteCount} vote{props.voteCount !== 1 && 's'}
           </p>
         </div>
         {props.reason && (
-          <div className={classes.reason} onClick={() => setIsReasonShown(!isReasonShown)}>
+          <div
+            className={cn(
+              'mt-2.5 border-t border-[#e6e6e6] pt-[10px] text-[13px] leading-[1.2] text-[#646465]',
+              isInvalid && 'opacity-50',
+            )}
+            onClick={() => setIsReasonShown(!isReasonShown)}
+          >
             <div
               className={cn(
-                classes.reasonWrapper,
-                isReasonShown && props.reason.length > 50 && classes.reasonShown,
+                isReasonShown && props.reason.length > 50
+                  ? 'block overflow-visible'
+                  : 'overflow-hidden',
               )}
             >
-              <p>{props.reason}</p>
+              <p className="m-0 p-0">{props.reason}</p>
             </div>
             {!isReasonShown && props.reason.length > 50 && (
-              <button type="button" className={classes.readMore} onClick={() => {}}>
+              <button
+                type="button"
+                className={
+                  'relative z-[2] -mt-5 block w-full border-0 bg-[linear-gradient(0deg,rgba(251,251,252,1)_33%,rgba(251,251,252,0)_100%)] px-[3px] pb-1 pt-5 text-center text-[13px] font-bold text-black'
+                }
+                onClick={() => {}}
+              >
                 more
               </button>
             )}
           </div>
         )}
         {props.isAccountSigner && (
-          <div className={classes.removeSignature}>
+          <div
+            className={
+              'mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-center leading-[1.1]'
+            }
+          >
             {isCancelSignaturePending ? (
-              <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+              <img
+                src="/loading-noggles.svg"
+                alt="loading"
+                className={'mx-auto max-w-[60px] p-[10px]'}
+              />
             ) : (
               <button
                 type="button"
@@ -150,6 +170,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                   cancel();
                   setIsCancelSignaturePending(true);
                 }}
+                className={
+                  'm-0 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-[var(--brand-color-red)]'
+                }
               >
                 <Trans>Remove sponsorship</Trans>
               </button>
@@ -157,8 +180,12 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           </div>
         )}
         {Boolean(props.isUpdateToProposal) && !props.isAccountSigner && (
-          <p className={classes.sigStatus}>
-            <span>
+          <p
+            className={
+              'mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-left text-[12px] leading-[1.1] text-[#646465]'
+            }
+          >
+            <span className="mr-2 inline-block text-[var(--brand-color-green)]">
               <FontAwesomeIcon icon={faCircleCheck} />
             </span>
             <Trans>Re-signed</Trans>
@@ -168,10 +195,11 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
       {Boolean(cancelStatusOverlay?.show) && (
         <div
           className={cn(
-            classes.cancelStatusOverlay,
+            'absolute left-[3px] top-[3px] z-[3] flex size-[calc(100%-6px)] flex-col justify-center border bg-white p-[10px] text-center',
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
-              classes.errorMessage,
-            cancelSigState.status === 'Success' && classes.successMessage,
+              'border-[var(--brand-color-red-translucent)] bg-[#fbfbfc] text-[var(--brand-color-red)]',
+            cancelSigState.status === 'Success' &&
+              'border-[var(--brand-color-green)] bg-[#fbfbfc] text-[var(--brand-color-green)]',
           )}
         >
           {(cancelSigState.status === 'Exception' ||
@@ -179,7 +207,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             cancelSigState.status === 'Success') && (
             <button
               type="button"
-              className={classes.closeButton}
+              className={
+                'absolute right-[10px] top-0 z-[99] cursor-pointer border-0 bg-transparent text-[20px] text-black'
+              }
               onClick={() => {
                 props.handleRefetchCandidateData();
                 setCancelStatusOverlay(undefined);
@@ -191,8 +221,10 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               &times;
             </button>
           )}
-          <div className={classes.cancelStatusOverlayTitle}>{cancelStatusOverlay.title}</div>
-          <div className={classes.cancelStatusOverlayMessage}>{cancelStatusOverlay.message}</div>
+          <div className={'text-center text-[18px] font-bold leading-none'}>
+            {cancelStatusOverlay.title}
+          </div>
+          <div className={'mt-[4px] text-[14px] font-normal'}>{cancelStatusOverlay.message}</div>
         </div>
       )}
     </li>

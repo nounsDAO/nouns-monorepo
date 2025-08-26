@@ -10,8 +10,6 @@ import { cn } from '@/lib/utils';
 import { Proposal, useDynamicQuorumProps } from '@/wrappers/nouns-dao';
 import { adjustedNounSupplyAtPropSnapshot } from '@/wrappers/subgraph';
 
-import classes from './dynamic-quorum-info-modal.module.css';
-
 import responsiveUiUtilsClasses from '@/utils/responsive-ui-utils.module.css';
 
 const PLOTTING_CONSTANTS = {
@@ -76,18 +74,26 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
 
   return (
     <>
-      <div className={classes.closeBtnWrapper}>
-        <button type="button" onClick={onDismiss} className={classes.closeBtn}>
-          <XIcon className={classes.icon} />
+      <div className="flex justify-end px-8 py-4">
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="fixed z-[100] h-10 w-10 rounded-full border-0 transition-all duration-150 ease-in-out hover:cursor-pointer hover:bg-white/50"
+        >
+          <XIcon className="h-6 w-6" />
         </button>
       </div>
-      <div className={classes.modal}>
-        <div className={classes.content}>
-          <h1 className={classes.title}>
+      <div
+        className={
+          'font-pt fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold shadow-quorum-modal max-[1200px]:bottom-0 max-[1200px]:left-0 max-[1200px]:top-[5vh] max-[1200px]:max-h-full max-[1200px]:w-full max-[1200px]:rounded-b-none max-[1200px]:bg-transparent max-[1200px]:shadow-none'
+        }
+      >
+        <div className="max-h-[90vh] overflow-y-hidden p-4 max-[1200px]:h-full max-[1200px]:max-h-full">
+          <h1 className="mb-[-1rem] flex flex-col font-londrina">
             <Trans>Dynamic Threshold</Trans>
           </h1>
 
-          <p className={classes.mainCopy}>
+          <p className="mb-2 font-medium max-[1200px]:text-white">
             {window.innerWidth < 1200 ? (
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
@@ -105,13 +111,13 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           </p>
 
           {/* Mobile - no graph content */}
-          <div className={cn(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
-            <div className={classes.mobileQuorumInfo}>
+          <div className={cn(responsiveUiUtilsClasses.mobileOnly, 'mt-12')}>
+            <div className={"flex justify-between text-lg font-medium text-white"}>
               <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
             </div>
 
-            <div className={classes.mobileQuorumInfo}>
+            <div className={"flex justify-between text-lg font-medium text-white"}>
               <span>Current Threshold:</span>{' '}
               {Math.floor(
                 (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) / 10_000,
@@ -119,22 +125,22 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
               Nouns
             </div>
 
-            <div className={classes.mobileQuorumInfo}>
+            <div className={"flex justify-between text-lg font-medium text-white"}>
               <span>Max Threshold:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
             </div>
           </div>
 
           {/* Outter container */}
-          <div className={cn(classes.graphContainer, classes.outterGraphContainer)}>
-            <div className={classes.graphWrapper}>
+          <div className={cn('rounded-[14px] p-4 shadow-quorum-modal', 'mt-8 bg-[rgba(244,244,248,1)] pb-8 pl-4 pr-12 pt-8 max-[1200px]:hidden')}>
+            <div className="flex">
               {/* Y-Axis label */}
-              <div className={classes.yAxisText}>
+              <div className="flex justify-center [writing-mode:vertical-rl] [text-orientation:mixed]">
                 <Trans>Required % of Nouns to Pass</Trans>
               </div>
 
               {/* Inner graph container */}
-              <div className={cn(classes.graphContainer, classes.innerGraphContainer)}>
+              <div className={cn('rounded-[14px] p-4 shadow-quorum-modal', 'ml-4 mt-4 w-full overflow-y-hidden bg-white pb-0 pl-0 pr-0 shadow-none')}>
                 {/* <svg width="950" height="320"> */}
                 <svg width={PLOTTING_CONSTANTS.width} height={PLOTTING_CONSTANTS.height}>
                   <line

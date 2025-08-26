@@ -21,7 +21,6 @@ import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
 import { Link, useParams } from 'react-router';
 
 import VersionTab from './version-tab';
-import classes from './vote.module.css';
 
 import editorClasses from '@/components/proposal-editor/proposal-editor.module.css';
 import headerClasses from '@/components/proposal-header/proposal-header.module.css';
@@ -66,12 +65,16 @@ const ProposalHistory = () => {
     );
   };
   const headerDiffs = (str: string) => {
-    return <h1 className={classes.titleDiffs}>{str}</h1>;
+    return (
+      <h1 className="mt-4 font-londrina text-[1.7rem] text-[var(--brand-gray-light-text)]">
+        {str}
+      </h1>
+    );
   };
 
   return (
-    <Section fullWidth={false} className={classes.votePage}>
-      <div className={classes.wrapper}>
+    <Section fullWidth={false} className="[&_a]:text-[var(--brand-dark-red)]">
+      <div className="mx-auto">
         {proposal && (
           <>
             <div className={headerClasses.backButtonWrapper}>
@@ -129,7 +132,7 @@ const ProposalHistory = () => {
           </>
         )}
       </div>
-      <div className={cn(classes.proposal, classes.wrapper)}>
+      <div className={cn('mt-4 bg-white', 'mx-auto')}>
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 md:col-span-12 lg:col-span-8">
             {((!isDiffsVisible && proposalVersions && activeVersion) ||
@@ -142,8 +145,8 @@ const ProposalHistory = () => {
               />
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
-              <div className={classes.diffsWrapper}>
-                <div className={cn('col-span-12', classes.section, 'm-0 p-0')}>
+              <div className="[&_table:first-of-type]:ml-[-10px] min-[992px]:[&_table:first-of-type]:ml-[-30px]">
+                <div className={cn('col-span-12', 'break-words pt-8 mt-8', 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
                   </h5>
@@ -165,7 +168,7 @@ const ProposalHistory = () => {
                   showDiffOnly={false}
                 />
                 <div className="grid grid-cols-12 gap-3">
-                  <div className={cn('col-span-12', classes.section)}>
+                  <div className={cn('col-span-12', 'break-words pt-8 mt-8')}>
                     <h5>
                       <Trans>Proposed Transactions</Trans>
                     </h5>
@@ -180,11 +183,11 @@ const ProposalHistory = () => {
             )}
           </div>
           <div className="col-span-12 md:col-span-12 lg:col-span-4">
-            <div className={classes.versionHistory}>
-              <div className={classes.versionHistoryHeader}>
+            <div className="sticky top-[20px] max-[992px]:relative">
+              <div className="mb-4 flex items-baseline justify-between">
                 <h2>Version History</h2>
               </div>
-              <div className={classes.versionsList}>
+              <div className="flex flex-col gap-[10px] text-[var(--brand-gray-light-text)]">
                 {proposalVersions &&
                   proposalVersions
                     .map((version, i) => {
@@ -205,8 +208,8 @@ const ProposalHistory = () => {
               {activeVersion > 1 && (
                 <button
                   className={cn(
-                    classes.diffsLink,
-                    isDiffsVisible ? classes.diffsLinkActive : classes.diffsLinkInactive,
+                    'mx-auto mb-0 mt-4 block rounded-lg border-2 border-transparent bg-black px-3 py-2 text-center text-[14px] font-bold text-white',
+                    isDiffsVisible && 'border-[3px] border-black bg-white text-black',
                   )}
                   onClick={() => setIsDiffsVisible(!isDiffsVisible)}
                 >

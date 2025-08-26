@@ -71,15 +71,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
   return (
     <Section
       fullWidth={false}
-      className={cn(classes.documentationSection, '-mb-10 sm:-mb-20')}
+      className={cn('!py-8 lg:!py-16', '-mb-10 sm:-mb-20')}
       style={{ background: props.backgroundColor }}
     >
       <div className="lg:col-span-10 lg:col-start-2">
-        <div className={classes.headerWrapper}>
-          <h1>
+        <div className="p-4 text-[1.3rem] lg:p-0">
+          <h1 className="font-londrina text-[4rem]">
             <Trans>WTF?</Trans>
           </h1>
-          <p className={classes.aboutText}>
+          <p className="font-pt m-0 my-12 font-medium leading-7 tracking-[-0.25px]">
             <Trans>
               Nouns are an experimental attempt to improve the formation of on-chain avatar
               communities. While projects such as {cryptopunksLink} have attempted to bootstrap
@@ -87,15 +87,21 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               governance, and a treasury that can be used by the community.
             </Trans>
           </p>
-          <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
+          <p
+            className="font-pt m-0 my-12 font-medium leading-7 tracking-[-0.25px]"
+            style={{ paddingBottom: '4rem' }}
+          >
             <Trans>
               Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
             </Trans>
           </p>
         </div>
         <Accordion flush>
-          <Accordion.Item eventKey="0" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="0"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Summary</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -141,12 +147,15 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="1" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="1"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Daily Auctions</Trans>
             </Accordion.Header>
             <Accordion.Body>
-              <p className={classes.aboutText}>
+              <p className="m-0">
                 <Trans>
                   The Nouns Auction Contract will act as a self-sufficient Noun generation and
                   distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of
@@ -154,8 +163,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
                   where they are governed by Noun owners.
                 </Trans>
               </p>
-
-              <p className={classes.aboutText}>
+              <p className="m-0">
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
                   Noun to be minted and a new 24 hour auction to begin.{' '}
@@ -170,8 +178,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="2" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="2"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -185,8 +196,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="3" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="3"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nouns DUNA</Trans>
             </Accordion.Header>
             <Accordion.Body>

@@ -24,7 +24,7 @@ import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalCandidate, useAddSignature } from '@/wrappers/nouns-data';
 
-import classes from './candidate-sponsors.module.css';
+// CSS module replaced with inline Tailwind classes
 
 const createProposalTypes = {
   Proposal: [
@@ -326,33 +326,43 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
   }, [data, isGetSignatureWaiting]);
 
   return (
-    <div className={classes.formWrapper}>
+    <div className="w-full p-4 text-left">
       <>
-        <div className={cn(classes.fields, (isWaiting || isLoading) && classes.disabled)}>
-          <h4 className={classes.formLabel}>Sponsor this proposal candidate</h4>
+        <div className={cn(isWaiting || isLoading ? 'opacity-50' : undefined)}>
+          <h4 className="mb-[2px] font-bold">Sponsor this proposal candidate</h4>
           <textarea
             placeholder="Optional reason"
             value={reasonText}
             onChange={event => setReasonText(event.target.value)}
             disabled={isWaiting || isLoading}
+            className="w-full mb-[10px] rounded-[8px] p-[10px] text-[14px] border border-[#aaa]"
           />
 
-          <h4 className={classes.formLabel}>Expiration date (required)</h4>
+          <h4 className="mb-[2px] font-bold">Expiration date (required)</h4>
           <input
             type="date"
             min={new Date().toISOString().split('T')[0]} // only future dates
             onChange={e => setExpirationDate(+dayjs(e.target.value).unix())}
             disabled={isWaiting || isLoading}
+            className="w-full mb-[10px] rounded-[8px] p-[10px] text-[14px] border border-[#aaa]"
           />
-          {dateErrorMessage && <p className={classes.dateErrorMessage}>{dateErrorMessage}</p>}
+          {dateErrorMessage && (
+            <p className="m-0 mb-2 p-0 text-left text-[13px] leading-[1] text-[var(--brand-color-red)]">
+              {dateErrorMessage}
+            </p>
+          )}
         </div>
         <div className="text-center">
           {isWaiting || isLoading ? (
-            <img src="/loading-noggles.svg" alt="loading" className={classes.loadingNoggles} />
+            <img
+              src="/loading-noggles.svg"
+              alt="loading"
+              className="mx-auto max-w-[60px] p-[10px]"
+            />
           ) : (
             <button
               type="button"
-              className={classes.button}
+              className="cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92] disabled:border disabled:border-[#e2e3e8]"
               onClick={() => {
                 sign();
               }}
@@ -368,18 +378,18 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
         </div>
 
         {isOverlayVisible && (
-          <div className={classes.submitSignatureStatusOverlay}>
+          <div className="absolute left-[3px] top-[3px] z-[100] flex flex-col justify-center bg-white p-[10px] text-center [height:calc(100%-6px)] [width:calc(100%-6px)]">
             <span
               className={cn(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                  classes.loadingButton,
+                  'font-pt mb-5 w-full rounded-[8px] border border-[#e6e6e6] bg-[rgba(0,0,0,0.05)] p-4 text-center text-[15px] font-bold text-[#14161b]'
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
                 <img
                   src="/loading-noggles.svg"
                   alt="loading"
-                  className={classes.transactionModalSpinner}
+                  className="mx-auto mb-2 block max-w-[45px]"
                 />
               )}
               {isGetSignatureWaiting && 'Awaiting signature'}
@@ -388,7 +398,12 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               {isLoading && 'Submitting signature'}
             </span>
             {Boolean(getSignatureErrorMessage || errorMessage) && (
-              <p className={cn(classes.statusMessage, classes.errorMessage)}>
+              <p
+                className={cn(
+                  'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out',
+                  'text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)]',
+                )}
+              >
                 {getSignatureErrorMessage || errorMessage}
                 <button
                   type="button"
@@ -402,7 +417,12 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             )}
             {isTxSuccessful && (
               <>
-                <p className={cn(classes.statusMessage, classes.successMessage)}>
+                <p
+                  className={cn(
+                    'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out',
+                    'text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)]',
+                  )}
+                >
                   <a
                     href={
                       addSignatureState.transaction?.hash &&
@@ -410,6 +430,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                     }
                     target="_blank"
                     rel="noreferrer"
+                    className="text-[var(--brand-color-green)] no-underline"
                   >
                     Signature added successfully
                     {addSignatureState.transaction != null && (
@@ -420,11 +441,11 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               </>
             )}
             <>
-              <ul className={classes.steps}>
-                <li>
-                  <strong>
+              <ul className="m-0 list-none p-0">
+                <li className="relative mb-[6px] text-[14px] font-normal">
+                  <strong className="relative top-[2px]">
                     {(isGetSignatureWaiting || isSignPending) && (
-                      <span className={classes.spinner}>
+                      <span className="mr-[3px] inline-block h-[20px] w-[20px] opacity-50">
                         <Spinner animation="border" />
                       </span>
                     )}
@@ -437,10 +458,10 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                   </strong>
                   <Trans>Signature request</Trans>
                 </li>
-                <li>
-                  <strong>
+                <li className="relative mb-[6px] text-[14px] font-normal">
+                  <strong className="relative top-[2px]">
                     {(isWaiting || isLoading) && (
-                      <span className={classes.spinner}>
+                      <span className="mr-[3px] inline-block h-[20px] w-[20px] opacity-50">
                         <Spinner animation="border" />
                       </span>
                     )}
@@ -456,7 +477,9 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                       isTxSuccessful ||
                       Boolean(errorMessage) ||
                       Boolean(getSignatureErrorMessage)
-                    ) && <span className={classes.placeholder}></span>}
+                    ) && (
+                      <span className="relative top-[3px] inline-block h-[18px] w-[18px] rounded-full bg-[rgba(0,0,0,0.3)] opacity-50 animate-pulse"></span>
+                    )}
                   </strong>
                   <Trans>Submit signature</Trans>
                 </li>
@@ -467,7 +490,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             {isTxSuccessful && (
               <button
                 type="button"
-                className={classes.closeButton}
+                className="absolute right-[10px] top-0 z-[99] cursor-pointer border-0 bg-transparent text-[20px] text-black"
                 onClick={() => {
                   props.setIsFormDisplayed(false);
                   clearTransactionState();
@@ -479,7 +502,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           </div>
         )}
       </>
-      <p className={classes.note}>
+      <p className="m-0 text-center text-[12px] leading-[1.2] text-[#646465]">
         <Trans>
           Once a signed proposal is onchain, signers will need to wait until the proposal is queued
           or defeated before putting another proposal onchain.

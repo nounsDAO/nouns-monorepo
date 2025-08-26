@@ -550,11 +550,8 @@ const VotePage = () => {
                 return <Fragment key={parsedCallData.streamAddress} />;
               }
               return (
-                <div
-                  key={parsedCallData.streamAddress}
-                  className={cn(classes.section, classes.transitionStateButtonSection)}
-                >
-                  <span className={classes.boldedLabel}>
+                <div key={parsedCallData.streamAddress} className={cn('break-words', 'border-t-0')}>
+                  <span className={'mb-2 font-medium text-[var(--brand-gray-light-text)]'}>
                     <Trans>Only visible to you</Trans>
                   </span>
                   <div className="grid gap-4">
@@ -569,7 +566,9 @@ const VotePage = () => {
                         });
                         setShowStreamWithdrawModal(true);
                       }}
-                      className={classes.transitionStateButton}
+                      className={
+                        'font-pt cursor-pointer bg-black px-4 py-[10px] font-bold text-white transition-all duration-150 ease-in-out hover:opacity-50'
+                      }
                     >
                       <Trans>
                         Withdraw from Stream{' '}
@@ -582,12 +581,16 @@ const VotePage = () => {
                 </div>
               );
             })}
-        <div className={cn(classes.section, classes.transitionStateButtonSection)}>
+        <div className={cn('break-words', 'border-t-0')}>
           <div className="grid gap-4">
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
-              <div className={classes.objectionWrapper}>
-                <div className={classes.objection}>
-                  <div className={classes.objectionHeader}>
+              <div
+                className={
+                  'rounded-[12px] border border-[#e6e6e6] px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center'
+                }
+              >
+                <div className={'flex items-center justify-between max-[992px]:flex-col'}>
+                  <div className={'m-0 block p-0 text-[13px] font-bold opacity-70'}>
                     <p>
                       <strong className="block">
                         <Trans>Objection only period</Trans>
@@ -601,11 +604,9 @@ const VotePage = () => {
                   <button
                     type="button"
                     onClick={() => setShowVoteModal(true)}
-                    className={cn(
-                      classes.destructiveTransitionStateButton,
-                      classes.button,
-                      classes.voteAgainst,
-                    )}
+                    className={
+                      'font-pt h-fit cursor-pointer rounded-lg border-0 bg-[var(--brand-color-red)] px-4 py-[10px] font-bold leading-none text-white transition-all duration-150 ease-in-out hover:opacity-70'
+                    }
                   >
                     <Trans>Vote against</Trans>
                   </button>
@@ -614,10 +615,10 @@ const VotePage = () => {
             ) : null}
 
             {isActionable() && (
-              <div className={classes.proposerOptionsWrapper}>
-                <div className={classes.proposerOptions}>
+              <div className="rounded-[12px] border border-[#e6e6e6] px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center">
+                <div className="flex items-center justify-between max-[992px]:flex-col">
                   <p>
-                    <span className={classes.proposerOptionsHeader}>
+                    <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                       <Trans>Proposal functions</Trans>
                     </span>
                     {isProposer() && isUpdateable() && (
@@ -631,11 +632,13 @@ const VotePage = () => {
                   <div className="flex flex-wrap items-center gap-3">
                     <>
                       {isAwaitingStateChange() && (
-                        <div className={cn(classes.awaitingStateChangeButton)}>
+                        <div className={cn('m-1 flex flex-col gap-1')}>
                           <Button
                             onClick={moveStateAction}
                             disabled={isQueuePending || isExecutePending || !isExecutable}
-                            className={cn(classes.transitionStateButton, classes.button)}
+                            className={
+                              'font-pt cursor-pointer bg-black px-4 py-[10px] font-bold text-white transition-all duration-150 ease-in-out hover:opacity-50'
+                            }
                           >
                             {isQueuePending || isExecutePending ? (
                               <LoadingSpinner className="size-4" />
@@ -651,7 +654,9 @@ const VotePage = () => {
                         <Button
                           onClick={destructiveStateAction}
                           disabled={isCancelPending}
-                          className={cn(classes.destructiveTransitionStateButton, classes.button)}
+                          className={
+                            'font-pt h-fit cursor-pointer rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out hover:bg-[var(--brand-color-red)] hover:text-white'
+                          }
                         >
                           {isCancelPending ? (
                             <LoadingSpinner className="size-4" />
@@ -664,7 +669,9 @@ const VotePage = () => {
                     {isProposer() && isUpdateable() && (
                       <Link
                         to={`/vote/${id}/edit`}
-                        className={cn(classes.primaryButton, classes.button)}
+                        className={
+                          'font-pt h-fit rounded-lg border-0 bg-black px-4 py-[10px] font-bold leading-none text-white no-underline transition-all duration-150 ease-in-out hover:opacity-75'
+                        }
                       >
                         <Trans>Edit</Trans>
                       </Link>
@@ -703,10 +710,10 @@ const VotePage = () => {
         {/* TODO abstract this into a component  */}
         <div className="-mx-2 flex flex-wrap">
           <div className="w-full px-2 xl:w-1/3">
-            <div className={classes.voteInfoCard}>
+            <div className={'mt-4 rounded-[12px] p-2'}>
               <div className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
+                <div className={'flex justify-between'}>
+                  <div className={'mt-2 w-max'}>
                     <h1>
                       <Trans>Threshold</Trans>
                     </h1>
@@ -718,24 +725,30 @@ const VotePage = () => {
                         <TooltipTrigger asChild>
                           <div
                             onClick={() => setShowDynamicQuorumInfoModal(isV2Prop)}
-                            className={cn(classes.thresholdInfo, classes.cursorPointer)}
+                            className={cn('text-right', 'cursor-pointer')}
                           >
                             <span>
                               <Trans>Current Threshold</Trans>
                             </span>
                             <h3>
                               <Trans>{i18n.number(Number(currentQuorum ?? 0))} votes</Trans>
-                              <SearchIcon className={cn(classes.dqIcon, 'inline-block')} />
+                              <SearchIcon
+                                className={cn('mb-1 ml-1 size-[18px] opacity-50', 'inline-block')}
+                              />
                             </h3>
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent className={classes.delegateHover}>
+                        <TooltipContent
+                          className={
+                            'rounded-lg bg-[var(--brand-gray-dark-text)] font-medium text-white opacity-75 transition duration-150 ease-in-out'
+                          }
+                        >
                           <Trans>View Threshold Info</Trans>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   ) : (
-                    <div className={classes.thresholdInfo}>
+                    <div className={'text-right'}>
                       <span>
                         <Trans>Threshold</Trans>
                       </span>
@@ -750,13 +763,13 @@ const VotePage = () => {
           </div>
 
           <div className="w-full px-2 xl:w-1/3">
-            <div className={classes.voteInfoCard}>
+            <div className={'mt-4 rounded-[12px] p-2'}>
               <div className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
+                <div className={'flex justify-between'}>
+                  <div className={'mt-2 w-max'}>
                     <h1>{startOrEndTimeCopy()}</h1>
                   </div>
-                  <div className={classes.voteMetadataTime}>
+                  <div className={'min-w-fit text-right'}>
                     <span>
                       {startOrEndTimeTime() &&
                         i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
@@ -776,7 +789,11 @@ const VotePage = () => {
                 {isNonNullish(currentBlock) &&
                   proposal?.objectionPeriodEndBlock !== undefined &&
                   proposal.objectionPeriodEndBlock > 0n && (
-                    <div className={classes.objectionPeriodActive}>
+                    <div
+                      className={
+                        'mt-4 border-t border-[rgba(0,0,0,0.1)] pt-4 text-[var(--brand-gray-light-text)]'
+                      }
+                    >
                       <p>
                         <strong>
                           <Trans>Objection period triggered</Trans>
@@ -792,15 +809,15 @@ const VotePage = () => {
           </div>
 
           <div className="w-full px-2 xl:w-1/3">
-            <div className={classes.voteInfoCard}>
+            <div className={'mt-4 rounded-[12px] p-2'}>
               <div className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
+                <div className={'flex justify-between'}>
+                  <div className={'mt-2 w-max'}>
                     <h1>
                       <Trans>Snapshot</Trans>
                     </h1>
                   </div>
-                  <div className={classes.snapshotBlock}>
+                  <div className={'text-right'}>
                     <span>
                       <Trans>Taken at block</Trans>
                     </span>
@@ -814,7 +831,7 @@ const VotePage = () => {
       </div>
 
       {isUpdateable() ? (
-        <div className={classes.v3ProposalWrapper}>
+        <div className={'mt-8'}>
           <div className="flex flex-wrap">
             <div className="w-full xl:w-2/3">
               <ProposalContent
@@ -825,7 +842,7 @@ const VotePage = () => {
                 proposeOnV1={proposal.onTimelockV1}
               />
             </div>
-            <div className={cn('w-full xl:w-1/3', classes.sidebar)}>
+            <div className={cn('w-full xl:w-1/3', 'min-[993px]:h-full')}>
               {proposalVersions !== undefined && (
                 <VoteSignals
                   feedback={proposalFeedback}

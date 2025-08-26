@@ -15,7 +15,7 @@ import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';
 
-import classes from './select-sponsors-to-propose.module.css';
+// CSS module replaced with inline Tailwind classes
 
 type Props = {
   isModalOpen: boolean;
@@ -108,11 +108,11 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
     handleUpdateProposalStateChange(updateProposalBySigsState);
   }, [updateProposalBySigsState, handleUpdateProposalStateChange]);
   const modalContent = (
-    <div className={classes.modalContent}>
-      <h2 className={classes.modalTitle}>
+    <div className="font-normal">
+      <h2>
         <Trans>Update proposal</Trans>
       </h2>
-      <p className={classes.modalDescription}>
+      <p>
         <Trans>Add an optional message for the changes to the proposal</Trans>
       </p>
       <FormControl
@@ -120,16 +120,17 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         placeholder={'Optional message'}
         value={reason}
         onChange={e => setReason(e.target.value)}
-        className={classes.reasonTextarea}
+        className="font-pt mb-[10px] w-full rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] px-[12px] py-[10px] text-[16px] leading-normal"
       />
-      <div className={classes.modalActions}>
+      <div className="my-[20px] text-center">
         {!(Boolean(errorMessage) || isTxSuccessful) && (
           <button
             type="button"
             className={cn(
-              classes.button,
-              classes.primaryButton,
-              (isWaiting || isLoading) && classes.loadingButton,
+              'font-pt h-fit rounded-[8px] border-0 bg-[#faf4f8] px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+              'mb-4 text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+              (isWaiting || isLoading) &&
+                'font-pt w-full border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)]',
             )}
             disabled={isWaiting || isLoading}
             onClick={() => {
@@ -142,7 +143,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
                 <img
                   src="/loading-noggles.svg"
                   alt="loading"
-                  className={classes.transactionModalSpinner}
+                  className="mx-auto mb-2 block max-w-[45px]"
                 />
               )}
               {isWaiting && 'Awaiting confirmation'}
@@ -152,7 +153,12 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         )}
 
         {Boolean(errorMessage) && (
-          <p className={cn(classes.statusMessage, classes.errorMessage)}>
+          <p
+            className={cn(
+              'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+              'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+            )}
+          >
             {errorMessage}
             <button
               type="button"
@@ -166,7 +172,12 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         )}
         {isTxSuccessful && (
           <>
-            <p className={cn(classes.statusMessage, classes.successMessage)}>
+            <p
+              className={cn(
+                'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+                'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+              )}
+            >
               <strong>Success!</strong> <br />
               <a
                 href={
@@ -175,6 +186,7 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
                 }
                 target="_blank"
                 rel="noreferrer"
+                className="text-[var(--brand-color-green)] no-underline"
               >
                 <Link to={`/vote/${props.proposalIdToUpdate}`}>
                   Proposal {props.proposalIdToUpdate} has been updated
