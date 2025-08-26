@@ -8,7 +8,7 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import dynamic from 'next/dynamic';
-import { Alert, Button, Col, Form } from 'react-bootstrap';
+import { Alert, Button, Form } from 'react-bootstrap';
 import { filter } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount } from 'wagmi';
@@ -257,7 +257,7 @@ const CreateProposalPage = () => {
         onActionAdd={handleAddProposalAction}
       />
 
-      <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
+      <div className={'mx-auto w-full lg:w-2/3 ' + classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={'/vote'}>
             <button
@@ -370,7 +370,7 @@ const CreateProposalPage = () => {
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}
         />
-      </Col>
+      </div>
     </Section>
   );
 };

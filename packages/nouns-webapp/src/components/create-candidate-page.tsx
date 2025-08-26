@@ -5,7 +5,7 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import dynamic from 'next/dynamic';
-import { Alert, Button, Col } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { toast } from 'sonner';
 import { formatEther } from 'viem';
@@ -199,7 +199,7 @@ const CreateCandidatePage = () => {
         onActionAdd={handleAddProposalAction}
       />
 
-      <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
+      <div className={'mx-auto w-full lg:w-2/3 ' + classes.createProposalForm}>
         <div className={classes.wrapper}>
           <Link to={'/vote#candidates'}>
             <button
@@ -281,7 +281,7 @@ const CreateCandidatePage = () => {
             </Trans>
           )}
         </p>
-      </Col>
+      </div>
     </Section>
   );
 };
