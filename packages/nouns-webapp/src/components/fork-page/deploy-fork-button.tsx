@@ -10,7 +10,6 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nouns-dao';
 
-import classes from './fork.module.css';
 
 type Props = {
   isDeployModalOpen: boolean;
@@ -92,8 +91,8 @@ function DeployForkButton(props: Props) {
   }, [executeForkState, handleExecuteForkStateChange]);
 
   const modalContent = (
-    <div className={classes.transactionModal}>
-      <h2 className={classes.transactionModalTitle}>
+    <div className="text-center">
+      <h2>
         <Trans>Deploy Fork</Trans>
       </h2>
       <p>
@@ -101,10 +100,11 @@ function DeployForkButton(props: Props) {
       </p>
       <p
         className={cn(
-          classes.transactionStatus,
-          isLoading ? classes.transactionStatusLoading : undefined,
-          isTxSuccessful ? classes.transactionStatusSuccess : undefined,
-          hasErrorMessage ? classes.transactionStatusError : undefined,
+          'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold',
+          isTxSuccessful &&
+            'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+          hasErrorMessage &&
+            'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
         )}
       >
         {isWaiting && (
@@ -112,7 +112,7 @@ function DeployForkButton(props: Props) {
             <img
               src="/loading-noggles.svg"
               alt="loading"
-              className={classes.transactionModalSpinner}
+              className="mx-auto mb-2 block max-w-[75px]"
             />
             Awaiting confirmation
           </>
@@ -122,7 +122,7 @@ function DeployForkButton(props: Props) {
             <img
               src="/loading-noggles.svg"
               alt="loading"
-              className={classes.transactionModalSpinner}
+              className="mx-auto mb-2 block max-w-[75px]"
             />
             Deploying
           </>
@@ -152,7 +152,11 @@ function DeployForkButton(props: Props) {
       {!props.isForkPeriodActive && props.isThresholdMet && (
         <button
           type="button"
-          className={cn(classes.button, classes.primaryButton, classes.deployButton)}
+          className={cn(
+            'font-pt h-fit rounded-[8px] px-[16px] py-[10px] font-bold leading-none transition-all duration-150 ease-in-out',
+            'bg-black text-white no-underline hover:opacity-75 disabled:opacity-50',
+            'w-full border-2 border-[var(--brand-color-red)] bg-[var(--brand-color-red)] text-white',
+          )}
           onClick={async () => {
             props.setIsDeployModalOpen(true);
             await executeFork({});
@@ -160,7 +164,7 @@ function DeployForkButton(props: Props) {
           disabled={!props.isUserConnected || isLoading || isWaiting}
         >
           {isLoading || isWaiting ? (
-            <div className={classes.spinner}>
+            <div className="text-[var(--brand-gray-light-text)]">
               <Spinner animation="border" />
             </div>
           ) : (

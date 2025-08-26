@@ -14,7 +14,6 @@ import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { useAllProposals, useProposalThreshold } from '@/wrappers/nouns-dao';
 
-import classes from './governance.module.css';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -46,9 +45,9 @@ const GovernancePage = () => {
   const nounPlural = <Trans>Nouns</Trans>;
   const subHeading = (
     <Trans>
-      Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on proposals
+      Nouns govern <span className="font-pt font-bold">Nouns DAO</span>. Nouns can vote on proposals
       or delegate their vote to a third party. A minimum of{' '}
-      <span className={classes.boldText}>
+      <span className="font-pt font-bold">
         {isNullish(nounsRequired) ? (
           '...'
         ) : (

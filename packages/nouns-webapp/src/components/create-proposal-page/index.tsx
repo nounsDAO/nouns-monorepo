@@ -45,7 +45,6 @@ import {
 } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
-// Converted from CSS module to inline Tailwind classes
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);

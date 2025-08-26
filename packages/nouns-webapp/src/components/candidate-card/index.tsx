@@ -9,7 +9,6 @@ import { relativeTimestamp } from '@/utils/time-utils';
 import { PartialProposal } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
 
-import classes from './candidate-card.module.css';
 import CandidateSponsors from './candidate-sponsors';
 
 type CandidateCardProps = {
@@ -31,11 +30,10 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
     <Link
       className={cn(
         'border-brand-gray-border bg-brand-gray-background font-pt text-22 group mb-4 mt-1.5 box-border flex flex-col rounded-2xl border p-4 text-center font-bold text-inherit no-underline hover:cursor-pointer hover:bg-white hover:text-inherit md:text-left',
-        classes.candidateLinkWithCountdown,
       )}
       href={`/candidates/${candidate.id}`}
     >
-      <div className={classes.title}>
+      <div className="w-full">
         <span className="block w-full">
           <span>{candidate.version.content.title}</span>
         </span>

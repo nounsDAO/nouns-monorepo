@@ -6,13 +6,11 @@ import Image from 'react-bootstrap/Image';
 
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 
-import classes from './noun.module.css';
-
 export const LoadingNoun = () => {
   return (
-    <div className={classes.imgWrapper}>
+    <div className="relative h-0 w-full pt-[100%]">
       <Image
-        className={classes.img}
+        className="absolute left-0 top-0 h-auto w-full align-middle"
         src={(loadingNoun as StaticImageData).src}
         alt={'loading noun'}
         fluid

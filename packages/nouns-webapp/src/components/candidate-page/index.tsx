@@ -36,8 +36,6 @@ import {
 } from '@/wrappers/nouns-data';
 import { Link, useParams } from 'react-router';
 
-import classes from './candidate.module.css';
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
@@ -265,10 +263,10 @@ const CandidatePage = () => {
               Jump to Sponsored Votes and Feedback
             </a>
           </div>
-          <div className={cn('col-span-12 lg:col-span-8', classes.proposal, classes.wrapper)}>
+          <div className={cn('col-span-12 lg:col-span-8', 'mx-auto mt-[1em] bg-white')}>
             <ProposalCandidateContent proposal={candidate} />
           </div>
-          <div id="feedback" className={cn('col-span-12 lg:col-span-4', classes.sidebar)}>
+          <div id="feedback" className={cn('col-span-12 lg:col-span-4', 'mt-4 min-[993px]:mt-6')}>
             {currentBlock != null &&
               threshold != null &&
               userVotes != null &&

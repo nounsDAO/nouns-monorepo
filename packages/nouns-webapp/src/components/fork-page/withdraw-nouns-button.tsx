@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useWithdrawFromForkEscrow } from '@/wrappers/nouns-dao';
 
-import classes from './fork.module.css';
 
 type Props = {
   tokenIds: number[];
@@ -87,18 +86,19 @@ function WithdrawNounsButton(props: Props) {
   }, [withdrawFromForkEscrowState, handleWithdrawFromForkEscrowStateChange]);
 
   const modalContent = (
-    <div className={classes.transactionModal}>
-      <h2 className={classes.transactionModalTitle}>
+    <div className="text-center">
+      <h2>
         <Trans>Withdraw Nouns from escrow</Trans>
       </h2>
       <p>Withdrawing {props.tokenIds.map(nounId => `Noun ${nounId}`).join(', ')}</p>
       <p
         className={cn(
-          classes.transactionStatus,
-          classes.withdrawStatus,
-          isLoading && classes.transactionStatusLoading,
-          isTxSuccessful && classes.transactionStatusSuccess,
-          isError && classes.transactionStatusError,
+          'text-[15px] mb-4 p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-[8px]',
+          'mb-0',
+          isTxSuccessful &&
+            'text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)]',
+          isError &&
+            'text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)]',
         )}
       >
         {isWaiting && (
@@ -106,7 +106,7 @@ function WithdrawNounsButton(props: Props) {
             <img
               src="/loading-noggles.svg"
               alt="loading"
-              className={classes.transactionModalSpinner}
+              className="mx-auto mb-2 block max-w-[75px]"
             />
             Awaiting confirmation
           </>
@@ -116,7 +116,7 @@ function WithdrawNounsButton(props: Props) {
             <img
               src="/loading-noggles.svg"
               alt="loading"
-              className={classes.transactionModalSpinner}
+              className="mx-auto mb-2 block max-w-[75px]"
             />
             Withdrawing
           </>
@@ -144,7 +144,11 @@ function WithdrawNounsButton(props: Props) {
     <>
       <button
         type="button"
-        className={cn(classes.button, classes.secondaryButton, classes.withdrawButton)}
+        className={cn(
+          'rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out leading-[1] py-[10px] px-[16px] h-fit',
+          'bg-white text-black border-2 border-black no-underline hover:opacity-75',
+          'border-[var(--brand-color-red)] text-[var(--brand-color-red)]',
+        )}
         onClick={async () => {
           await withdrawFromForkEscrow({
             args: [map(props.tokenIds, n => BigInt(n))],

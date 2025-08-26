@@ -24,7 +24,6 @@ import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalCandidate, useAddSignature } from '@/wrappers/nouns-data';
 
-// CSS module replaced with inline Tailwind classes
 
 const createProposalTypes = {
   Proposal: [

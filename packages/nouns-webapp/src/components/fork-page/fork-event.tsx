@@ -14,7 +14,6 @@ import {
 } from '@/wrappers/nouns-dao';
 import { Link } from 'react-router';
 
-import classes from './fork.module.css';
 
 type Props = {
   event?: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
@@ -58,7 +57,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
-                    className={classes.nounImage}
+                    className="aspect-square w-full max-w-[50px] rounded-[6px]"
                   />
                 </Link>
               );
@@ -69,7 +68,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className={classes.proposerLinkJp}
+              className="text-[#14161b] no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -89,7 +88,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
-                    className={classes.nounImage}
+                    className="aspect-square w-full max-w-[50px] rounded-[6px]"
                   />
                 </Link>
               );
@@ -100,7 +99,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className={classes.proposerLinkJp}
+              className="text-[#14161b] no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -120,7 +119,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
-                    className={classes.nounImage}
+                    className="aspect-square w-full max-w-[50px] rounded-[6px]"
                   />
                 </Link>
               );
@@ -131,7 +130,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className={classes.proposerLinkJp}
+              className="text-[#14161b] no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -175,18 +174,25 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
   if (event.createdAt === null) return null;
 
   return (
-    <div className={cn(classes.forkTimelineItem, isOnlyEvent && classes.isOnlyEvent)} id={event.id}>
-      <a href={`#${event.id}`} className={classes.eventPoint}>
-        {''}
+    <div className={cn('group relative m-0 pb-[50px] pl-[40px]', isOnlyEvent && '')} id={event.id}>
+      <span aria-hidden className="absolute left-[6px] top-[3px] bottom-0 w-[3px] bg-[#b3b3b3]" />
+      <a href={`#${event.id}`} className="absolute -left-[7px] -top-[2px] block h-[30px] w-[30px]">
+        <span className="absolute inset-0 rounded-full border-[3px] border-[#B3B3B3] bg-white" />
+        <span className="absolute inset-0 rounded-full border-[3px] border-[#14161b] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
       </a>
       <header>
-        <span className={classes.timestamp}>
-          <a href={`#${event.id}`}>
+        <span className="font-londrina text-[#14161b]">
+          <a
+            href={`#${event.id}`}
+            className="no-underline transition-all duration-200 ease-in-out group-hover:opacity-100"
+          >
             {timestamp ?? ''}
-            <span>{dateTime ?? ''}</span>
+            <span className="ml-2 font-pt text-[13px] opacity-0 transition-opacity duration-200 ease-in-out group-hover:inline-block group-hover:opacity-50">
+              {dateTime ?? ''}
+            </span>
           </a>
         </span>
-        <h3 className={classes.eventTitle}>
+        <h3 className="m-0 text-[20px] font-bold leading-[1.1]">
           {isCycleEvent ? (
             actionLabel
           ) : (
@@ -196,13 +202,17 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
           )}
         </h3>
         {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
-          event.reason && <p className={classes.message}>{event.reason}</p>}
-        <div className={classes.nounsList}>{nounsInEvent}</div>
+          event.reason && (
+            <p className="my-1 mx-0 p-0 text-[18px] italic opacity-80 before:content-['“'] before:ml-[-6px] after:content-['”']">
+              {event.reason}
+            </p>
+          )}
+        <div className="mt-[14px] flex flex-row flex-wrap gap-[10px]">{nounsInEvent}</div>
         {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
           proposalsList &&
           proposalsList.length > 0 && (
-            <div className={classes.proposals}>
-              <p className={classes.sectionLabel}>
+            <div className="mt-5 list-none border-t border-[#e6e6e6] pt-[10px]">
+              <p className="m-0 p-0 text-[14px] font-bold opacity-80">
                 <Trans>Offending proposal{proposalsList.length === 1 ? '' : 's'}</Trans>
               </p>
               <ul>{proposalsList}</ul>

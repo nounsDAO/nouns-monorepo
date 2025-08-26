@@ -13,7 +13,6 @@ import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-import auctionActivityClasses from '@/components/auction-activity/auction-activity.module.css';
 import auctionBidClasses from '@/components/auction-activity/bid-history.module.css';
 
 interface NounderNounContentProps {
@@ -63,8 +62,8 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
 
   return (
     <AuctionActivityWrapper>
-      <div className={auctionActivityClasses.informationRow}>
-        <div className={cn(auctionActivityClasses.activityRow, 'grid grid-cols-1 gap-4')}>
+      <div className="mb-2">
+        <div className={cn('mb-0', 'grid grid-cols-1 gap-4')}>
           <AuctionTitleAndNavWrapper>
             <AuctionNavigation
               isFirstAuction={isFirstAuction}
@@ -78,30 +77,26 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             <AuctionActivityNounTitle nounId={nounId} />
           </div>
         </div>
-        <div
-          className={cn(
-            auctionActivityClasses.activityRow,
-            'grid grid-cols-1 gap-4 lg:grid-cols-12',
-          )}
-        >
-          <div className={cn(auctionActivityClasses.currentBidCol, 'lg:col-span-4')}>
+        <div className={cn('mb-0', 'grid grid-cols-1 gap-4 lg:grid-cols-12')}>
+          <div
+            className={cn('lg-max:border-r-0 lg-max:pl-0 ml-1.5 mt-1.5 border-r', 'lg:col-span-4')}
+          >
             <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
           </div>
           <div
             className={cn(
-              auctionActivityClasses.currentBidCol,
+              'lg-max:border-r-0 lg-max:pl-0 lg-max:ml-1.5 lg-max:mt-1.5 lg-max:pl-0 ml-1.5 mt-1.5 border-r pl-0',
               'border-r-0',
-              auctionActivityClasses.auctionTimerCol,
               'lg:col-span-5',
             )}
           >
-            <div className={auctionActivityClasses.section}>
+            <div>
               <Winner winner={'0x'} isNounders={true} />
             </div>
           </div>
         </div>
       </div>
-      <div className={cn(auctionActivityClasses.activityRow, 'grid grid-cols-1')}>
+      <div className={cn('mb-0', 'grid grid-cols-1')}>
         <div className="w-full">
           <ul className={auctionBidClasses.bidCollection}>
             <li

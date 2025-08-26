@@ -38,7 +38,6 @@ import {
 } from '@/wrappers/nouns-data';
 import { Link, useParams } from 'react-router';
 
-import classes from '@/components/create-proposal-page/create-proposal.module.css';
 
 interface EditCandidateProps {
   match: {
@@ -276,29 +275,29 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const updateFeeText = !isNullish(updateCandidateCost) ? formatEther(updateCandidateCost) : '0';
 
   return (
-    <Section fullWidth={false} className={classes.createProposalPage}>
+    <Section fullWidth={false} className="font-pt">
       <ProposalActionModal
         onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}
         onActionAdd={handleAddProposalAction}
       />
-      <div className={'mx-auto w-full lg:w-2/3 ' + classes.createProposalForm}>
-        <div className={classes.wrapper}>
+      <div className={cn('mx-auto w-full lg:w-2/3', 'rounded-[5px] bg-white px-10 py-0')}>
+        <div className="flex items-center">
           <Link to={`/candidates/${id}`}>
             <button
               className={cn(
-                classes.backButton,
+                'mr-4 mt-[0.1rem] inline-block h-8 w-8 appearance-none rounded-full p-0 font-bold',
                 'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
               )}
             >
               ←
             </button>
           </Link>
-          <h3 className={classes.heading}>
+          <h3 className="my-4 font-londrina text-[42px]">
             <Trans>Edit Proposal Candidate</Trans>
           </h3>
         </div>
-        <Alert variant="secondary" className={classes.voterIneligibleAlert}>
+        <Alert variant="secondary" className="rounded-[8px]">
           <b>
             <Trans>Note</Trans>
           </b>
@@ -306,7 +305,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         </Alert>
         <div className="d-grid">
           <Button
-            className={classes.proposalActionButton}
+            className="h-[50px] rounded-[8px] font-pt text-[24px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
             variant="dark"
             onClick={() => setShowTransactionFormModal(true)}
           >
@@ -320,7 +319,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         />
 
         {totalUSDCPayment > 0 && (
-          <Alert variant="secondary" className={classes.tokenBuyerNotif}>
+          <Alert variant="secondary" className="mt-4 rounded-[8px]">
             <b>
               <Trans>Note</Trans>
             </b>
@@ -339,7 +338,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <InputGroup className={classes.commitMessage}>
+        <InputGroup className="[&_input]:mt-4 [&_input]:w-full [&_input]:rounded-[8px] [&_input]:border [&_input]:border-[#aaa] [&_input]:text-base [&_input]:text-[#212529]">
           <FormControl
             value={commitMessage}
             onChange={e => setCommitMessage(e.target.value)}
@@ -348,7 +347,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         </InputGroup>
 
         <EditProposalButton
-          className={classes.createProposalButton}
+          className="h-[50px] rounded-[8px] font-pt text-[18px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not relevant for edit
@@ -361,7 +360,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         {!hasVotes &&
           !isNullish(updateCandidateCost) &&
           Number(formatEther(updateCandidateCost)) > 0 && (
-            <p className={classes.feeNotice}>{updateFeeText} ETH fee upon submission</p>
+            <p className="text-center text-[18px] text-[#6c757d]">{updateFeeText} ETH fee upon submission</p>
           )}
 
         <p className="text-center">

@@ -15,7 +15,6 @@ import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';
 
-// CSS module replaced with inline Tailwind classes
 
 type Props = {
   isModalOpen: boolean;

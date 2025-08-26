@@ -7,7 +7,6 @@ import { Trans } from '@lingui/react/macro';
 import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
-// Inline Tailwind conversion for original signature rows
 
 type OriginalSignatureProps = {
   voteCount: number;

@@ -11,8 +11,6 @@ import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nouns-dao';
 
-import classes from './proposal-content.module.css';
-
 import { linkIfAddress } from '.';
 
 type Props = {
@@ -59,9 +57,9 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
             )}
             {d.target.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase() &&
               d.functionSig === 'transfer' && (
-                <div className={classes.txnInfoText}>
-                  <div className={classes.txnInfoIconWrapper}>
-                    <InformationCircleIcon className={classes.txnInfoIcon} />
+                <div className="my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium text-[var(--brand-gray-light-text)] max-[992px]:mt-4 max-[992px]:items-start">
+                  <div className="flex w-[25px] items-center">
+                    <InformationCircleIcon className="size-[18px] opacity-50 max-[992px]:mr-2 max-[992px]:mt-1" />
                   </div>
                   <div>
                     <Trans>
@@ -73,9 +71,9 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
               )}
             {d.target.toLowerCase() === nounsPayerAddress[chainId].toLowerCase() &&
               d.functionSig === 'sendOrRegisterDebt' && (
-                <div className={classes.txnInfoText}>
-                  <div className={classes.txnInfoIconWrapper}>
-                    <InformationCircleIcon className={classes.txnInfoIcon} />
+                <div className="my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium text-[var(--brand-gray-light-text)] max-[992px]:mt-4 max-[992px]:items-start">
+                  <div className="flex w-[25px] items-center">
+                    <InformationCircleIcon className="size-[18px] opacity-50 max-[992px]:mr-2 max-[992px]:mt-1" />
                   </div>
                   <div>
                     <Trans>

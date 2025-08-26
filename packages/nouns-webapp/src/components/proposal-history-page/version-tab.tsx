@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 
-// Converted from CSS module to inline Tailwind classes
 
 type Props = {
   isActive: boolean;

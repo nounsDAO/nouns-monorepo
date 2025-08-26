@@ -12,7 +12,6 @@ import {
 } from '@/contracts';
 import { cn } from '@/lib/utils';
 
-import classes from './documentation.module.css';
 
 interface DocumentationProps {
   backgroundColor?: string;
@@ -238,8 +237,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               />
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="4" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="4"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -308,8 +310,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="5" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="5"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -326,8 +331,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="6" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="6"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -351,8 +359,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="7" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="7"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -376,8 +387,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="8" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+          <Accordion.Item
+            eventKey="8"
+            className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
+          >
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nounder&apos;s Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
