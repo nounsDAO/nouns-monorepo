@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/index.css';
 import { Footer } from '@/components/footer';
 import NavBar from '@/components/nav-bar';
-import { Toaster } from '@/components/ui/sonner';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
@@ -32,16 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <NavBar />
           {children}
           <Footer />
-          <Toaster
-            expand
-            closeButton
-            toastOptions={{
-              classNames: {
-                closeButton:
-                  '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
-              },
-            }}
-          />
         </Providers>
       </body>
     </html>

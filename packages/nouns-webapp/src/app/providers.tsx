@@ -49,6 +49,7 @@ import { execute } from '@/subgraphs/execute';
 import { nounPath } from '@/utils/history';
 import { defaultChain, config as wagmiConfig } from '@/wagmi';
 import { clientFactory, latestAuctionsQuery } from '@/wrappers/subgraph';
+import { Toaster } from '@/components/ui/sonner';
 
 const queryClient = new QueryClient();
 const client = clientFactory(config.app.subgraphApiUri);
@@ -272,6 +273,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
                   <CustomConnectkitProvider>
                     <NetworkAlertWrapper />
                     {children}
+                    <Toaster
+                      expand
+                      closeButton
+                      toastOptions={{
+                        classNames: {
+                          closeButton:
+                            '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
+                        },
+                      }}
+                    />
                   </CustomConnectkitProvider>
                 </LanguageProvider>
               </ApolloProvider>
