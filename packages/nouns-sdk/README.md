@@ -24,7 +24,7 @@ You can check the linked contracts above for all the available methods.
 They're generated from the contract ABIs and include type-safe methods for all of the read and write functions.
 
 > [!TIP]
-> To get full IDE completions on the contract methods, ensure you have `strict` mode enabled in your `tsconfig.json` and that you fullfill all the [wagmi requirements](https://wagmi.sh/core/typescript#requirements)
+> To get full IDE completions on the contract methods, ensure you have `strict` mode enabled in your `tsconfig.json` and that you fulfill all the [wagmi requirements](https://wagmi.sh/core/typescript#requirements)
 
 #### Actions
 

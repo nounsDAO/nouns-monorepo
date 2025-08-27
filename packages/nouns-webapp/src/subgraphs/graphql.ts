@@ -911,7 +911,7 @@ export type DynamicQuorumParams = {
   __typename?: 'DynamicQuorumParams';
   /** The block from which proposals are using DQ, based on when we first see configuration being set */
   dynamicQuorumStartBlock?: Maybe<Scalars['BigInt']['output']>;
-  /** Unique entity used to store the latest dymanic quorum params */
+  /** Unique entity used to store the latest dynamic quorum params */
   id: Scalars['ID']['output'];
   /** Max quorum basis points */
   maxQuorumVotesBPS: Scalars['Int']['output'];
