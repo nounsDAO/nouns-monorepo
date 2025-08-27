@@ -17,11 +17,8 @@ import { hardhat } from 'viem/chains';
 import { usePublicClient, WagmiProvider, useAccount } from 'wagmi';
 
 import { CustomConnectkitProvider } from '@/components/custom-connectkit-provider';
-import { Footer } from '@/components/footer';
-import NavBar from '@/components/nav-bar';
 import NetworkAlert from '@/components/network-alert';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import config, { CHAIN_ID } from '@/config';
 import {
@@ -273,22 +270,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <PastAuctions />
                 <LanguageProvider>
                   <CustomConnectkitProvider>
-                    <div className="wrapper">
-                      <NetworkAlertWrapper />
-                      <NavBar />
-                      {children}
-                      <Footer />
-                      <Toaster
-                        expand
-                        closeButton
-                        toastOptions={{
-                          classNames: {
-                            closeButton:
-                              '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
-                          },
-                        }}
-                      />
-                    </div>
+                    <NetworkAlertWrapper />
+                    {children}
                   </CustomConnectkitProvider>
                 </LanguageProvider>
               </ApolloProvider>

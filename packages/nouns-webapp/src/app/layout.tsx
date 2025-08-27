@@ -7,6 +7,9 @@ import { Providers } from './providers';
 // Global CSS imports should live in the root layout
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/index.css';
+import { Footer } from '@/components/footer';
+import NavBar from '@/components/nav-bar';
+import { Toaster } from '@/components/ui/sonner';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
@@ -24,8 +27,22 @@ export const viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <Providers>{children}</Providers>
+      <body className="bg-background text-foreground overflow-x-hidden">
+        <Providers>
+          <NavBar />
+          {children}
+          <Footer />
+          <Toaster
+            expand
+            closeButton
+            toastOptions={{
+              classNames: {
+                closeButton:
+                  '[--toast-close-button-start:auto] [--toast-close-button-end:0] [--toast-close-button-transform:translate(35%,-35%)]',
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
   );

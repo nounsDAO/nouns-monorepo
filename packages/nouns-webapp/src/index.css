@@ -134,9 +134,6 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground overflow-x-hidden;
-  }
   ul {
     @apply list-inside list-disc;
   }
