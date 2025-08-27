@@ -1,14 +1,14 @@
-/* eslint-disable react/prop-types */
-import { CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 
 import { cn } from '@/lib/utils';
 
-const Section: React.FC<{
+type SectionProps = {
   fullWidth: boolean;
   className?: string;
   style?: CSSProperties;
   children: React.ReactNode;
-}> = props => {
+};
+const Section: React.FC<SectionProps> = props => {
   const { fullWidth, className, children, style } = props;
   return (
     <div className={cn('pt-8', className)} style={style}>
