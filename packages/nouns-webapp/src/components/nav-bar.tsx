@@ -93,7 +93,7 @@ const NavBar = () => {
         className="lg:mb-0 lg:mr-0 lg:pb-4"
         expanded={isNavExpanded}
       >
-        <div className="w-full max-w-none px-4">
+        <div className="mx-auto flex w-full max-w-none items-center justify-between border-0 border-solid border-neutral-200 px-4 leading-6 text-black md:max-w-screen-md xl:max-w-screen-xl">
           <div className="flex flex-row flex-nowrap items-center justify-center">
             <Navbar.Brand
               as={Link}
