@@ -47,7 +47,7 @@ const NavBar = () => {
 
   const safePathname = pathname ?? '';
   const useStateBg =
-    safePathname === '/' || safePathname.includes('/noun/') || safePathname.includes('/auction/');
+    safePathname === '/' || safePathname.includes('/nouns/') || safePathname.includes('/auction/');
 
   const stateBasedButtonStyle = isCool ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO;
 

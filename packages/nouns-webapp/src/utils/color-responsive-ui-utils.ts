@@ -5,7 +5,7 @@ import { useAppSelector } from '@/hooks';
 export const shouldUseStateBg = (location: { pathname: string }) => {
   return (
     location.pathname === '/' ||
-    location.pathname.includes('/noun') ||
+    location.pathname.includes('/nouns') ||
     location.pathname.includes('/auction')
   );
 };
