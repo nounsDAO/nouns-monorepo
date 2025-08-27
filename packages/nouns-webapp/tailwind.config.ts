@@ -39,6 +39,8 @@ export default {
           'linear-gradient(90deg, rgba(244,244,248,0) 0%, rgba(244,244,248,0.9) 15%, rgba(244,244,248,1) 25%, rgba(244,244,248,1) 100%)',
         'sponsor-fade-hover':
           'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 100%)',
+        // Replaces bg-[radial-gradient(#ffffff70_15%,rgba(0,0,0,0)_75%)]
+        'radial-white-70': 'radial-gradient(#ffffff70 15%, rgba(0,0,0,0) 75%)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -48,6 +50,7 @@ export default {
         10: '10px', // used in nav-bar, vote-modal, and various buttons
         14: '14px', // used in bid-history rows and panels
         15: '15px', // used widely across inputs/buttons
+        12: '12px', // replaces rounded-[12px]
       },
       colors: {
         cool: {
@@ -103,7 +106,12 @@ export default {
             'gray-background',
             'cool-dark-text',
             'cool-light-text',
+            'cool-border',
+            'cool-accent',
             'warm-light-text',
+            'warm-border',
+            'warm-accent',
+            'gray-hover',
           ].map(name => [`brand-${name}`, `var(--brand-${name})`]),
         ),
         border: 'hsl(var(--border))',
@@ -116,17 +124,30 @@ export default {
         'brand-border-ui': '#e2e3e8', // used for subtle borders (nav, proposals)
         'brand-gray-border': '#e2e3e8', // alias for legacy border-brand-gray-border usage
         'brand-surface': '#f4f4f8', // light gray surface
+        'brand-surface-muted': '#e2e3e8', // subtle surface used for hover states
+        'brand-surface-elevated': '#e0e0e7', // elevated surface panels
+        'brand-surface-contrast': '#fbfbfc', // very light surface used in signature cards
+        'brand-surface-subtle': '#fafbfc', // table backgrounds in diffs
         'brand-surface-cool': '#e9ebf3', // cool background chips
         'brand-surface-warm': '#fdf9f9', // warm background chips
         'brand-text-muted-600': '#8c8d92', // muted text
+        'brand-text-muted-500': '#646465', // slightly darker muted text used in signatures
+        'brand-text-muted-700': '#5f5f5f', // stronger muted text
+        'brand-text-muted-550': '#6c757d', // secondary muted text
         'brand-border-light': '#e6e6e6', // light border used in feedback modules
         'brand-border-muted': '#aaaaaa', // muted border for inputs
+        'brand-border-muted-400': '#b3b3b3', // timeline markers and rails
+        'brand-border-neutral-400': '#a7a7aa', // neutral dashed border
         'brand-warm-muted': '#b6a9a7', // warm muted text
         'brand-cool-muted': '#79809c', // cool muted text
         'brand-warning-border': '#f0ad4e', // warning border
         'brand-warning-text': '#dc9e46', // warning text
+        'brand-cool-deep': '#1b2140', // deep cool text for headings in bid modal
+        'brand-surface-neutral': '#e8e8ec', // neutral surface fill
       },
       boxShadow: {
+        // Replaces shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)]
+        'brand-focus-green': '0 0 0 0.2rem rgba(67,179,105,0.75)',
         'quorum-modal': '0 0 24px rgba(0,0,0,0.05)',
         'bid-wrapper': 'inset 0 -12px 16px rgba(0,0,0,0.08)',
       },
