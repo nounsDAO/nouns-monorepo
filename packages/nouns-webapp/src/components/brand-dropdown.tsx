@@ -24,7 +24,7 @@ const BrandDropdown: React.FC<BrandDropdownProps> = ({
       {label && <span className="opacity-50">{label}</span>}
       <select
         onChange={onChange}
-        className="h-12 w-full cursor-pointer appearance-none rounded-[15px] border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)] outline-none"
+        className="text-brand-cool-dark-text h-12 w-full cursor-pointer appearance-none rounded-[15px] border border-black/10 px-4 py-2 text-[22px] font-bold outline-none"
         value={value}
       >
         {children}
@@ -36,7 +36,7 @@ const BrandDropdown: React.FC<BrandDropdownProps> = ({
           top: `${chevronTop}px`,
         }}
       >
-        <ChevronDownIcon className="size-7 text-[var(--brand-cool-dark-text)]" />
+        <ChevronDownIcon className="text-brand-cool-dark-text size-7" />
       </div>
     </div>
   );

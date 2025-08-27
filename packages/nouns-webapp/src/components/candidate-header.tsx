@@ -54,7 +54,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           {!availableVotes && (
             <div
               className={
-                'font-pt mb-[1.15rem] min-w-[9.5rem] text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+                'font-pt text-brand-gray-light-text mb-[1.15rem] min-w-[9.5rem] text-[16px] font-medium'
               }
             >
               <Trans>You have no votes.</Trans>
@@ -64,7 +64,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       ) : (
         <div
           className={
-            'font-pt mb-[1.15rem] min-w-48 text-[16px] font-medium text-[var(--brand-gray-light-text)]'
+            'font-pt text-brand-gray-light-text mb-[1.15rem] min-w-48 text-[16px] font-medium'
           }
         >
           <Trans>Connect a wallet to vote.</Trans>
@@ -96,7 +96,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             type="button"
             className={cn(
               'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
-              'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+              'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
               'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
             )}
           >
@@ -107,14 +107,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
           <div>
-            <span className="font-londrina text-[24px] text-[#8c8d92]">
+            <span className="font-londrina text-brand-text-muted-600 text-[24px]">
               <div className="d-flex">
                 <div>{subHead}</div>
               </div>
             </span>
             <div className={'flex pr-8'}>
               <div className={'mr-2'}>
-                <h1 className="font-londrina text-[42px] text-[#14161b]">{title} </h1>
+                <h1 className="font-londrina text-brand-gray-dark-text text-[42px]">{title} </h1>
               </div>
             </div>
           </div>
@@ -135,7 +135,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           >
             <div className={'ml-10 font-medium'}>
               <Trans>
-                <span className={'text-[var(--brand-gray-light-text)]'}>Proposed by: </span>
+                <span className={'text-brand-gray-light-text'}>Proposed by: </span>
                 <span>{proposerLink}</span>
                 {transactionLink}
               </Trans>
@@ -143,9 +143,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           </HoverCard>
         ) : (
           <>
-            <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
-              Proposed by
-            </h3>
+            <h3 className={'font-londrina text-brand-gray-light-text text-[18px]'}>Proposed by</h3>
 
             <div className={'ml-0 flex flex-row'}>
               <HoverCard
@@ -153,7 +151,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
                 tip={proposer || ''}
                 id="byLineHoverCard"
               >
-                <h3 className={'font-londrina text-[18px] text-[var(--brand-gray-light-text)]'}>
+                <h3 className={'font-londrina text-brand-gray-light-text text-[18px]'}>
                   {proposerLink}
                   {transactionLink}
                 </h3>
@@ -166,7 +164,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       <p className={'inline-block text-[12px]'}>
         {versionsCount > 1 ? (
           <Link href={`/candidates/${id}/history/`}>
-            <strong className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}>
+            <strong
+              className={'border-brand-border-light mr-[5px] rounded-md border px-[10px] py-[6px]'}
+            >
               Version {versionsCount}
             </strong>{' '}
             <span className={'opacity-70'}>
@@ -176,7 +176,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
           </Link>
         ) : (
           <>
-            <strong className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}>
+            <strong
+              className={'border-brand-border-light mr-[5px] rounded-md border px-[10px] py-[6px]'}
+            >
               Version {versionsCount}
             </strong>{' '}
             <span className={'opacity-70'}>

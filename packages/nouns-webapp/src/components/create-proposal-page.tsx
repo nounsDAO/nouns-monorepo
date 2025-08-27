@@ -248,7 +248,7 @@ const CreateProposalPage = () => {
   ]);
 
   return (
-    <Section fullWidth={false} className={'font-pt [&_a]:text-[var(--brand-dark-red)]'}>
+    <Section fullWidth={false} className={'font-pt [&_a]:text-brand-dark-red'}>
       <ProposalActionModal
         onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}
@@ -262,7 +262,7 @@ const CreateProposalPage = () => {
               type="button"
               className={cn(
                 'mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
-                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+                'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
               )}
             >
               ←
@@ -325,7 +325,7 @@ const CreateProposalPage = () => {
           onBodyInput={handleBodyInput}
         />
         <p className="m-0 p-0">Looking for treasury v1?</p>
-        <p className={'m-0 p-0 text-[14px] text-[var(--text-light-gray)]'}>
+        <p className={'text-brand-gray-light-text m-0 p-0 text-[14px]'}>
           If you&apos;re not sure what this means, you probably don&apos;t need it. Otherwise, you
           can interact with the original treasury{' '}
           <button
@@ -339,7 +339,7 @@ const CreateProposalPage = () => {
         </p>
 
         {isDaoGteV3 && config.featureToggles.proposeOnV1 && isV1OptionVisible && (
-          <div className={'my-4 border-y border-[rgba(0,0,0,0.1)] pb-2 pt-4 text-[14px]'}>
+          <div className={'my-4 border-y border-black/10 pb-2 pt-4 text-[14px]'}>
             <div>
               <Form.Check
                 type="checkbox"
@@ -348,7 +348,7 @@ const CreateProposalPage = () => {
                 onChange={() => setIsProposeOnV1(!isProposeOnV1)}
               />
             </div>
-            <p className={'m-0 p-0 text-[14px] text-[var(--text-light-gray)]'}>
+            <p className={'text-brand-gray-light-text m-0 p-0 text-[14px]'}>
               Used to interact with any assets owned by the{' '}
               <a href={daoEtherscanLink} target="_blank" rel="noreferrer">
                 original treasury

@@ -47,7 +47,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         id={'address-tooltip'}
         effect={'solid'}
         className={
-          '!rounded-lg !bg-[var(--brand-gray-dark-text)] font-medium text-white !opacity-75 transition duration-150 ease-in-out'
+          '!bg-brand-gray-dark-text !rounded-lg font-medium text-white !opacity-75 transition duration-150 ease-in-out'
         }
         getContent={() => {
           return state.address;

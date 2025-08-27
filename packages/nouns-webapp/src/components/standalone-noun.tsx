@@ -100,7 +100,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName="h-[42px] w-[42px] max-[1200px]:h-[70%] max-[1200px]:w-[70%]"
-        className={border === true ? 'rounded-full border-2 border-[#ffffff]' : 'rounded-full'}
+        className={border === true ? 'rounded-full border-2 border-white' : 'rounded-full'}
       />
     </Link>
   );

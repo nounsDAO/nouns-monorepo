@@ -63,7 +63,7 @@ const SettleManuallyBtn: React.FC<{
       <button
         type="button"
         onClick={settleAuctionHandler}
-        className="m-0 inline cursor-pointer border-0 bg-transparent p-0 underline disabled:cursor-default disabled:text-[#8c8d92] disabled:no-underline"
+        className="disabled:text-brand-text-muted-600 m-0 inline cursor-pointer border-0 bg-transparent p-0 underline disabled:cursor-default disabled:no-underline"
         disabled={!settleEnabled}
       >
         {settleEnabled ? (

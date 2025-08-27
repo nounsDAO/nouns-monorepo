@@ -34,7 +34,7 @@ const ProposalEditor = ({
     <div>
       <InputGroup
         className={
-          'd-flex flex-column my-4 rounded-[8px] border border-[#aaa] px-4 pb-4 pt-2 shadow-none outline-none'
+          'd-flex flex-column border-brand-border-muted my-4 rounded-lg border px-4 pb-4 pt-2 shadow-none outline-none'
         }
       >
         <FormText>{isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}</FormText>
@@ -55,7 +55,9 @@ const ProposalEditor = ({
       </InputGroup>
       {proposalText !== '' && (
         <div
-          className={'rounded-[8px] border border-[#aaa] px-4 pb-4 pt-2 shadow-none outline-none'}
+          className={
+            'border-brand-border-muted rounded-lg border px-4 pb-4 pt-2 shadow-none outline-none'
+          }
         >
           <h3>
             <Trans>Preview</Trans>

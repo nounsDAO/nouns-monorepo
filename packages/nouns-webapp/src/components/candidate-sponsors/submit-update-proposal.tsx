@@ -119,17 +119,17 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         placeholder={'Optional message'}
         value={reason}
         onChange={e => setReason(e.target.value)}
-        className="font-pt mb-[10px] w-full rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] px-[12px] py-[10px] text-[16px] leading-normal"
+        className="font-pt rounded-12 mb-[10px] w-full border-2 border-black/25 px-[12px] py-[10px] text-[16px] leading-normal"
       />
       <div className="my-[20px] text-center">
         {!(isTruthy(errorMessage) || isTxSuccessful) && (
           <button
             type="button"
             className={cn(
-              'font-pt h-fit rounded-[8px] border-0 bg-[#faf4f8] px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-              'mb-4 text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+              'font-pt bg-brand-surface-pink text-brand-gray-dark-text h-fit rounded-lg border-0 px-[16px] py-[10px] text-[22px] font-bold leading-none transition-all duration-150 ease-in-out',
+              'mb-4 text-white no-underline hover:opacity-75 disabled:bg-neutral-300 disabled:hover:opacity-100',
               (isWaiting || isLoading) &&
-                'font-pt w-full border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text w-full border bg-white p-4 text-center text-[15px] font-bold',
             )}
             disabled={isWaiting || isLoading}
             onClick={() => {
@@ -154,8 +154,8 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
         {isTruthy(errorMessage) && (
           <p
             className={cn(
-              'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-              'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+              'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+              'border-brand-color-red-translucent bg-brand-color-red-translucent text-brand-color-red',
             )}
           >
             {errorMessage}
@@ -173,8 +173,8 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
           <>
             <p
               className={cn(
-                'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-                'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+                'border-brand-color-green bg-brand-color-green-translucent text-brand-color-green',
               )}
             >
               <strong>Success!</strong> <br />

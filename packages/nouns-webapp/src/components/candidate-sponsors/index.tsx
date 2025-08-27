@@ -116,11 +116,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           proposalIdToUpdate={props.originalProposal?.id ? props.originalProposal?.id : ''}
         />
       )}
-      <div className={'relative rounded-[12px] border border-[#e6e6e6] text-left'}>
+      <div className={'rounded-12 border-brand-border-light relative border text-left'}>
         {isThresholdMet && (
           <p
             className={
-              'mb-0 mt-[-4px] border-b border-[rgba(0,0,0,0.1)] px-4 pb-2 pt-[0.7rem] text-[14px] font-bold text-[var(--brand-color-green)] [&_img]:relative [&_img]:top-px'
+              'text-brand-color-green mb-0 mt-[-4px] border-b border-black/10 px-4 pb-2 pt-[0.7rem] text-[14px] font-bold [&_img]:relative [&_img]:top-px'
             }
           >
             <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
@@ -186,7 +186,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   )}
                   <p
                     className={
-                      'm-0 mb-[10px] pt-0 text-[14px] leading-[1.1] text-[var(--brand-gray-light-text)]'
+                      'text-brand-gray-light-text m-0 mb-[10px] pt-0 text-[14px] leading-[1.1]'
                     }
                   >
                     {isThresholdMet && props.isUpdateToProposal !== true ? (
@@ -263,7 +263,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             .map((_s, i) => (
                               <li
                                 className={
-                                  'm-0 mb-[10px] min-h-[40px] list-none rounded-[12px] border-2 border-dashed border-[rgba(0,0,0,0.05)] p-[10px]'
+                                  'rounded-12 m-0 mb-[10px] min-h-[40px] list-none border-2 border-dashed border-black/5 p-[10px]'
                                 }
                                 key={i}
                               >
@@ -289,7 +289,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                             <button
                               type="button"
                               className={
-                                'cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92]'
+                                'border-brand-border-light disabled:bg-brand-surface disabled:text-brand-text-muted-600 cursor-pointer rounded-lg border bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none'
                               }
                               onClick={() => {
                                 if (props.isUpdateToProposal === true) {
@@ -315,7 +315,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                                   <button
                                     type="button"
                                     className={
-                                      'cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92]'
+                                      'border-brand-border-light disabled:bg-brand-surface disabled:text-brand-text-muted-600 cursor-pointer rounded-lg border bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none'
                                     }
                                     onClick={() => setIsFormDisplayed(!isFormDisplayed)}
                                   >
@@ -324,7 +324,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                                 ) : (
                                   <div
                                     className={
-                                      'm-0 mx-auto p-0 px-5 text-center text-[13px] leading-none text-[var(--brand-gray-light-text)]'
+                                      'text-brand-gray-light-text m-0 mx-auto p-0 px-5 text-center text-[13px] leading-none'
                                     }
                                   >
                                     <p>

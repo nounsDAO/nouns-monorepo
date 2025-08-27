@@ -132,8 +132,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           {/* Outter container */}
           <div
             className={cn(
-              'shadow-quorum-modal rounded-[14px] p-4',
-              'mt-8 bg-[rgba(244,244,248,1)] py-8 pl-4 pr-12 max-[1200px]:hidden',
+              'shadow-quorum-modal rounded-14 p-4',
+              'bg-brand-surface mt-8 py-8 pl-4 pr-12 max-[1200px]:hidden',
             )}
           >
             <div className="flex">
@@ -282,12 +282,12 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
               </div>
             </div>
 
-            <div className={'mt-2 text-center font-medium text-[var(--brand-gray-light-text)]'}>
+            <div className={'text-brand-gray-light-text mt-2 text-center font-medium'}>
               <Trans>% of Nouns Currently Against</Trans>
             </div>
           </div>
 
-          <p className={'mt-2 text-sm font-medium text-[var(--brand-gray-light-text)]'}>
+          <p className={'text-brand-gray-light-text mt-2 text-sm font-medium'}>
             <Trans>
               More details on how the dynamic threshold works can be found{' '}
               <span className={'underline'}>here</span>.

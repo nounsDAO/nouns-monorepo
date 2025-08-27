@@ -5,13 +5,12 @@ import { Trans } from '@lingui/react/macro';
 import { isNullish } from 'remeda';
 import { formatUnits } from 'viem';
 
+import { linkIfAddress } from '@/components/proposal-content';
 import ShortAddress from '@/components/short-address';
 import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
 import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail } from '@/wrappers/nouns-dao';
-
-import { linkIfAddress } from '.';
 
 type Props = {
   details: ProposalDetail[];
@@ -57,7 +56,7 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
             )}
             {d.target.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase() &&
               d.functionSig === 'transfer' && (
-                <div className="my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium text-[var(--brand-gray-light-text)] max-[992px]:mt-4 max-[992px]:items-start">
+                <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium max-[992px]:mt-4 max-[992px]:items-start">
                   <div className="flex w-[25px] items-center">
                     <InformationCircleIcon className="size-[18px] opacity-50 max-[992px]:mr-2 max-[992px]:mt-1" />
                   </div>
@@ -71,7 +70,7 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
               )}
             {d.target.toLowerCase() === nounsPayerAddress[chainId].toLowerCase() &&
               d.functionSig === 'sendOrRegisterDebt' && (
-                <div className="my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium text-[var(--brand-gray-light-text)] max-[992px]:mt-4 max-[992px]:items-start">
+                <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium max-[992px]:mt-4 max-[992px]:items-start">
                   <div className="flex w-[25px] items-center">
                     <InformationCircleIcon className="size-[18px] opacity-50 max-[992px]:mr-2 max-[992px]:mt-1" />
                   </div>

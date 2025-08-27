@@ -27,7 +27,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
 
   if (loading || data == null || data.delegates.length === 0) {
     return (
-      <div className="flex h-[185px] w-full flex-col justify-center text-[var(--brand-gray-light-text)]">
+      <div className="text-brand-gray-light-text flex h-[185px] w-full flex-col justify-center">
         <div className="flex w-full justify-center">
           <Spinner animation="border" />
         </div>
@@ -53,7 +53,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
         <ShortAddress address={data?.delegates?.[0]?.id ?? ''} />
       </div>
 
-      <div className="mb-3 mt-1 flex items-center text-[15px] font-medium not-italic leading-[1.4] text-[var(--brand-gray-dark-text)] [font-feature-settings:'tnum'_on,'lnum'_on,'ss06'_on,'ss01'_on,'liga'_off]">
+      <div className="text-brand-gray-dark-text mb-3 mt-1 flex items-center text-[15px] font-medium not-italic leading-[1.4] [font-feature-settings:'tnum'_on,'lnum'_on,'ss06'_on,'ss01'_on,'liga'_off]">
         <ScaleIcon height={20} width={20} className="mb-[5px] mr-[6px]" />
         {numVotesForProp === 1 ? (
           <Trans>

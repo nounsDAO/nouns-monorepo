@@ -87,14 +87,14 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   return (
     <li
       className={cn(
-        'relative m-0 mb-[10px] list-none rounded-[12px] border border-[#e6e6e6] bg-[#fbfbfc] p-[10px]',
+        'rounded-12 border-brand-border-light bg-brand-surface-contrast relative m-0 mb-[10px] list-none border p-[10px]',
         isTruthy(cancelStatusOverlay?.show) && 'min-h-[75px]',
       )}
     >
       {isTruthy(props.signerHasActiveOrPendingProposal) && (
         <div
           className={
-            'mb-2 rounded-[8px] bg-[rgba(0,0,0,0.05)] px-4 py-2 text-center text-[13px] leading-none text-[rgba(0,0,0,0.4)]'
+            'mb-2 rounded-lg bg-black/5 px-4 py-2 text-center text-[13px] leading-none text-black/40'
           }
         >
           <Trans>Signature invalid while signer has an active or pending proposal</Trans>
@@ -110,7 +110,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                 </span>
               </a>
             </p>
-            <p className={'text-[13px] text-[#646465]'}>
+            <p className={'text-brand-text-muted-500 text-[13px]'}>
               {(isTruthy(props.isUpdateToProposal) && !isTruthy(props.isParentProposalUpdatable)) ||
               props.expirationTimestamp < timestampNow
                 ? 'Expired'
@@ -118,14 +118,14 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
               {expiration}
             </p>
           </div>
-          <p className={'m-0 p-0 text-[13px] font-bold text-[#646465]'}>
+          <p className={'text-brand-text-muted-500 m-0 p-0 text-[13px] font-bold'}>
             {props.voteCount} vote{props.voteCount !== 1 && 's'}
           </p>
         </div>
         {props.reason && (
           <div
             className={cn(
-              'mt-2.5 border-t border-[#e6e6e6] pt-[10px] text-[13px] leading-[1.2] text-[#646465]',
+              'border-brand-border-light text-brand-text-muted-500 mt-2.5 border-t pt-[10px] text-[13px] leading-[1.2]',
               isInvalid && 'opacity-50',
             )}
             onClick={() => setIsReasonShown(!isReasonShown)}
@@ -155,7 +155,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         {props.isAccountSigner && (
           <div
             className={
-              'mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-center leading-[1.1]'
+              'border-brand-border-light mt-2 border-0 border-t pt-[10px] text-center leading-[1.1]'
             }
           >
             {isCancelSignaturePending ? (
@@ -172,7 +172,7 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
                   setIsCancelSignaturePending(true);
                 }}
                 className={
-                  'm-0 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-[var(--brand-color-red)]'
+                  'text-brand-color-red m-0 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold'
                 }
               >
                 <Trans>Remove sponsorship</Trans>
@@ -183,10 +183,10 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
         {isTruthy(props.isUpdateToProposal) && !props.isAccountSigner && (
           <p
             className={
-              'mt-2 border-0 border-t border-[#e6e6e6] pt-[10px] text-left text-[12px] leading-[1.1] text-[#646465]'
+              'border-brand-border-light text-brand-text-muted-500 mt-2 border-0 border-t pt-[10px] text-left text-[12px] leading-[1.1]'
             }
           >
-            <span className="mr-2 inline-block text-[var(--brand-color-green)]">
+            <span className="text-brand-color-green mr-2 inline-block">
               <FontAwesomeIcon icon={faCircleCheck} />
             </span>
             <Trans>Re-signed</Trans>
@@ -198,9 +198,9 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
           className={cn(
             'absolute left-[3px] top-[3px] z-[3] flex size-[calc(100%-6px)] flex-col justify-center border bg-white p-[10px] text-center',
             (cancelSigState.status === 'Exception' || cancelSigState.status === 'Fail') &&
-              'border-[var(--brand-color-red-translucent)] bg-[#fbfbfc] text-[var(--brand-color-red)]',
+              'border-brand-color-red-translucent bg-brand-surface-contrast text-brand-color-red',
             cancelSigState.status === 'Success' &&
-              'border-[var(--brand-color-green)] bg-[#fbfbfc] text-[var(--brand-color-green)]',
+              'border-brand-color-green bg-brand-surface-contrast text-brand-color-green',
           )}
         >
           {(cancelSigState.status === 'Exception' ||

@@ -138,12 +138,14 @@ export default {
         'brand-border-muted': '#aaaaaa', // muted border for inputs
         'brand-border-muted-400': '#b3b3b3', // timeline markers and rails
         'brand-border-neutral-400': '#a7a7aa', // neutral dashed border
+        'brand-border-neutral-300': '#d3d3d3', // neutral selection border
         'brand-warm-muted': '#b6a9a7', // warm muted text
         'brand-cool-muted': '#79809c', // cool muted text
         'brand-warning-border': '#f0ad4e', // warning border
         'brand-warning-text': '#dc9e46', // warning text
         'brand-cool-deep': '#1b2140', // deep cool text for headings in bid modal
         'brand-surface-neutral': '#e8e8ec', // neutral surface fill
+        'brand-surface-pink': '#faf4f8', // light pink surface used in add-nouns modal
       },
       boxShadow: {
         // Replaces shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)]

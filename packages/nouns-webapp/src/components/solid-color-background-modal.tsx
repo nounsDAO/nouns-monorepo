@@ -19,8 +19,8 @@ export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = prop
   return (
     <NounsTransition
       className={[
-        'fixed inset-0 z-10 h-full w-full bg-[rgba(75,75,75,0.5)] opacity-0 backdrop-blur-[24px] transition-opacity duration-75 ease-in-out',
-        'lg-max:bg-[rgba(0,0,0,0.74)]',
+        'fixed inset-0 z-10 h-full w-full bg-black/50 opacity-0 backdrop-blur-[24px] transition-opacity duration-75 ease-in-out',
+        'lg-max:bg-black/75',
       ].join(' ')}
       nodeRef={nodeRef}
       show={props.show}
@@ -85,7 +85,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
         nodeRef={modalRef}
         show={show}
         className={[
-          'font-pt absolute left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] translate-y-[-1rem] scale-50 rounded-[24px] bg-[rgba(244,244,248,1)] p-6 font-bold shadow-[0_0_24px_rgba(0,0,0,0.05)] transition-all duration-150 ease-in-out',
+          'font-pt bg-brand-surface shadow-quorum-modal absolute left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] translate-y-[-1rem] scale-50 rounded-3xl p-6 font-bold transition-all duration-150 ease-in-out',
           'lg-max:bottom-0 lg-max:left-0 lg-max:top-auto lg-max:max-h-[calc(100%_-_75px)] lg-max:w-full lg-max:overflow-y-scroll lg-max:rounded-b-none lg-max:shadow-none lg-max:translate-y-[20rem] lg-max:scale-100',
         ].join(' ')}
         timeout={200}

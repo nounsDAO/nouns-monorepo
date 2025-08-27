@@ -67,7 +67,7 @@ const CandidateSponsors = ({
       )}
       {placeholderKeys.map(k => (
         <div
-          className="size-8 rounded-full border border-dashed border-[#a7a7aa] bg-[#e8e8ec]"
+          className="border-brand-border-neutral-400 bg-brand-surface-neutral size-8 rounded-full border border-dashed"
           key={k}
         />
       ))}

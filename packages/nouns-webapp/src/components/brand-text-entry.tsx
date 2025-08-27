@@ -25,8 +25,8 @@ const BrandTextEntry: React.FC<BrandTextEntryProps> = props => {
         min={min}
         placeholder={placeholder}
         className={cn(
-          'mb-2 mt-1 h-12 w-full rounded-[15px] border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)] outline-none',
-          isInvalid ? '!border-2 !border-[var(--brand-color-red)]' : '',
+          'text-brand-cool-dark-text mb-2 mt-1 h-12 w-full rounded-[15px] border border-black/10 px-4 py-2 text-[22px] font-bold outline-none',
+          isInvalid ? '!border-brand-color-red !border-2' : '',
         )}
       />
     </div>

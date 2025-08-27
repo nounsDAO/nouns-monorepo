@@ -103,8 +103,8 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
                 'text-[15.5px] font-medium leading-[21px]',
                 // Padding and border color vary by theme
                 isCool
-                  ? 'border-b border-[var(--brand-cool-border)] p-3'
-                  : 'border-b border-[var(--brand-warm-border)] px-3 pb-2 pt-1',
+                  ? 'border-brand-cool-border border-b p-3'
+                  : 'border-brand-warm-border border-b px-3 pb-2 pt-1',
               )}
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}

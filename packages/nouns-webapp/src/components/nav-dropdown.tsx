@@ -6,8 +6,6 @@ import NavBarButton, { NavBarButtonStyle } from '@/components/nav-bar-button';
 import { cn } from '@/lib/utils';
 import { usePickByState } from '@/utils/color-responsive-ui-utils';
 
- 
-
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
   buttonIcon?: React.ReactNode;
@@ -63,14 +61,17 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={cn('font-pt p-0.3 text-sm font-bold text-brand-black transition-all duration-150 ease-in-out', 'xl-max:hidden')}
+        className={cn(
+          'font-pt p-0.3 text-brand-black text-sm font-bold transition-all duration-150 ease-in-out',
+          'xl-max:hidden',
+        )}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >
         <Dropdown.Toggle as={customDropdownToggle} id="dropdown" />
         <Dropdown.Menu
           className={cn(
-            '!left-[5px] m-0 overflow-hidden rounded-[10px] border border-[rgba(0,0,0,0.1)] p-0 [&>a:hover]:bg-white [&>a:last-child]:border-none [&>a]:block [&>a]:rounded-none [&>a]:border-0 [&>a]:border-b-[1.5px] [&>a]:border-b-[#e2e3e8] [&>a]:px-4 [&>a]:py-2 [&>a]:font-bold [&>a]:text-[rgb(95,95,95)] [&>a]:no-underline',
+            'rounded-10 [&>a]:border-b-brand-border-ui [&>a]:text-brand-text-muted-700 !left-[5px] m-0 overflow-hidden border border-black/10 p-0 [&>a:hover]:bg-white [&>a:last-child]:border-none [&>a]:block [&>a]:rounded-none [&>a]:border-0 [&>a]:border-b-[1.5px] [&>a]:px-4 [&>a]:py-2 [&>a]:font-bold [&>a]:no-underline',
             stateSelectedDropdownClass,
             buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
           )}

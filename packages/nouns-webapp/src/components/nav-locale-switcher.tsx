@@ -86,7 +86,7 @@ const CustomMenu = ({
         switch (index) {
           case 0:
             dropDownStyle =
-              'ml-1 rounded-t-[10px] border-b border-b-[rgba(0,0,0,0.06)] pb-2 pl-4 pt-[0.65rem] transition-all duration-150 ease-in-out hover:text-black';
+              'ml-1 rounded-t-[10px] border-b border-b-black/5 pb-2 pl-4 pt-[0.65rem] transition-all duration-150 ease-in-out hover:text-black';
             buttonStyle = buttonStyleTop;
             break;
           case SUPPORTED_LOCALES.length - 1:
@@ -95,7 +95,7 @@ const CustomMenu = ({
             break;
           default:
             dropDownStyle =
-              'ml-1 border-b border-b-[rgba(0,0,0,0.06)] pb-[0.65rem] pl-4 pt-2 hover:text-black';
+              'ml-1 border-b border-b-black/5 pb-[0.65rem] pl-4 pt-2 hover:text-black';
             buttonStyle = buttonStyleBottom;
         }
 

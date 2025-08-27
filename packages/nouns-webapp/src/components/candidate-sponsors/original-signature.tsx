@@ -7,7 +7,6 @@ import { Trans } from '@lingui/react/macro';
 import ShortAddress from '@/components/short-address';
 import { buildEtherscanAddressLink } from '@/utils/etherscan';
 
-
 type OriginalSignatureProps = {
   voteCount: number;
   signer: Address;
@@ -22,7 +21,7 @@ const OriginalSignature: React.FC<OriginalSignatureProps> = ({
   return (
     <li
       className={
-        'm-0 mb-[10px] min-h-[40px] list-none rounded-[12px] border-2 border-dashed border-[rgba(0,0,0,0.05)] p-[10px]'
+        'rounded-12 m-0 mb-[10px] min-h-[40px] list-none border-2 border-dashed border-black/5 p-[10px]'
       }
     >
       <div className={'flex flex-row justify-between'}>
@@ -33,11 +32,11 @@ const OriginalSignature: React.FC<OriginalSignatureProps> = ({
             </a>
           </p>
         </div>
-        <p className={'m-0 p-0 text-[13px] font-bold text-[#646465]'}>
+        <p className={'text-brand-text-muted-500 m-0 p-0 text-[13px] font-bold'}>
           {voteCount} vote{voteCount !== 1 && 's'}
         </p>
       </div>
-      <p className={'mt-[15px] text-center text-[14px] leading-[1.2] text-[#646465]'}>
+      <p className={'text-brand-text-muted-500 mt-[15px] text-center text-[14px] leading-[1.2]'}>
         {isParentProposalUpdatable ? (
           <Trans>Awaiting signature</Trans>
         ) : (

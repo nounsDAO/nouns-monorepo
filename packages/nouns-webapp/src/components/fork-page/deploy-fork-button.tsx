@@ -10,7 +10,6 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Hash } from '@/utils/types';
 import { useExecuteFork } from '@/wrappers/nouns-dao';
 
-
 type Props = {
   isDeployModalOpen: boolean;
   isForkPeriodActive: boolean;
@@ -100,11 +99,11 @@ function DeployForkButton(props: Props) {
       </p>
       <p
         className={cn(
-          'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold',
+          'font-pt border-brand-border-light mb-4 rounded-lg border bg-white p-4 text-center text-[15px] font-bold',
           isTxSuccessful &&
-            'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+            'border-brand-color-green bg-brand-color-green-translucent text-brand-color-green',
           hasErrorMessage &&
-            'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+            'border-brand-color-red-translucent bg-brand-color-red-translucent text-brand-color-red',
         )}
       >
         {isWaiting && (
@@ -155,7 +154,7 @@ function DeployForkButton(props: Props) {
           className={cn(
             'font-pt h-fit rounded-[8px] px-[16px] py-[10px] font-bold leading-none transition-all duration-150 ease-in-out',
             'bg-black text-white no-underline hover:opacity-75 disabled:opacity-50',
-            'w-full border-2 border-[var(--brand-color-red)] bg-[var(--brand-color-red)] text-white',
+            'border-brand-color-red bg-brand-color-red w-full border-2',
           )}
           onClick={async () => {
             props.setIsDeployModalOpen(true);
@@ -164,7 +163,7 @@ function DeployForkButton(props: Props) {
           disabled={!props.isUserConnected || isLoading || isWaiting}
         >
           {isLoading || isWaiting ? (
-            <div className="text-[var(--brand-gray-light-text)]">
+            <div className="text-brand-gray-light-text">
               <Spinner animation="border" />
             </div>
           ) : (

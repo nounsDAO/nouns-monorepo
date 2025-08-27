@@ -212,7 +212,7 @@ const CandidatePage = () => {
       {isProposer && isProposal === false && (
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-12">
-            <div className="mb-8 flex items-center justify-between gap-4 rounded-[12px] border border-[#e6e6e6] p-[15px] max-[992px]:flex-col max-[992px]:text-center">
+            <div className="rounded-12 border-brand-border-light mb-8 flex items-center justify-between gap-4 border p-[15px] max-[992px]:flex-col max-[992px]:text-center">
               <p>
                 <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                   <Trans>Proposer functions</Trans>
@@ -228,7 +228,7 @@ const CandidatePage = () => {
                   disabled={isCancelPending}
                   variant="danger"
                   className={cn(
-                    'font-pt h-[50px] rounded-lg bg-[var(--brand-color-red)] text-[24px] font-bold transition-all duration-150 ease-in-out',
+                    'font-pt bg-brand-color-red h-[50px] rounded-lg text-[24px] font-bold transition-all duration-150 ease-in-out',
                     'hover:cursor-pointer hover:opacity-50',
                   )}
                 >
@@ -241,7 +241,7 @@ const CandidatePage = () => {
                 <Link
                   href={`/candidates/${id}/edit`}
                   className={cn(
-                    'font-pt h-fit rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+                    'font-pt text-brand-gray-dark-text h-fit rounded-lg border-0 px-4 py-[10px] font-bold leading-none transition-all duration-150 ease-in-out',
                     'bg-black text-white no-underline hover:opacity-75',
                   )}
                 >
@@ -257,7 +257,7 @@ const CandidatePage = () => {
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-12">
             <a
-              className="font-londrina mb-0 mt-2 flex w-full flex-col rounded-[12px] border border-[#e6e6e6] bg-white p-2 text-center font-bold no-underline min-[991px]:hidden"
+              className="font-londrina rounded-12 border-brand-border-light mb-0 mt-2 flex w-full flex-col border bg-white p-2 text-center font-bold no-underline min-[991px]:hidden"
               href="#feedback"
             >
               Jump to Sponsored Votes and Feedback

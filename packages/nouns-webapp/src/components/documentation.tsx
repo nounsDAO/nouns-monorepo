@@ -99,7 +99,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="0"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Summary</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -149,7 +149,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="1"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Daily Auctions</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -180,7 +180,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="2"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -198,7 +198,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="3"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nouns DUNA</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -240,7 +240,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="4"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -313,7 +313,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="5"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -334,7 +334,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="6"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -362,7 +362,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="7"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
             <Accordion.Body>
@@ -390,7 +390,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
             eventKey="8"
             className="font-pt mb-10 border-0 bg-transparent text-[1.2rem] font-medium leading-7 tracking-[-0.25px]"
           >
-            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-[#212529] [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal hover:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!text-[var(--brand-dark-red)] focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
+            <Accordion.Header className="[&_button]:font-londrina [&_button:not(.collapsed)]:text-brand-black hover:[&_button]:!text-brand-dark-red focus:[&_button]:!text-brand-dark-red [&_button:not(.collapsed)]:!shadow-none [&_button]:cursor-pointer [&_button]:border-0 [&_button]:bg-transparent [&_button]:py-0 [&_button]:pl-5 [&_button]:text-[2.5rem] [&_button]:leading-normal focus:[&_button]:!shadow-none lg:[&_button]:pl-0">
               <Trans>Nounder&apos;s Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>

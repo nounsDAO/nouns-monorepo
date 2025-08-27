@@ -90,7 +90,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
       </ModalTitle>
 
       {invalidArgument && (
-        <div className="text-[var(--brand-color-rd)]">
+        <div className="text-brand-color-red">
           <Trans>Invalid Arguments</Trans>
         </div>
       )}
@@ -105,7 +105,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
                     {input.type}
                   </InputGroup.Text>
                   <FormControl
-                    className="rounded-15 mb-2 mt-1 h-12 w-full border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)] outline-none"
+                    className="rounded-15 text-brand-cool-dark-text mb-2 mt-1 h-12 w-full border border-black/10 px-4 py-2 text-[22px] font-bold outline-none"
                     value={args[i] ?? ''}
                     onChange={e => setArgument(i, e.target.value)}
                   />

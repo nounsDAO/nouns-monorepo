@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return (
     <div
-      className="lg-max:bg-[rgba(0,0,0,0.74)] fixed inset-0 z-[60] size-full bg-[rgba(75,75,75,0.5)] backdrop-blur-xl"
+      className="lg-max:bg-black/75 fixed inset-0 z-[60] size-full bg-black/50 backdrop-blur-xl"
       onClick={props.onDismiss}
     />
   );

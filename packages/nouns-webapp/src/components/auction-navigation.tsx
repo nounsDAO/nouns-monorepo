@@ -72,10 +72,10 @@ const AuctionNavigation: React.FC<AuctionNavigationProps> = props => {
         className={[
           'inline-block h-8 w-8 appearance-none rounded-full border-0 bg-contain bg-no-repeat p-0 text-[large] font-bold',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          'md-lg:hover:bg-[var(--brand-gray-hover)] md-lg:hover:opacity-90',
+          'md-lg:hover:bg-brand-gray-hover md-lg:hover:opacity-90',
           isCool
-            ? 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]'
-            : 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]',
+            ? 'bg-brand-cool-accent text-brand-cool-dark-text'
+            : 'bg-brand-warm-accent text-brand-warm-dark-text',
         ].join(' ')}
         disabled={isFirstAuction}
       >
@@ -87,10 +87,10 @@ const AuctionNavigation: React.FC<AuctionNavigationProps> = props => {
         className={[
           'ml-[0.3rem] inline-block h-8 w-8 appearance-none rounded-full border-0 bg-contain bg-no-repeat p-0 text-[large] font-bold',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          'md-lg:hover:bg-[var(--brand-gray-hover)] md-lg:hover:opacity-90',
+          'md-lg:hover:bg-brand-gray-hover md-lg:hover:opacity-90',
           isCool
-            ? 'bg-[var(--brand-cool-accent)] text-[var(--brand-cool-dark-text)]'
-            : 'bg-[var(--brand-warm-accent)] text-[var(--brand-warm-dark-text)]',
+            ? 'bg-brand-cool-accent text-brand-cool-dark-text'
+            : 'bg-brand-warm-accent text-brand-warm-dark-text',
         ].join(' ')}
         disabled={isLastAuction}
       >

@@ -208,12 +208,12 @@ const ForkPage = () => {
                 <header>
                   <div className="flex w-full flex-row items-center justify-start gap-[10px] text-center">
                     <Link
-                      className="inline-block size-8 appearance-none rounded-full border border-[rgba(0,0,0,0.1)] bg-white p-0 font-bold leading-[1.85] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
+                      className="text-brand-text-muted-700 inline-block size-8 appearance-none rounded-full border border-black/10 bg-white p-0 font-bold leading-[1.85] no-underline transition-[border] duration-150 ease-in-out hover:border-black/25"
                       href="/fork"
                     >
                       ←
                     </Link>
-                    <span className="rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px] text-[14px] text-[#14161b]">
+                    <span className="border-brand-border-light text-brand-gray-dark-text rounded-md border px-[10px] py-[6px] text-[14px]">
                       {forkStatusLabel}
                     </span>
                     <div className="size-8 opacity-0" />
@@ -257,12 +257,12 @@ const ForkPage = () => {
               <div className="lg:col-span-6">
                 <div className="flex w-full flex-row items-center justify-start gap-[10px] text-center">
                   <Link
-                    className="inline-block size-8 appearance-none rounded-full border border-[rgba(0,0,0,0.1)] bg-white p-0 font-bold leading-[1.85] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
+                    className="text-brand-text-muted-700 inline-block size-8 appearance-none rounded-full border border-black/10 bg-white p-0 font-bold leading-[1.85] no-underline transition-[border] duration-150 ease-in-out hover:border-black/25"
                     href="/fork"
                   >
                     ←
                   </Link>
-                  <span className="rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px] text-[14px] text-[#14161b]">
+                  <span className="border-brand-border-light text-brand-gray-dark-text rounded-md border px-[10px] py-[6px] text-[14px]">
                     {forkStatusLabel}
                   </span>
                   <div className="size-8 opacity-0" />
@@ -271,7 +271,7 @@ const ForkPage = () => {
                   <Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans>
                 </h1>
                 {!isForked && !isForkPeriodActive && (
-                  <p className="mt-[10px] text-[14px] text-[var(--brand-gray-dark-text)] opacity-60">
+                  <p className="text-brand-gray-dark-text mt-[10px] text-[14px] opacity-60">
                     <Trans>
                       More than {forkThreshold == null ? '...' : forkThreshold} Nouns{' '}
                       {`(${forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'}% of the DAO)`}{' '}
@@ -324,10 +324,10 @@ const ForkPage = () => {
       {(isForked || isForkPeriodActive) && (
         <Section fullWidth={false}>
           <div className="col-span-12">
-            <div className="mb-5 rounded-[12px] border border-[#e6e6e6] p-5">
+            <div className="rounded-12 border-brand-border-light mb-5 border p-5">
               {forkDetails.data.forkingPeriodEndTimestamp &&
                 +forkDetails.data.forkingPeriodEndTimestamp > now.getTime() / 1000 && (
-                  <div className={cn('mb-4 border-b border-[rgba(0,0,0,0.1)] pb-4 text-center')}>
+                  <div className={cn('mb-4 border-b border-black/10 pb-4 text-center')}>
                     <ForkingPeriodTimer
                       endTime={+forkDetails.data.forkingPeriodEndTimestamp}
                       isPeriodEnded={isTruthy(
@@ -383,7 +383,7 @@ const ForkPage = () => {
       {!isNewForkPage && escrowEvents.data != null && (
         <div
           className={cn(
-            'mt-12 border-t border-[#e6e6e6] pt-8',
+            'border-brand-border-light mt-12 border-t pt-8',
             isForkPeriodActive && 'mt-0 border-t-0',
             isForked && 'mt-0 border-t-0',
           )}
@@ -393,10 +393,10 @@ const ForkPage = () => {
               <div
                 className={cn(
                   'lg:col-span-3',
-                  'sticky top-[20px] h-fit max-[991px]:relative max-[991px]:top-0 max-[991px]:mb-[30px] max-[991px]:border-b max-[991px]:border-[#e6e6e6] max-[991px]:pb-[30px]',
+                  'max-[991px]:border-brand-border-light sticky top-[20px] h-fit max-[991px]:relative max-[991px]:top-0 max-[991px]:mb-[30px] max-[991px]:border-b max-[991px]:pb-[30px]',
                 )}
               >
-                <div className="mb-5 w-full rounded-[12px] border border-[#e6e6e6] p-5 text-center leading-none">
+                <div className="rounded-12 border-brand-border-light mb-5 w-full border p-5 text-center leading-none">
                   <span>{isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}</span>
                   <strong>
                     {isForkPeriodActive || isForked ? (
@@ -418,7 +418,7 @@ const ForkPage = () => {
                     })()}
                   </strong>
                   {isForkPeriodActive || isForked ? null : (
-                    <span className="mt-2 border-t border-[rgba(0,0,0,0.1)] pt-2">
+                    <span className="mt-2 border-t border-black/10 pt-2">
                       {currentEscrowPercentage >= 100
                         ? `threshold met`
                         : `${currentEscrowPercentage}% of threshold`}
@@ -464,7 +464,7 @@ const ForkPage = () => {
                 {!isForked &&
                   userEscrowedNounIds.data != null &&
                   userEscrowedNounIds.data.length > 0 && (
-                    <div className={cn('mb-5 rounded-[12px] border border-[#e6e6e6] p-5')}>
+                    <div className={cn('rounded-12 border-brand-border-light mb-5 border p-5')}>
                       <p>
                         Your Noun{userEscrowedNounIds.data.length > 1 && 's'} in escrow:{' '}
                         <strong>

@@ -79,7 +79,7 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
             return (
               <li
                 key={i}
-                className="relative [&_table:first-of-type]:ml-0 [&_table]:!m-0 [&_table]:block [&_table]:!w-full [&_table]:!bg-[#fafbfc] [&_tbody]:block [&_td:nth-child(even)]:w-[calc(50%_-_25px)] [&_td:nth-child(odd)]:pr-[5px] [&_tr]:flex [&_tr]:w-full [&_tr]:items-stretch"
+                className="[&_table]:!bg-brand-surface-subtle relative [&_table:first-of-type]:ml-0 [&_table]:!m-0 [&_table]:block [&_table]:!w-full [&_tbody]:block [&_td:nth-child(even)]:w-[calc(50%_-_25px)] [&_td:nth-child(odd)]:pr-[5px] [&_tr]:flex [&_tr]:w-full [&_tr]:items-stretch"
               >
                 {/* manually add num for better css control */}
                 <div className="absolute -left-6 top-0">{i + 1}.</div>

@@ -32,7 +32,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
       className={cn(
         'font-pt p-3 text-[1.1rem] font-bold transition-all duration-200 ease-in-out',
         'rounded-14 h-18 mt-3 w-full border-b-0 bg-white',
-        'border-[var(--brand-cool-border)] hover:brightness-105',
+        'border-brand-cool-border hover:brightness-105',
       )}
     >
       <div className={cn('flex items-center justify-between')}>
@@ -70,16 +70,12 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = ({ bid, index }) =
             className={cn(
               'whitespace-nowrap',
               'font-pt mr-4 pt-[2px] text-[18px] font-bold',
-              'text-[var(--brand-cool-dark-text)]',
+              'text-brand-cool-dark-text',
             )}
           >
             {bidAmount}
           </div>
-          <div
-            className={cn(
-              'text-[var(--brand-cool-light-text)] hover:text-[var(--brand-cool-dark-text)]',
-            )}
-          >
+          <div className={cn('text-brand-cool-light-text hover:text-brand-cool-dark-text')}>
             <a href={txLink} target="_blank" rel="noreferrer">
               <div className="text-brand-gray-light-text mb-px transition-all duration-150 ease-in-out hover:cursor-pointer hover:text-black">
                 <ExternalLinkIcon height={24} width={24} />

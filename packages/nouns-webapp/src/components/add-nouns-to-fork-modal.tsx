@@ -234,8 +234,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       <button
         type="button"
         className={cn(
-          'font-pt h-fit rounded-lg border-0 px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-          'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+          'font-pt text-brand-gray-dark-text h-fit rounded-lg border-0 px-4 py-[10px] text-[22px] font-bold leading-none transition-all duration-150 ease-in-out',
+          'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-neutral-300 disabled:hover:opacity-100',
         )}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
@@ -247,7 +247,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
       <button
         type="button"
         className={cn(
-          'font-pt h-fit rounded-lg border-0 bg-[#faf4f8] px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+          'font-pt bg-brand-surface-pink text-brand-gray-dark-text h-fit rounded-lg border-0 px-4 py-[10px] text-[22px] font-bold leading-none transition-all duration-150 ease-in-out',
         )}
         onClick={() => {
           props.setIsConfirmModalOpen(false);
@@ -319,12 +319,12 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           );
           return (
             <div
-              className="flex flex-row items-center justify-between rounded-[8px] border-2 border-[#d3d3d3] bg-white px-[10px] py-[6px] text-[16px]"
+              className="border-brand-border-neutral-300 flex flex-row items-center justify-between rounded-lg border-2 bg-white px-[10px] py-[6px] text-[16px]"
               key={i}
             >
               <span>
                 <a
-                  className="text-[#14161b] no-underline hover:underline"
+                  className="text-brand-gray-dark-text no-underline hover:underline"
                   href={`/vote/${prop?.id}`}
                   target="_blank"
                   rel="noreferrer"
@@ -401,10 +401,10 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 (props.userEscrowedNouns?.includes(nounId) ?? false)
               }
               className={cn(
-                'font-londrina relative w-[calc(33%_-_6px)] cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50 max-[991px]:w-full',
-                selectedNouns.includes(nounId) && 'border-2 border-[rgba(0,0,0,0.75)]',
+                'font-londrina rounded-12 relative w-[calc(33%_-_6px)] cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 max-[991px]:w-full',
+                selectedNouns.includes(nounId) && 'border-2 border-black/75',
                 (props.userEscrowedNouns?.includes(nounId) ?? false) &&
-                  'overflow-hidden border-[#e8e8e8] opacity-100 hover:border-[#e8e8e8] hover:shadow-none [&>div]:opacity-65',
+                  'border-brand-surface-neutral hover:border-brand-surface-neutral overflow-hidden opacity-100 hover:shadow-none [&>div]:opacity-65',
               )}
               key={nounId}
             >
@@ -417,7 +417,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 Noun {nounId}
               </div>
               {(props.userEscrowedNouns?.includes(nounId) ?? false) && (
-                <span className="font-pt absolute left-0 top-0 w-full rounded-[4px] border-b border-[#e6e6e6] bg-white p-0 text-center text-[10px] font-bold">
+                <span className="font-pt border-brand-border-light absolute left-0 top-0 w-full rounded border-b bg-white p-0 text-center text-[10px] font-bold">
                   {props.isForkingPeriod ? 'in fork' : 'in escrow'}
                 </span>
               )}
@@ -435,10 +435,10 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           <button
             type="button"
             className={cn(
-              'font-pt h-fit rounded-lg border-0 px-4 py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-              'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+              'font-pt text-brand-gray-dark-text h-fit rounded-lg border-0 px-4 py-[10px] text-[22px] font-bold leading-none transition-all duration-150 ease-in-out',
+              'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-neutral-300 disabled:hover:opacity-100',
               (isWaiting || isApprovalWaiting || isLoading || isApprovalLoading) &&
-                'font-pt mb-5 w-full rounded-[8px] border border-[#e6e6e6] bg-[rgba(0,0,0,0.05)] p-4 text-center text-[15px] font-bold text-[#14161b]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text mb-5 w-full rounded-lg border bg-black/5 p-4 text-center text-[15px] font-bold',
             )}
             disabled={
               selectedNouns.length === 0 ||
@@ -476,8 +476,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         {(isTruthy(approvalErrorMessage) || isTruthy(errorMessage)) && (
           <p
             className={cn(
-              'font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-150 ease-in-out',
-              'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+              'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+              'border-brand-color-red-translucent bg-brand-color-red-translucent text-brand-color-red',
             )}
           >
             {isTruthy(approvalErrorMessage) ? approvalErrorMessage : errorMessage}
@@ -495,8 +495,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           <>
             <p
               className={cn(
-                'font-pt mb-4 rounded-lg border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[#14161b] transition-all duration-150 ease-in-out',
-                'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+                'border-brand-color-green bg-brand-color-green-translucent text-brand-color-green',
               )}
             >
               <a
@@ -566,7 +566,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                     isTruthy(errorMessage) ||
                     isTruthy(approvalErrorMessage)
                   ) && (
-                    <span className="relative top-[3px] inline-block size-[18px] animate-pulse rounded-full bg-[rgba(0,0,0,0.3)] opacity-50"></span>
+                    <span className="relative top-[3px] inline-block size-[18px] animate-pulse rounded-full bg-black/30 opacity-50"></span>
                   )}
                 </strong>
                 <Trans>Add to escrow</Trans>
@@ -579,7 +579,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
         )}
         {selectedNouns.length > 0 && !isTxSuccessful && (
           <>
-            <p className={'text-[15px] text-[#14161b]'}>
+            <p className={'text-brand-gray-dark-text text-[15px]'}>
               Adding {selectedNouns.map(nounId => `Noun ${nounId}`).join(', ')}
             </p>
           </>

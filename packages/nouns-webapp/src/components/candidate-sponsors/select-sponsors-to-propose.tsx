@@ -204,8 +204,8 @@ const SelectSponsorsToPropose = (props: Props) => {
                 signature.signer.activeOrPendingProposal === true
               }
               className={cn(
-                'font-londrina relative w-full cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50 max-[991px]:w-full',
-                selectedSignatures.includes(signature) && 'border-2 border-[rgba(0,0,0,0.75)]',
+                'font-londrina rounded-12 relative w-full cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 max-[991px]:w-full',
+                selectedSignatures.includes(signature) && 'border-2 border-black/75',
               )}
             >
               <div className={'flex flex-row items-center justify-center gap-[10px]'}>
@@ -217,7 +217,7 @@ const SelectSponsorsToPropose = (props: Props) => {
                   style={{ borderRadius: '6px' }}
                 />
                 <ShortAddress address={signature.signer.id} />
-                <p className={'m-0 p-0 text-[13px] font-bold text-[var(--brand-gray-dark-text)]'}>
+                <p className={'text-brand-gray-dark-text m-0 p-0 text-[13px] font-bold'}>
                   <Plural value={signature.signer.voteCount ?? 0} one="# vote" other="# votes" />
                 </p>
               </div>
@@ -230,10 +230,10 @@ const SelectSponsorsToPropose = (props: Props) => {
           <button
             type="button"
             className={cn(
-              'font-pt h-fit rounded-[8px] border-0 px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-              'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
+              'font-pt text-brand-gray-dark-text h-fit rounded-lg border-0 px-[16px] py-[10px] text-[22px] font-bold leading-none transition-all duration-150 ease-in-out',
+              'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-neutral-300 disabled:hover:opacity-100',
               (isWaiting || isLoading) &&
-                'font-pt w-full border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text w-full border bg-white p-4 text-center text-[15px] font-bold',
             )}
             disabled={selectedVoteCount < props.requiredVotes || isWaiting || isLoading}
             onClick={() => {
@@ -265,8 +265,8 @@ const SelectSponsorsToPropose = (props: Props) => {
         {errorMessage !== '' && (
           <p
             className={cn(
-              'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-              'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+              'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+              'border-brand-color-red-translucent bg-brand-color-red-translucent text-brand-color-red',
             )}
           >
             {errorMessage}
@@ -284,8 +284,8 @@ const SelectSponsorsToPropose = (props: Props) => {
           <>
             <p
               className={cn(
-                'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
-                'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
+                'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border bg-white px-8 py-4 text-center text-[15px] font-bold transition-all duration-150 ease-in-out',
+                'border-brand-color-green bg-brand-color-green-translucent text-brand-color-green',
               )}
             >
               <strong>

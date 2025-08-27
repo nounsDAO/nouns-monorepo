@@ -53,7 +53,7 @@ const ProposalTransactions = ({
           key={`${tx.signature}-${tx.calldata}`}
           title={getHoverText(tx)}
           className={
-            'mt-4 flex items-center justify-between rounded-[8px] border border-[#aaa] px-4 py-2'
+            'border-brand-border-muted mt-4 flex items-center justify-between rounded-lg border px-4 py-2'
           }
         >
           <div>

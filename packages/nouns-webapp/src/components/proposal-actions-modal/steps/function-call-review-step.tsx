@@ -78,7 +78,7 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
           <span className="opacity-50">
             <Trans>Address</Trans>
           </span>
-          <div className="mb-2 break-all text-[22px] font-bold text-[var(--brand-cool-dark-text)]">
+          <div className="text-brand-cool-dark-text mb-2 break-all text-[22px] font-bold">
             <a href={buildEtherscanAddressLink(address)} target="_blank" rel="noreferrer">
               <ShortAddress address={address} />
             </a>
@@ -92,7 +92,7 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
             <span className="opacity-50">
               <Trans>Value</Trans>
             </span>
-            <div className="mb-2 break-all text-[22px] font-bold text-[var(--brand-cool-dark-text)]">
+            <div className="text-brand-cool-dark-text mb-2 break-all text-[22px] font-bold">
               {value ? `${value} ETH` : <Trans>None</Trans>}
             </div>
           </div>
@@ -107,7 +107,7 @@ const FunctionCallReviewStep: React.FC<FinalProposalActionStepProps> = props => 
             <span className="opacity-50">
               <Trans>Function</Trans>
             </span>
-            <div className="mb-2 break-all text-[22px] font-bold text-[var(--brand-cool-dark-text)]">
+            <div className="text-brand-cool-dark-text mb-2 break-all text-[22px] font-bold">
               {func || <Trans>None</Trans>}
             </div>
           </div>

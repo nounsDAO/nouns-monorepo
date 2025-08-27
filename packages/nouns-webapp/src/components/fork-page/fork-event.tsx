@@ -67,7 +67,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className="text-[#14161b] no-underline hover:underline"
+              className="text-brand-gray-dark-text no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -98,7 +98,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className="text-[#14161b] no-underline hover:underline"
+              className="text-brand-gray-dark-text no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -129,7 +129,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
               href={buildEtherscanAddressLink(event.owner.id || '')}
               target="_blank"
               rel="noreferrer"
-              className="text-[#14161b] no-underline hover:underline"
+              className="text-brand-gray-dark-text no-underline hover:underline"
             >
               <ShortAddress address={event.owner.id || ''} avatar={false} />
             </a>,
@@ -174,13 +174,16 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
 
   return (
     <div className={cn('group relative m-0 pb-[50px] pl-[40px]', isOnlyEvent && '')} id={event.id}>
-      <span aria-hidden className="absolute bottom-0 left-[6px] top-[3px] w-[3px] bg-[#b3b3b3]" />
+      <span
+        aria-hidden
+        className="bg-brand-border-muted-400 absolute bottom-0 left-[6px] top-[3px] w-[3px]"
+      />
       <a href={`#${event.id}`} className="absolute -left-[7px] -top-[2px] block size-[30px]">
-        <span className="absolute inset-0 rounded-full border-[3px] border-[#B3B3B3] bg-white" />
-        <span className="absolute inset-0 rounded-full border-[3px] border-[#14161b] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
+        <span className="border-brand-border-muted-400 absolute inset-0 rounded-full border-[3px] bg-white" />
+        <span className="border-brand-gray-dark-text absolute inset-0 rounded-full border-[3px] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
       </a>
       <header>
-        <span className="font-londrina text-[#14161b]">
+        <span className="font-londrina text-brand-gray-dark-text">
           <a
             href={`#${event.id}`}
             className="no-underline transition-all duration-200 ease-in-out group-hover:opacity-100"
@@ -210,7 +213,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
         {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
           proposalsList &&
           proposalsList.length > 0 && (
-            <div className="mt-5 list-none border-t border-[#e6e6e6] pt-[10px]">
+            <div className="border-brand-border-light mt-5 list-none border-t pt-[10px]">
               <p className="m-0 p-0 text-[14px] font-bold opacity-80">
                 <Trans>Offending proposal{proposalsList.length === 1 ? '' : 's'}</Trans>
               </p>

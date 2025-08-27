@@ -58,7 +58,7 @@ const CandidateHistoryPage = () => {
           'font-pt text-[1.1rem] [&_h1]:mt-4 [&_h1]:text-[1.7rem] [&_h1]:font-bold [&_h2]:mt-4 [&_h2]:text-[1.5rem] [&_h2]:font-bold [&_h3]:text-[1.3rem] [&_img]:h-auto [&_img]:max-w-full',
           '[&_.section]:mt-8 [&_.section]:break-words [&_.section]:pt-8',
           '[&_.section_h5]:font-londrina [&_.section_h5]:mt-4 [&_.section_h5]:text-[1.7rem]',
-          '[&_.txnInfoText]:my-1 [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:font-medium [&_.txnInfoText]:text-[var(--brand-gray-light-text)]',
+          '[&_.txnInfoText]:text-brand-gray-light-text [&_.txnInfoText]:my-1 [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:font-medium',
           'lg-max:[&_.txnInfoText]:items-start lg-max:[&_.txnInfoText]:mt-4',
           '[&_.txnInfoIcon]:size-[18px] [&_.txnInfoIcon]:opacity-50',
           'lg-max:[&_.txnInfoIcon]:mt-1 lg-max:[&_.txnInfoIcon]:mr-2',
@@ -73,15 +73,11 @@ const CandidateHistoryPage = () => {
   };
 
   const headerDiffs = (str: string) => {
-    return (
-      <h1 className={'font-londrina mt-4 text-[1.7rem] text-[var(--brand-gray-light-text)]'}>
-        {str}
-      </h1>
-    );
+    return <h1 className={'font-londrina text-brand-gray-light-text mt-4 text-[1.7rem]'}>{str}</h1>;
   };
 
   return (
-    <Section fullWidth={false} className={'[&_a]:text-[var(--brand-dark-red)]'}>
+    <Section fullWidth={false} className={'[&_a]:text-brand-dark-red'}>
       <div className={'mx-auto'}>
         <div className={'relative'}>
           <Link href={`/candidates/${id}`}>
@@ -89,7 +85,7 @@ const CandidateHistoryPage = () => {
               type="button"
               className={cn(
                 'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
-                'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
+                'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
                 'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
               )}
             >
@@ -98,7 +94,7 @@ const CandidateHistoryPage = () => {
           </Link>
         </div>
         <div>
-          <span className={'font-londrina text-[24px] text-[#8c8d92]'}>
+          <span className={'font-londrina text-brand-gray-light-text text-[24px]'}>
             <div className="d-flex">
               <div>
                 <Trans>Proposal Candidate</Trans>
@@ -121,7 +117,7 @@ const CandidateHistoryPage = () => {
                   />
                 </div>
               ) : (
-                <h1 className={'font-londrina text-[42px] text-[#14161b]'}>
+                <h1 className={'font-londrina text-brand-gray-dark-text text-[42px]'}>
                   {proposalVersions
                     ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title
                     : proposal.data?.title}{' '}
@@ -187,7 +183,7 @@ const CandidateHistoryPage = () => {
                   <Trans>Version History</Trans>
                 </h2>
               </div>
-              <div className={'flex flex-col gap-[10px] text-[var(--brand-gray-light-text)]'}>
+              <div className={'text-brand-gray-light-text flex flex-col gap-[10px]'}>
                 {proposalVersions &&
                   proposalVersions
                     .map((version: ProposalCandidateVersionContent, i: number) => (

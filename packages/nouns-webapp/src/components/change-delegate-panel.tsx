@@ -108,11 +108,11 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
     }
 
     if (isAddress(delegateAddress)) {
-      setDelegateInputClass('border-2 border-[var(--brand-color-green)]');
+      setDelegateInputClass('border-2 border-brand-color-green');
       return;
     }
 
-    setDelegateInputClass('border-2 border-[var(--brand-color-red)]');
+    setDelegateInputClass('border-2 border-brand-color-red');
   }, [delegateAddress, delegateTo, hasResolvedDeepLinkedENS]);
 
   const etherscanTxLink = buildEtherscanTxLink(delegateState.transaction?.hash ?? '');
@@ -133,7 +133,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
             {locale === 'en-US' ? (
               <>
                 Delegate{' '}
-                <span className="w-[22px] rounded-full bg-[radial-gradient(#ffffff70_15%,rgba(0,0,0,0)_75%)] px-[8px] py-[6px] text-center text-[20px] leading-[22px]">
+                <span className="bg-radial-white-70 w-[22px] rounded-full px-[8px] py-[6px] text-center text-[20px] leading-[22px]">
                   {availableVotes}
                 </span>
                 {availableVotes === 1 ? <>Vote</> : <>Votes</>}
@@ -223,7 +223,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         </h1>
         <p className="font-pt text-brand-cool-dark-text font-medium">{primaryCopy}</p>
         {availableVotes > 0 && accountVotes - availableVotes < (proposalThreshold ?? 0) + 1 && (
-          <div className="-mt-2 rounded-[14px] border border-[var(--brand-color-red)] bg-[var(--brand-color-red-translucent)] px-4 py-1 text-[var(--brand-color-red)]">
+          <div className="rounded-14 border-brand-color-red bg-brand-color-red-translucent text-brand-color-red -mt-2 border px-4 py-1">
             <Trans>
               Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
               {proposalThreshold === 0 || proposalThreshold === null ? 'vote' : 'votes'} after this
@@ -237,7 +237,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
       {changeDelegateState !== ChangeDelegateState.CHANGE_FAILURE && delegateTo === undefined && (
         <FormControl
           className={cn(
-            'font-pt h-[54px] w-full !rounded-[12px] bg-white text-[25px] font-bold text-black !shadow-none outline-none transition-all duration-200 ease-in-out focus:shadow-none',
+            'font-pt !rounded-12 h-[54px] w-full bg-white text-[25px] font-bold text-black !shadow-none outline-none transition-all duration-200 ease-in-out focus:shadow-none',
             delegateInputClass,
           )}
           type="string"
@@ -264,7 +264,7 @@ const ChangeDelegatePanel: React.FC<ChangeDelegatePanelProps> = props => {
         <div className="mt-2 pb-1 pr-1">
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
           delegateAddress === currentDelegate ? (
-            <span className="ml-1 text-[var(--brand-cool-light-text)]">
+            <span className="text-brand-cool-light-text ml-1">
               <Trans>You&apos;ve already delegated to this address</Trans>
             </span>
           ) : (

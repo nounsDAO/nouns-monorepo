@@ -18,14 +18,14 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = ({ treasuryBalance, treasu
 
   const styleWrapper =
     treasuryStyle === NavBarButtonStyle.WARM_INFO
-      ? 'rounded-10 border text-[var(--brand-warm-light-text)] border-[var(--brand-warm-border)] hover:text-black hover:bg-[var(--brand-warm-accent)]'
+      ? 'rounded-10 border text-brand-warm-light-text border-brand-warm-border hover:text-black hover:bg-brand-warm-accent'
       : treasuryStyle === NavBarButtonStyle.COOL_INFO
-        ? 'rounded-10 border text-brand-cool-dark-text border-[var(--brand-cool-border)] hover:text-black hover:bg-[var(--brand-cool-accent)]'
+        ? 'rounded-10 border text-brand-cool-dark-text border-brand-cool-border hover:text-black hover:bg-brand-cool-accent'
         : 'bg-white';
 
   const balanceColor =
     treasuryStyle === NavBarButtonStyle.WARM_INFO
-      ? 'text-[var(--brand-warm-dark-text)]'
+      ? 'text-brand-warm-dark-text'
       : treasuryStyle === NavBarButtonStyle.COOL_INFO
         ? 'text-brand-cool-dark-text'
         : '';

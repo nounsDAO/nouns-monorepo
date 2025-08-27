@@ -24,7 +24,7 @@ const LanguageSelectionModal: FC<LanguageSelectionModalProps> = ({ onDismiss }) 
       {SUPPORTED_LOCALES.map((locale: SupportedLocale) => {
         return (
           <div
-            className="text-brand-black m-[5px] flex justify-between rounded-[5px] border-0 bg-[rgba(211,211,211,0.664)] px-[20px] py-[5px] outline-none hover:bg-[lightgray] hover:text-white focus:bg-[lightgray] focus:shadow-none focus:outline-none active:bg-[lightgray] active:shadow-none disabled:bg-[lightgray]"
+            className="text-brand-black m-[5px] flex justify-between rounded-[5px] border-0 bg-gray-300/70 px-[20px] py-[5px] outline-none hover:bg-gray-300 hover:text-white focus:bg-gray-300 focus:shadow-none focus:outline-none active:bg-gray-300 active:shadow-none disabled:bg-gray-300"
             key={locale}
             onClick={() => {
               setActiveLocale(locale);

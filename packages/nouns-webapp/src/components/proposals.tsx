@@ -168,7 +168,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   return (
     <div className="flex flex-col">
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className="mb-4 flex items-center justify-between border-b border-[rgba(0,0,0,0.1)]">
+      <div className="mb-4 flex items-center justify-between border-b border-black/10">
         <Section fullWidth={false} className="mx-auto w-full">
           <div
             className={cn(
@@ -185,7 +185,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   className={cn(
                     'font-londrina rounded-[12px] rounded-b-none border border-transparent bg-white px-[14px] pb-[6px] pt-[10px] text-[32px] leading-none text-black',
                     index === activeTab &&
-                      'relative top-[2px] border border-[rgba(0,0,0,0.1)] border-b-white px-[14px] py-[10px]',
+                      'relative top-[2px] border border-black/10 border-b-white px-[14px] py-[10px]',
                   )}
                   onClick={() => setActiveTab(index)}
                   key={index}
@@ -201,7 +201,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 <div className="text-right">
                   <Button
                     className={
-                      'mb-2 h-12 max-w-40 rounded-[12px] border border-[var(--brand-color-green)] bg-[var(--brand-color-green)] font-bold hover:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:bg-[var(--brand-color-green)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] active:bg-[var(--brand-color-green)]'
+                      'rounded-12 border-brand-color-green bg-brand-color-green hover:bg-brand-color-green hover:shadow-brand-focus-green focus:bg-brand-color-green focus:shadow-brand-focus-green active:bg-brand-color-green mb-2 h-12 max-w-40 border font-bold'
                     }
                     onClick={() => router.push('/create-proposal')}
                   >
@@ -213,7 +213,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   <div className="pl-2">
                     <Button
                       className={
-                        'mb-2 h-12 max-w-40 rounded-[12px] border border-[rgba(0,0,0,0.1)] bg-white font-bold text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black focus:bg-[#e2e3e8] focus:text-black active:bg-[#e2e3e8]'
+                        'rounded-12 text-brand-text-muted-700 hover:bg-brand-surface-muted focus:bg-brand-surface-muted active:bg-brand-surface-muted mb-2 h-12 max-w-40 border border-black/10 bg-white font-bold hover:text-black focus:text-black'
                       }
                       onClick={() => setShowDelegateModal(true)}
                     >
@@ -226,7 +226,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               <div className={cn('d-flex', 'text-right')}>
                 {!isMobile && (
                   <div
-                    className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px] text-[var(--brand-gray-light-text)]`}
+                    className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center text-brand-gray-light-text mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px]`}
                   >
                     {nullStateCopy()}
                   </div>
@@ -235,7 +235,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   <div className={'min-w-40'}>
                     <Button
                       className={
-                        'mb-2 h-12 max-w-40 cursor-not-allowed rounded-[12px] border border-[#e2e3e8] bg-[#f4f4f8] font-bold text-[#8c8d92] hover:border-[#f4f4f8] hover:bg-[#f4f4f8] hover:text-[#8c8d92] focus:border-[#f4f4f8] focus:bg-[#f4f4f8] focus:text-[#8c8d92] focus:shadow-none focus:outline-none active:bg-[#f4f4f8]'
+                        'rounded-12 border-brand-border-ui bg-brand-surface text-brand-text-muted-600 hover:border-brand-surface hover:bg-brand-surface hover:text-brand-text-muted-600 focus:border-brand-surface focus:bg-brand-surface focus:text-brand-text-muted-600 active:bg-brand-surface mb-2 h-12 max-w-40 cursor-not-allowed border font-bold focus:shadow-none focus:outline-none'
                       }
                     >
                       <Trans>Submit Proposal</Trans>
@@ -246,7 +246,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   <div className={'pl-2'}>
                     <Button
                       className={
-                        'mb-2 h-12 max-w-40 rounded-[12px] border border-[rgba(0,0,0,0.1)] bg-white font-bold text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black focus:bg-[#e2e3e8] focus:text-black active:bg-[#e2e3e8]'
+                        'rounded-12 text-brand-text-muted-700 hover:bg-brand-surface-muted focus:bg-brand-surface-muted active:bg-brand-surface-muted mb-2 h-12 max-w-40 border border-black/10 bg-white font-bold hover:text-black focus:text-black'
                       }
                       onClick={() => setShowDelegateModal(true)}
                     >
@@ -266,7 +266,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             <div className="w-full">
               <div>
                 <div
-                  className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px] text-[var(--brand-gray-light-text)]`}
+                  className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center text-brand-gray-light-text mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px]`}
                 >
                   {nullStateCopy()}
                 </div>
@@ -278,7 +278,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   <div className={'text-right'}>
                     <Button
                       className={
-                        'mb-2 h-12 max-w-40 rounded-[12px] border border-[var(--brand-color-green)] bg-[var(--brand-color-green)] font-bold hover:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:bg-[var(--brand-color-green)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] active:bg-[var(--brand-color-green)]'
+                        'rounded-12 border-brand-color-green bg-brand-color-green hover:bg-brand-color-green hover:shadow-brand-focus-green focus:bg-brand-color-green focus:shadow-brand-focus-green active:bg-brand-color-green mb-2 h-12 max-w-40 border font-bold'
                       }
                       onClick={() => router.push('create-proposal')}
                     >
@@ -289,7 +289,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     <div className={'pl-2'}>
                       <Button
                         className={
-                          'mb-2 h-12 max-w-40 rounded-[12px] border border-[rgba(0,0,0,0.1)] bg-white font-bold text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black focus:bg-[#e2e3e8] focus:text-black active:bg-[#e2e3e8]'
+                          'rounded-12 text-brand-text-muted-700 hover:bg-brand-surface-muted focus:bg-brand-surface-muted active:bg-brand-surface-muted mb-2 h-12 max-w-40 border border-black/10 bg-white font-bold hover:text-black focus:text-black'
                         }
                         onClick={() => setShowDelegateModal(true)}
                       >
@@ -322,7 +322,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       <div
                         className={cn(
                           'font-pt rounded-lg border-2 border-transparent px-2.5 py-1.5 text-sm font-bold text-white',
-                          '-ml-2 w-fit bg-[var(--brand-gray-light-text-translucent)]',
+                          'bg-brand-gray-light-text-translucent -ml-2 w-fit',
                         )}
                       >
                         <div className={'flex flex-row'}>
@@ -340,14 +340,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   return (
                     <a
                       className={cn(
-                        'font-pt mb-4 mt-[0.4rem] flex flex-col rounded-[16px] border border-[#e2e3e8] bg-[#f4f4f8] p-4 text-[22px] font-bold no-underline hover:cursor-pointer hover:bg-white',
+                        'font-pt border-brand-border-ui bg-brand-surface mb-4 mt-[0.4rem] flex flex-col rounded-2xl border p-4 text-[22px] font-bold no-underline hover:cursor-pointer hover:bg-white',
                       )}
                       href={`/vote/${p.id}`}
                       key={i}
                     >
                       <div className={'flex w-full flex-row items-center justify-between'}>
                         <span className={`lg-max:max-w-[65%] lg-max:break-words w-4/5`}>
-                          <span className={'mr-2 text-[#8c8d92]'}>
+                          <span className={'text-brand-text-muted-600 mr-2'}>
                             {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
                           <span>{p.title}</span>
@@ -417,7 +417,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       <Alert
                         variant="secondary"
                         className={
-                          'font-pt my-4 flex flex-col items-center justify-center text-center text-[16px] font-medium leading-[22.4px] text-[var(--brand-gray-light-text)]'
+                          'font-pt text-brand-gray-light-text my-4 flex flex-col items-center justify-center text-center text-[16px] font-medium leading-[22.4px]'
                         }
                       >
                         <Spinner animation="border" />
@@ -443,7 +443,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     <Trans>About Proposal Candidates</Trans>
                   </strong>
                 </h4>
-                <p className="m-0 p-0 text-[var(--brand-gray-light-text)]">
+                <p className="text-brand-gray-light-text m-0 p-0">
                   <Trans>
                     Proposal candidates can be created by anyone. If a candidate receives enough
                     signatures by Nouns voters, it can be promoted to a proposal.
@@ -452,7 +452,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 <Link
                   href="/create-candidate"
                   className={cn(
-                    'mt-4 block rounded-[12px] border border-[rgba(0,0,0,0.1)] bg-black p-4 text-center font-bold leading-none text-white no-underline hover:border-[rgba(0,0,0,0.1)] hover:bg-black hover:text-[#e2e3e8] hover:shadow-none',
+                    'rounded-12 hover:text-brand-border-ui mt-4 block border border-black/10 bg-black p-4 text-center font-bold leading-none text-white no-underline hover:border-black/10 hover:bg-black hover:shadow-none',
                   )}
                 >
                   Create a candidate

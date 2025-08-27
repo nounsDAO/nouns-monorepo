@@ -104,7 +104,7 @@ const StreamWithdrawModalOverlay: React.FC<StreamWithdrawModalOverlayProps> = pr
               </p>
               <div className="mt-4 font-bold">
                 Error:{' '}
-                <span className="font-bold text-[var(--brand-color-red)]">
+                <span className="text-brand-color-red font-bold">
                   {withdrawTokensState.errorMessage}
                 </span>
               </div>

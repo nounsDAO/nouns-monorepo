@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { useWithdrawFromForkEscrow } from '@/wrappers/nouns-dao';
 
-
 type Props = {
   tokenIds: number[];
   isWithdrawModalOpen: boolean;
@@ -93,12 +92,11 @@ function WithdrawNounsButton(props: Props) {
       <p>Withdrawing {props.tokenIds.map(nounId => `Noun ${nounId}`).join(', ')}</p>
       <p
         className={cn(
-          'text-[15px] mb-4 p-4 text-center font-pt font-bold bg-white border border-[#e6e6e6] rounded-[8px]',
-          'mb-0',
+          'font-pt border-brand-border-light mb-4 rounded-lg border bg-white p-4 text-center text-[15px] font-bold',
           isTxSuccessful &&
-            'text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)]',
+            'text-brand-color-green border-brand-color-green bg-brand-color-green-translucent',
           isError &&
-            'text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)]',
+            'text-brand-color-red border-brand-color-red-translucent bg-brand-color-red-translucent',
         )}
       >
         {isWaiting && (
@@ -145,9 +143,9 @@ function WithdrawNounsButton(props: Props) {
       <button
         type="button"
         className={cn(
-          'rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out leading-[1] py-[10px] px-[16px] h-fit',
-          'bg-white text-black border-2 border-black no-underline hover:opacity-75',
-          'border-[var(--brand-color-red)] text-[var(--brand-color-red)]',
+          'font-pt h-fit rounded-lg px-[16px] py-[10px] font-bold leading-[1] transition-all duration-150 ease-in-out',
+          'border-2 border-black bg-white text-black no-underline hover:opacity-75',
+          'border-brand-color-red text-brand-color-red',
         )}
         onClick={async () => {
           await withdrawFromForkEscrow({

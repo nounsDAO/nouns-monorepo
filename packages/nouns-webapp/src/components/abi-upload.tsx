@@ -15,7 +15,7 @@ const ABIUpload: React.FC<ABIUploadProps> = ({ abiFileName, isInvalid, onChange 
         {displayLabel}
       </label>
       <input
-        className="h-12 w-full rounded-[15px] border border-[rgba(0,0,0,0.1)] px-4 py-2 text-[22px] font-bold text-[var(--brand-cool-dark-text)]"
+        className="text-brand-cool-dark-text h-12 w-full rounded-[15px] border border-black/10 px-4 py-2 text-[22px] font-bold"
         type="file"
         id="import-abi"
         accept="application/JSON"

@@ -38,9 +38,7 @@ export const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ bid, isCool }) =
           <div className="font-pt font-bold">
             <div
               className={`font-pt text-[18px] font-bold ${
-                isTruthy(isCool)
-                  ? 'text-[var(--brand-cool-dark-text)]'
-                  : 'text-[var(--brand-warm-dark-text)]'
+                isTruthy(isCool) ? 'text-brand-cool-dark-text' : 'text-brand-warm-dark-text'
               }`}
             >
               <ShortAddress address={bid.sender} avatar={!isMobile} />
@@ -50,7 +48,7 @@ export const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ bid, isCool }) =
         </div>
         <div className="flex flex-row items-center justify-center">
           <div className="font-pt mr-4 pt-[2px] text-[18px] font-bold">{bidAmount}</div>
-          <div className="text-[var(--brand-cool-light-text)] hover:text-[var(--brand-cool-dark-text)]">
+          <div className="text-brand-cool-light-text hover:text-brand-cool-dark-text">
             <a href={txLink} target="_blank" rel="noreferrer">
               <LinkIcon width={24} height={24} aria-label="link symbol" />
             </a>

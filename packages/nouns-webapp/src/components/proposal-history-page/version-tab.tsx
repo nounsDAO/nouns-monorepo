@@ -34,9 +34,8 @@ const VersionTab = (props: Props) => {
     <>
       <Link
         className={cn(
-          'rounded-[12px] border border-transparent bg-[#f2f2f5] p-[15px] text-left no-underline hover:border hover:border-[rgba(0,0,0,0.2)] hover:bg-[#e6e6eb]',
-          props.isActive &&
-            'border border-[rgba(0,0,0,0.4)] bg-white [&_h4]:text-[var(--brand-gray-dark-text)]',
+          'rounded-12 bg-brand-surface hover:bg-brand-surface-muted border border-transparent p-[15px] text-left no-underline hover:border hover:border-black/20',
+          props.isActive && '[&_h4]:text-brand-gray-dark-text border border-black/40 bg-white',
         )}
         href={versionLink}
       >
@@ -45,9 +44,9 @@ const VersionTab = (props: Props) => {
         </h4>
         <span>{updatedTimestamp !== null ? dayjs(updatedTimestamp).fromNow() : null}</span>
         {props.updateMessage !== '' && props.isActive === true && (
-          <div className={'mt-[10px] border-t border-[#e6e6e6] pt-[10px]'}>
+          <div className={'border-brand-border-light mt-[10px] border-t pt-[10px]'}>
             <h5>Commit message</h5>
-            <p className="font-pt m-0 p-0 text-[14px] font-normal text-[var(--brand-gray-light-text)]">
+            <p className="font-pt text-brand-gray-light-text m-0 p-0 text-[14px] font-normal">
               {props.updateMessage}
             </p>
           </div>

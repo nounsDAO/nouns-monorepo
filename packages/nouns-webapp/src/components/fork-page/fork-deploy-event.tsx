@@ -4,7 +4,6 @@ dayjs.extend(relativeTime);
 
 import { Fork } from '@/wrappers/nouns-dao';
 
-
 type Props = {
   forkDetails: Fork;
   // event: ForkCycleEvent;
@@ -23,7 +22,7 @@ const ForkCycleEvent = ({ forkDetails }: Props) => {
       // href={buildEtherscanAddressLink(event.owner.id || '')}
       target="_blank"
       rel="noreferrer"
-      className="text-[#14161b] no-underline hover:underline"
+      className="text-brand-gray-dark-text no-underline hover:underline"
     >
       {/* <ShortAddress address={event.owner.id || ''} avatar={false} /> */}
     </a>
@@ -33,14 +32,14 @@ const ForkCycleEvent = ({ forkDetails }: Props) => {
     <div className="group relative m-0 pb-[50px] pl-[40px]" id="#deploy-fork">
       <span
         aria-hidden
-        className="absolute left-[6px] top-[3px] bottom-0 w-[3px] bg-[#b3b3b3]"
+        className="bg-brand-border-muted-400 absolute bottom-0 left-[6px] top-[3px] w-[3px]"
       />
       <a href="#deploy-fork" className="absolute -left-[7px] -top-[2px] block h-[30px] w-[30px]">
-        <span className="absolute inset-0 rounded-full border-[3px] border-[#B3B3B3] bg-white" />
-        <span className="absolute inset-0 rounded-full border-[3px] border-[#14161b] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
+        <span className="border-brand-border-muted-400 absolute inset-0 rounded-full border-[3px] bg-white" />
+        <span className="border-brand-gray-dark-text absolute inset-0 rounded-full border-[3px] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
       </a>
       <header>
-        <span className="font-londrina text-[#14161b]">
+        <span className="font-londrina text-brand-gray-dark-text">
           <a href="#deploy-fork" className="no-underline transition-all duration-200 ease-in-out">
             {timestamp}
           </a>

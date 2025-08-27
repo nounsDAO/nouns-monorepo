@@ -552,7 +552,7 @@ const VotePage = () => {
               }
               return (
                 <div key={parsedCallData.streamAddress} className={cn('break-words', 'border-t-0')}>
-                  <span className={'mb-2 font-medium text-[var(--brand-gray-light-text)]'}>
+                  <span className={'text-brand-gray-light-text mb-2 font-medium'}>
                     <Trans>Only visible to you</Trans>
                   </span>
                   <div className="grid gap-4">
@@ -587,7 +587,7 @@ const VotePage = () => {
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div
                 className={
-                  'rounded-[12px] border border-[#e6e6e6] px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center'
+                  'rounded-12 border-brand-border-light border px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center'
                 }
               >
                 <div className={'flex items-center justify-between max-[992px]:flex-col'}>
@@ -606,7 +606,7 @@ const VotePage = () => {
                     type="button"
                     onClick={() => setShowVoteModal(true)}
                     className={
-                      'font-pt h-fit cursor-pointer rounded-lg border-0 bg-[var(--brand-color-red)] px-4 py-[10px] font-bold leading-none text-white transition-all duration-150 ease-in-out hover:opacity-70'
+                      'font-pt bg-brand-color-red h-fit cursor-pointer rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-white transition-all duration-150 ease-in-out hover:opacity-70'
                     }
                   >
                     <Trans>Vote against</Trans>
@@ -616,7 +616,7 @@ const VotePage = () => {
             ) : null}
 
             {isActionable() && (
-              <div className="rounded-[12px] border border-[#e6e6e6] px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center">
+              <div className="rounded-12 border-brand-border-light border px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center">
                 <div className="flex items-center justify-between max-[992px]:flex-col">
                   <p>
                     <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
@@ -656,7 +656,7 @@ const VotePage = () => {
                           onClick={destructiveStateAction}
                           disabled={isCancelPending}
                           className={
-                            'font-pt h-fit cursor-pointer rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out hover:bg-[var(--brand-color-red)] hover:text-white'
+                            'font-pt text-brand-gray-dark-text hover:bg-brand-color-red h-fit cursor-pointer rounded-lg border-0 px-4 py-[10px] font-bold leading-none transition-all duration-150 ease-in-out hover:text-white'
                           }
                         >
                           {isCancelPending ? (
@@ -741,7 +741,7 @@ const VotePage = () => {
                         </TooltipTrigger>
                         <TooltipContent
                           className={
-                            'rounded-lg bg-[var(--brand-gray-dark-text)] font-medium text-white opacity-75 transition duration-150 ease-in-out'
+                            'bg-brand-gray-dark-text rounded-lg font-medium text-white opacity-75 transition duration-150 ease-in-out'
                           }
                         >
                           <Trans>View Threshold Info</Trans>
@@ -791,9 +791,7 @@ const VotePage = () => {
                   proposal?.objectionPeriodEndBlock !== undefined &&
                   proposal.objectionPeriodEndBlock > 0n && (
                     <div
-                      className={
-                        'mt-4 border-t border-[rgba(0,0,0,0.1)] pt-4 text-[var(--brand-gray-light-text)]'
-                      }
+                      className={'text-brand-gray-light-text mt-4 border-t border-black/10 pt-4'}
                     >
                       <p>
                         <strong>

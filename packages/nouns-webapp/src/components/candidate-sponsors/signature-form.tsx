@@ -24,7 +24,6 @@ import { Address } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalCandidate, useAddSignature } from '@/wrappers/nouns-data';
 
-
 const createProposalTypes = {
   Proposal: [
     { name: 'proposer', type: 'address' },
@@ -334,7 +333,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             value={reasonText}
             onChange={event => setReasonText(event.target.value)}
             disabled={isWaiting || isLoading}
-            className="w-full mb-[10px] rounded-[8px] p-[10px] text-[14px] border border-[#aaa]"
+            className="border-brand-border-muted mb-[10px] w-full rounded-lg border p-[10px] text-[14px]"
           />
 
           <h4 className="mb-[2px] font-bold">Expiration date (required)</h4>
@@ -343,10 +342,10 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             min={new Date().toISOString().split('T')[0]} // only future dates
             onChange={e => setExpirationDate(+dayjs(e.target.value).unix())}
             disabled={isWaiting || isLoading}
-            className="w-full mb-[10px] rounded-[8px] p-[10px] text-[14px] border border-[#aaa]"
+            className="border-brand-border-muted mb-[10px] w-full rounded-lg border p-[10px] text-[14px]"
           />
           {dateErrorMessage && (
-            <p className="m-0 mb-2 p-0 text-left text-[13px] leading-[1] text-[var(--brand-color-red)]">
+            <p className="text-brand-color-red m-0 mb-2 p-0 text-left text-[13px] leading-[1]">
               {dateErrorMessage}
             </p>
           )}
@@ -361,7 +360,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           ) : (
             <button
               type="button"
-              className="cursor-pointer rounded-[8px] border border-[#e6e6e6] bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:bg-[#f4f4f8] disabled:text-[#8c8d92] disabled:border disabled:border-[#e2e3e8]"
+              className="border-brand-border-light disabled:bg-brand-surface disabled:text-brand-text-muted-600 disabled:border-brand-border-ui cursor-pointer rounded-lg border bg-black p-[10px] text-[14px] font-bold text-white transition-opacity duration-150 ease-in-out hover:opacity-80 disabled:pointer-events-none disabled:border"
               onClick={() => {
                 sign();
               }}
@@ -381,7 +380,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             <span
               className={cn(
                 (isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) &&
-                  'font-pt mb-5 w-full rounded-[8px] border border-[#e6e6e6] bg-[rgba(0,0,0,0.05)] p-4 text-center text-[15px] font-bold text-[#14161b]'
+                  'font-pt border-brand-border-light text-brand-gray-dark-text mb-5 w-full rounded-lg border bg-black/5 p-4 text-center text-[15px] font-bold',
               )}
             >
               {(isWaiting || isGetSignatureWaiting || isLoading || isGetSignaturePending) && (
@@ -399,8 +398,8 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
             {isTruthy(getSignatureErrorMessage || errorMessage) && (
               <p
                 className={cn(
-                  'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out',
-                  'text-[var(--brand-color-red)] border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)]',
+                  'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border p-4 text-center text-[14px] font-normal leading-[1.1] transition-all duration-150 ease-in-out',
+                  'text-brand-color-red border-brand-color-red-translucent bg-brand-color-red-translucent',
                 )}
               >
                 {getSignatureErrorMessage || errorMessage}
@@ -418,8 +417,8 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
               <>
                 <p
                   className={cn(
-                    'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] p-4 text-center text-[14px] font-normal leading-[1.1] text-[#14161b] transition-all duration-150 ease-in-out',
-                    'text-[var(--brand-color-green)] border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)]',
+                    'font-pt border-brand-border-light text-brand-gray-dark-text mb-4 rounded-lg border p-4 text-center text-[14px] font-normal leading-[1.1] transition-all duration-150 ease-in-out',
+                    'text-brand-color-green border-brand-color-green bg-brand-color-green-translucent',
                   )}
                 >
                   <a
@@ -429,7 +428,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                     }
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[var(--brand-color-green)] no-underline"
+                    className="text-brand-color-green no-underline"
                   >
                     Signature added successfully
                     {addSignatureState.transaction != null && (
@@ -477,7 +476,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
                       isTruthy(errorMessage) ||
                       isTruthy(getSignatureErrorMessage)
                     ) && (
-                      <span className="relative top-[3px] inline-block h-[18px] w-[18px] rounded-full bg-[rgba(0,0,0,0.3)] opacity-50 animate-pulse"></span>
+                      <span className="relative top-[3px] inline-block h-[18px] w-[18px] animate-pulse rounded-full bg-black/30 opacity-50"></span>
                     )}
                   </strong>
                   <Trans>Submit signature</Trans>
@@ -501,7 +500,7 @@ const SignatureForm = (props: Readonly<SignatureFormProps>) => {
           </div>
         )}
       </>
-      <p className="m-0 text-center text-[12px] leading-[1.2] text-[#646465]">
+      <p className="text-brand-text-muted-500 m-0 text-center text-[12px] leading-[1.2]">
         <Trans>
           Once a signed proposal is onchain, signers will need to wait until the proposal is queued
           or defeated before putting another proposal onchain.
