@@ -3,6 +3,7 @@ import type { StaticImageData } from 'next/image';
 import React from 'react';
 
 import Image from 'react-bootstrap/Image';
+import { cn } from '@/lib/utils';
 
 import loadingNoun from '@/assets/loading-skull-noun.gif';
 
@@ -33,9 +34,9 @@ const LegacyNoun: React.FC<{
       : (imgPath as StaticImageData | undefined)?.src || (loadingNoun as StaticImageData).src;
 
   return (
-    <div className={`relative h-0 w-full pt-[100%] ${wrapperClassName ?? ''}`}>
+    <div className={cn('relative h-0 w-full pt-[100%]', wrapperClassName)}>
       <Image
-        className={`absolute left-0 top-0 h-auto w-full align-middle ${className ?? ''}`}
+        className={cn('absolute left-0 top-0 h-auto w-full align-middle', className)}
         src={resolvedSrc}
         alt={alt}
         fluid

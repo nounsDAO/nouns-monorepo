@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { cn } from '@/lib/utils';
 
 interface VoteStatusPillProps {
   status: string;
@@ -12,17 +13,19 @@ const VoteStatusPill: React.FC<VoteStatusPillProps> = props => {
   switch (status) {
     case 'success':
       return (
-        <div className={`${base} bg-brand-color-blue-translucent text-brand-color-blue`}>
+        <div className={cn(base, 'bg-brand-color-blue-translucent text-brand-color-blue')}>
           {text}
         </div>
       );
     case 'failure':
       return (
-        <div className={`${base} bg-brand-color-red-translucent text-brand-color-red`}>{text}</div>
+        <div className={cn(base, 'bg-brand-color-red-translucent text-brand-color-red')}>
+          {text}
+        </div>
       );
     default:
       return (
-        <div className={`${base} bg-brand-color-green-translucent text-brand-color-green`}>
+        <div className={cn(base, 'bg-brand-color-green-translucent text-brand-color-green')}>
           {text}
         </div>
       );

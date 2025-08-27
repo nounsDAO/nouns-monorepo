@@ -37,9 +37,10 @@ export const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ bid, isCool }) =
         <div className="flex flex-col">
           <div className="font-pt font-bold">
             <div
-              className={`font-pt text-[18px] font-bold ${
-                isTruthy(isCool) ? 'text-brand-cool-dark-text' : 'text-brand-warm-dark-text'
-              }`}
+              className={cn(
+                'font-pt text-[18px] font-bold',
+                isTruthy(isCool) ? 'text-brand-cool-dark-text' : 'text-brand-warm-dark-text',
+              )}
             >
               <ShortAddress address={bid.sender} avatar={!isMobile} />
             </div>
