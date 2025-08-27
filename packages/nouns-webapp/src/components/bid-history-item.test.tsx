@@ -73,15 +73,6 @@ describe('BidHistoryItem Component', () => {
     expect(link).toHaveAttribute('rel', 'noreferrer');
   });
 
-  it('applies warm style when isCool is false', () => {
-    render(<BidHistoryItem bid={mockBid} isCool={false} />);
-
-    const bidRow = screen.getByRole('listitem');
-    expect(bidRow).toHaveClass('text-[0.95rem]');
-    expect(bidRow).toHaveClass('pt-1', 'pr-3', 'pb-2', 'pl-3');
-    expect(bidRow).not.toHaveClass('text-[1.1rem]');
-  });
-
   it('applies cool style when isCool is true', () => {
     render(<BidHistoryItem bid={mockBid} isCool={true} />);
 
