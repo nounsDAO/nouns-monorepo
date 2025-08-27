@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { isTruthy, map } from 'remeda';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
@@ -27,7 +29,6 @@ import {
   useForkThresholdBPS,
   useNumTokensInForkEscrow,
 } from '@/wrappers/nouns-dao';
-import { Link, useParams } from 'react-router';
 
 import DeployForkButton from './deploy-fork-button';
 import ForkEventComponent from './fork-event';
@@ -178,7 +179,7 @@ const ForkPage = () => {
 
   if (!isPageDataLoaded) {
     return (
-      <div className={cn('h-full flex justify-center items-center opacity-50')}>
+      <div className={cn('flex h-full items-center justify-center opacity-50')}>
         <img src="/loading-noggles.svg" alt="loading" className="mx-auto mb-2 block max-w-[75px]" />
       </div>
     );
@@ -199,23 +200,23 @@ const ForkPage = () => {
           {isNewForkPage ? (
             <div
               className={cn(
-                'flex justify-between content-end max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
-                'flex-col items-center text-center justify-center min-[992px]:min-h-[50vh]'
+                'flex content-end max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
+                'flex-col items-center justify-center text-center min-[992px]:min-h-[50vh]',
               )}
             >
               <div className="lg:col-span-12">
                 <header>
-                  <div className="w-full text-center flex flex-row justify-start items-center gap-[10px]">
+                  <div className="flex w-full flex-row items-center justify-start gap-[10px] text-center">
                     <Link
-                      className="appearance-none p-0 inline-block w-8 h-8 rounded-full leading-[1.85] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
-                      to="/fork"
+                      className="inline-block size-8 appearance-none rounded-full border border-[rgba(0,0,0,0.1)] bg-white p-0 font-bold leading-[1.85] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
+                      href="/fork"
                     >
                       ←
                     </Link>
-                    <span className="text-[#14161b] text-[14px] py-[6px] px-[10px] border border-[#e6e6e6] rounded-[6px]">
+                    <span className="rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px] text-[14px] text-[#14161b]">
                       {forkStatusLabel}
                     </span>
-                    <div className="w-8 h-8 opacity-0" />
+                    <div className="size-8 opacity-0" />
                   </div>
                   <h1>
                     <Trans>Fork Nouns DAO</Trans>
@@ -235,7 +236,7 @@ const ForkPage = () => {
                   type="button"
                   onClick={() => setIsModalOpen(true)}
                   className={cn(
-                    'rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out leading-[1] py-[10px] px-[16px] h-fit',
+                    'font-pt h-fit rounded-[8px] px-[16px] py-[10px] font-bold leading-none transition-all duration-150 ease-in-out',
                     'bg-black text-white no-underline hover:opacity-75 disabled:opacity-50',
                   )}
                   disabled={userOwnedNounIds?.data?.length === 0}
@@ -247,30 +248,30 @@ const ForkPage = () => {
           ) : (
             <div
               className={cn(
-                'flex justify-between content-end max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
+                'flex content-end justify-between max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
                 (escrowEvents.data == null || isNewForkPage) &&
-                  'flex-col items-center text-center justify-center min-[992px]:min-h-[50vh]',
-                isForked && 'flex-col items-center w-full',
+                  'flex-col items-center justify-center text-center min-[992px]:min-h-[50vh]',
+                isForked && 'w-full flex-col items-center',
               )}
             >
               <div className="lg:col-span-6">
-                <div className="w-full text-center flex flex-row justify-start items-center gap-[10px]">
+                <div className="flex w-full flex-row items-center justify-start gap-[10px] text-center">
                   <Link
-                    className="appearance-none p-0 inline-block w-8 h-8 rounded-full leading-[1.85] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
-                    to="/fork"
+                    className="inline-block size-8 appearance-none rounded-full border border-[rgba(0,0,0,0.1)] bg-white p-0 font-bold leading-[1.85] text-[rgb(95,95,95)] no-underline transition-[border] duration-150 ease-in-out hover:border-[rgba(0,0,0,0.25)]"
+                    href="/fork"
                   >
                     ←
                   </Link>
-                  <span className="text-[#14161b] text-[14px] py-[6px] px-[10px] border border-[#e6e6e6] rounded-[6px]">
+                  <span className="rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px] text-[14px] text-[#14161b]">
                     {forkStatusLabel}
                   </span>
-                  <div className="w-8 h-8 opacity-0" />
+                  <div className="size-8 opacity-0" />
                 </div>
                 <h1>
                   <Trans>Nouns DAO Fork{isForked ? ` #${id}` : ''}</Trans>
                 </h1>
                 {!isForked && !isForkPeriodActive && (
-                  <p className="text-[var(--brand-gray-dark-text)] opacity-60 text-[14px] mt-[10px]">
+                  <p className="mt-[10px] text-[14px] text-[var(--brand-gray-dark-text)] opacity-60">
                     <Trans>
                       More than {forkThreshold == null ? '...' : forkThreshold} Nouns{' '}
                       {`(${forkThresholdBPS != null ? forkThresholdBPS / 100 : '...'}% of the DAO)`}{' '}
@@ -283,7 +284,7 @@ const ForkPage = () => {
                 <div
                   className={cn(
                     'flex flex-row items-end justify-end gap-5',
-                    escrowEvents.data == null && 'flex flex-col items-center justify-center mt-4',
+                    escrowEvents.data == null && 'mt-4 flex flex-col items-center justify-center',
                   )}
                 >
                   {!isForkPeriodActive &&
@@ -307,7 +308,7 @@ const ForkPage = () => {
                       }
                     }}
                     className={cn(
-                      'rounded-[8px] font-pt font-bold transition-all duration-150 ease-in-out leading-[1] py-[10px] px-[16px] h-fit',
+                      'font-pt h-fit rounded-[8px] px-[16px] py-[10px] font-bold leading-none transition-all duration-150 ease-in-out',
                       'bg-black text-white no-underline hover:opacity-75 disabled:opacity-50',
                     )}
                     disabled={userOwnedNounIds?.data?.length === 0}
@@ -337,7 +338,7 @@ const ForkPage = () => {
                     />
                   </div>
                 )}
-              <div className={cn('text-center gap-[10px]')}>
+              <div className={cn('gap-[10px] text-center')}>
                 {forkDetails.data.executedAt != null && forkDetails.data.executedAt > 0n ? (
                   <p>
                     <strong>
@@ -389,8 +390,13 @@ const ForkPage = () => {
         >
           <div className="container mx-auto px-4">
             <div className={cn('grid grid-cols-12 gap-3')}>
-              <div className={cn('lg:col-span-3', 'sticky top-[20px] h-fit max-[991px]:relative max-[991px]:top-0 max-[991px]:mb-[30px] max-[991px]:border-b max-[991px]:border-[#e6e6e6] max-[991px]:pb-[30px]') }>
-                <div className="mb-5 w-full rounded-[12px] border border-[#e6e6e6] p-5 text-center leading-[1]">
+              <div
+                className={cn(
+                  'lg:col-span-3',
+                  'sticky top-[20px] h-fit max-[991px]:relative max-[991px]:top-0 max-[991px]:mb-[30px] max-[991px]:border-b max-[991px]:border-[#e6e6e6] max-[991px]:pb-[30px]',
+                )}
+              >
+                <div className="mb-5 w-full rounded-[12px] border border-[#e6e6e6] p-5 text-center leading-none">
                   <span>{isForkPeriodActive || isForked ? 'in fork' : 'in escrow'}</span>
                   <strong>
                     {isForkPeriodActive || isForked ? (
@@ -446,7 +452,7 @@ const ForkPage = () => {
                       <div
                         className={cn(
                           'aspect-square w-full max-w-[50px] rounded-[6px]',
-                          "[width:calc(calc(100%_/_4)_-_8px)]",
+                          '[width:calc(calc(100%_/_4)_-_8px)]',
                         )}
                         key={i}
                       />

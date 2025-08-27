@@ -9,11 +9,11 @@ import { Trans } from '@lingui/react/macro';
 
 // i18n macros/components removed for build stability
 import { DownloadIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import CCZero from '@/assets/cczero-badge.svg?react';
 import playgroundNouns from '@/assets/playground-nouns.webp';
 import traitsImage from '@/assets/traits.webp';
-import { Link } from 'react-router';
 
 interface AssetCardProps {
   title: string;
@@ -86,8 +86,7 @@ const SectionCard: React.FC<{
       </div>
 
       <Link
-        to={to}
-        reloadDocument
+        href={to}
         className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
       >
         {title}

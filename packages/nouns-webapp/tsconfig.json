@@ -13,11 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "incremental": true,
+    "incremental": false,
     "types": ["jest", "@testing-library/jest-dom"],
     "paths": {
-      "@/*": ["./src/*"],
-      "react-router": ["./src/shims/react-router-shim"]
+      "@/*": ["./src/*"]
     },
 
     "plugins": [

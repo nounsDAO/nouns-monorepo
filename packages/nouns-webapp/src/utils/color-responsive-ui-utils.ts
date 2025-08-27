@@ -1,5 +1,6 @@
+import { usePathname } from 'next/navigation';
+
 import { useAppSelector } from '@/hooks';
-import { useLocation } from '@/shims/react-router-shim';
 
 export const shouldUseStateBg = (location: { pathname: string }) => {
   return (
@@ -18,8 +19,8 @@ export const shouldUseStateBg = (location: { pathname: string }) => {
  * @returns item corresponding to current state
  */
 export const usePickByState = <T>(whiteState: T, coolState: T, warmState: T): T => {
-  const location = useLocation();
-  const useStateBg = shouldUseStateBg(location);
+  const pathname = usePathname();
+  const useStateBg = shouldUseStateBg({ pathname });
   const isCoolState = useAppSelector(state => state.application.isCoolBackground);
 
   if (!useStateBg) {

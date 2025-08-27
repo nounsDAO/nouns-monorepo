@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -20,7 +22,6 @@ import {
   ProposalCandidateVersionContent,
   useCandidateProposalVersions,
 } from '@/wrappers/nouns-data';
-import { Link, useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -83,7 +84,7 @@ const CandidateHistoryPage = () => {
     <Section fullWidth={false} className={'[&_a]:text-[var(--brand-dark-red)]'}>
       <div className={'mx-auto'}>
         <div className={'relative'}>
-          <Link to={`/candidates/${id}`}>
+          <Link href={`/candidates/${id}`}>
             <button
               type="button"
               className={cn(

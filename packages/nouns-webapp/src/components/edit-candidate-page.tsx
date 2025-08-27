@@ -5,6 +5,8 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { filter, isNullish } from 'remeda';
 import { toast } from 'sonner';
@@ -36,8 +38,6 @@ import {
   useGetUpdateCandidateCost,
   useUpdateProposalCandidate,
 } from '@/wrappers/nouns-data';
-import { Link, useParams } from 'react-router';
-
 
 interface EditCandidateProps {
   match: {
@@ -283,17 +283,17 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       />
       <div className={cn('mx-auto w-full lg:w-2/3', 'rounded-[5px] bg-white px-10 py-0')}>
         <div className="flex items-center">
-          <Link to={`/candidates/${id}`}>
+          <Link href={`/candidates/${id}`}>
             <button
               className={cn(
-                'mr-4 mt-[0.1rem] inline-block h-8 w-8 appearance-none rounded-full p-0 font-bold',
+                'mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
                 'border border-black/10 bg-white text-[rgb(95,95,95)] hover:bg-[#e2e3e8] hover:text-black',
               )}
             >
               ←
             </button>
           </Link>
-          <h3 className="my-4 font-londrina text-[42px]">
+          <h3 className="font-londrina my-4 text-[42px]">
             <Trans>Edit Proposal Candidate</Trans>
           </h3>
         </div>
@@ -305,7 +305,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         </Alert>
         <div className="d-grid">
           <Button
-            className="h-[50px] rounded-[8px] font-pt text-[24px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
+            className="font-pt h-[50px] rounded-[8px] text-[24px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
             variant="dark"
             onClick={() => setShowTransactionFormModal(true)}
           >
@@ -347,7 +347,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         </InputGroup>
 
         <EditProposalButton
-          className="h-[50px] rounded-[8px] font-pt text-[18px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
+          className="font-pt h-[50px] rounded-[8px] text-[18px] font-bold transition-all duration-150 ease-in-out hover:cursor-pointer hover:opacity-50"
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold ?? undefined}
           hasActiveOrPendingProposal={false} // not relevant for edit
@@ -360,7 +360,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         {!hasVotes &&
           !isNullish(updateCandidateCost) &&
           Number(formatEther(updateCandidateCost)) > 0 && (
-            <p className="text-center text-[18px] text-[#6c757d]">{updateFeeText} ETH fee upon submission</p>
+            <p className="text-center text-[18px] text-[#6c757d]">
+              {updateFeeText} ETH fee upon submission
+            </p>
           )}
 
         <p className="text-center">

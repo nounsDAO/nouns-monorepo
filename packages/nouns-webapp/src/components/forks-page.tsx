@@ -3,12 +3,12 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 
 import ForkStatus from '@/components/fork-status';
 import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { Fork, ForkState, useForks } from '@/wrappers/nouns-dao';
-import { Link } from 'react-router';
 
 const ForksPage: React.FC = () => {
   const forks = useForks();
@@ -72,7 +72,7 @@ const ForksPage: React.FC = () => {
 
                     return (
                       <Link
-                        to={`/fork/${fork.id}`}
+                        href={`/fork/${fork.id}`}
                         className="border-brand-gray-border bg-brand-gray-background font-pt text-22 mb-4 mt-[0.4rem] flex justify-between gap-4 rounded-2xl border p-4 font-bold text-inherit no-underline hover:cursor-pointer hover:bg-white"
                         key={i}
                       >
@@ -94,7 +94,7 @@ const ForksPage: React.FC = () => {
               <div>
                 <p className="w-full text-center">
                   <Trans>There are no active forks.</Trans>{' '}
-                  <Link to={`/fork/${nextForkId}`}>
+                  <Link href={`/fork/${nextForkId}`}>
                     <Trans>Start a new fork</Trans>
                   </Link>
                 </p>

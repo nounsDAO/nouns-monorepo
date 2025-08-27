@@ -8,6 +8,7 @@ import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { filter, isTruthy } from 'remeda';
 import { toast } from 'sonner';
@@ -43,7 +44,6 @@ import {
   usePropose,
   useProposeOnTimelockV1,
 } from '@/wrappers/nouns-dao';
-import { Link } from 'react-router';
 
 const CreateProposalPage = () => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
@@ -257,7 +257,7 @@ const CreateProposalPage = () => {
 
       <div className={cn('mx-auto w-full lg:w-2/3', 'rounded-[5px] bg-white px-10 py-0')}>
         <div className={'flex items-center'}>
-          <Link to={'/vote'}>
+          <Link href={'/vote'}>
             <button
               type="button"
               className={cn(

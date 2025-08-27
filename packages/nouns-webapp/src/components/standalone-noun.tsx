@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 
 import { getNounData, ImageData as data } from '@noundry/nouns-assets';
 import { buildSVG } from '@nouns/sdk';
+import Link from 'next/link';
 import Image from 'react-bootstrap/Image';
 import { useDispatch } from 'react-redux';
 
 import LegacyNoun from '@/components/legacy-noun';
 import { setOnDisplayAuctionNounId } from '@/state/slices/on-display-auction';
 import { INounSeed, useNounSeed } from '@/wrappers/noun-token';
-import { Link } from 'react-router';
 
 interface StandaloneNounProps {
   nounId: bigint;
@@ -64,7 +64,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   };
 
   return (
-    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
+    <Link href={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
     </Link>
   );
@@ -95,7 +95,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     );
 
   return (
-    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
+    <Link href={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
@@ -122,7 +122,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
   };
 
   return (
-    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
+    <Link href={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
@@ -161,7 +161,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = ({
 
   const noun = <LegacyNoun imgPath={image} alt={description} />;
   const nounWithLink = (
-    <Link to={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
+    <Link href={'/noun/' + nounId.toString()} className="cursor-pointer" onClick={onClickHandler}>
       {noun}
     </Link>
   );

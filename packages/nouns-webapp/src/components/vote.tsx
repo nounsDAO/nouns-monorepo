@@ -15,6 +15,8 @@ import en from 'dayjs/locale/en';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { zeroAddress } from 'viem';
@@ -63,7 +65,6 @@ import {
   proposalVotesQuery,
   propUsingDynamicQuorum,
 } from '@/wrappers/subgraph';
-import { Link, useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -668,7 +669,7 @@ const VotePage = () => {
                     </>
                     {isProposer() && isUpdateable() && (
                       <Link
-                        to={`/vote/${id}/edit`}
+                        href={`/vote/${id}/edit`}
                         className={
                           'font-pt h-fit rounded-lg border-0 bg-black px-4 py-[10px] font-bold leading-none text-white no-underline transition-all duration-150 ease-in-out hover:opacity-75'
                         }

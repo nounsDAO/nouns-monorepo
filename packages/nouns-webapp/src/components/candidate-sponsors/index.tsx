@@ -4,14 +4,14 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans } from '@lingui/react/macro';
 import { AnimatePresence, motion } from 'motion/react';
-import { isNullish } from 'remeda';
+import Link from 'next/link';
+import { isNullish, isTruthy } from 'remeda';
 import { useAccount } from 'wagmi';
 
 import { cn } from '@/lib/utils';
 import { useDelegateNounsAtBlockQuery, useUserVotes } from '@/wrappers/noun-token';
 import { Proposal, ProposalState } from '@/wrappers/nouns-dao';
 import { ProposalCandidate } from '@/wrappers/nouns-data';
-import { Link } from 'react-router';
 
 import OriginalSignature from './original-signature';
 import SelectSponsorsToPropose from './select-sponsors-to-propose';
@@ -275,7 +275,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                     {props.isUpdateToProposal === true && !isParentProposalUpdatable ? (
                       <p>
                         <strong>
-                          <Link to={`/vote/${props.originalProposal?.id}`}>
+                          <Link href={`/vote/${props.originalProposal?.id}`}>
                             Proposal {props.originalProposal?.id}
                           </Link>
                         </strong>{' '}

@@ -1,33 +1,31 @@
 import React from 'react';
 
-import { useLocation } from 'react-router';
-
 export const useScrollToLocation = () => {
   const scrolledRef = React.useRef(false);
-  const { hash } = useLocation();
-  const hashRef = React.useRef(hash);
+  const hashRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
-    if (hash) {
-      if (hashRef.current !== hash) {
-        hashRef.current = hash;
+    const doScroll = () => {
+      const currentHash = window.location.hash || '';
+      if (!currentHash) return;
+      if (hashRef.current !== currentHash) {
+        hashRef.current = currentHash;
         scrolledRef.current = false;
       }
       if (!scrolledRef.current) {
-        const id = hash.replace('#', '');
+        const id = currentHash.replace('#', '');
         const element = document.getElementById(id);
-
         if (element) {
           const elementOffset = 30;
           const elementPosition = element?.getBoundingClientRect().top || 0;
           const offsetPosition = elementPosition + window.pageYOffset - elementOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          });
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
           scrolledRef.current = true;
         }
       }
-    }
-  });
+    };
+    doScroll();
+    window.addEventListener('hashchange', doScroll);
+    return () => window.removeEventListener('hashchange', doScroll);
+  }, []);
 };

@@ -118,7 +118,6 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, './src'),
-      'react-router': path.resolve(__dirname, './shims/react-router-shim'),
     };
 
     // Allow generated subgraph code to import .js while using .ts files

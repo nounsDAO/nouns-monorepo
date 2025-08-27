@@ -8,14 +8,15 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-// eslint-disable-next-line no-restricted-imports
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { first, isNullish, isNonNullish } from 'remeda';
 import { toast } from 'sonner';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import CandidateHeader from '@/components/candidate-header';
-import CandidateSponsors from '@/components/candidate-sponsors';
+import CandidateSponsors from '@/components/candidate-sponsors/index';
 import ProposalCandidateContent from '@/components/proposal-candidate-content';
 import Section from '@/components/section';
 import VoteSignals from '@/components/vote-signals';
@@ -34,7 +35,6 @@ import {
   useCandidateFeedback,
   useCandidateProposal,
 } from '@/wrappers/nouns-data';
-import { Link, useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -167,7 +167,7 @@ const CandidatePage = () => {
             <Trans>
               <strong>Note: </strong>
               This candidate is an update to{' '}
-              <Link to={`/vote/${candidate?.proposalIdToUpdate}`}>
+              <Link href={`/vote/${candidate?.proposalIdToUpdate}`}>
                 Proposal {candidate?.proposalIdToUpdate}
               </Link>
               .
@@ -181,7 +181,7 @@ const CandidatePage = () => {
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
           {primaryProposalId != null && primaryProposalId !== 0 && (
-            <Link to={`/vote/${primaryProposalId}`}>View the proposal here</Link>
+            <Link href={`/vote/${primaryProposalId}`}>View the proposal here</Link>
           )}
         </Alert>
       )}
@@ -239,7 +239,7 @@ const CandidatePage = () => {
                   )}
                 </Button>
                 <Link
-                  to={`/candidates/${id}/edit`}
+                  href={`/candidates/${id}/edit`}
                   className={cn(
                     'font-pt h-fit rounded-lg border-0 px-4 py-[10px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
                     'bg-black text-white no-underline hover:opacity-75',

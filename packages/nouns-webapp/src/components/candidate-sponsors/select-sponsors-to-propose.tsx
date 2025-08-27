@@ -2,6 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { t } from '@lingui/core/macro';
 import { Plural, Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 import { Alert } from 'react-bootstrap';
 
 import link from '@/assets/icons/Link.svg';
@@ -12,7 +13,6 @@ import { buildEtherscanTxLink } from '@/utils/etherscan';
 import { Address, Hex } from '@/utils/types';
 import { usePropose } from '@/wrappers/nouns-dao';
 import { CandidateSignature, ProposalCandidate, useProposeBySigs } from '@/wrappers/nouns-data';
-import { Link } from 'react-router';
 
 type Props = {
   isModalOpen: boolean;
@@ -136,7 +136,7 @@ const SelectSponsorsToPropose = (props: Props) => {
   }, [proposeBySigsState, proposeState, handleProposeStateChange, selectedSignatures]);
 
   const modalContent = (
-    <div className={"font-normal"}>
+    <div className={'font-normal'}>
       <h2>
         <Trans>Choose sponsors</Trans>
       </h2>
@@ -146,15 +146,15 @@ const SelectSponsorsToPropose = (props: Props) => {
           greater than the proposal threshold of {props.requiredVotes}.
         </Trans>
       </p>
-      <Alert className={"mb-2"} variant="warning">
+      <Alert className={'mb-2'} variant="warning">
         <Trans>
           <strong>Note: </strong>
           All signers on an onchain proposal have permission to cancel the proposal.
         </Trans>
       </Alert>
-      <div className={"my-[20px] flex flex-row items-end justify-between max-[991px]:flex-col"}>
+      <div className={'my-[20px] flex flex-row items-end justify-between max-[991px]:flex-col'}>
         {selectedSignatures.length > 0 && (
-          <div className={"w-[70%] max-[991px]:w-full"}>
+          <div className={'w-[70%] max-[991px]:w-full'}>
             <p>
               <strong>
                 <Trans>Select signatures</Trans>
@@ -182,7 +182,7 @@ const SelectSponsorsToPropose = (props: Props) => {
           </button>
         )}
       </div>
-      <div className={"mt-[10px] flex flex-row flex-wrap items-center justify-center gap-[10px]"}>
+      <div className={'mt-[10px] flex flex-row flex-wrap items-center justify-center gap-[10px]'}>
         {props.signatures.map((signature: CandidateSignature) => {
           return (
             <button
@@ -204,14 +204,20 @@ const SelectSponsorsToPropose = (props: Props) => {
                 signature.signer.activeOrPendingProposal === true
               }
               className={cn(
-                'font-londrina relative w-full cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-[1] transition-all duration-200 ease-in-out max-[991px]:w-full hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50',
+                'font-londrina relative w-full cursor-pointer rounded-[12px] border-2 border-[rgba(0,0,0,0.25)] bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50 max-[991px]:w-full',
                 selectedSignatures.includes(signature) && 'border-2 border-[rgba(0,0,0,0.75)]',
               )}
             >
-              <div className={"flex flex-row items-center justify-center gap-[10px]"}>
-                <img src={`https://noun.pics/${signature.signer.id}`} alt={signature.signer.id} width="48" height="48" style={{ borderRadius: '6px' }} />
+              <div className={'flex flex-row items-center justify-center gap-[10px]'}>
+                <img
+                  src={`https://noun.pics/${signature.signer.id}`}
+                  alt={signature.signer.id}
+                  width="48"
+                  height="48"
+                  style={{ borderRadius: '6px' }}
+                />
                 <ShortAddress address={signature.signer.id} />
-                <p className={"m-0 p-0 text-[13px] font-bold text-[var(--brand-gray-dark-text)]"}>
+                <p className={'m-0 p-0 text-[13px] font-bold text-[var(--brand-gray-dark-text)]'}>
                   <Plural value={signature.signer.voteCount ?? 0} one="# vote" other="# votes" />
                 </p>
               </div>
@@ -219,15 +225,15 @@ const SelectSponsorsToPropose = (props: Props) => {
           );
         })}
       </div>
-      <div className={"my-[20px] text-center"}>
+      <div className={'my-[20px] text-center'}>
         {errorMessage === '' && !isTxSuccessful && (
           <button
             type="button"
             className={cn(
-              'font-pt h-fit rounded-[8px] border-0 bg-[#faf4f8] px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+              'font-pt h-fit rounded-[8px] border-0 px-[16px] py-[10px] text-[22px] font-bold leading-none text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
               'mb-4 bg-black text-white no-underline hover:opacity-75 disabled:bg-[#ccc] disabled:hover:opacity-100',
               (isWaiting || isLoading) &&
-                'font-pt w-full border border-[#e6e6e6] p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] bg-white',
+                'font-pt w-full border border-[#e6e6e6] bg-white p-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)]',
             )}
             disabled={selectedVoteCount < props.requiredVotes || isWaiting || isLoading}
             onClick={() => {
@@ -245,7 +251,11 @@ const SelectSponsorsToPropose = (props: Props) => {
             )}
             <span>
               {(isWaiting || isLoading) && (
-                <img src="/loading-noggles.svg" alt={t`loading`} className="mx-auto mb-2 block max-w-[45px]" />
+                <img
+                  src="/loading-noggles.svg"
+                  alt={t`loading`}
+                  className="mx-auto mb-2 block max-w-[45px]"
+                />
               )}
               {isWaiting && <Trans>Awaiting confirmation</Trans>}
               {isLoading && <Trans>Submitting proposal</Trans>}
@@ -253,10 +263,12 @@ const SelectSponsorsToPropose = (props: Props) => {
           </button>
         )}
         {errorMessage !== '' && (
-          <p className={cn(
-            'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out bg-white',
-            'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
-          )}>
+          <p
+            className={cn(
+              'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
+              'border-[var(--brand-color-red-translucent)] bg-[var(--brand-color-red-translucent)] text-[var(--brand-color-red)]',
+            )}
+          >
             {errorMessage}
             <button
               type="button"
@@ -272,7 +284,7 @@ const SelectSponsorsToPropose = (props: Props) => {
           <>
             <p
               className={cn(
-                'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out bg-white',
+                'font-pt mb-4 rounded-[8px] border border-[#e6e6e6] bg-white px-8 py-4 text-center text-[15px] font-bold text-[var(--brand-gray-dark-text)] transition-all duration-150 ease-in-out',
                 'border-[var(--brand-color-green)] bg-[var(--brand-color-green-translucent)] text-[var(--brand-color-green)]',
               )}
             >
@@ -296,7 +308,7 @@ const SelectSponsorsToPropose = (props: Props) => {
               </a>
               <br />
               {(props.candidate.matchingProposalIds?.length ?? 0) > 0 && (
-                <Link to={`/vote/${props?.candidate?.matchingProposalIds?.[0]}`}>
+                <Link href={`/vote/${props?.candidate?.matchingProposalIds?.[0]}`}>
                   <Trans>View the proposal</Trans>
                 </Link>
               )}

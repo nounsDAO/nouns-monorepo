@@ -1,8 +1,9 @@
 import { Trans } from '@lingui/react/macro';
-import { Nav } from 'react-bootstrap';
+//
+
+import Link from 'next/link';
 
 import Section from '@/components/section';
-import { Link } from 'react-router';
 
 const NounsIntroSection = () => {
   return (
@@ -35,15 +36,9 @@ const NounsIntroSection = () => {
               'text-muted absolute bottom-[-40px] top-[350px] px-10 lg:bottom-auto lg:top-[365px]'
             }
           >
-            This video was commissioned in{' '}
-            <Nav.Link as={Link} to="/vote/113">
-              Prop 113
-            </Nav.Link>{' '}
+            This video was commissioned in <Link href="/vote/113">Prop 113</Link>{' '}
             <span className="sm:block">
-              and minted in{' '}
-              <Nav.Link as={Link} to="/vote/190">
-                Prop 190
-              </Nav.Link>
+              and minted in <Link href="/vote/190">Prop 190</Link>
             </span>
           </small>
         </div>
@@ -63,7 +58,7 @@ const NounsIntroSection = () => {
               'text-muted absolute bottom-[-40px] top-[350px] px-10 lg:bottom-auto lg:top-[365px]'
             }
           >
-            This video was produced as part of <Link to="/vote/143">Prop 143</Link>
+            This video was produced as part of <Link href="/vote/143">Prop 143</Link>
           </small>
         </div>
 

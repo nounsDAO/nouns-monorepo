@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 import { useBlockNumber } from 'wagmi';
 
 import ByLineHoverCard from '@/components/by-line-hover-card';
@@ -14,7 +15,6 @@ import { buildEtherscanAddressLink } from '@/utils/etherscan';
 import { isMobileScreen } from '@/utils/is-mobile';
 import { relativeTimestamp } from '@/utils/time-utils';
 import { useUserVotesAsOfBlock } from '@/wrappers/noun-token';
-import { Link } from 'react-router';
 
 interface CandidateHeaderProps {
   title: string;
@@ -91,7 +91,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
   return (
     <>
       <div className={'relative'}>
-        <Link to={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
+        <Link href={props.isCandidate === true ? '/vote#candidates' : '/vote'}>
           <button
             type="button"
             className={cn(
@@ -165,7 +165,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
 
       <p className={'inline-block text-[12px]'}>
         {versionsCount > 1 ? (
-          <Link to={`/candidates/${id}/history/`}>
+          <Link href={`/candidates/${id}/history/`}>
             <strong className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}>
               Version {versionsCount}
             </strong>{' '}

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 
 import AuctionActivityDateHeadline from '@/components/auction-activity-date-headline';
 import AuctionActivityNounTitle from '@/components/auction-activity-noun-title';
@@ -11,7 +12,6 @@ import CurrentBid, { BID_N_A } from '@/components/current-bid';
 import Winner from '@/components/winner';
 import { useAppSelector } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router';
 
 interface NounderNounContentProps {
   mintTimestamp: bigint;
@@ -109,7 +109,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             >
               <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
               <Link
-                to="/vote"
+                href="/vote"
                 className="text-brand-dark-green visited:text-brand-dark-green active:text-brand-dark-green hover:text-brand-dark-red underline"
               >
                 <Trans>Nouns DAO</Trans>
@@ -130,7 +130,7 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
             )}
           >
             <Link
-              to="/nounders"
+              href="/nounders"
               className={cn(
                 'font-pt ml-2 text-[16px] font-bold no-underline transition-all duration-200 ease-in-out hover:brightness-110',
                 isCool

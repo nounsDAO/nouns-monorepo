@@ -4,7 +4,7 @@ import { isAddress } from 'viem';
  * Get address from query param
  *
  * @param paramName query param name i.e. for the URL nouns.wtf/delegate?to=0xabv... to would be the paramName
- * @param useLocationResult string returned by react-router-v5 useLocation
+ * @param useLocationResult search string (e.g., "?to=0x...")
  */
 export const getAddressFromQueryParams = (
   paramName: string,

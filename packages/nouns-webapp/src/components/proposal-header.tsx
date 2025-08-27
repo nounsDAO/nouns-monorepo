@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 
 import { i18n } from '@lingui/core';
 import { Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 import { Alert, Button } from 'react-bootstrap';
 import { isNullish } from 'remeda';
 import { useBlockNumber } from 'wagmi';
@@ -26,7 +27,6 @@ import {
   useIsDaoGteV3,
   useProposalVote,
 } from '@/wrappers/nouns-dao';
-import { Link } from 'react-router';
 
 interface ProposalHeaderProps {
   title?: string;
@@ -168,7 +168,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   return (
     <>
       <div className={'relative'}>
-        <Link to={'/vote'}>
+        <Link href={'/vote'}>
           <button
             type="button"
             className={cn(
@@ -297,7 +297,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       {isDaoGteV3 && (
         <p className={'inline-block text-[12px]'}>
           {hasManyVersions ? (
-            <Link to={`/vote/${proposal.id}/history/`}>
+            <Link href={`/vote/${proposal.id}/history/`}>
               <strong
                 className={'mr-[5px] rounded-[6px] border border-[#e6e6e6] px-[10px] py-[6px]'}
               >

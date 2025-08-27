@@ -2,6 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 import ShortAddress from '@/components/short-address';
 import { cn } from '@/lib/utils';
@@ -12,8 +13,6 @@ import {
   ForkCycleEvent,
   useProposalTitles,
 } from '@/wrappers/nouns-dao';
-import { Link } from 'react-router';
-
 
 type Props = {
   event?: EscrowDeposit | EscrowWithdrawal | ForkCycleEvent;
@@ -53,7 +52,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
           setNounsInEvent(
             event.tokenIDs?.map((tokenId, i) => {
               return (
-                <Link key={i} to={`/noun/${tokenId}`}>
+                <Link key={i} href={`/noun/${tokenId}`}>
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
@@ -84,7 +83,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
           setNounsInEvent(
             event.tokenIDs?.map((tokenId, i) => {
               return (
-                <Link key={i} to={`/noun/${tokenId}`}>
+                <Link key={i} href={`/noun/${tokenId}`}>
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
@@ -115,7 +114,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
           setNounsInEvent(
             event.tokenIDs?.map((tokenId, i) => {
               return (
-                <Link key={i} to={`/noun/${tokenId}`}>
+                <Link key={i} href={`/noun/${tokenId}`}>
                   <img
                     src={`https://noun.pics/${tokenId}`}
                     alt={`Noun ${tokenId}`}
@@ -164,7 +163,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
   const proposalsList = proposalsTitles?.map((proposal, i) => {
     return (
       <li key={i}>
-        <Link to={`/vote/${proposal.id}`}>
+        <Link href={`/vote/${proposal.id}`}>
           <strong>{proposal.id}</strong> {proposal.title}
         </Link>
       </li>
@@ -175,8 +174,8 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
 
   return (
     <div className={cn('group relative m-0 pb-[50px] pl-[40px]', isOnlyEvent && '')} id={event.id}>
-      <span aria-hidden className="absolute left-[6px] top-[3px] bottom-0 w-[3px] bg-[#b3b3b3]" />
-      <a href={`#${event.id}`} className="absolute -left-[7px] -top-[2px] block h-[30px] w-[30px]">
+      <span aria-hidden className="absolute bottom-0 left-[6px] top-[3px] w-[3px] bg-[#b3b3b3]" />
+      <a href={`#${event.id}`} className="absolute -left-[7px] -top-[2px] block size-[30px]">
         <span className="absolute inset-0 rounded-full border-[3px] border-[#B3B3B3] bg-white" />
         <span className="absolute inset-0 rounded-full border-[3px] border-[#14161b] bg-white opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-50" />
       </a>
@@ -187,7 +186,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
             className="no-underline transition-all duration-200 ease-in-out group-hover:opacity-100"
           >
             {timestamp ?? ''}
-            <span className="ml-2 font-pt text-[13px] opacity-0 transition-opacity duration-200 ease-in-out group-hover:inline-block group-hover:opacity-50">
+            <span className="font-pt ml-2 text-[13px] opacity-0 transition-opacity duration-200 ease-in-out group-hover:inline-block group-hover:opacity-50">
               {dateTime ?? ''}
             </span>
           </a>
@@ -203,7 +202,7 @@ const ForkEvent = ({ event, isOnlyEvent = false }: Props) => {
         </h3>
         {(event.eventType === 'EscrowDeposit' || event.eventType === 'ForkJoin') &&
           event.reason && (
-            <p className="my-1 mx-0 p-0 text-[18px] italic opacity-80 before:content-['“'] before:ml-[-6px] after:content-['”']">
+            <p className="mx-0 my-1 p-0 text-[18px] italic opacity-80 before:ml-[-6px] before:content-['“'] after:content-['”']">
               {event.reason}
             </p>
           )}

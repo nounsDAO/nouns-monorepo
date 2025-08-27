@@ -1,7 +1,9 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
+import Link from 'next/link';
 import { FormControl } from 'react-bootstrap';
+import { isTruthy } from 'remeda';
 
 import link from '@/assets/icons/Link.svg';
 import { cn } from '@/lib/utils';
@@ -11,11 +13,8 @@ import {
   ProposalCandidate,
   useUpdateProposalBySigs,
 } from '@/wrappers/nouns-data';
-import { Link } from 'react-router';
 
 import SolidColorBackgroundModal from '../solid-color-background-modal';
-import { isTruthy } from 'remeda';
-
 
 type Props = {
   isModalOpen: boolean;
@@ -179,22 +178,21 @@ const SubmitUpdateProposal = (props: Readonly<Props>) => {
               )}
             >
               <strong>Success!</strong> <br />
-              <a
-                href={
-                  updateProposalBySigsState.transaction?.hash &&
-                  `${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`
-                }
-                target="_blank"
-                rel="noreferrer"
-                className="text-[var(--brand-color-green)] no-underline"
-              >
-                <Link to={`/vote/${props.proposalIdToUpdate}`}>
+              <span className="inline-flex items-center gap-2">
+                <Link href={`/vote/${props.proposalIdToUpdate}`}>
                   Proposal {props.proposalIdToUpdate} has been updated
                 </Link>
-                {updateProposalBySigsState.transaction != null && (
-                  <img src={link} width={16} alt="link symbol" />
+                {updateProposalBySigsState.transaction?.hash && (
+                  <a
+                    href={`${buildEtherscanTxLink(updateProposalBySigsState.transaction.hash)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center"
+                  >
+                    <img src={link} width={16} alt="link symbol" />
+                  </a>
                 )}
-              </a>
+              </span>
             </p>
           </>
         )}

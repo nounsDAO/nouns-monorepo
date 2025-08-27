@@ -1,26 +1,27 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import DelegationModal from '@/components/delegation-modal';
 import { getAddressFromQueryParams } from '@/utils/get-address-from-query-params';
-import { useLocation, useNavigate } from 'react-router';
 
 const DelegatePage = () => {
-  const { search } = useLocation();
-  const delegateTo = getAddressFromQueryParams('to', search);
+  const params = useSearchParams();
+  const delegateTo = getAddressFromQueryParams('to', `?${params.toString()}`);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   if (!delegateTo || delegateTo.length === 0) {
     return (
       <>
-        <DelegationModal onDismiss={() => navigate('/vote')} />
+        <DelegationModal onDismiss={() => router.push('/vote')} />
       </>
     );
   }
 
   return (
     <>
-      <DelegationModal onDismiss={() => navigate('/vote')} delegateTo={delegateTo} />
+      <DelegationModal onDismiss={() => router.push('/vote')} delegateTo={delegateTo} />
     </>
   );
 };

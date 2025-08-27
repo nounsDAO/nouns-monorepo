@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import AuctionActivity from '@/components/auction-activity';
 import { LoadingNoun } from '@/components/legacy-noun';
 import NounderNounContent from '@/components/nounder-noun-content';
@@ -12,7 +14,6 @@ import { beige, grey } from '@/utils/noun-bg-colors';
 import { isNounderNoun } from '@/utils/nounder-noun';
 import { INounSeed } from '@/wrappers/noun-token';
 import { Auction as IAuction } from '@/wrappers/nouns-auction';
-import { useNavigate } from 'react-router';
 
 interface AuctionProps {
   auction?: IAuction;
@@ -21,7 +22,7 @@ interface AuctionProps {
 const Auction: React.FC<AuctionProps> = props => {
   const { auction: currentAuction } = props;
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const stateBgColor = useAppSelector((state: RootState) => state.application.stateBackgroundColor);
   const lastNounId = useAppSelector((state: RootState) => state.onDisplayAuction.lastAuctionNounId);
@@ -32,12 +33,12 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     if (currentAuction) {
-      navigate(nounPath(Number(currentAuction.nounId) - 1));
+      router.push(nounPath(Number(currentAuction.nounId) - 1));
     }
   };
   const nextAuctionHandler = () => {
     if (currentAuction) {
-      navigate(nounPath(Number(currentAuction.nounId) + 1));
+      router.push(nounPath(Number(currentAuction.nounId) + 1));
     }
   };
 

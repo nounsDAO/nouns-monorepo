@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 import advanced from 'dayjs/plugin/advancedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import ReactDiffViewer from 'react-diff-viewer';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -19,7 +21,6 @@ import Section from '@/components/section';
 import { cn } from '@/lib/utils';
 import { processProposalDescriptionText } from '@/utils/process-proposal-description-text';
 import { useProposal, useProposalVersions } from '@/wrappers/nouns-dao';
-import { Link, useParams } from 'react-router';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -84,7 +85,7 @@ const ProposalHistory = () => {
         {proposal && (
           <>
             <div className={'relative'}>
-              <Link to={`/vote/${id}`}>
+              <Link href={`/vote/${id}`}>
                 <button
                   type="button"
                   className={cn(

@@ -8,6 +8,8 @@ import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
@@ -33,7 +35,6 @@ import {
   useProposalThreshold,
 } from '@/wrappers/nouns-dao';
 import { ProposalCandidate, useCandidateProposals } from '@/wrappers/nouns-data';
-import { Link, useLocation, useNavigate } from 'react-router';
 
 dayjs.extend(relativeTime);
 
@@ -104,7 +105,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
   const dispatch = useAppDispatch();
   const candidates = useAppSelector(state => state.candidates.data);
@@ -116,7 +117,13 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
-  const { hash } = useLocation();
+  const [hash, setHash] = useState<string>('');
+  useEffect(() => {
+    const updateHash = () => setHash(window.location.hash || '');
+    updateHash();
+    window.addEventListener('hashchange', updateHash);
+    return () => window.removeEventListener('hashchange', updateHash);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -142,11 +149,11 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
 
   useEffect(() => {
     if (activeTab === 1) {
-      navigate('/vote#candidates');
+      router.push('/vote#candidates');
     } else {
-      navigate('/vote');
+      router.push('/vote');
     }
-  }, [activeTab, navigate]);
+  }, [activeTab, router]);
 
   const nullStateCopy = () => {
     if (!!account) {
@@ -196,7 +203,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     className={
                       'mb-2 h-12 max-w-40 rounded-[12px] border border-[var(--brand-color-green)] bg-[var(--brand-color-green)] font-bold hover:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:bg-[var(--brand-color-green)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] active:bg-[var(--brand-color-green)]'
                     }
-                    onClick={() => navigate('/create-proposal')}
+                    onClick={() => router.push('/create-proposal')}
                   >
                     <Trans>Submit Proposal</Trans>
                   </Button>
@@ -273,7 +280,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       className={
                         'mb-2 h-12 max-w-40 rounded-[12px] border border-[var(--brand-color-green)] bg-[var(--brand-color-green)] font-bold hover:bg-[var(--brand-color-green)] hover:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] focus:bg-[var(--brand-color-green)] focus:shadow-[0_0_0_0.2rem_rgb(67,179,105,0.75)] active:bg-[var(--brand-color-green)]'
                       }
-                      onClick={() => navigate('create-proposal')}
+                      onClick={() => router.push('create-proposal')}
                     >
                       <Trans>Submit Proposal</Trans>
                     </Button>
@@ -443,7 +450,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   </Trans>
                 </p>
                 <Link
-                  to="/create-candidate"
+                  href="/create-candidate"
                   className={cn(
                     'mt-4 block rounded-[12px] border border-[rgba(0,0,0,0.1)] bg-black p-4 text-center font-bold leading-none text-white no-underline hover:border-[rgba(0,0,0,0.1)] hover:bg-black hover:text-[#e2e3e8] hover:shadow-none',
                   )}

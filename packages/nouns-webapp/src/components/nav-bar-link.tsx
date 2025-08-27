@@ -1,7 +1,8 @@
 import React from 'react';
 
+import NextLink from 'next/link';
+
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router';
 
 const NavBarLink: React.FC<{
   children: React.ReactNode;
@@ -9,21 +10,22 @@ const NavBarLink: React.FC<{
   className?: string;
 }> = props => {
   const { to, children, className } = props;
-  // hacks to make React Router work with external links
-  const onClick = () => (/http/.test(to) ? (window.location.href = to) : null);
-  const target = /http/.test(to) ? '_blank' : '';
+  const isExternal = /^https?:/i.test(to);
+  const cls = cn(
+    `text-brand-black hover:text-brand-dark-green lg-max:bg-transparent lg-max:text-brand-black lg-max:hover:bg-transparent lg-max:hover:text-brand-dark-green mr-4 flex h-8 cursor-pointer items-center justify-center rounded-[50px] border-0 bg-white p-7 text-lg font-normal no-underline hover:bg-[#f2f2f2]`,
+    className,
+  );
+  if (isExternal) {
+    return (
+      <a href={to} className={cls} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
   return (
-    <Link
-      to={to}
-      className={cn(
-        `text-brand-black hover:text-brand-dark-green lg-max:bg-transparent lg-max:text-brand-black lg-max:hover:bg-transparent lg-max:hover:text-brand-dark-green mr-4 flex h-8 cursor-pointer items-center justify-center rounded-[50px] border-0 bg-white p-7 text-lg font-normal no-underline hover:bg-[#f2f2f2]`,
-        className,
-      )}
-      onClick={onClick}
-      target={target}
-    >
+    <NextLink href={to} className={cls}>
       {children}
-    </Link>
+    </NextLink>
   );
 };
 export default NavBarLink;
