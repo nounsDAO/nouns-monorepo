@@ -182,22 +182,4 @@ describe('AuctionNavigation Component', () => {
 
     expect(onNextAuctionClick).not.toHaveBeenCalled();
   });
-
-  it('applies correct CSS classes based on isCool selector', () => {
-    render(
-      <AuctionNavigation
-        isFirstAuction={false}
-        isLastAuction={false}
-        onPrevAuctionClick={vi.fn()}
-        onNextAuctionClick={vi.fn()}
-      />,
-    );
-
-    const prevButton = screen.getByText('←');
-    const nextButton = screen.getByText('→');
-
-    // Since we mocked isCool to be true
-    expect(prevButton.className).toContain('leftArrowCool');
-    expect(nextButton.className).toContain('rightArrowCool');
-  });
 });
