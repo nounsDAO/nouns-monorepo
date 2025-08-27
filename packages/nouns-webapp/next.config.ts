@@ -203,7 +203,12 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/auction/:id',
-        destination: '/noun/:id',
+        destination: '/nouns/:id',
+        permanent: true,
+      },
+      {
+        source: '/noun/:id',
+        destination: '/nouns/:id',
         permanent: true,
       },
       {
