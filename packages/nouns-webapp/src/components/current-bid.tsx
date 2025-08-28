@@ -28,26 +28,27 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
   const titleContent = auctionEnded ? <Trans>Winning bid</Trans> : <Trans>Current bid</Trans>;
 
   return (
-    <div
-      className={cn(
-        'max-lg:w-full max-lg:mx-0 max-lg:justify-between px-0',
-        'flex flex-row items-end justify-between gap-2 lg:flex-col',
-      )}
-    >
-      <div className={cn('max-lg:pl-2', 'basis-5/12 lg:w-full lg:basis-auto')}>
+    <div className={cn('-mx-3 mt-0 flex flex-wrap border-0 border-solid border-neutral-200 px-0')}>
+      <div
+        className={cn(
+          'mt-0 max-w-full flex-none border-0 border-solid border-neutral-200 px-3 lg:w-full lg:flex-none',
+        )}
+      >
         <h4
-          className="font-pt max-lg:mb-0 max-lg:mt-1.5 text-lg font-bold"
-          style={{
-            color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
-          }}
+          className={cn(
+            'font-pt line-height-1 m-0 border-0 border-solid border-neutral-200 text-lg font-bold text-slate-500 xl:text-2xl',
+            isCool ? 'border-brand-cool-border border-b-2' : 'border-brand-warm-border border-b-2',
+          )}
         >
           {titleContent}
         </h4>
       </div>
-      <div className="lg:w-full">
+      <div className="mt-0 w-auto max-w-full flex-none border-0 border-solid border-neutral-200 px-3 lg:w-full lg:flex-none">
         <h2
-          className="font-pt text-32 mt-0.75 max-lg:text-23 max-lg:mr-2 mb-0 font-bold"
-          style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
+          className={cn(
+            'font-pt linee-height-1 mx-0 mb-0 mt-1 border-0 border-solid border-neutral-200 text-3xl font-bold text-slate-800 xl:text-3xl',
+            isCool ? 'border-brand-cool-border border-b-2' : 'border-brand-warm-border border-b-2',
+          )}
         >
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid} />}
         </h2>

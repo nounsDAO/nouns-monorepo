@@ -117,13 +117,13 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </div>
           </div>
           <div className="mb-0 flex flex-col gap-4 lg:flex-row">
-            <div className="max-lg:border-r-0 max-lg:pl-0 ml-1.5 mt-1.5 w-full border-r lg:basis-1/3">
+            <div className="ml-1 mt-1 w-full max-w-full shrink-0 border-0 border-r border-solid border-gray-300 px-3 lg:flex-none">
               <CurrentBid
                 currentBid={BigInt(auction.amount?.toString() ?? '0')}
                 auctionEnded={auctionEnded}
               />
             </div>
-            <div className="max-lg:ml-1.5 max-lg:mt-1.5 max-lg:pl-0 w-full pl-0 lg:basis-1/2">
+            <div className="w-full pl-0 max-lg:ml-1.5 max-lg:mt-1.5 max-lg:pl-0 lg:basis-1/2">
               {auctionEnded ? (
                 renderAuctionWinner()
               ) : (
@@ -134,7 +134,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         </div>
         {auctionEnded && (
           <div className="mb-0 flex w-full">
-            <div className="max-lg:pl-3.5 group mb-4 mt-0 w-full transition duration-200 ease-in-out hover:text-black">
+            <div className="group mb-4 mt-0 w-full transition duration-200 ease-in-out hover:text-black max-lg:pl-3.5">
               <FontAwesomeIcon icon={faInfoCircle} className="opacity-60" />
               <a
                 href={'https://www.nouns.game/crystal-ball'}
