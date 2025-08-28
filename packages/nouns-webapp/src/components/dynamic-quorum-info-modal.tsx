@@ -83,15 +83,15 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
       </div>
       <div
         className={
-          'font-pt shadow-quorum-modal fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold max-[1200px]:bottom-0 max-[1200px]:left-0 max-[1200px]:top-[5vh] max-[1200px]:max-h-full max-[1200px]:w-full max-[1200px]:rounded-b-none max-[1200px]:bg-transparent max-[1200px]:shadow-none'
+          'font-pt shadow-quorum-modal fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold xl-max:bottom-0 xl-max:left-0 xl-max:top-[5vh] xl-max:max-h-full xl-max:w-full xl-max:rounded-b-none xl-max:bg-transparent xl-max:shadow-none'
         }
       >
-        <div className="max-h-[90vh] overflow-y-hidden p-4 max-[1200px]:h-full max-[1200px]:max-h-full">
+        <div className="max-h-[90vh] overflow-y-hidden p-4 xl-max:h-full xl-max:max-h-full">
           <h1 className="font-londrina -mb-4 flex flex-col">
             <Trans>Dynamic Threshold</Trans>
           </h1>
 
-          <p className="mb-2 font-medium max-[1200px]:text-white">
+          <p className="mb-2 font-medium xl-max:text-white">
             {window.innerWidth < 1200 ? (
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
@@ -133,7 +133,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           <div
             className={cn(
               'shadow-quorum-modal rounded-14 p-4',
-              'bg-brand-surface mt-8 py-8 pl-4 pr-12 max-[1200px]:hidden',
+              'bg-brand-surface mt-8 py-8 pl-4 pr-12 xl-max:hidden',
             )}
           >
             <div className="flex">

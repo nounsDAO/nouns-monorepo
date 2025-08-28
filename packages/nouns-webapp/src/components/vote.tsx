@@ -587,10 +587,10 @@ const VotePage = () => {
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div
                 className={
-                  'rounded-12 border-brand-border-light border px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center'
+                  'rounded-12 border-brand-border-light border px-[15px] py-[5px] lg-max:p-[10px] lg-max:text-center'
                 }
               >
-                <div className={'flex items-center justify-between max-[992px]:flex-col'}>
+                <div className={'flex items-center justify-between lg-max:flex-col'}>
                   <div className={'m-0 block p-0 text-[13px] font-bold opacity-70'}>
                     <p>
                       <strong className="block">
@@ -616,8 +616,8 @@ const VotePage = () => {
             ) : null}
 
             {isActionable() && (
-              <div className="rounded-12 border-brand-border-light border px-[15px] py-[5px] max-[992px]:p-[10px] max-[992px]:text-center">
-                <div className="flex items-center justify-between max-[992px]:flex-col">
+              <div className="rounded-12 border-brand-border-light border px-[15px] py-[5px] lg-max:p-[10px] lg-max:text-center">
+                <div className="flex items-center justify-between lg-max:flex-col">
                   <p>
                     <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                       <Trans>Proposal functions</Trans>
@@ -841,7 +841,7 @@ const VotePage = () => {
                 proposeOnV1={proposal.onTimelockV1}
               />
             </div>
-            <div className={cn('w-full xl:w-1/3', 'min-[993px]:h-full')}>
+            <div className={cn('w-full xl:w-1/3', 'md-lg:h-full')}>
               {proposalVersions !== undefined && (
                 <VoteSignals
                   feedback={proposalFeedback}

@@ -59,7 +59,12 @@ const SettleManuallyBtn: React.FC<{
   const mins = timerDuration.minutes();
 
   return (
-    <p className={`lg-max:text-center lg-max:ml-2 max-[660px]:ml-0`}>
+    <p
+      className={
+        // layout/display (responsive alignment)
+        'lg-max:text-center lg-max:ml-2 660-max:ml-0'
+      }
+    >
       <button
         type="button"
         onClick={settleAuctionHandler}

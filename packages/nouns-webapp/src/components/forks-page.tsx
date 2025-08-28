@@ -25,8 +25,14 @@ const ForksPage: React.FC = () => {
   return (
     <div>
       <Section fullWidth={false} className="lg-max:mx-2">
-        <div className={`mx-auto w-full lg:w-10/12`}>
-          <div className={`flex flex-col gap-2`}>
+        <div className={
+          // layout → sizing
+          'mx-auto w-full lg:w-10/12'
+        }>
+          <div className={
+            // layout
+            'flex flex-col gap-2'
+          }>
             <span className="font-londrina text-brand-text-muted-600 text-2xl">
               <Trans>Governance</Trans>
             </span>
@@ -55,8 +61,14 @@ const ForksPage: React.FC = () => {
       </Section>
       {/* if the latest fork id is finished forking, display a callout with an option to start a new fork. */}
       <Section fullWidth={false} className="lg-max:mx-2">
-        <div className={`mx-auto w-full lg:w-10/12`}>
-          <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`}>
+        <div className={
+          // layout → sizing
+          'mx-auto w-full lg:w-10/12'
+        }>
+          <div className={
+            // layout
+            'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'
+          }>
             {Array.isArray(forks.data) && forks.data.length > 0
               ? forks.data
                   .map((fork: Fork, i: number) => {

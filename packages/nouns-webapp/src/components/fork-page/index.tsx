@@ -200,8 +200,8 @@ const ForkPage = () => {
           {isNewForkPage ? (
             <div
               className={cn(
-                'flex content-end max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
-                'flex-col items-center justify-center text-center min-[992px]:min-h-[50vh]',
+                'flex content-end lg-max:flex-col lg-max:items-start lg-max:gap-[10px]',
+                'flex-col items-center justify-center text-center md-lg:min-h-[50vh]',
               )}
             >
               <div className="lg:col-span-12">
@@ -248,9 +248,9 @@ const ForkPage = () => {
           ) : (
             <div
               className={cn(
-                'flex content-end justify-between max-[991px]:flex-col max-[991px]:items-start max-[991px]:gap-[10px]',
+                'flex content-end justify-between lg-max:flex-col lg-max:items-start lg-max:gap-[10px]',
                 (escrowEvents.data == null || isNewForkPage) &&
-                  'flex-col items-center justify-center text-center min-[992px]:min-h-[50vh]',
+                  'flex-col items-center justify-center text-center md-lg:min-h-[50vh]',
                 isForked && 'w-full flex-col items-center',
               )}
             >
@@ -393,7 +393,7 @@ const ForkPage = () => {
               <div
                 className={cn(
                   'lg:col-span-3',
-                  'max-[991px]:border-brand-border-light sticky top-[20px] h-fit max-[991px]:relative max-[991px]:top-0 max-[991px]:mb-[30px] max-[991px]:border-b max-[991px]:pb-[30px]',
+                  'lg-max:border-brand-border-light sticky top-[20px] h-fit lg-max:relative lg-max:top-0 lg-max:mb-[30px] lg-max:border-b lg-max:pb-[30px]',
                 )}
               >
                 <div className="rounded-12 border-brand-border-light mb-5 w-full border p-5 text-center leading-none">
@@ -437,7 +437,7 @@ const ForkPage = () => {
                 />
 
                 {(isForkPeriodActive || isForked) && (
-                  <div className="flex flex-row flex-wrap justify-between gap-[10px] max-[991px]:hidden">
+                <div className="flex flex-row flex-wrap justify-between gap-[10px] lg-max:hidden">
                     {forkDetails.data.addedNouns.map(nounId => (
                       <a href={`/noun/${nounId}`} target="_blank" rel="noreferrer" key={nounId}>
                         <img

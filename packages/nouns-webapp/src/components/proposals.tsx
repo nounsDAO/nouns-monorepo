@@ -196,7 +196,12 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             </div>
             {!isMobile && hasEnoughVotesToPropose ? (
               <div
-                className={`lg-max:w-full lg-max:flex lg-max:items-center lg-max:justify-center flex pt-[0.8rem]`}
+                className={cn(
+                  // layout/display
+                  'flex lg-max:flex lg-max:items-center lg-max:justify-center',
+                  // spacing
+                  'pt-[0.8rem] lg-max:w-full',
+                )}
               >
                 <div className="text-right">
                   <Button
@@ -226,7 +231,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               <div className={cn('d-flex', 'text-right')}>
                 {!isMobile && (
                   <div
-                    className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center text-brand-gray-light-text mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px]`}
+                    className={cn(
+                      // typography
+                      'font-pt text-[16px] font-medium leading-[22.4px] text-brand-gray-light-text',
+                      // spacing
+                      'mr-4 mt-[0.9rem] lg-max:mr-0 lg-max:mt-0',
+                      // responsive alignment
+                      'lg-max:text-center',
+                    )}
                   >
                     {nullStateCopy()}
                   </div>
@@ -265,9 +277,12 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
           <div className="w-100">
             <div className="w-full">
               <div>
-                <div
-                  className={`font-pt lg-max:mt-0 lg-max:mr-0 lg-max:text-center text-brand-gray-light-text mr-4 mt-[0.9rem] text-[16px] font-medium leading-[22.4px]`}
-                >
+                  <div
+                    className={cn(
+                      'font-pt text-[16px] font-medium leading-[22.4px] text-brand-gray-light-text',
+                      'mr-4 mt-[0.9rem] lg-max:mr-0 lg-max:mt-0 lg-max:text-center',
+                    )}
+                  >
                   {nullStateCopy()}
                 </div>
               </div>
@@ -305,7 +320,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
       )}
       <Section fullWidth={false} className={'mx-auto w-full'}>
         {activeTab === 0 && (
-          <div className={`mx-auto w-full lg:w-10/12`}>
+          <div className={cn('mx-auto w-full lg:w-10/12')}>
             {proposals && proposals.length > 0 ? (
               proposals
                 .slice(0)
@@ -346,7 +361,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       key={i}
                     >
                       <div className={'flex w-full flex-row items-center justify-between'}>
-                        <span className={`lg-max:max-w-[65%] lg-max:break-words w-4/5`}>
+                        <span className={cn('w-4/5 lg-max:max-w-[65%] lg-max:break-words')}>
                           <span className={'text-brand-text-muted-600 mr-2'}>
                             {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
@@ -382,7 +397,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
           </div>
         )}
         {activeTab === 1 && (
-          <div className={`mx-auto w-full lg:w-10/12`}>
+          <div className={cn('mx-auto w-full lg:w-10/12')}>
             <div className="w-full lg:flex lg:gap-6">
               <div className="w-full lg:w-9/12">
                 {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
@@ -437,7 +452,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   </>
                 )}
               </div>
-              <div className={`font-pt w-full lg:w-3/12`}>
+              <div className={cn('font-pt w-full lg:w-3/12')}>
                 <h4 className="mb-2 text-[1.2rem] font-bold">
                   <strong>
                     <Trans>About Proposal Candidates</Trans>

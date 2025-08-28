@@ -117,7 +117,12 @@ const BrandAssetsPage = () => {
     },
   ];
   return (
-    <div className={`font-pt -mb-10 min-h-screen bg-gray-100 sm:-mb-20`}>
+    <div
+      className={
+        // typography → layout → spacing → color
+        'font-pt min-h-screen -mb-10 sm:-mb-20 bg-gray-100'
+      }
+    >
       <div className="container-sm py-12">
         <div className="mb-12">
           <h1 className="mb-4 text-5xl font-bold text-gray-900">
@@ -132,7 +137,10 @@ const BrandAssetsPage = () => {
         </div>
 
         <section className="mt-12">
-          <h2 className={`font-landrina text-4xl font-bold`}>
+          <h2 className={
+            // typography
+            'font-landrina text-4xl font-bold'
+          }>
             <Trans>Logo</Trans>
           </h2>
           {/* Responsive grid: 1 column on mobile, 2 on tablet, 3 on desktop */}
@@ -149,7 +157,10 @@ const BrandAssetsPage = () => {
           </div>
         </section>
         <section className="mt-12">
-          <h2 className={`font-landrina mt-6 text-4xl font-bold`}>
+          <h2 className={
+            // spacing → typography
+            'mt-6 font-landrina text-4xl font-bold'
+          }>
             <Trans>Nouns & Traits</Trans>
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -168,7 +179,10 @@ const BrandAssetsPage = () => {
           </div>
         </section>
         <section className="mt-12">
-          <h2 className={`font-landrina mt-6 text-4xl font-bold`}>
+          <h2 className={
+            // spacing → typography
+            'mt-6 font-landrina text-4xl font-bold'
+          }>
             <Trans>License</Trans>
           </h2>
           <div className="mt-6 items-start gap-6">

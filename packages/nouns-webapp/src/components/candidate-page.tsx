@@ -212,7 +212,7 @@ const CandidatePage = () => {
       {isProposer && isProposal === false && (
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-12">
-            <div className="rounded-12 border-brand-border-light mb-8 flex items-center justify-between gap-4 border p-[15px] max-[992px]:flex-col max-[992px]:text-center">
+            <div className="rounded-12 border-brand-border-light mb-8 flex items-center justify-between gap-4 border p-[15px] lg-max:flex-col lg-max:text-center">
               <p>
                 <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                   <Trans>Proposer functions</Trans>
@@ -222,7 +222,7 @@ const CandidatePage = () => {
                   sponsor to re-sign
                 </Trans>
               </p>
-              <div className="flex w-[30%] flex-row justify-end gap-4 max-[992px]:w-full max-[992px]:justify-center">
+              <div className="flex w-[30%] flex-row justify-end gap-4 lg-max:w-full lg-max:justify-center">
                 <Button
                   onClick={destructiveStateAction}
                   disabled={isCancelPending}
@@ -257,7 +257,7 @@ const CandidatePage = () => {
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-12">
             <a
-              className="font-londrina rounded-12 border-brand-border-light mb-0 mt-2 flex w-full flex-col border bg-white p-2 text-center font-bold no-underline min-[991px]:hidden"
+              className="font-londrina rounded-12 border-brand-border-light mb-0 mt-2 flex w-full flex-col border bg-white p-2 text-center font-bold no-underline md-lg:hidden"
               href="#feedback"
             >
               Jump to Sponsored Votes and Feedback
@@ -266,7 +266,7 @@ const CandidatePage = () => {
           <div className={cn('col-span-12 lg:col-span-8', 'mx-auto mt-[1em] bg-white')}>
             <ProposalCandidateContent proposal={candidate} />
           </div>
-          <div id="feedback" className={cn('col-span-12 lg:col-span-4', 'mt-4 min-[993px]:mt-6')}>
+          <div id="feedback" className={cn('col-span-12 lg:col-span-4', 'mt-4 md-lg:mt-6')}>
             {currentBlock != null &&
               threshold != null &&
               userVotes != null &&

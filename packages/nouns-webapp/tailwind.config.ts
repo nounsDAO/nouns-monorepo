@@ -206,9 +206,22 @@ export default {
     tailwindcssAnimate,
     // @ts-ignore
     function ({ addUtilities, addVariant, matchUtilities, theme }) {
-      // Custom max-width variants to replace max-[...] utilities
-      addVariant('lg-max', '@media (max-width: 992px)');
-      addVariant('xl-max', '@media (max-width: 1200px)');
+      // Generate max-<screen> variants from configured screens (e.g., max-lg)
+      const screens = theme('screens') || {};
+      Object.entries(screens).forEach(([k, v]) => {
+        if (typeof v === 'string') {
+          addVariant(`max-${k}`, `@media (max-width: ${v})`);
+        }
+      });
+      // Additional max-width helpers to replace arbitrary breakpoint utilities
+      addVariant('1040-max', '@media (max-width: 1040px)');
+      addVariant('660-max', '@media (max-width: 660px)');
+      addVariant('568-max', '@media (max-width: 568px)');
+      addVariant('414-max', '@media (max-width: 414px)');
+      addVariant('370-max', '@media (max-width: 370px)');
+      addVariant('330-max', '@media (max-width: 330px)');
+      // Additional min-width helper for 400px
+      addVariant('min-400', '@media (min-width: 400px)');
 
       // Custom utilities for checkerboard background sizing and positioning
       addUtilities({

@@ -85,9 +85,14 @@ const ProposalHistory = () => {
                 <button
                   type="button"
                   className={cn(
-                    'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
+                    // layout/display
+                    'absolute -left-12 inline-block size-8 appearance-none rounded-full p-0 font-bold',
+                    // spacing
+                    'mr-4 mt-[0.1rem]',
+                    // color/background/border
                     'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
-                    'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
+                    // responsive
+                    '1040-max:relative 1040-max:left-0 414-max:hidden',
                   )}
                 >
                   ←
@@ -146,7 +151,7 @@ const ProposalHistory = () => {
               />
             )}
             {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
-              <div className="[&_table:first-of-type]:ml-[-10px] min-[992px]:[&_table:first-of-type]:ml-[-30px]">
+              <div className="[&_table:first-of-type]:ml-[-10px] md-lg:[&_table:first-of-type]:ml-[-30px]">
                 <div className={cn('col-span-12', 'mt-8 break-words pt-8', 'm-0 p-0')}>
                   <h5>
                     <Trans>Description</Trans>
@@ -184,7 +189,7 @@ const ProposalHistory = () => {
             )}
           </div>
           <div className="col-span-12 md:col-span-12 lg:col-span-4">
-            <div className="sticky top-[20px] max-[992px]:relative">
+            <div className="sticky top-[20px] lg-max:relative">
               <div className="mb-4 flex items-baseline justify-between">
                 <h2>Version History</h2>
               </div>

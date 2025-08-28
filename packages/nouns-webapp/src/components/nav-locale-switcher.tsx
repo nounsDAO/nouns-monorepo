@@ -188,7 +188,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         />
         {buttonUp && (
           <CustomMenu
-            className={`border-0 bg-inherit`}
+            className={cn('border-0 bg-inherit')}
             buttonStyleTop={buttonStyleTop}
             buttonStyleBottom={buttonStyleBottom}
             activeLocale={activeLocale}

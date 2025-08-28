@@ -177,7 +177,7 @@ const CandidateHistoryPage = () => {
             )}
           </div>
           <div className="lg:col-span-4">
-            <div className={'sticky top-[20px] max-[992px]:relative'}>
+            <div className={'sticky top-[20px] lg-max:relative'}>
               <div className={'mb-4 flex items-baseline justify-between'}>
                 <h2>
                   <Trans>Version History</Trans>
