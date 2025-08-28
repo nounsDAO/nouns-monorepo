@@ -47,9 +47,9 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
       )}
       {transaction.target.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase() &&
         transaction.functionSig === 'transfer' && (
-          <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium lg-max:mt-4 lg-max:items-start">
+          <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium max-lg:mt-4 max-lg:items-start">
             <div className="flex w-[25px] items-center">
-              <InformationCircleIcon className="size-[18px] opacity-50 lg-max:mr-2 lg-max:mt-1" />
+              <InformationCircleIcon className="size-[18px] opacity-50 max-lg:mr-2 max-lg:mt-1" />
             </div>
             <div>
               <Trans>
@@ -61,9 +61,9 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
         )}
       {transaction.target.toLowerCase() === nounsPayerAddress[chainId].toLowerCase() &&
         transaction.functionSig === 'sendOrRegisterDebt' && (
-          <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium lg-max:mt-4 lg-max:items-start">
+          <div className="text-brand-gray-light-text my-1 ml-[-0.1rem] flex items-center text-[16px] font-medium max-lg:mt-4 max-lg:items-start">
             <div className="flex w-[25px] items-center">
-              <InformationCircleIcon className="size-[18px] opacity-50 lg-max:mr-2 lg-max:mt-1" />
+              <InformationCircleIcon className="size-[18px] opacity-50 max-lg:mr-2 max-lg:mt-1" />
             </div>
             <div>
               <Trans>

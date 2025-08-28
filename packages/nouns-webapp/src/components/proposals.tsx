@@ -174,8 +174,8 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             className={cn(
               'mx-auto w-full lg:w-10/12',
               'flex flex-row justify-between',
-              'lg-max:flex-col lg-max:justify-start lg-max:items-start',
-              !hasEnoughVotesToPropose ? 'lg-max:flex-row' : '',
+              'max-lg:flex-col max-lg:justify-start max-lg:items-start',
+              !hasEnoughVotesToPropose ? 'max-lg:flex-row' : '',
             )}
           >
             <div className="m-0 flex flex-row items-end justify-between gap-[10px]">
@@ -198,9 +198,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               <div
                 className={cn(
                   // layout/display
-                  'flex lg-max:flex lg-max:items-center lg-max:justify-center',
+                  'flex max-lg:flex max-lg:items-center max-lg:justify-center',
                   // spacing
-                  'pt-[0.8rem] lg-max:w-full',
+                  'pt-[0.8rem] max-lg:w-full',
                 )}
               >
                 <div className="text-right">
@@ -235,9 +235,9 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       // typography
                       'font-pt text-[16px] font-medium leading-[22.4px] text-brand-gray-light-text',
                       // spacing
-                      'mr-4 mt-[0.9rem] lg-max:mr-0 lg-max:mt-0',
+                      'mr-4 mt-[0.9rem] max-lg:mr-0 max-lg:mt-0',
                       // responsive alignment
-                      'lg-max:text-center',
+                      'max-lg:text-center',
                     )}
                   >
                     {nullStateCopy()}
@@ -280,7 +280,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                   <div
                     className={cn(
                       'font-pt text-[16px] font-medium leading-[22.4px] text-brand-gray-light-text',
-                      'mr-4 mt-[0.9rem] lg-max:mr-0 lg-max:mt-0 lg-max:text-center',
+                      'mr-4 mt-[0.9rem] max-lg:mr-0 max-lg:mt-0 max-lg:text-center',
                     )}
                   >
                   {nullStateCopy()}
@@ -361,7 +361,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       key={i}
                     >
                       <div className={'flex w-full flex-row items-center justify-between'}>
-                        <span className={cn('w-4/5 lg-max:max-w-[65%] lg-max:break-words')}>
+                        <span className={cn('w-4/5 max-lg:max-w-[65%] max-lg:break-words')}>
                           <span className={'text-brand-text-muted-600 mr-2'}>
                             {i18n.number(Number(p.id || '0'))}
                           </span>{' '}
@@ -369,7 +369,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                         </span>
 
                         {isPropInStateToHaveCountDown && (
-                          <div className={cn('flex', 'lg-max:hidden')}>{countdownPill}</div>
+                          <div className={cn('flex', 'max-lg:hidden')}>{countdownPill}</div>
                         )}
                         <div className={cn('ml-2 min-w-max max-w-20')}>
                           <ProposalStatus status={p.status}></ProposalStatus>
@@ -377,7 +377,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                       </div>
 
                       {isPropInStateToHaveCountDown && (
-                        <div className={cn('lg-max:mt-4 lg-max:flex lg-max:w-full hidden')}>
+                        <div className={cn('max-lg:mt-4 max-lg:flex max-lg:w-full hidden')}>
                           {countdownPill}
                         </div>
                       )}

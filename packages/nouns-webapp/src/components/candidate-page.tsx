@@ -212,7 +212,7 @@ const CandidatePage = () => {
       {isProposer && isProposal === false && (
         <div className="grid grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-12">
-            <div className="rounded-12 border-brand-border-light mb-8 flex items-center justify-between gap-4 border p-[15px] lg-max:flex-col lg-max:text-center">
+            <div className="rounded-12 border-brand-border-light mb-8 flex items-center justify-between gap-4 border p-[15px] max-lg:flex-col max-lg:text-center">
               <p>
                 <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                   <Trans>Proposer functions</Trans>
@@ -222,7 +222,7 @@ const CandidatePage = () => {
                   sponsor to re-sign
                 </Trans>
               </p>
-              <div className="flex w-[30%] flex-row justify-end gap-4 lg-max:w-full lg-max:justify-center">
+              <div className="flex w-[30%] flex-row justify-end gap-4 max-lg:w-full max-lg:justify-center">
                 <Button
                   onClick={destructiveStateAction}
                   disabled={isCancelPending}

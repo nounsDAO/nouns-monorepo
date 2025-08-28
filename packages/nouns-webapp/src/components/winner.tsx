@@ -28,9 +28,9 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeLocale = useActiveLocale();
 
   const nonNounderNounContent = isWinnerYou ? (
-    <div className={cn('lg-max:pr-1 mt-1', activeLocale === 'ja-JP' ? 'lg:w-8/12' : 'lg:w-4/12')}>
+    <div className={cn('max-lg:pr-1 mt-1', activeLocale === 'ja-JP' ? 'lg:w-8/12' : 'lg:w-4/12')}>
       <h2
-        className="font-pt lg-max:text-23 lg-max:mr-2 text-32 font-bold"
+        className="font-pt max-lg:text-23 max-lg:mr-2 text-32 font-bold"
         style={{
           color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
         }}
@@ -60,8 +60,8 @@ const Winner: React.FC<WinnerProps> = props => {
 
   return (
     <>
-      <div className="lg-max:mt-0 lg-max:w-full lg-max:mx-0 lg-max:px-0 lg-max:justify-between ml-2 mt-0.5 flex flex-wrap pl-6">
-        <div className="font-pt lg-max:pl-2 w-auto lg:w-full">
+      <div className="max-lg:mt-0 max-lg:w-full max-lg:mx-0 max-lg:px-0 max-lg:justify-between ml-2 mt-0.5 flex flex-wrap pl-6">
+        <div className="font-pt max-lg:pl-2 w-auto lg:w-full">
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -73,7 +73,7 @@ const Winner: React.FC<WinnerProps> = props => {
         </div>
         <div className="flex-1 lg:w-full">
           <h2
-            className="font-pt lg-max:text-23 lg-max:mr-2 text-32 font-bold"
+            className="font-pt max-lg:text-23 max-lg:mr-2 text-32 font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}

@@ -587,10 +587,10 @@ const VotePage = () => {
             {userVotes !== undefined && userVotes > 0 && !hasVoted && isObjectionPeriod ? (
               <div
                 className={
-                  'rounded-12 border-brand-border-light border px-[15px] py-[5px] lg-max:p-[10px] lg-max:text-center'
+                  'rounded-12 border-brand-border-light border px-[15px] py-[5px] max-lg:p-[10px] max-lg:text-center'
                 }
               >
-                <div className={'flex items-center justify-between lg-max:flex-col'}>
+                <div className={'flex items-center justify-between max-lg:flex-col'}>
                   <div className={'m-0 block p-0 text-[13px] font-bold opacity-70'}>
                     <p>
                       <strong className="block">
@@ -616,8 +616,8 @@ const VotePage = () => {
             ) : null}
 
             {isActionable() && (
-              <div className="rounded-12 border-brand-border-light border px-[15px] py-[5px] lg-max:p-[10px] lg-max:text-center">
-                <div className="flex items-center justify-between lg-max:flex-col">
+              <div className="rounded-12 border-brand-border-light border px-[15px] py-[5px] max-lg:p-[10px] max-lg:text-center">
+                <div className="flex items-center justify-between max-lg:flex-col">
                   <p>
                     <span className="m-0 block p-0 text-[13px] font-bold opacity-70">
                       <Trans>Proposal functions</Trans>

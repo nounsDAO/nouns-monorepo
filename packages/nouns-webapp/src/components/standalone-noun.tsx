@@ -90,7 +90,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       <LegacyNoun
         imgPath=""
         alt="Noun"
-        wrapperClassName="h-[42px] w-[42px] xl-max:h-[70%] xl-max:w-[70%]"
+        wrapperClassName="h-[42px] w-[42px] max-xl:h-[70%] max-xl:w-[70%]"
       />
     );
 
@@ -99,7 +99,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       <LegacyNoun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
-        wrapperClassName="h-[42px] w-[42px] xl-max:h-[70%] xl-max:w-[70%]"
+        wrapperClassName="h-[42px] w-[42px] max-xl:h-[70%] max-xl:w-[70%]"
         className={border === true ? 'rounded-full border-2 border-white' : 'rounded-full'}
       />
     </Link>

@@ -30,13 +30,13 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
   return (
     <div
       className={cn(
-        'lg-max:w-full lg-max:mx-0 lg-max:justify-between px-0',
+        'max-lg:w-full max-lg:mx-0 max-lg:justify-between px-0',
         'flex flex-row items-end justify-between gap-2 lg:flex-col',
       )}
     >
-      <div className={cn('lg-max:pl-2', 'basis-5/12 lg:w-full lg:basis-auto')}>
+      <div className={cn('max-lg:pl-2', 'basis-5/12 lg:w-full lg:basis-auto')}>
         <h4
-          className="font-pt lg-max:mb-0 lg-max:mt-1.5 text-lg font-bold"
+          className="font-pt max-lg:mb-0 max-lg:mt-1.5 text-lg font-bold"
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
           }}
@@ -46,7 +46,7 @@ const CurrentBid: React.FC<CurrentBidProps> = props => {
       </div>
       <div className="lg:w-full">
         <h2
-          className="font-pt text-32 mt-0.75 lg-max:text-23 lg-max:mr-2 mb-0 font-bold"
+          className="font-pt text-32 mt-0.75 max-lg:text-23 max-lg:mr-2 mb-0 font-bold"
           style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid} />}

@@ -61,7 +61,7 @@ const GovernancePage = () => {
 
   return (
     <>
-      <Section fullWidth={false} className="lg-max:mx-2">
+      <Section fullWidth={false} className="max-lg:mx-2">
         <div className="mx-auto">
           <div>
             <span className="font-londrina text-brand-text-muted-600 text-2xl">

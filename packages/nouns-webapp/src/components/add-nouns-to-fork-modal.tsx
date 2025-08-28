@@ -346,8 +346,8 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
           );
         })}
       </div>
-      <div className="my-[20px] flex flex-row items-end justify-between lg-max:flex-col">
-        <div className="w-[70%] lg-max:w-full">
+      <div className="my-[20px] flex flex-row items-end justify-between max-lg:flex-col">
+        <div className="w-[70%] max-lg:w-full">
           <p>
             <strong>Select Nouns to {props.isForkingPeriod ? 'join fork' : 'to escrow'}</strong>
           </p>
@@ -401,7 +401,7 @@ const AddNounsToForkModal = (props: AddNounsToForkModalProps) => {
                 (props.userEscrowedNouns?.includes(nounId) ?? false)
               }
               className={cn(
-                'font-londrina rounded-12 relative w-[calc(33%_-_6px)] cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 lg-max:w-full',
+                'font-londrina rounded-12 relative w-[calc(33%_-_6px)] cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 max-lg:w-full',
                 selectedNouns.includes(nounId) && 'border-2 border-black/75',
                 (props.userEscrowedNouns?.includes(nounId) ?? false) &&
                   'border-brand-surface-neutral hover:border-brand-surface-neutral overflow-hidden opacity-100 hover:shadow-none [&>div]:opacity-65',

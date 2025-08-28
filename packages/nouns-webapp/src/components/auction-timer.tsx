@@ -71,12 +71,12 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
 
   return (
     <div
-      className="lg-max:mx-0 lg-max:w-auto lg-max:pl-0 lg-max:justify-between mt-0.3 flex w-max cursor-pointer flex-wrap pl-10 pr-0"
+      className="max-lg:mx-0 max-lg:w-auto max-lg:pl-0 max-lg:justify-between mt-0.3 flex w-max cursor-pointer flex-wrap pl-10 pr-0"
       onClick={() => setTimerToggle(!timerToggle)}
     >
-      <div className="lg-max:mt-0 lg-max:pl-2 mt-px">
+      <div className="max-lg:mt-0 max-lg:pl-2 mt-px">
         <h4
-          className="font-pt lg-max:mb-0 lg-max:mt-1.5 text-lg font-bold"
+          className="font-pt max-lg:mb-0 max-lg:mt-1.5 text-lg font-bold"
           style={{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
           }}
@@ -98,31 +98,31 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
       <div>
         {timerToggle ? (
           <h2
-            className="font-pt lg-max:text-23 lg-max:pr-2 text-32 mb-0 mt-px flex font-bold"
+            className="font-pt max-lg:text-23 max-lg:pr-2 text-32 mb-0 mt-px flex font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
             <div className="mr-2">
-              <span className="font-pt lg-max:text-23 text-32 font-bold">
+              <span className="font-pt max-lg:text-23 text-32 font-bold">
                 {`${Math.floor(timerDuration.hours())}`}
-                <span className="font-pt lg-max:text-23 text-32 font-bold">
+                <span className="font-pt max-lg:text-23 text-32 font-bold">
                   <Trans>h</Trans>
                 </span>
               </span>
             </div>
             <div className="mr-2">
-              <span className="font-pt lg-max:text-23 text-32 font-bold">
+              <span className="font-pt max-lg:text-23 text-32 font-bold">
                 {`${flooredMinutes}`}
-                <span className="font-pt lg-max:text-23 text-32 font-bold">
+                <span className="font-pt max-lg:text-23 text-32 font-bold">
                   <Trans>m</Trans>
                 </span>
               </span>
             </div>
             <div className="mr-0">
-              <span className="font-pt lg-max:text-23 text-32 font-bold">
+              <span className="font-pt max-lg:text-23 text-32 font-bold">
                 {`${flooredSeconds}`}
-                <span className="font-pt lg-max:text-23 text-32 font-bold">
+                <span className="font-pt max-lg:text-23 text-32 font-bold">
                   <Trans>s</Trans>
                 </span>
               </span>
@@ -130,13 +130,13 @@ const AuctionTimer: React.FC<AuctionTimerProps> = ({ auction, auctionEnded }) =>
           </h2>
         ) : (
           <h2
-            className="font-pt lg-max:text-23 text-32 mb-0 mt-px flex font-bold"
+            className="font-pt max-lg:text-23 text-32 mb-0 mt-px flex font-bold"
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
             <div className="mr-2">
-              <span className="font-pt lg-max:text-23 text-32 font-bold">
+              <span className="font-pt max-lg:text-23 text-32 font-bold">
                 {i18n.date(new Date(endTimeUnix * 1000), { timeStyle: 'medium' })}
               </span>
             </div>

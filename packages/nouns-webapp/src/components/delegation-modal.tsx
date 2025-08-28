@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return (
     <div
-      className="lg-max:bg-black/75 fixed inset-0 z-[60] size-full bg-black/50 backdrop-blur-xl"
+      className="max-lg:bg-black/75 fixed inset-0 z-[60] size-full bg-black/50 backdrop-blur-xl"
       onClick={props.onDismiss}
     />
   );
@@ -40,7 +40,7 @@ const DelegationModalOverlay: React.FC<DelegationModalOverlayProps> = props => {
 
       <div
         className={cn(
-          'bg-brand-gray-background font-pt shadow-quorum-modal lg-max:bottom-0 lg-max:left-0 lg-max:top-auto lg-max:max-h-full lg-max:w-full lg-max:rounded-b-none lg-max:shadow-none fixed left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] rounded-[24px] p-6 font-bold',
+          'bg-brand-gray-background font-pt shadow-quorum-modal max-lg:bottom-0 max-lg:left-0 max-lg:top-auto max-lg:max-h-full max-lg:w-full max-lg:rounded-b-none max-lg:shadow-none fixed left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] rounded-[24px] p-6 font-bold',
           'flex h-auto !max-h-fit flex-col gap-2',
         )}
       >

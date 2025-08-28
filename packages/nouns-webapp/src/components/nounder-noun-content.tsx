@@ -77,13 +77,13 @@ const NounderNounContent: React.FC<NounderNounContentProps> = props => {
         </div>
         <div className={cn('mb-0', 'grid grid-cols-1 gap-4 lg:grid-cols-12')}>
           <div
-            className={cn('lg-max:border-r-0 lg-max:pl-0 ml-1.5 mt-1.5 border-r', 'lg:col-span-4')}
+            className={cn('max-lg:border-r-0 max-lg:pl-0 ml-1.5 mt-1.5 border-r', 'lg:col-span-4')}
           >
             <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
           </div>
           <div
             className={cn(
-              'lg-max:border-r-0 lg-max:ml-1.5 lg-max:mt-1.5 lg-max:pl-0 ml-1.5 mt-1.5 border-r pl-0',
+              'max-lg:border-r-0 max-lg:ml-1.5 max-lg:mt-1.5 max-lg:pl-0 ml-1.5 mt-1.5 border-r pl-0',
               'lg:col-span-5',
             )}
           >

@@ -97,17 +97,17 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   }, [publicClient, ensCached, delegateGroupedVoteData]);
 
   return (
-    <div className={cn('lg:col-span-4', 'xl-max:w-1/3')}>
+    <div className={cn('lg:col-span-4', 'max-xl:w-1/3')}>
       <Card
-        className={cn('bg-brand-gray-background mt-4 min-h-72 rounded-xl p-2', 'xl-max:min-h-0')}
+        className={cn('bg-brand-gray-background mt-4 min-h-72 rounded-xl p-2', 'max-xl:min-h-0')}
       >
         <Card.Body className="p-2">
           <Card.Text className="m-0 py-2">
             <span
               className={cn(
                 isEnUS
-                  ? 'font-londrina text-22 xl-max:mx-auto'
-                  : 'font-londrina xl-max:mx-auto xl-max:text-base text-base',
+                  ? 'font-londrina text-22 max-xl:mx-auto'
+                  : 'font-londrina max-xl:mx-auto max-xl:text-base text-base',
                 titleClass,
               )}
             >
@@ -116,10 +116,10 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             <span
               className={cn(
                 'font-pt text-22 mt-[0.15rem] font-bold',
-                'xl-max:hidden',
+                'max-xl:hidden',
                 !isEnUS ? 'text-base' : '',
                 'relative',
-                'xl-max:mx-auto',
+                'max-xl:mx-auto',
               )}
             >
               {i18n.number(voteCount)}
@@ -136,7 +136,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             </span>
           </Card.Text>
 
-          <Card.Text className={cn('m-0 py-2', 'xl-max:flex xl-max:flex-col hidden')}>
+          <Card.Text className={cn('m-0 py-2', 'max-xl:flex max-xl:flex-col hidden')}>
             <span className={cn('font-pt text-22 mt-[0.15rem] font-bold', 'relative')}>
               {i18n.number(voteCount)}
               {filteredDelegateGroupedVoteData.length > 0 && (
@@ -153,7 +153,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
-          <div className={cn('flex flex-wrap', 'mt-6 px-2', 'xl-max:hidden')}>
+          <div className={cn('flex flex-wrap', 'mt-6 px-2', 'max-xl:hidden')}>
             <DelegateGroupedNounImageVoteTable
               filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
               propId={Number(proposal.id || '0')}

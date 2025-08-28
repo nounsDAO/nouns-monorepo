@@ -191,7 +191,7 @@ const Bid: React.FC<BidProps> = props => {
                 {!auctionEnded && !bidInput ? (
                   <>
                     Ξ {minBidEth(minBid)}{' '}
-                    <span className={activeLocale === 'ja-JP' ? 'max-[414px]:hidden' : ''}>
+                    <span className={activeLocale === 'ja-JP' ? 'max-xs:hidden' : ''}>
                       <Trans>or more</Trans>
                     </span>
                   </>

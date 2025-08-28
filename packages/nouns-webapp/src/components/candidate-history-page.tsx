@@ -59,9 +59,9 @@ const CandidateHistoryPage = () => {
           '[&_.section]:mt-8 [&_.section]:break-words [&_.section]:pt-8',
           '[&_.section_h5]:font-londrina [&_.section_h5]:mt-4 [&_.section_h5]:text-[1.7rem]',
           '[&_.txnInfoText]:text-brand-gray-light-text [&_.txnInfoText]:my-1 [&_.txnInfoText]:-ml-[0.1rem] [&_.txnInfoText]:flex [&_.txnInfoText]:items-center [&_.txnInfoText]:text-[16px] [&_.txnInfoText]:font-medium',
-          'lg-max:[&_.txnInfoText]:items-start lg-max:[&_.txnInfoText]:mt-4',
+          'max-lg:[&_.txnInfoText]:items-start max-lg:[&_.txnInfoText]:mt-4',
           '[&_.txnInfoIcon]:size-[18px] [&_.txnInfoIcon]:opacity-50',
-          'lg-max:[&_.txnInfoIcon]:mt-1 lg-max:[&_.txnInfoIcon]:mr-2',
+          'max-lg:[&_.txnInfoIcon]:mt-1 max-lg:[&_.txnInfoIcon]:mr-2',
           '[&_.txnInfoIconWrapper]:flex [&_.txnInfoIconWrapper]:w-[25px] [&_.txnInfoIconWrapper]:items-center',
           '[&_.v3Proposal.section]:mt-0 [&_.v3Proposal.section]:pt-0',
         )}
@@ -86,7 +86,7 @@ const CandidateHistoryPage = () => {
               className={cn(
                 'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
                 'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
-                'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
+                'max-lg:relative max-lg:left-0 max-xs:hidden',
               )}
             >
               ←
@@ -177,7 +177,7 @@ const CandidateHistoryPage = () => {
             )}
           </div>
           <div className="lg:col-span-4">
-            <div className={'sticky top-[20px] lg-max:relative'}>
+            <div className={'sticky top-[20px] max-lg:relative'}>
               <div className={'mb-4 flex items-baseline justify-between'}>
                 <h2>
                   <Trans>Version History</Trans>

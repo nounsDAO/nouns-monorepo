@@ -152,9 +152,9 @@ const SelectSponsorsToPropose = (props: Props) => {
           All signers on an onchain proposal have permission to cancel the proposal.
         </Trans>
       </Alert>
-      <div className={'my-[20px] flex flex-row items-end justify-between lg-max:flex-col'}>
+      <div className={'my-[20px] flex flex-row items-end justify-between max-lg:flex-col'}>
         {selectedSignatures.length > 0 && (
-          <div className={'w-[70%] lg-max:w-full'}>
+          <div className={'w-[70%] max-lg:w-full'}>
             <p>
               <strong>
                 <Trans>Select signatures</Trans>
@@ -204,7 +204,7 @@ const SelectSponsorsToPropose = (props: Props) => {
                 signature.signer.activeOrPendingProposal === true
               }
               className={cn(
-                'font-londrina rounded-12 relative w-full cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 lg-max:w-full',
+                'font-londrina rounded-12 relative w-full cursor-pointer border-2 border-black/25 bg-white p-[10px] text-left text-[20px] leading-none transition-all duration-200 ease-in-out hover:ring-2 hover:ring-inset hover:ring-black/25 disabled:cursor-not-allowed disabled:opacity-50 max-lg:w-full',
                 selectedSignatures.includes(signature) && 'border-2 border-black/75',
               )}
             >

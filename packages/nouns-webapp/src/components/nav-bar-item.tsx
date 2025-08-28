@@ -10,7 +10,7 @@ const NavBarItem: React.FC<{
   return (
     <div
       className={cn(
-        'lg-max:!bg-transparent lg-max:!text-brand-black lg-max:hover:!bg-transparent [&a]:text-brand-black [&a:hover]:text-brand-dark-red mr-4 flex items-center justify-center',
+        'max-lg:!bg-transparent max-lg:!text-brand-black max-lg:hover:!bg-transparent [&a]:text-brand-black [&a:hover]:text-brand-dark-red mr-4 flex items-center justify-center',
         className,
       )}
       onClick={onClick}

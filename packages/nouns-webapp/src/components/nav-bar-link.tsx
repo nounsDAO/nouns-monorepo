@@ -12,7 +12,7 @@ const NavBarLink: React.FC<{
   const { to, children, className } = props;
   const isExternal = /^https?:/i.test(to);
   const cls = cn(
-    `text-brand-black hover:text-brand-dark-green lg-max:bg-transparent lg-max:text-brand-black lg-max:hover:bg-transparent lg-max:hover:text-brand-dark-green mr-4 flex h-8 cursor-pointer items-center justify-center rounded-[50px] border-0 bg-white p-7 text-lg font-normal no-underline hover:bg-brand-surface`,
+    'text-brand-black hover:text-brand-dark-green max-lg:bg-transparent max-lg:text-brand-black max-lg:hover:bg-transparent max-lg:hover:text-brand-dark-green mr-4 flex h-8 cursor-pointer items-center justify-center rounded-[50px] border-0 bg-white p-7 text-lg font-normal no-underline hover:bg-brand-surface',
     className,
   );
   if (isExternal) {

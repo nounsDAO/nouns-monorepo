@@ -61,11 +61,11 @@ const Holder: React.FC<HolderProps> = props => {
         className={cn(
           'grid grid-cols-12 gap-3',
           'ml-2 mt-[2px] pl-6',
-          'lg-max:mt-0 lg-max:w-full lg-max:mx-0 lg-max:px-0',
-          'lg-max:justify-between',
+          'max-lg:mt-0 max-lg:w-full max-lg:mx-0 max-lg:px-0',
+          'max-lg:justify-between',
         )}
       >
-        <div className={cn('col-span-1 lg:col-span-12', 'lg-max:pl-2')}>
+        <div className={cn('col-span-1 lg:col-span-12', 'max-lg:pl-2')}>
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
@@ -79,7 +79,7 @@ const Holder: React.FC<HolderProps> = props => {
           <h2
             className={cn(
               'font-pt whitespace-nowrap text-[32px] font-bold',
-              'lg-max:mr-2 lg-max:text-23',
+              'max-lg:mr-2 max-lg:text-23',
             )}
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',

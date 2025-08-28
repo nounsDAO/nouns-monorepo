@@ -55,7 +55,7 @@ const ForkingPeriodTimer: React.FC<ForkingPeriodTimerProps> = props => {
       {timerToggle ? (
         <>
           <h2
-            className={cn('flex items-center justify-center', 'lg-max:pr-2')}
+            className={cn('flex items-center justify-center', 'max-lg:pr-2')}
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}

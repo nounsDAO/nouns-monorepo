@@ -20,7 +20,7 @@ export const Backdrop: React.FC<{ onDismiss: () => void; show: boolean }> = prop
     <NounsTransition
       className={[
         'fixed inset-0 z-10 h-full w-full bg-black/50 opacity-0 backdrop-blur-[24px] transition-opacity duration-75 ease-in-out',
-        'lg-max:bg-black/75',
+        'max-lg:bg-black/75',
       ].join(' ')}
       nodeRef={nodeRef}
       show={props.show}
@@ -86,7 +86,7 @@ const SolidColorBackgroundModalOverlay: React.FC<{
         show={show}
         className={[
           'font-pt bg-brand-surface shadow-quorum-modal absolute left-[calc(50%_-_236px)] top-[15vh] z-[100] w-[472px] translate-y-[-1rem] scale-50 rounded-3xl p-6 font-bold transition-all duration-150 ease-in-out',
-          'lg-max:bottom-0 lg-max:left-0 lg-max:top-auto lg-max:max-h-[calc(100%_-_75px)] lg-max:w-full lg-max:overflow-y-scroll lg-max:rounded-b-none lg-max:shadow-none lg-max:translate-y-[20rem] lg-max:scale-100',
+          'max-lg:bottom-0 max-lg:left-0 max-lg:top-auto max-lg:max-h-[calc(100%_-_75px)] max-lg:w-full max-lg:overflow-y-scroll max-lg:rounded-b-none max-lg:shadow-none max-lg:translate-y-[20rem] max-lg:scale-100',
         ].join(' ')}
         timeout={200}
         transitionStyes={isMobile ? mobileModalSlideInFromBottm : desktopModalSlideInFromTopAndGrow}

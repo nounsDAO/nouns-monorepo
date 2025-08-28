@@ -61,7 +61,7 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
         document.getElementById('backdrop-root')!,
       )}
       {ReactDOM.createPortal(
-        <div className="fixed left-1/2 top-[15vh] z-[100] w-[25rem] -translate-x-1/2 rounded-[15px] p-8 text-center lg-max:left-[10%] lg-max:w-4/5 lg-max:translate-x-0">
+        <div className="fixed left-1/2 top-[15vh] z-[100] w-[25rem] -translate-x-1/2 rounded-[15px] p-8 text-center max-lg:left-[10%] max-lg:w-4/5 max-lg:translate-x-0">
           {png && (
             <LegacyNoun
               imgPath={png}

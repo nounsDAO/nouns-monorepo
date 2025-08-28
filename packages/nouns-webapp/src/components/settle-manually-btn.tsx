@@ -62,7 +62,7 @@ const SettleManuallyBtn: React.FC<{
     <p
       className={
         // layout/display (responsive alignment)
-        'lg-max:text-center lg-max:ml-2 660-max:ml-0'
+        'max-lg:text-center max-lg:ml-2 max-md:ml-0'
       }
     >
       <button

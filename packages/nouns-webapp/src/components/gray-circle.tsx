@@ -17,7 +17,7 @@ export const GrayCircle: React.FC<GrayCircleProps> = ({ isDelegateView }) => {
         wrapperClassName={
           isDelegate
             ? 'h-[42px] w-[42px] ml-[12px]'
-            : 'h-[42px] w-[42px] xl-max:h-[70%] xl-max:w-[70%]'
+            : 'h-[42px] w-[42px] max-xl:h-[70%] max-xl:w-[70%]'
         }
         className={isDelegate ? 'mt-[13px] rounded-full' : 'rounded-full'}
       />

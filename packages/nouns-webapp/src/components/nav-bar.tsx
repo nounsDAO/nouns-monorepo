@@ -100,7 +100,7 @@ const NavBar = () => {
               href="/"
               className="relative z-20 py-2 transition-all duration-150 ease-in-out hover:scale-95"
             >
-              <NogglesLogo className="lg-max:size-18 size-20" aria-label="Nouns DAO noggles" />
+              <NogglesLogo className="max-lg:size-18 size-20" aria-label="Nouns DAO noggles" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -130,7 +130,7 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end z-10">
-            <div className="xl-max:block hidden">
+            <div className="max-xl:block hidden">
               <Nav.Link
                 as={Link}
                 href="/vote"
@@ -162,7 +162,7 @@ const NavBar = () => {
                 </>
               )}
             </div>
-            <div className="xl-max:hidden">
+            <div className="max-xl:hidden">
               {isDaoGteV3 ? (
                 v3DaoNavItem
               ) : (
@@ -180,7 +180,7 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </div>
-            <div className="xl-max:block hidden">
+            <div className="max-xl:block hidden">
               <Nav.Link
                 as={Link}
                 href="/playground"
@@ -196,7 +196,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/nouns"
-                className="font-pt p-0.3 text-15 lg-max:[&_svg]:max-h-none lg-max:[&_svg]:min-h-10 lg-max:[&_svg]:max-w-10 font-bold text-black"
+                className="font-pt p-0.3 text-15 max-lg:[&_svg]:max-h-none max-lg:[&_svg]:min-h-10 max-lg:[&_svg]:max-w-10 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -208,7 +208,7 @@ const NavBar = () => {
               <Nav.Link
                 as={Link}
                 href="/traits"
-                className="font-pt p-0.3 text-15 lg-max:[&_svg]:max-h-none lg-max:[&_svg]:min-h-10 lg-max:[&_svg]:max-w-10 font-bold text-black"
+                className="font-pt p-0.3 text-15 max-lg:[&_svg]:max-h-none max-lg:[&_svg]:min-h-10 max-lg:[&_svg]:max-w-10 font-bold text-black"
                 onClick={closeNav}
               >
                 <NavBarButton
@@ -218,7 +218,7 @@ const NavBar = () => {
                 />
               </Nav.Link>
             </div>
-            <div className="xl-max:hidden">
+            <div className="max-xl:hidden">
               <NavDropdown
                 buttonText="Explore"
                 buttonIcon={<NogglesIcon />}

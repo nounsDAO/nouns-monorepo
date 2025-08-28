@@ -42,7 +42,7 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
   <div
     className={cn(
       'font-pt h-10 rounded-[10px] p-0 text-base font-bold leading-4 shadow-none transition-all duration-150 ease-in-out',
-      'lg-max:h-12 lg-max:text-lg',
+      'max-lg:h-12 max-lg:text-lg',
       buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
     )}
     onClick={e => {
@@ -52,9 +52,12 @@ const CustomDropdownToggle: React.FC<CustomDropdownToggleProps> = ({
   >
     <div
       className={cn(
+        // layout → spacing
         'flex size-full flex-row items-center justify-start pr-3.5',
-        'lg-max:h-12 lg-max:text-lg',
-        'max-[370px]:w-[90px] max-[330px]:w-[70px] min-[400px]:w-auto',
+        // responsive type/size
+        'max-lg:h-12 max-lg:text-lg',
+        // width adjustments at small screens using default screens
+        'max-xs:w-[90px] xs:w-auto',
       )}
     >
       <div className={'min-h-4.5 truncate leading-5 text-black'}>
@@ -104,7 +107,7 @@ const CustomMenu = ({
             key={locale}
             className={cn(
               'flex size-full flex-row items-center justify-start pr-3.5',
-              'lg-max:h-12 lg-max:text-lg',
+              'max-lg:h-12 max-lg:text-lg',
               'transition-all duration-150 ease-in-out hover:cursor-pointer hover:bg-white',
               buttonStyle,
               dropDownStyle,
@@ -163,7 +166,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       <div
         className={cn(
           'font-pt p-0.3 text-brand-black text-sm font-bold transition-all duration-150 ease-in-out',
-          'xl-max:block hidden',
+          'max-xl:block hidden',
         )}
         onClick={() => setShowLanguagePickerModal(true)}
       >
@@ -177,7 +180,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       <div
         className={cn(
           'font-pt p-0.3 text-brand-black text-sm font-bold transition-all duration-150 ease-in-out',
-          'xl-max:hidden',
+          'max-xl:hidden',
         )}
       >
         <CustomDropdownToggle

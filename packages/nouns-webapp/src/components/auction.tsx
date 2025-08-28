@@ -45,12 +45,9 @@ const Auction: React.FC<AuctionProps> = props => {
   const nounContent = currentAuction && (
     <div
       className={[
-        // .nounWrapper base
         'w-full self-end',
-        // <= 992px formerly lg-max
-        'lg-max:ml-[15%] lg-max:mr-[15%] lg-max:w-[70%]',
-        // <= 568px overrides
-        'max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%]',
+        'max-lg:ml-[15%] max-lg:mr-[15%] max-lg:w-[70%]',
+        'max-sm:ml-[10%] max-sm:mr-[10%] max-sm:mt-8 max-sm:w-[80%]',
       ].join(' ')}
     >
       <StandaloneNounWithSeed
@@ -65,8 +62,8 @@ const Auction: React.FC<AuctionProps> = props => {
     <div
       className={[
         'w-full self-end',
-        'lg-max:ml-[15%] lg-max:mr-[15%] lg-max:w-[70%]',
-        'max-[568px]:ml-[10%] max-[568px]:mr-[10%] max-[568px]:mt-8 max-[568px]:w-[80%]',
+        'max-lg:ml-[15%] max-lg:mr-[15%] max-lg:w-[70%]',
+        'max-sm:ml-[10%] max-sm:mr-[10%] max-sm:mt-8 max-sm:w-[80%]',
       ].join(' ')}
     >
       <LoadingNoun />
@@ -98,7 +95,7 @@ const Auction: React.FC<AuctionProps> = props => {
     <div style={{ backgroundColor: stateBgColor }}>
       <div className="mx-auto max-w-screen-xl px-4">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className={['flex', 'max-[568px]:p-0'].join(' ')}>
+          <div className={['flex', 'max-sm:p-0'].join(' ')}>
             {currentAuction ? nounContent : loadingNoun}
           </div>
           <div
@@ -106,9 +103,9 @@ const Auction: React.FC<AuctionProps> = props => {
               // .auctionActivityCol base
               'min-h-[558px] self-end pb-0 pr-20',
               // <= 992px formerly lg-max
-              'lg-max:w-full lg-max:bg-white lg-max:pl-[5%] lg-max:pr-[5%] lg-max:pt-[5%]',
+              'max-lg:w-full max-lg:bg-white max-lg:pl-[5%] max-lg:pr-[5%] max-lg:pt-[5%]',
               // <= 568px overrides
-              'max-[568px]:ml-0 max-[568px]:mr-0 max-[568px]:w-full max-[568px]:pl-0 max-[568px]:pr-0 max-[568px]:pt-8',
+              'max-sm:ml-0 max-sm:mr-0 max-sm:w-full max-sm:pl-0 max-sm:pr-0 max-sm:pt-8',
             ].join(' ')}
           >
             {currentAuction &&

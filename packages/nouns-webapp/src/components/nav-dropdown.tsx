@@ -63,7 +63,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
       <Dropdown
         className={cn(
           'font-pt p-0.3 text-brand-black text-sm font-bold transition-all duration-150 ease-in-out',
-          'xl-max:hidden',
+          'max-xl:hidden',
         )}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}

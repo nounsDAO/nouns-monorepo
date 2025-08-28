@@ -24,7 +24,7 @@ const ForksPage: React.FC = () => {
 
   return (
     <div>
-      <Section fullWidth={false} className="lg-max:mx-2">
+      <Section fullWidth={false} className="max-lg:mx-2">
         <div className={
           // layout → sizing
           'mx-auto w-full lg:w-10/12'
@@ -60,7 +60,7 @@ const ForksPage: React.FC = () => {
         </div>
       </Section>
       {/* if the latest fork id is finished forking, display a callout with an option to start a new fork. */}
-      <Section fullWidth={false} className="lg-max:mx-2">
+      <Section fullWidth={false} className="max-lg:mx-2">
         <div className={
           // layout → sizing
           'mx-auto w-full lg:w-10/12'

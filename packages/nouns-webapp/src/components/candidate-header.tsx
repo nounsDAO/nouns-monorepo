@@ -97,7 +97,7 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
             className={cn(
               'absolute -left-12 mr-4 mt-[0.1rem] inline-block size-8 appearance-none rounded-full p-0 font-bold',
               'text-brand-text-muted-700 hover:bg-brand-surface-muted border border-black/10 bg-white hover:text-black',
-              'max-[1040px]:relative max-[1040px]:left-0 max-[414px]:hidden',
+              'max-lg:relative max-lg:left-0 max-xs:hidden',
             )}
           >
             ←

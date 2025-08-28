@@ -83,15 +83,15 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
       </div>
       <div
         className={
-          'font-pt shadow-quorum-modal fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold xl-max:bottom-0 xl-max:left-0 xl-max:top-[5vh] xl-max:max-h-full xl-max:w-full xl-max:rounded-b-none xl-max:bg-transparent xl-max:shadow-none'
+          'font-pt shadow-quorum-modal fixed left-[calc(50%-35rem)] top-[10vh] z-[100] w-[70rem] rounded-[24px] bg-white p-4 font-bold max-xl:bottom-0 max-xl:left-0 max-xl:top-[5vh] max-xl:max-h-full max-xl:w-full max-xl:rounded-b-none max-xl:bg-transparent max-xl:shadow-none'
         }
       >
-        <div className="max-h-[90vh] overflow-y-hidden p-4 xl-max:h-full xl-max:max-h-full">
+        <div className="max-h-[90vh] overflow-y-hidden p-4 max-xl:h-full max-xl:max-h-full">
           <h1 className="font-londrina -mb-4 flex flex-col">
             <Trans>Dynamic Threshold</Trans>
           </h1>
 
-          <p className="mb-2 font-medium xl-max:text-white">
+          <p className="mb-2 font-medium max-xl:text-white">
             {window.innerWidth < 1200 ? (
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
@@ -109,7 +109,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           </p>
 
           {/* Mobile - no graph content */}
-          <div className={cn('xl-max:block hidden', 'mt-12')}>
+          <div className={cn('max-xl:block hidden', 'mt-12')}>
             <div className={'flex justify-between text-lg font-medium text-white'}>
               <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
@@ -133,7 +133,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<DynamicQuorumInfoModalOverlayProps
           <div
             className={cn(
               'shadow-quorum-modal rounded-14 p-4',
-              'bg-brand-surface mt-8 py-8 pl-4 pr-12 xl-max:hidden',
+              'bg-brand-surface mt-8 py-8 pl-4 pr-12 max-xl:hidden',
             )}
           >
             <div className="flex">
