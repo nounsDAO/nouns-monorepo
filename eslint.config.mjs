@@ -22,6 +22,7 @@ import turboPlugin from 'eslint-plugin-turbo';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 import vitestPlugin from 'eslint-plugin-vitest';
+import tailwindPlugin from 'eslint-plugin-tailwindcss';
 
 // Compatibility layer for traditional configs
 const compat = new FlatCompat({
@@ -127,12 +128,97 @@ export default defineConfig([
         },
       ],
       // Lingui plugin rules
-      'lingui/no-unlocalized-strings': 'off',
+      'lingui/no-unlocalized-strings': [
+        'warn',
+        {
+          ignore: [
+            // Single "word" not starting with uppercase (e.g., class names, tokens)
+            '^(?![A-Z])\\S+$',
+            // UPPERCASE literals and tokens
+            '^[A-Z0-9_-]+$',
+            // Common non-user-facing strings and protocols
+            '^https?://',
+            '^data:',
+            '^mailto:',
+            '^tel:',
+            // MIME types
+            '^application/',
+            // Root-relative static asset paths
+            '^/[A-Za-z0-9/_-]+\\.(?:png|svg|webp|jpg|jpeg)$',
+            // Root-relative internal routes (non-user-facing)
+            '^/[A-Za-z0-9/_-]+$',
+            // Filenames with common extensions (tests, downloads)
+            '\\.(?:json|png|svg|webp|jpg|jpeg)$',
+            // CSS color/function tokens
+            'rgba',
+            // CSS custom properties via var() in inline styles
+            '^var\\(',
+            // Day.js-like date/time format masks (letters & punctuation only)
+            '^[MDYHhmsA, :/\\-]+$',
+            // Next.js/React Server Components directive
+            '^use client$'
+          ],
+          ignoreNames: [
+            // Attribute-like names that often contain non-user text
+            { regex: { pattern: 'className', flags: 'i' } },
+            { regex: { pattern: '^[A-Z0-9_-]+$' } },
+            { regex: { pattern: '^aria-', flags: 'i' } },
+            'style',
+            'styleName',
+            'src',
+            'srcSet',
+            'type',
+            'id',
+            'width',
+            'height',
+            'displayName',
+            'Authorization',
+            'href',
+            'rel',
+            'target',
+            'role',
+            'alt',
+            'data-testid',
+            // Inline style property names commonly using non-translatable CSS tokens/values
+            'transform',
+            'transition'
+          ],
+          ignoreFunctions: [
+            // Styling/class helpers and common utilities
+            'cva',
+            'cn',
+            'clsx',
+            // Analytics/logging/errors
+            'track',
+            'Error',
+            'console.*',
+            // Common DOM and platform methods where string args are not user-facing
+            '*headers.set',
+            '*.addEventListener',
+            '*.removeEventListener',
+            '*.postMessage',
+            '*.getElementById',
+            '*.dispatch',
+            '*.commit',
+            '*.includes',
+            '*.indexOf',
+            '*.endsWith',
+            '*.startsWith',
+            'require'
+          ]
+        }
+      ],
       'lingui/t-call-in-function': 'error',
       'lingui/no-single-variables-to-translate': 'error',
       // Unicorn plugin rules
       'unicorn/better-regex': 'error',
       'unicorn/no-nested-ternary': 'error',
+      'unicorn/filename-case': [
+        'warn',
+        {
+          case: 'kebabCase',
+        },
+      ],
       // Unused imports plugin rules
       'no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
@@ -155,6 +241,43 @@ export default defineConfig([
         typescript: {
           project: './tsconfig.json',
         },
+      },
+    },
+  },
+
+  // Tailwind CSS plugin configuration for TS/TSX/JSX
+  {
+    files: ['**/*.{ts,tsx,jsx}'],
+    plugins: {
+      tailwindcss: tailwindPlugin,
+    },
+    extends: [tailwindPlugin.configs['flat/recommended']],
+    rules: {
+      // Enforce canonical Tailwind class order (v3 official sorting)
+      'tailwindcss/classnames-order': 'warn',
+      // Avoid noisy false positives; still hint when a core utility exists
+      'tailwindcss/no-arbitrary-value': [
+        'warn',
+        {
+          ignoreFunctions: ['theme', 'rgb', 'rgba', 'hsl', 'hsla', 'var'],
+        },
+      ],
+      // Allow project-specific design tokens as classnames (BEM, CSS modules, etc.)
+      'tailwindcss/no-custom-classname': 'off',
+    },
+    settings: {
+      tailwindcss: {
+        // Autodetect Tailwind config (monorepo-friendly glob)
+        config: ['tailwind.config.{js,cjs,mjs,ts}'],
+        // Recognize common class helper utilities
+        callees: ['clsx', 'cn', 'cva'],
+        // Properties that may contain classnames
+        classRegex: '^(class|className|tw)$',
+        // Consider CSS files for directive/variant detection
+        cssFiles: ['**/*.css'],
+        // Prefer official Tailwind grouping/sorting
+        officialSorting: true,
+        removeDuplicates: true,
       },
     },
   },
@@ -184,6 +307,9 @@ export default defineConfig([
           project: 'packages/nouns-webapp/tsconfig.json',
         },
       },
+      react: {
+        version: 'detect',
+      }
     },
     languageOptions: {
       globals: {
@@ -232,6 +358,10 @@ export default defineConfig([
               name: 'react-bootstrap',
               message: 'Use tailwindcss instead',
             },
+            {
+              name: 'react-router',
+              message: 'Use Next.js App Router instead',
+            },
           ],
           patterns: [
             {
@@ -265,6 +395,7 @@ export default defineConfig([
     plugins: {
       import: importPlugin,
       prettier: prettierPlugin,
+      unicorn: unicornPlugin,
     },
     rules: {
       // Import plugin rules for JS files
@@ -273,6 +404,10 @@ export default defineConfig([
       'import/default': 'error',
       'import/namespace': 'error',
       'import/export': 'error',
+      'unicorn/filename-case': [
+        'warn',
+        { case: 'kebabCase' },
+      ],
       // Prettier rules
       'prettier/prettier': 'warn',
     },
@@ -304,6 +439,14 @@ export default defineConfig([
           ignore: ['^ponder:'],
         },
       ],
+    },
+  },
+
+  // Disable lingui/no-unlocalized-strings in test files (intentional literals in tests)
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      'lingui/no-unlocalized-strings': 'off',
     },
   },
 

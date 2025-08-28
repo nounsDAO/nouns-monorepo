@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as types from './graphql.js';
+import * as types from './graphql';
 
 
 
@@ -92,143 +92,143 @@ const documents: Documents = {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetSeeds($first: Int!) {\n      seeds(first: $first) {\n        id\n        background\n        body\n        accessory\n        head\n        glasses\n      }\n    }\n  "): typeof import('./graphql.js').GetSeedsDocument;
+export function graphql(source: "\n    query GetSeeds($first: Int!) {\n      seeds(first: $first) {\n        id\n        background\n        body\n        accessory\n        head\n        glasses\n      }\n    }\n  "): typeof import('./graphql').GetSeedsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetProposal($id: ID!) {\n      proposal(id: $id) {\n        id\n        description\n        status\n        proposalThreshold\n        quorumVotes\n        forVotes\n        againstVotes\n        abstainVotes\n        createdTransactionHash\n        createdBlock\n        createdTimestamp\n        startBlock\n        endBlock\n        updatePeriodEndBlock\n        objectionPeriodEndBlock\n        executionETA\n        targets\n        values\n        signatures\n        calldatas\n        onTimelockV1\n        voteSnapshotBlock\n        proposer {\n          id\n        }\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetProposalDocument;
+export function graphql(source: "\n    query GetProposal($id: ID!) {\n      proposal(id: $id) {\n        id\n        description\n        status\n        proposalThreshold\n        quorumVotes\n        forVotes\n        againstVotes\n        abstainVotes\n        createdTransactionHash\n        createdBlock\n        createdTimestamp\n        startBlock\n        endBlock\n        updatePeriodEndBlock\n        objectionPeriodEndBlock\n        executionETA\n        targets\n        values\n        signatures\n        calldatas\n        onTimelockV1\n        voteSnapshotBlock\n        proposer {\n          id\n        }\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetProposalDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetPartialProposals($first: Int!) {\n      proposals(first: $first, orderBy: createdBlock, orderDirection: asc) {\n        id\n        title\n        status\n        forVotes\n        againstVotes\n        abstainVotes\n        quorumVotes\n        executionETA\n        startBlock\n        endBlock\n        updatePeriodEndBlock\n        objectionPeriodEndBlock\n        onTimelockV1\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetPartialProposalsDocument;
+export function graphql(source: "\n    query GetPartialProposals($first: Int!) {\n      proposals(first: $first, orderBy: createdBlock, orderDirection: asc) {\n        id\n        title\n        status\n        forVotes\n        againstVotes\n        abstainVotes\n        quorumVotes\n        executionETA\n        startBlock\n        endBlock\n        updatePeriodEndBlock\n        objectionPeriodEndBlock\n        onTimelockV1\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetPartialProposalsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {\n      proposals(\n        first: $first\n        where: {\n          or: [\n            { status: PENDING, endBlock_gt: $currentBlock }\n            { status: ACTIVE, endBlock_gt: $currentBlock }\n          ]\n        }\n      ) {\n        proposer {\n          id\n        }\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetActivePendingUpdatableProposersDocument;
+export function graphql(source: "\n    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {\n      proposals(\n        first: $first\n        where: {\n          or: [\n            { status: PENDING, endBlock_gt: $currentBlock }\n            { status: ACTIVE, endBlock_gt: $currentBlock }\n          ]\n        }\n      ) {\n        proposer {\n          id\n        }\n        signers {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetActivePendingUpdatableProposersDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {\n      proposals(\n        first: $first\n        where: {\n          status: PENDING\n          endBlock_gt: $currentBlock\n          updatePeriodEndBlock_gt: $currentBlock\n        }\n      ) {\n        id\n      }\n    }\n  "): typeof import('./graphql.js').GetUpdatableProposalsDocument;
+export function graphql(source: "\n    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {\n      proposals(\n        first: $first\n        where: {\n          status: PENDING\n          endBlock_gt: $currentBlock\n          updatePeriodEndBlock_gt: $currentBlock\n        }\n      ) {\n        id\n      }\n    }\n  "): typeof import('./graphql').GetUpdatableProposalsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCandidateProposals($first: Int!) {\n      proposalCandidates(first: $first) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        createdTransactionHash\n        canceled\n        versions {\n          content {\n            title\n          }\n        }\n        latestVersion {\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n            proposalIdToUpdate\n            contentSignatures {\n              id\n              signer {\n                id\n                proposals {\n                  id\n                }\n              }\n              sig\n              expirationTimestamp\n              canceled\n              reason\n            }\n            matchingProposalIds\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetCandidateProposalsDocument;
+export function graphql(source: "\n    query GetCandidateProposals($first: Int!) {\n      proposalCandidates(first: $first) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        createdTransactionHash\n        canceled\n        versions {\n          content {\n            title\n          }\n        }\n        latestVersion {\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n            proposalIdToUpdate\n            contentSignatures {\n              id\n              signer {\n                id\n                proposals {\n                  id\n                }\n              }\n              sig\n              expirationTimestamp\n              canceled\n              reason\n            }\n            matchingProposalIds\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql').GetCandidateProposalsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCandidateProposal($id: ID!) {\n      proposalCandidate(id: $id) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        createdTransactionHash\n        canceled\n        versions {\n          content {\n            title\n          }\n        }\n        latestVersion {\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n            proposalIdToUpdate\n            contentSignatures {\n              id\n              signer {\n                id\n                proposals {\n                  id\n                }\n              }\n              sig\n              expirationTimestamp\n              canceled\n              reason\n            }\n            matchingProposalIds\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetCandidateProposalDocument;
+export function graphql(source: "\n    query GetCandidateProposal($id: ID!) {\n      proposalCandidate(id: $id) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        createdTransactionHash\n        canceled\n        versions {\n          content {\n            title\n          }\n        }\n        latestVersion {\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n            proposalIdToUpdate\n            contentSignatures {\n              id\n              signer {\n                id\n                proposals {\n                  id\n                }\n              }\n              sig\n              expirationTimestamp\n              canceled\n              reason\n            }\n            matchingProposalIds\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql').GetCandidateProposalDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCandidateProposalVersions($id: ID!) {\n      proposalCandidate(id: $id) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        canceled\n        createdTransactionHash\n        versions {\n          id\n          createdTimestamp\n          updateMessage\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n          }\n        }\n        latestVersion {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetCandidateProposalVersionsDocument;
+export function graphql(source: "\n    query GetCandidateProposalVersions($id: ID!) {\n      proposalCandidate(id: $id) {\n        id\n        slug\n        proposer\n        lastUpdatedTimestamp\n        canceled\n        createdTransactionHash\n        versions {\n          id\n          createdTimestamp\n          updateMessage\n          content {\n            title\n            description\n            targets\n            values\n            signatures\n            calldatas\n            encodedProposalHash\n          }\n        }\n        latestVersion {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetCandidateProposalVersionsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetProposalVersions($id: ID!) {\n      proposalVersions(where: { proposal_: { id: $id } }) {\n        id\n        createdAt\n        updateMessage\n        title\n        description\n        targets\n        values\n        signatures\n        calldatas\n        proposal {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetProposalVersionsDocument;
+export function graphql(source: "\n    query GetProposalVersions($id: ID!) {\n      proposalVersions(where: { proposal_: { id: $id } }) {\n        id\n        createdAt\n        updateMessage\n        title\n        description\n        targets\n        values\n        signatures\n        calldatas\n        proposal {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetProposalVersionsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetAuction($id: ID!) {\n    auction(id: $id) {\n      id\n      amount\n      settled\n      bidder {\n        id\n      }\n      startTime\n      endTime\n      noun {\n        id\n        seed {\n          id\n          background\n          body\n          accessory\n          head\n          glasses\n        }\n        owner {\n          id\n        }\n      }\n      bids {\n        id\n        blockNumber\n        txIndex\n        amount\n      }\n    }\n  }\n"): typeof import('./graphql.js').GetAuctionDocument;
+export function graphql(source: "\n  query GetAuction($id: ID!) {\n    auction(id: $id) {\n      id\n      amount\n      settled\n      bidder {\n        id\n      }\n      startTime\n      endTime\n      noun {\n        id\n        seed {\n          id\n          background\n          body\n          accessory\n          head\n          glasses\n        }\n        owner {\n          id\n        }\n      }\n      bids {\n        id\n        blockNumber\n        txIndex\n        amount\n      }\n    }\n  }\n"): typeof import('./graphql').GetAuctionDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetBidsByAuction($auctionId: String!) {\n      bids(where: { auction: $auctionId }) {\n        id\n        amount\n        blockNumber\n        blockTimestamp\n        txIndex\n        bidder {\n          id\n        }\n        noun {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetBidsByAuctionDocument;
+export function graphql(source: "\n    query GetBidsByAuction($auctionId: String!) {\n      bids(where: { auction: $auctionId }) {\n        id\n        amount\n        blockNumber\n        blockTimestamp\n        txIndex\n        bidder {\n          id\n        }\n        noun {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetBidsByAuctionDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetNoun($id: ID!) {\n      noun(id: $id) {\n        id\n        seed {\n          background\n          body\n          accessory\n          head\n          glasses\n        }\n        owner {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetNounDocument;
+export function graphql(source: "\n    query GetNoun($id: ID!) {\n      noun(id: $id) {\n        id\n        seed {\n          background\n          body\n          accessory\n          head\n          glasses\n        }\n        owner {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetNounDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetNounsIndex {\n      nouns {\n        id\n        owner {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetNounsIndexDocument;
+export function graphql(source: "\n    query GetNounsIndex {\n      nouns {\n        id\n        owner {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetNounsIndexDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {\n    auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {\n      id\n      amount\n      settled\n      bidder {\n        id\n      }\n      startTime\n      endTime\n      noun {\n        id\n        owner {\n          id\n        }\n      }\n      bids {\n        id\n        amount\n        blockNumber\n        blockTimestamp\n        txHash\n        txIndex\n        bidder {\n          id\n        }\n      }\n    }\n  }\n"): typeof import('./graphql.js').GetLatestAuctionsDocument;
+export function graphql(source: "\n  query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {\n    auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {\n      id\n      amount\n      settled\n      bidder {\n        id\n      }\n      startTime\n      endTime\n      noun {\n        id\n        owner {\n          id\n        }\n      }\n      bids {\n        id\n        amount\n        blockNumber\n        blockTimestamp\n        txHash\n        txIndex\n        bidder {\n          id\n        }\n      }\n    }\n  }\n"): typeof import('./graphql').GetLatestAuctionsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetLatestBids($first: Int!) {\n      bids(first: $first, orderBy: blockTimestamp, orderDirection: desc) {\n        id\n        bidder {\n          id\n        }\n        amount\n        blockTimestamp\n        txIndex\n        blockNumber\n        auction {\n          id\n          startTime\n          endTime\n          settled\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetLatestBidsDocument;
+export function graphql(source: "\n    query GetLatestBids($first: Int!) {\n      bids(first: $first, orderBy: blockTimestamp, orderDirection: desc) {\n        id\n        bidder {\n          id\n        }\n        amount\n        blockTimestamp\n        txIndex\n        blockNumber\n        auction {\n          id\n          startTime\n          endTime\n          settled\n        }\n      }\n    }\n  "): typeof import('./graphql').GetLatestBidsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetNounVotingHistory($nounId: ID!, $first: Int!) {\n      noun(id: $nounId) {\n        id\n        votes(first: $first) {\n          blockNumber\n          proposal {\n            id\n          }\n          support\n          supportDetailed\n          voter {\n            id\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetNounVotingHistoryDocument;
+export function graphql(source: "\n    query GetNounVotingHistory($nounId: ID!, $first: Int!) {\n      noun(id: $nounId) {\n        id\n        votes(first: $first) {\n          blockNumber\n          proposal {\n            id\n          }\n          support\n          supportDetailed\n          voter {\n            id\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql').GetNounVotingHistoryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetNounTransferHistory($nounId: String!, $first: Int!) {\n      transferEvents(where: { noun: $nounId }, first: $first) {\n        id\n        previousHolder {\n          id\n        }\n        newHolder {\n          id\n        }\n        blockNumber\n      }\n    }\n  "): typeof import('./graphql.js').GetNounTransferHistoryDocument;
+export function graphql(source: "\n    query GetNounTransferHistory($nounId: String!, $first: Int!) {\n      transferEvents(where: { noun: $nounId }, first: $first) {\n        id\n        previousHolder {\n          id\n        }\n        newHolder {\n          id\n        }\n        blockNumber\n      }\n    }\n  "): typeof import('./graphql').GetNounTransferHistoryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetNounDelegationHistory($nounId: String!, $first: Int!) {\n      delegationEvents(where: { noun: $nounId }, first: $first) {\n        id\n        previousDelegate {\n          id\n        }\n        newDelegate {\n          id\n        }\n        blockNumber\n      }\n    }\n  "): typeof import('./graphql.js').GetNounDelegationHistoryDocument;
+export function graphql(source: "\n    query GetNounDelegationHistory($nounId: String!, $first: Int!) {\n      delegationEvents(where: { noun: $nounId }, first: $first) {\n        id\n        previousDelegate {\n          id\n        }\n        newDelegate {\n          id\n        }\n        blockNumber\n      }\n    }\n  "): typeof import('./graphql').GetNounDelegationHistoryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCreateTimestampAllProposals {\n      proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {\n        id\n        createdTimestamp\n      }\n    }\n  "): typeof import('./graphql.js').GetCreateTimestampAllProposalsDocument;
+export function graphql(source: "\n    query GetCreateTimestampAllProposals {\n      proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {\n        id\n        createdTimestamp\n      }\n    }\n  "): typeof import('./graphql').GetCreateTimestampAllProposalsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetProposalVotes($proposalId: String!) {\n      votes(where: { proposal: $proposalId, votesRaw_gt: 0 }) {\n        supportDetailed\n        voter {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetProposalVotesDocument;
+export function graphql(source: "\n    query GetProposalVotes($proposalId: String!) {\n      votes(where: { proposal: $proposalId, votesRaw_gt: 0 }) {\n        supportDetailed\n        voter {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetProposalVotesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!) {\n      delegates(where: { id_in: $delegates }, block: { number: $block }) {\n        id\n        nounsRepresented {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetDelegateNounsAtBlockDocument;
+export function graphql(source: "\n    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!) {\n      delegates(where: { id_in: $delegates }, block: { number: $block }) {\n        id\n        nounsRepresented {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetDelegateNounsAtBlockDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCurrentlyDelegatedNouns($delegate: ID!) {\n      delegates(where: { id: $delegate }) {\n        id\n        nounsRepresented {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetCurrentlyDelegatedNounsDocument;
+export function graphql(source: "\n    query GetCurrentlyDelegatedNouns($delegate: ID!) {\n      delegates(where: { id: $delegate }) {\n        id\n        nounsRepresented {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetCurrentlyDelegatedNounsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetAdjustedNounSupplyAtPropSnapshot($proposalId: ID!) {\n      proposals(where: { id: $proposalId }) {\n        adjustedTotalSupply\n      }\n    }\n  "): typeof import('./graphql.js').GetAdjustedNounSupplyAtPropSnapshotDocument;
+export function graphql(source: "\n    query GetAdjustedNounSupplyAtPropSnapshot($proposalId: ID!) {\n      proposals(where: { id: $proposalId }) {\n        adjustedTotalSupply\n      }\n    }\n  "): typeof import('./graphql').GetAdjustedNounSupplyAtPropSnapshotDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetPropUsingDynamicQuorum($proposalId: ID!) {\n      proposal(id: $proposalId) {\n        quorumCoefficient\n      }\n    }\n  "): typeof import('./graphql.js').GetPropUsingDynamicQuorumDocument;
+export function graphql(source: "\n    query GetPropUsingDynamicQuorum($proposalId: ID!) {\n      proposal(id: $proposalId) {\n        quorumCoefficient\n      }\n    }\n  "): typeof import('./graphql').GetPropUsingDynamicQuorumDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetProposalFeedbacks($proposalId: ID!) {\n      proposalFeedbacks(where: { proposal_: { id: $proposalId } }) {\n        supportDetailed\n        votes\n        reason\n        createdTimestamp\n        voter {\n          id\n        }\n        proposal {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetProposalFeedbacksDocument;
+export function graphql(source: "\n    query GetProposalFeedbacks($proposalId: ID!) {\n      proposalFeedbacks(where: { proposal_: { id: $proposalId } }) {\n        supportDetailed\n        votes\n        reason\n        createdTimestamp\n        voter {\n          id\n        }\n        proposal {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetProposalFeedbacksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCandidateFeedbacks($candidateId: ID!) {\n      candidateFeedbacks(where: { candidate_: { id: $candidateId } }) {\n        supportDetailed\n        votes\n        reason\n        createdTimestamp\n        voter {\n          id\n        }\n        candidate {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetCandidateFeedbacksDocument;
+export function graphql(source: "\n    query GetCandidateFeedbacks($candidateId: ID!) {\n      candidateFeedbacks(where: { candidate_: { id: $candidateId } }) {\n        supportDetailed\n        votes\n        reason\n        createdTimestamp\n        voter {\n          id\n        }\n        candidate {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetCandidateFeedbacksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetOwnedNouns($owner: ID!) {\n      nouns(where: { owner_: { id: $owner } }) {\n        id\n      }\n    }\n  "): typeof import('./graphql.js').GetOwnedNounsDocument;
+export function graphql(source: "\n    query GetOwnedNouns($owner: ID!) {\n      nouns(where: { owner_: { id: $owner } }) {\n        id\n      }\n    }\n  "): typeof import('./graphql').GetOwnedNounsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetAccountEscrowedNouns($owner: ID!) {\n      escrowedNouns(where: { owner_: { id: $owner } }, first: 1000) {\n        noun {\n          id\n        }\n        fork {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetAccountEscrowedNounsDocument;
+export function graphql(source: "\n    query GetAccountEscrowedNouns($owner: ID!) {\n      escrowedNouns(where: { owner_: { id: $owner } }, first: 1000) {\n        noun {\n          id\n        }\n        fork {\n          id\n        }\n      }\n    }\n  "): typeof import('./graphql').GetAccountEscrowedNounsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetEscrowDepositEvents($forkId: String!) {\n      escrowDeposits(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        reason\n        tokenIDs\n        proposalIDs\n      }\n    }\n  "): typeof import('./graphql.js').GetEscrowDepositEventsDocument;
+export function graphql(source: "\n    query GetEscrowDepositEvents($forkId: String!) {\n      escrowDeposits(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        reason\n        tokenIDs\n        proposalIDs\n      }\n    }\n  "): typeof import('./graphql').GetEscrowDepositEventsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetForkJoins($forkId: String!) {\n      forkJoins(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        reason\n        tokenIDs\n        proposalIDs\n      }\n    }\n  "): typeof import('./graphql.js').GetForkJoinsDocument;
+export function graphql(source: "\n    query GetForkJoins($forkId: String!) {\n      forkJoins(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        reason\n        tokenIDs\n        proposalIDs\n      }\n    }\n  "): typeof import('./graphql').GetForkJoinsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetEscrowWithdrawEvents($forkId: String!) {\n      escrowWithdrawals(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        tokenIDs\n      }\n    }\n  "): typeof import('./graphql.js').GetEscrowWithdrawEventsDocument;
+export function graphql(source: "\n    query GetEscrowWithdrawEvents($forkId: String!) {\n      escrowWithdrawals(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {\n        id\n        createdAt\n        owner {\n          id\n        }\n        tokenIDs\n      }\n    }\n  "): typeof import('./graphql').GetEscrowWithdrawEventsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetProposalTitles($ids: [ID!]!) {\n      proposals(where: { id_in: $ids }) {\n        id\n        title\n      }\n    }\n  "): typeof import('./graphql.js').GetProposalTitlesDocument;
+export function graphql(source: "\n    query GetProposalTitles($ids: [ID!]!) {\n      proposals(where: { id_in: $ids }) {\n        id\n        title\n      }\n    }\n  "): typeof import('./graphql').GetProposalTitlesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetForkDetails($id: ID!) {\n      fork(id: $id) {\n        id\n        forkID\n        executed\n        executedAt\n        forkTreasury\n        forkToken\n        tokensForkingCount\n        tokensInEscrowCount\n        forkingPeriodEndTimestamp\n        escrowedNouns(first: 1000) {\n          noun {\n            id\n          }\n        }\n        joinedNouns(first: 1000) {\n          noun {\n            id\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql.js').GetForkDetailsDocument;
+export function graphql(source: "\n    query GetForkDetails($id: ID!) {\n      fork(id: $id) {\n        id\n        forkID\n        executed\n        executedAt\n        forkTreasury\n        forkToken\n        tokensForkingCount\n        tokensInEscrowCount\n        forkingPeriodEndTimestamp\n        escrowedNouns(first: 1000) {\n          noun {\n            id\n          }\n        }\n        joinedNouns(first: 1000) {\n          noun {\n            id\n          }\n        }\n      }\n    }\n  "): typeof import('./graphql').GetForkDetailsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetForks {\n      forks {\n        id\n        forkID\n        executed\n        executedAt\n        forkTreasury\n        forkToken\n        tokensForkingCount\n        tokensInEscrowCount\n        forkingPeriodEndTimestamp\n      }\n    }\n  "): typeof import('./graphql.js').GetForksDocument;
+export function graphql(source: "\n    query GetForks {\n      forks {\n        id\n        forkID\n        executed\n        executedAt\n        forkTreasury\n        forkToken\n        tokensForkingCount\n        tokensInEscrowCount\n        forkingPeriodEndTimestamp\n      }\n    }\n  "): typeof import('./graphql').GetForksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetIsForkActive($currentTimestamp: BigInt!) {\n      forks(where: { executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp }) {\n        forkID\n        forkingPeriodEndTimestamp\n      }\n    }\n  "): typeof import('./graphql.js').GetIsForkActiveDocument;
+export function graphql(source: "\n    query GetIsForkActive($currentTimestamp: BigInt!) {\n      forks(where: { executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp }) {\n        forkID\n        forkingPeriodEndTimestamp\n      }\n    }\n  "): typeof import('./graphql').GetIsForkActiveDocument;
 
 
 export function graphql(source: string) {

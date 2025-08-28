@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { grey } from '@/utils/nounBgColors';
+import { grey } from '@/utils/noun-bg-colors';
 
 interface ApplicationState {
   stateBackgroundColor: string;

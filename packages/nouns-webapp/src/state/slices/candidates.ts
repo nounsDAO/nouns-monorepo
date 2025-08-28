@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ProposalCandidate } from '@/wrappers/nounsData';
+import { ProposalCandidate } from '@/wrappers/nouns-data';
 
 export interface CandidatesState {
   data: ProposalCandidate[] | undefined;

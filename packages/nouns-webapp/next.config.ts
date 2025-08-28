@@ -1,0 +1,223 @@
+import type { NextConfig } from 'next';
+import * as path from 'path';
+import { fileURLToPath } from 'node:url';
+
+const nextConfig: NextConfig = {
+  // Enable experimental features
+  experimental: {
+    // Enable webpack 5 features
+    esmExternals: true,
+
+    // Enable server components and SWC plugins
+    swcPlugins: [
+      [
+        '@lingui/swc-plugin',
+        {
+          // Additional Configuration for Lingui SWC plugin
+          rootMode: 'upward',
+        },
+      ],
+    ],
+  },
+
+  // Output configuration
+  output: 'standalone',
+
+  // Environment variables
+  env: {
+    // TODO: We can move some of envs here in refactor to be accessible in runtime when working server components or server scripts in refactors
+    // https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
+    // CUSTOM_KEY: 'my-value',
+  },
+
+  // Turbopack configuration
+  turbopack: {
+    rules: {
+      // Load .po gettext catalogs with Lingui and treat the generated output as JS so Turbopack can bundle them
+      '*.po': {
+        loaders: ['@lingui/loader'],
+        as: '*.js',
+      },
+      // Turn *.svg files into React components via SVGR
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js', // tell Turbopack the output is JS
+      },
+    },
+    // Turbopack: alias Node's 'fs' to an empty browser shim so client bundles don't include server-only APIs
+    resolveAlias: {
+      fs: {
+        browser: './src/shims/empty.ts',
+      },
+    },
+  },
+
+  // Webpack configuration
+  webpack: (config, { isServer }) => {
+    // Enable caching for faster builds
+    const filename = fileURLToPath(import.meta.url);
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [filename],
+      },
+    };
+
+    // SVGR support for SVG imports
+    config.module.rules.push({
+      test: /\.svg$/,
+      oneOf: [
+        {
+          resourceQuery: /react/,
+          use: [
+            {
+              loader: '@svgr/webpack',
+              options: {
+                svgoConfig: {
+                  floatPrecision: 2,
+                },
+                exportType: 'default',
+                ref: true,
+              },
+            },
+          ],
+        },
+        {
+          type: 'asset/resource',
+        },
+      ],
+    });
+
+    // Load gettext .po files using Lingui loader (per latest docs)
+    config.module.rules.push({
+      test: /\.po$/i,
+      use: [{ loader: '@lingui/loader' }],
+    });
+
+    // Node.js polyfills for client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        module: false,
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        url: require.resolve('url'),
+        zlib: require.resolve('browserify-zlib'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        assert: require.resolve('assert'),
+        os: require.resolve('os-browserify/browser'),
+        path: require.resolve('path-browserify'),
+      };
+    }
+
+    // Path aliases
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, './src'),
+    };
+
+    // Allow generated subgraph code to import .js while using .ts files
+    config.resolve.extensionAlias = {
+      '.js': ['.ts', '.js'],
+      '.mjs': ['.mts', '.mjs'],
+    } as any;
+
+    // Suppress known dynamic require warnings from cosmiconfig/import-fresh/typescript used by Lingui macros
+    const prevIgnore = config.ignoreWarnings ?? [];
+    const ignoreFn = (warning: any) =>
+      typeof warning?.message === 'string' &&
+      warning.message.includes(
+        'Critical dependency: the request of a dependency is an expression',
+      ) &&
+      /node_modules\/(cosmiconfig|import-fresh|typescript)/.test(warning?.module?.resource || '');
+    (config as any).ignoreWarnings = Array.isArray(prevIgnore)
+      ? [...prevIgnore, ignoreFn]
+      : [ignoreFn];
+
+    return config;
+  },
+
+  // Compiler configuration (SWC-specific)
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
+
+    // Enable SWC relay plugin if you're using Relay
+    // relay: {
+    //   src: './src',
+    //   artifactDirectory: './src/__generated__',
+    //   language: 'typescript',
+    // },
+
+    // Enable styled-components support if needed
+    // styledComponents: true,
+  },
+
+  // TypeScript configuration
+  typescript: {
+    // Allow production builds to complete despite TypeScript errors
+    ignoreBuildErrors: true,
+  },
+
+  // ESLint configuration
+  eslint: {
+    // Allow production builds to complete despite ESLint errors
+    ignoreDuringBuilds: true,
+  },
+
+  // Image optimization
+  images: {
+    // Configure image domains if needed
+    domains: [],
+  },
+
+  // Headers configuration
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+    ];
+  },
+
+  // Redirects configuration
+  async redirects() {
+    return [
+      {
+        source: '/auction/:id',
+        destination: '/nouns/:id',
+        permanent: true,
+      },
+      {
+        source: '/noun/:id',
+        destination: '/nouns/:id',
+        permanent: true,
+      },
+      {
+        source: '/explore',
+        destination: '/nouns',
+        permanent: true,
+      },
+    ];
+  },
+};
+
+export default nextConfig;
