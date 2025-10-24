@@ -30,12 +30,12 @@ import { Table } from 'nextra/components';
 
 Proposals are at the heart of Nouns DAO's governance. They allow community members to propose transactions to be executed by the DAO, such as funding projects, updating governance parameters, or adding new artwork to the collection.
 
-Each proposal goes through a voteing process where Noun holders (& delegates) can express their support or opposition. Proposals that receive enough support are executed, allowing the DAO to take action based on the community's collective decision.
+Each proposal goes through a voting process where Noun holders (& delegates) can express their support or opposition. Proposals that receive enough support are executed, allowing the DAO to take action based on the community's collective decision.
 
 ## Who can propose
 
 Anyone who has at least <code className="nextra-code">{await nounsRequiredToPropose()}</code> votes can create a proposal.
-If you have less than that, you can still participate by creating a **Proposal Candidate**.
+The requirement for proposing is 25 bps of the circulating supply of Nouns. If you have less than that, you can still participate by creating a **Proposal Candidate**. 
 
 > [!TIP]
 > Each account can only have one active proposal at a time. If you have an active proposal, you must wait for it to go through the voting period before creating a new one.
@@ -43,12 +43,12 @@ If you have less than that, you can still participate by creating a **Proposal C
 
 ### Proposal Candidates
 
-Proposal Candidates are proposals that are not yet ready for voting. Then can be upgraded to proposals once they reach the minimum threshold of <code className="nextra-code">{await nounsRequiredToPropose()}</code> votes, counting the proposer votes and any votes from sponsors.
+Proposal Candidates are proposals that are not yet ready for voting. This is a way for proposal authors to seek feedback on their proposal and/or sponsorship from Noun holders. When a candidate reaches the required minimum threshold of <code className="nextra-code">{await nounsRequiredToPropose()}</code> votes, including the proposer's votes and any votes from sponsors, it can then be upgraded to a proposal.
 
 ## Who can vote
 
 Anyone who holds Nouns or has [Delegated votes](/governance/delegation) can vote on proposals.
-The amount of votes you have in each proposal is determined when the vote starts.
+The amount of votes you have in each proposal is determined at the time the vote starts.
 
 ## Approval criteria
 
@@ -148,7 +148,7 @@ The main voting period where token holders can cast their votes for or against t
 - Voters can cast For, Against, or Abstain votes
 - Vote snapshot (how many votes each delegate has on the prop) is taken after the Pending period (not at proposal creation)
 - Succeeds if more For votes than Against votes AND has more For votes than the dynamic quorum threshold
-- May trigger an [Objection Period](#objection-period) if proposal swings from defeated to successful near the end
+- May trigger an [Objection Period](#objection-period) if proposal swings from defeated to successful near the end (this is currently disabled)
 
 
 ### Defeated
@@ -189,7 +189,7 @@ Proposals can be cancelled at any moment before they are Defeated or Executed.
 If a proposal changes from defeated to successful close to the end of the Voting period, it enters the Objection Period.
 During the Objection Period, only "Against" votes are allowed (no For votes).
 
-This mechanism protects against last-minute vote manipulation.
+If enabled, this mechanism protects against last-minute vote manipulation. It is currently disabled.
 
 ### Expiration
 
