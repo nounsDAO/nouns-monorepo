@@ -310,7 +310,7 @@ export type Bid = {
   id: Scalars['ID']['output'];
   /** The Noun being bid on */
   noun: Noun;
-  /** Transaction has for the bid */
+  /** Transaction hash for the bid */
   txHash: Scalars['Bytes']['output'];
   /** Index of transaction within block */
   txIndex: Scalars['BigInt']['output'];
@@ -613,6 +613,7 @@ export enum CandidateFeedbackOrderBy {
   CandidateCanceled = 'candidate__canceled',
   CandidateCanceledBlock = 'candidate__canceledBlock',
   CandidateCanceledTimestamp = 'candidate__canceledTimestamp',
+  CandidateCanceledTransactionHash = 'candidate__canceledTransactionHash',
   CandidateCreatedBlock = 'candidate__createdBlock',
   CandidateCreatedTimestamp = 'candidate__createdTimestamp',
   CandidateCreatedTransactionHash = 'candidate__createdTransactionHash',
@@ -2011,6 +2012,8 @@ export type Proposal = {
   canceledBlock?: Maybe<Scalars['BigInt']['output']>;
   /** The timestamp when this proposal was canceled */
   canceledTimestamp?: Maybe<Scalars['BigInt']['output']>;
+  /** The transaction hash when the proposal was canceled */
+  canceledTransactionHash?: Maybe<Scalars['Bytes']['output']>;
   /** The ID of the client that facilitated this proposal */
   clientId: Scalars['Int']['output'];
   /** The proposal creation block */
@@ -2027,6 +2030,8 @@ export type Proposal = {
   executedBlock?: Maybe<Scalars['BigInt']['output']>;
   /** The timestamp when this proposal was executed */
   executedTimestamp?: Maybe<Scalars['BigInt']['output']>;
+  /** The transaction hash when the proposal was executed */
+  executedTransactionHash?: Maybe<Scalars['Bytes']['output']>;
   /** Once the proposal is queued for execution it will have an ETA of the execution */
   executionETA?: Maybe<Scalars['BigInt']['output']>;
   /** Feedback posts associated to this proposal */
@@ -2039,6 +2044,8 @@ export type Proposal = {
   lastUpdatedBlock: Scalars['BigInt']['output'];
   /** The proposal's last update timestamp */
   lastUpdatedTimestamp: Scalars['BigInt']['output'];
+  /** The proposal's last update transaction hash */
+  lastUpdatedTransactionHash: Scalars['Bytes']['output'];
   /** Dynamic quorum param snapshot: max quorum basis points */
   maxQuorumVotesBPS: Scalars['Int']['output'];
   /** Dynamic quorum param snapshot: min quorum basis points */
@@ -2055,6 +2062,8 @@ export type Proposal = {
   queuedBlock?: Maybe<Scalars['BigInt']['output']>;
   /** The timestamp when this proposal was queued */
   queuedTimestamp?: Maybe<Scalars['BigInt']['output']>;
+  /** The transaction hash when the proposal was queued */
+  queuedTransactionHash?: Maybe<Scalars['Bytes']['output']>;
   /** Dynamic quorum param snapshot: the dynamic quorum coefficient */
   quorumCoefficient: Scalars['BigInt']['output'];
   /** The required number of votes for quorum at the time of proposal creation */
@@ -2081,6 +2090,8 @@ export type Proposal = {
   vetoedBlock?: Maybe<Scalars['BigInt']['output']>;
   /** The timestamp when this proposal was vetoed */
   vetoedTimestamp?: Maybe<Scalars['BigInt']['output']>;
+  /** The transaction hash when the proposal was vetoed */
+  vetoedTransactionHash?: Maybe<Scalars['Bytes']['output']>;
   /** The block at which voting balance snapshots are taken for this proposal */
   voteSnapshotBlock: Scalars['BigInt']['output'];
   /** Votes associated to this proposal */
@@ -2122,6 +2133,8 @@ export type ProposalCandidate = {
   canceledBlock?: Maybe<Scalars['BigInt']['output']>;
   /** The timestamp at which this candidate was canceled */
   canceledTimestamp?: Maybe<Scalars['BigInt']['output']>;
+  /** The transaction hash at which this candidate was canceled */
+  canceledTransactionHash?: Maybe<Scalars['Bytes']['output']>;
   /** The proposal candidate creation block */
   createdBlock: Scalars['BigInt']['output'];
   /** The proposal candidate creation timestamp */
@@ -2331,6 +2344,8 @@ export type ProposalCandidateSignature = {
   createdBlock: Scalars['BigInt']['output'];
   /** The signature's creation timestamp */
   createdTimestamp: Scalars['BigInt']['output'];
+  /** The signature's transaction hash */
+  createdTransactionHash: Scalars['Bytes']['output'];
   /** The hash of the abi encoded proposal data */
   encodedProposalHash: Scalars['Bytes']['output'];
   /** The signature's expiration timestamp */
@@ -2392,6 +2407,16 @@ export type ProposalCandidateSignatureFilter = {
   createdTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  createdTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  createdTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   encodedProposalHash?: InputMaybe<Scalars['Bytes']['input']>;
   encodedProposalHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
   encodedProposalHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -2493,6 +2518,7 @@ export enum ProposalCandidateSignatureOrderBy {
   ContentTitle = 'content__title',
   CreatedBlock = 'createdBlock',
   CreatedTimestamp = 'createdTimestamp',
+  CreatedTransactionHash = 'createdTransactionHash',
   EncodedProposalHash = 'encodedProposalHash',
   ExpirationTimestamp = 'expirationTimestamp',
   Id = 'id',
@@ -2630,6 +2656,7 @@ export enum ProposalCandidateVersionOrderBy {
   ProposalCanceled = 'proposal__canceled',
   ProposalCanceledBlock = 'proposal__canceledBlock',
   ProposalCanceledTimestamp = 'proposal__canceledTimestamp',
+  ProposalCanceledTransactionHash = 'proposal__canceledTransactionHash',
   ProposalCreatedBlock = 'proposal__createdBlock',
   ProposalCreatedTimestamp = 'proposal__createdTimestamp',
   ProposalCreatedTransactionHash = 'proposal__createdTransactionHash',
@@ -2663,6 +2690,16 @@ export type ProposalCandidateFilter = {
   canceledTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   canceledTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   canceledTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  canceledTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  canceledTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   canceled_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   canceled_not?: InputMaybe<Scalars['Boolean']['input']>;
   canceled_not_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
@@ -2783,6 +2820,7 @@ export enum ProposalCandidateOrderBy {
   Canceled = 'canceled',
   CanceledBlock = 'canceledBlock',
   CanceledTimestamp = 'canceledTimestamp',
+  CanceledTransactionHash = 'canceledTransactionHash',
   CreatedBlock = 'createdBlock',
   CreatedTimestamp = 'createdTimestamp',
   CreatedTransactionHash = 'createdTransactionHash',
@@ -2939,6 +2977,7 @@ export enum ProposalFeedbackOrderBy {
   ProposalAgainstVotes = 'proposal__againstVotes',
   ProposalCanceledBlock = 'proposal__canceledBlock',
   ProposalCanceledTimestamp = 'proposal__canceledTimestamp',
+  ProposalCanceledTransactionHash = 'proposal__canceledTransactionHash',
   ProposalClientId = 'proposal__clientId',
   ProposalCreatedBlock = 'proposal__createdBlock',
   ProposalCreatedTimestamp = 'proposal__createdTimestamp',
@@ -2947,11 +2986,13 @@ export enum ProposalFeedbackOrderBy {
   ProposalEndBlock = 'proposal__endBlock',
   ProposalExecutedBlock = 'proposal__executedBlock',
   ProposalExecutedTimestamp = 'proposal__executedTimestamp',
+  ProposalExecutedTransactionHash = 'proposal__executedTransactionHash',
   ProposalExecutionEta = 'proposal__executionETA',
   ProposalForVotes = 'proposal__forVotes',
   ProposalId = 'proposal__id',
   ProposalLastUpdatedBlock = 'proposal__lastUpdatedBlock',
   ProposalLastUpdatedTimestamp = 'proposal__lastUpdatedTimestamp',
+  ProposalLastUpdatedTransactionHash = 'proposal__lastUpdatedTransactionHash',
   ProposalMaxQuorumVotesBps = 'proposal__maxQuorumVotesBPS',
   ProposalMinQuorumVotesBps = 'proposal__minQuorumVotesBPS',
   ProposalObjectionPeriodEndBlock = 'proposal__objectionPeriodEndBlock',
@@ -2959,6 +3000,7 @@ export enum ProposalFeedbackOrderBy {
   ProposalProposalThreshold = 'proposal__proposalThreshold',
   ProposalQueuedBlock = 'proposal__queuedBlock',
   ProposalQueuedTimestamp = 'proposal__queuedTimestamp',
+  ProposalQueuedTransactionHash = 'proposal__queuedTransactionHash',
   ProposalQuorumCoefficient = 'proposal__quorumCoefficient',
   ProposalQuorumVotes = 'proposal__quorumVotes',
   ProposalStartBlock = 'proposal__startBlock',
@@ -2968,6 +3010,7 @@ export enum ProposalFeedbackOrderBy {
   ProposalUpdatePeriodEndBlock = 'proposal__updatePeriodEndBlock',
   ProposalVetoedBlock = 'proposal__vetoedBlock',
   ProposalVetoedTimestamp = 'proposal__vetoedTimestamp',
+  ProposalVetoedTransactionHash = 'proposal__vetoedTransactionHash',
   ProposalVoteSnapshotBlock = 'proposal__voteSnapshotBlock',
   Reason = 'reason',
   SupportDetailed = 'supportDetailed',
@@ -2996,6 +3039,8 @@ export type ProposalVersion = {
   createdAt: Scalars['BigInt']['output'];
   /** The block number of the update */
   createdBlock: Scalars['BigInt']['output'];
+  /** The transaction hash of the update */
+  createdTransactionHash: Scalars['Bytes']['output'];
   /** The full proposal description, which includes the title */
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -3039,6 +3084,16 @@ export type ProposalVersionFilter = {
   createdBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdBlock_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  createdTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  createdTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  createdTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   description?: InputMaybe<Scalars['String']['input']>;
   description_contains?: InputMaybe<Scalars['String']['input']>;
   description_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -3153,6 +3208,7 @@ export enum ProposalVersionOrderBy {
   Calldatas = 'calldatas',
   CreatedAt = 'createdAt',
   CreatedBlock = 'createdBlock',
+  CreatedTransactionHash = 'createdTransactionHash',
   Description = 'description',
   Id = 'id',
   Proposal = 'proposal',
@@ -3161,6 +3217,7 @@ export enum ProposalVersionOrderBy {
   ProposalAgainstVotes = 'proposal__againstVotes',
   ProposalCanceledBlock = 'proposal__canceledBlock',
   ProposalCanceledTimestamp = 'proposal__canceledTimestamp',
+  ProposalCanceledTransactionHash = 'proposal__canceledTransactionHash',
   ProposalClientId = 'proposal__clientId',
   ProposalCreatedBlock = 'proposal__createdBlock',
   ProposalCreatedTimestamp = 'proposal__createdTimestamp',
@@ -3169,11 +3226,13 @@ export enum ProposalVersionOrderBy {
   ProposalEndBlock = 'proposal__endBlock',
   ProposalExecutedBlock = 'proposal__executedBlock',
   ProposalExecutedTimestamp = 'proposal__executedTimestamp',
+  ProposalExecutedTransactionHash = 'proposal__executedTransactionHash',
   ProposalExecutionEta = 'proposal__executionETA',
   ProposalForVotes = 'proposal__forVotes',
   ProposalId = 'proposal__id',
   ProposalLastUpdatedBlock = 'proposal__lastUpdatedBlock',
   ProposalLastUpdatedTimestamp = 'proposal__lastUpdatedTimestamp',
+  ProposalLastUpdatedTransactionHash = 'proposal__lastUpdatedTransactionHash',
   ProposalMaxQuorumVotesBps = 'proposal__maxQuorumVotesBPS',
   ProposalMinQuorumVotesBps = 'proposal__minQuorumVotesBPS',
   ProposalObjectionPeriodEndBlock = 'proposal__objectionPeriodEndBlock',
@@ -3181,6 +3240,7 @@ export enum ProposalVersionOrderBy {
   ProposalProposalThreshold = 'proposal__proposalThreshold',
   ProposalQueuedBlock = 'proposal__queuedBlock',
   ProposalQueuedTimestamp = 'proposal__queuedTimestamp',
+  ProposalQueuedTransactionHash = 'proposal__queuedTransactionHash',
   ProposalQuorumCoefficient = 'proposal__quorumCoefficient',
   ProposalQuorumVotes = 'proposal__quorumVotes',
   ProposalStartBlock = 'proposal__startBlock',
@@ -3190,6 +3250,7 @@ export enum ProposalVersionOrderBy {
   ProposalUpdatePeriodEndBlock = 'proposal__updatePeriodEndBlock',
   ProposalVetoedBlock = 'proposal__vetoedBlock',
   ProposalVetoedTimestamp = 'proposal__vetoedTimestamp',
+  ProposalVetoedTransactionHash = 'proposal__vetoedTransactionHash',
   ProposalVoteSnapshotBlock = 'proposal__voteSnapshotBlock',
   Signatures = 'signatures',
   Targets = 'targets',
@@ -3248,6 +3309,16 @@ export type ProposalFilter = {
   canceledTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   canceledTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   canceledTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  canceledTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  canceledTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  canceledTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   clientId?: InputMaybe<Scalars['Int']['input']>;
   clientId_gt?: InputMaybe<Scalars['Int']['input']>;
   clientId_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -3326,6 +3397,16 @@ export type ProposalFilter = {
   executedTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   executedTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   executedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  executedTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  executedTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  executedTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   executionETA?: InputMaybe<Scalars['BigInt']['input']>;
   executionETA_gt?: InputMaybe<Scalars['BigInt']['input']>;
   executionETA_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3367,6 +3448,16 @@ export type ProposalFilter = {
   lastUpdatedTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   lastUpdatedTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   lastUpdatedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lastUpdatedTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  lastUpdatedTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  lastUpdatedTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   maxQuorumVotesBPS?: InputMaybe<Scalars['Int']['input']>;
   maxQuorumVotesBPS_gt?: InputMaybe<Scalars['Int']['input']>;
   maxQuorumVotesBPS_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -3441,6 +3532,16 @@ export type ProposalFilter = {
   queuedTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   queuedTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   queuedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  queuedTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  queuedTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  queuedTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   quorumCoefficient?: InputMaybe<Scalars['BigInt']['input']>;
   quorumCoefficient_gt?: InputMaybe<Scalars['BigInt']['input']>;
   quorumCoefficient_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3546,6 +3647,16 @@ export type ProposalFilter = {
   vetoedTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   vetoedTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   vetoedTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  vetoedTransactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  vetoedTransactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  vetoedTransactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   voteSnapshotBlock?: InputMaybe<Scalars['BigInt']['input']>;
   voteSnapshotBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
   voteSnapshotBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3564,6 +3675,7 @@ export enum ProposalOrderBy {
   Calldatas = 'calldatas',
   CanceledBlock = 'canceledBlock',
   CanceledTimestamp = 'canceledTimestamp',
+  CanceledTransactionHash = 'canceledTransactionHash',
   ClientId = 'clientId',
   CreatedBlock = 'createdBlock',
   CreatedTimestamp = 'createdTimestamp',
@@ -3572,12 +3684,14 @@ export enum ProposalOrderBy {
   EndBlock = 'endBlock',
   ExecutedBlock = 'executedBlock',
   ExecutedTimestamp = 'executedTimestamp',
+  ExecutedTransactionHash = 'executedTransactionHash',
   ExecutionEta = 'executionETA',
   FeedbackPosts = 'feedbackPosts',
   ForVotes = 'forVotes',
   Id = 'id',
   LastUpdatedBlock = 'lastUpdatedBlock',
   LastUpdatedTimestamp = 'lastUpdatedTimestamp',
+  LastUpdatedTransactionHash = 'lastUpdatedTransactionHash',
   MaxQuorumVotesBps = 'maxQuorumVotesBPS',
   MinQuorumVotesBps = 'minQuorumVotesBPS',
   ObjectionPeriodEndBlock = 'objectionPeriodEndBlock',
@@ -3590,6 +3704,7 @@ export enum ProposalOrderBy {
   ProposerTokenHoldersRepresentedAmount = 'proposer__tokenHoldersRepresentedAmount',
   QueuedBlock = 'queuedBlock',
   QueuedTimestamp = 'queuedTimestamp',
+  QueuedTransactionHash = 'queuedTransactionHash',
   QuorumCoefficient = 'quorumCoefficient',
   QuorumVotes = 'quorumVotes',
   Signatures = 'signatures',
@@ -3603,6 +3718,7 @@ export enum ProposalOrderBy {
   Values = 'values',
   VetoedBlock = 'vetoedBlock',
   VetoedTimestamp = 'vetoedTimestamp',
+  VetoedTransactionHash = 'vetoedTransactionHash',
   VoteSnapshotBlock = 'voteSnapshotBlock',
   Votes = 'votes'
 }
@@ -4198,6 +4314,517 @@ export enum SeedOrderBy {
   Id = 'id'
 }
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  /** Access to subgraph metadata */
+  _meta?: Maybe<Meta>;
+  account?: Maybe<Account>;
+  accounts: Array<Account>;
+  auction?: Maybe<Auction>;
+  auctions: Array<Auction>;
+  bid?: Maybe<Bid>;
+  bids: Array<Bid>;
+  candidateFeedback?: Maybe<CandidateFeedback>;
+  candidateFeedbacks: Array<CandidateFeedback>;
+  delegate?: Maybe<Delegate>;
+  delegates: Array<Delegate>;
+  delegationEvent?: Maybe<DelegationEvent>;
+  delegationEvents: Array<DelegationEvent>;
+  dynamicQuorumParams?: Maybe<DynamicQuorumParams>;
+  dynamicQuorumParams_collection: Array<DynamicQuorumParams>;
+  escrowDeposit?: Maybe<EscrowDeposit>;
+  escrowDeposits: Array<EscrowDeposit>;
+  escrowWithdrawal?: Maybe<EscrowWithdrawal>;
+  escrowWithdrawals: Array<EscrowWithdrawal>;
+  escrowedNoun?: Maybe<EscrowedNoun>;
+  escrowedNouns: Array<EscrowedNoun>;
+  fork?: Maybe<Fork>;
+  forkJoin?: Maybe<ForkJoin>;
+  forkJoinedNoun?: Maybe<ForkJoinedNoun>;
+  forkJoinedNouns: Array<ForkJoinedNoun>;
+  forkJoins: Array<ForkJoin>;
+  forks: Array<Fork>;
+  governance?: Maybe<Governance>;
+  governances: Array<Governance>;
+  noun?: Maybe<Noun>;
+  nouns: Array<Noun>;
+  proposal?: Maybe<Proposal>;
+  proposalCandidate?: Maybe<ProposalCandidate>;
+  proposalCandidateContent?: Maybe<ProposalCandidateContent>;
+  proposalCandidateContents: Array<ProposalCandidateContent>;
+  proposalCandidateSignature?: Maybe<ProposalCandidateSignature>;
+  proposalCandidateSignatures: Array<ProposalCandidateSignature>;
+  proposalCandidateVersion?: Maybe<ProposalCandidateVersion>;
+  proposalCandidateVersions: Array<ProposalCandidateVersion>;
+  proposalCandidates: Array<ProposalCandidate>;
+  proposalFeedback?: Maybe<ProposalFeedback>;
+  proposalFeedbacks: Array<ProposalFeedback>;
+  proposalVersion?: Maybe<ProposalVersion>;
+  proposalVersions: Array<ProposalVersion>;
+  proposals: Array<Proposal>;
+  seed?: Maybe<Seed>;
+  seeds: Array<Seed>;
+  transferEvent?: Maybe<TransferEvent>;
+  transferEvents: Array<TransferEvent>;
+  vote?: Maybe<Vote>;
+  votes: Array<Vote>;
+};
+
+
+export type SubscriptionMetaArgs = {
+  block?: InputMaybe<BlockHeight>;
+};
+
+
+export type SubscriptionAccountArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionAccountsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AccountOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<AccountFilter>;
+};
+
+
+export type SubscriptionAuctionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionAuctionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AuctionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<AuctionFilter>;
+};
+
+
+export type SubscriptionBidArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionBidsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BidOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<BidFilter>;
+};
+
+
+export type SubscriptionCandidateFeedbackArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionCandidateFeedbacksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<CandidateFeedbackOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<CandidateFeedbackFilter>;
+};
+
+
+export type SubscriptionDelegateArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDelegatesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DelegateOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DelegateFilter>;
+};
+
+
+export type SubscriptionDelegationEventArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDelegationEventsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DelegationEventOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DelegationEventFilter>;
+};
+
+
+export type SubscriptionDynamicQuorumParamsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionDynamicQuorumParamsCollectionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DynamicQuorumParamsOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<DynamicQuorumParamsFilter>;
+};
+
+
+export type SubscriptionEscrowDepositArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowDepositsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowDepositOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowDepositFilter>;
+};
+
+
+export type SubscriptionEscrowWithdrawalArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowWithdrawalsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowWithdrawalOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowWithdrawalFilter>;
+};
+
+
+export type SubscriptionEscrowedNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionEscrowedNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EscrowedNounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<EscrowedNounFilter>;
+};
+
+
+export type SubscriptionForkArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinedNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionForkJoinedNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkJoinedNounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkJoinedNounFilter>;
+};
+
+
+export type SubscriptionForkJoinsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkJoinOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkJoinFilter>;
+};
+
+
+export type SubscriptionForksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ForkOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ForkFilter>;
+};
+
+
+export type SubscriptionGovernanceArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionGovernancesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<GovernanceOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<GovernanceFilter>;
+};
+
+
+export type SubscriptionNounArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionNounsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<NounOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<NounFilter>;
+};
+
+
+export type SubscriptionProposalArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateContentArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateContentsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateContentOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateContentFilter>;
+};
+
+
+export type SubscriptionProposalCandidateSignatureArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateSignaturesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateSignatureOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateSignatureFilter>;
+};
+
+
+export type SubscriptionProposalCandidateVersionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalCandidateVersionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateVersionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateVersionFilter>;
+};
+
+
+export type SubscriptionProposalCandidatesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalCandidateOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalCandidateFilter>;
+};
+
+
+export type SubscriptionProposalFeedbackArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalFeedbacksArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalFeedbackOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalFeedbackFilter>;
+};
+
+
+export type SubscriptionProposalVersionArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionProposalVersionsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalVersionOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalVersionFilter>;
+};
+
+
+export type SubscriptionProposalsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProposalOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<ProposalFilter>;
+};
+
+
+export type SubscriptionSeedArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionSeedsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<SeedOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<SeedFilter>;
+};
+
+
+export type SubscriptionTransferEventArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionTransferEventsArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TransferEventOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<TransferEventFilter>;
+};
+
+
+export type SubscriptionVoteArgs = {
+  block?: InputMaybe<BlockHeight>;
+  id: Scalars['ID']['input'];
+  subgraphError?: SubgraphErrorPolicy;
+};
+
+
+export type SubscriptionVotesArgs = {
+  block?: InputMaybe<BlockHeight>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<VoteOrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: SubgraphErrorPolicy;
+  where?: InputMaybe<VoteFilter>;
+};
+
 export type TransferEvent = {
   __typename?: 'TransferEvent';
   /** Block number of the event */
@@ -4348,6 +4975,8 @@ export type Vote = {
   support: Scalars['Boolean']['output'];
   /** The integer support value: against (0), for (1), or abstain (2) */
   supportDetailed: Scalars['Int']['output'];
+  /** The transaction hash of the vote */
+  transactionHash: Scalars['Bytes']['output'];
   /** Delegate that emitted the vote */
   voter: Delegate;
   /** Amount of votes in favour or against expressed as a BigInt normalized value for the Nouns ERC721 Token */
@@ -4462,6 +5091,16 @@ export type VoteFilter = {
   support_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   support_not?: InputMaybe<Scalars['Boolean']['input']>;
   support_not_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  transactionHash?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  transactionHash_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_not?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  transactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   voter?: InputMaybe<Scalars['String']['input']>;
   voter_?: InputMaybe<DelegateFilter>;
   voter_contains?: InputMaybe<Scalars['String']['input']>;
@@ -4513,6 +5152,7 @@ export enum VoteOrderBy {
   ProposalAgainstVotes = 'proposal__againstVotes',
   ProposalCanceledBlock = 'proposal__canceledBlock',
   ProposalCanceledTimestamp = 'proposal__canceledTimestamp',
+  ProposalCanceledTransactionHash = 'proposal__canceledTransactionHash',
   ProposalClientId = 'proposal__clientId',
   ProposalCreatedBlock = 'proposal__createdBlock',
   ProposalCreatedTimestamp = 'proposal__createdTimestamp',
@@ -4521,11 +5161,13 @@ export enum VoteOrderBy {
   ProposalEndBlock = 'proposal__endBlock',
   ProposalExecutedBlock = 'proposal__executedBlock',
   ProposalExecutedTimestamp = 'proposal__executedTimestamp',
+  ProposalExecutedTransactionHash = 'proposal__executedTransactionHash',
   ProposalExecutionEta = 'proposal__executionETA',
   ProposalForVotes = 'proposal__forVotes',
   ProposalId = 'proposal__id',
   ProposalLastUpdatedBlock = 'proposal__lastUpdatedBlock',
   ProposalLastUpdatedTimestamp = 'proposal__lastUpdatedTimestamp',
+  ProposalLastUpdatedTransactionHash = 'proposal__lastUpdatedTransactionHash',
   ProposalMaxQuorumVotesBps = 'proposal__maxQuorumVotesBPS',
   ProposalMinQuorumVotesBps = 'proposal__minQuorumVotesBPS',
   ProposalObjectionPeriodEndBlock = 'proposal__objectionPeriodEndBlock',
@@ -4533,6 +5175,7 @@ export enum VoteOrderBy {
   ProposalProposalThreshold = 'proposal__proposalThreshold',
   ProposalQueuedBlock = 'proposal__queuedBlock',
   ProposalQueuedTimestamp = 'proposal__queuedTimestamp',
+  ProposalQueuedTransactionHash = 'proposal__queuedTransactionHash',
   ProposalQuorumCoefficient = 'proposal__quorumCoefficient',
   ProposalQuorumVotes = 'proposal__quorumVotes',
   ProposalStartBlock = 'proposal__startBlock',
@@ -4542,10 +5185,12 @@ export enum VoteOrderBy {
   ProposalUpdatePeriodEndBlock = 'proposal__updatePeriodEndBlock',
   ProposalVetoedBlock = 'proposal__vetoedBlock',
   ProposalVetoedTimestamp = 'proposal__vetoedTimestamp',
+  ProposalVetoedTransactionHash = 'proposal__vetoedTransactionHash',
   ProposalVoteSnapshotBlock = 'proposal__voteSnapshotBlock',
   Reason = 'reason',
   Support = 'support',
   SupportDetailed = 'supportDetailed',
+  TransactionHash = 'transactionHash',
   Voter = 'voter',
   VoterDelegatedVotes = 'voter__delegatedVotes',
   VoterDelegatedVotesRaw = 'voter__delegatedVotesRaw',
@@ -4841,7 +5486,7 @@ export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
 {
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  __apiType?: NonNullable<DocumentTypeDecoration<TResult, TVariables>['__apiType']>;
   private value: string;
   public __meta__?: Record<string, any> | undefined;
 
@@ -4851,7 +5496,7 @@ export class TypedDocumentString<TResult, TVariables>
     this.__meta__ = __meta__;
   }
 
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+  override toString(): string & DocumentTypeDecoration<TResult, TVariables> {
     return this.value;
   }
 }

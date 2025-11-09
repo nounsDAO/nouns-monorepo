@@ -3,8 +3,8 @@ import 'dotenv/config';
 import { ByteResolver, TimestampResolver } from 'graphql-scalars';
 
 const config: CodegenConfig = {
-  emitLegacyCommonJSImports: false,
-  schema: process.env.VITE_SEPOLIA_SUBGRAPH,
+  emitLegacyCommonJSImports: true,
+  schema: process.env.NEXT_PUBLIC_MAINNET_SUBGRAPH,
   documents: ['./src/**/*.{ts,tsx}', '!./src/subgraphs/*'],
   ignoreNoDocuments: true,
   generates: {

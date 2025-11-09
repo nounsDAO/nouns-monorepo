@@ -7,8 +7,8 @@ import application from '@/state/slices/application';
 import auction from '@/state/slices/auction';
 import candidates from '@/state/slices/candidates';
 import logs from '@/state/slices/logs';
-import onDisplayAuction from '@/state/slices/onDisplayAuction';
-import pastAuctions from '@/state/slices/pastAuctions';
+import onDisplayAuction from '@/state/slices/on-display-auction';
+import pastAuctions from '@/state/slices/past-auctions';
 
 const createRootReducer = () =>
   combineReducers({
@@ -30,14 +30,14 @@ export const store = configureStore({
     });
     // Enable logger in development and when explicitly enabled
     if (
-      import.meta.env.MODE !== 'production' &&
-      import.meta.env.VITE_ENABLE_REDUX_LOGGER === 'true'
+      process.env.NODE_ENV !== 'production' &&
+      process.env.NEXT_PUBLIC_ENABLE_REDUX_LOGGER === 'true'
     ) {
       return middleware.concat(loggerMiddleware);
     }
     return middleware;
   },
-  devTools: import.meta.env.MODE !== 'production',
+  devTools: process.env.NODE_ENV !== 'production',
   preloadedState: undefined,
 });
 

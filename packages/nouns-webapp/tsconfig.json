@@ -8,15 +8,21 @@
     "declaration": false,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["@vitest/browser/providers/playwright"],
+    "jsx": "preserve",
+    "incremental": false,
+    "types": ["jest", "@testing-library/jest-dom"],
     "paths": {
       "@/*": ["./src/*"]
     },
 
     "plugins": [
+      {
+        "name": "next"
+      },
       {
         "name": "@0no-co/graphqlsp",
         "schema": "./src/subgraphs/schema.graphql"
@@ -29,5 +35,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/vite-env.d.ts"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", "vitest.config.ts"]
 }

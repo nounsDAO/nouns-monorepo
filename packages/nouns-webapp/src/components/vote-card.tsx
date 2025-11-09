@@ -1,0 +1,169 @@
+import React, { useEffect, useState } from 'react';
+
+import { i18n } from '@lingui/core';
+import { Trans, Plural } from '@lingui/react/macro';
+import { Card } from 'react-bootstrap';
+import { usePublicClient } from 'wagmi';
+
+import DelegateGroupedNounImageVoteTable from '@/components/delegate-grouped-noun-image-vote-table';
+import VoteProgressBar from '@/components/vote-progress-bar';
+import { useActiveLocale } from '@/hooks/use-activate-locale';
+import { cn } from '@/lib/utils';
+import { ensCacheKey } from '@/utils/ens-lookup';
+import { lookupNNSOrENS } from '@/utils/lookup-nns-or-ens';
+import { Address } from '@/utils/types';
+import { Proposal } from '@/wrappers/nouns-dao';
+
+export enum VoteCardVariant {
+  FOR,
+  AGAINST,
+  ABSTAIN,
+}
+
+interface VoteCardProps {
+  proposal: Proposal;
+  percentage: number;
+  variant: VoteCardVariant;
+  delegateGroupedVoteData:
+    | { delegate: Address; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | undefined;
+}
+
+const VoteCard: React.FC<VoteCardProps> = props => {
+  const { proposal, percentage, variant, delegateGroupedVoteData } = props;
+
+  let titleClass: string;
+  let titleCopy;
+  let voteCount;
+  let supportDetailedValue: 0 | 1 | 2;
+  switch (variant) {
+    case VoteCardVariant.FOR:
+      titleClass = 'text-brand-color-green';
+      titleCopy = <Trans>For</Trans>;
+      voteCount = proposal.forCount;
+      supportDetailedValue = 1;
+      break;
+    case VoteCardVariant.AGAINST:
+      titleClass = 'text-brand-color-red';
+      titleCopy = <Trans>Against</Trans>;
+      voteCount = proposal.againstCount;
+      supportDetailedValue = 0;
+      break;
+    default:
+      titleClass = 'text-brand-gray-light-text';
+      titleCopy = <Trans>Abstain</Trans>;
+      voteCount = proposal.abstainCount;
+      supportDetailedValue = 2;
+      break;
+  }
+
+  const publicClient = usePublicClient();
+  const [ensCached, setEnsCached] = useState(false);
+  const locale = useActiveLocale();
+  const filteredDelegateGroupedVoteData =
+    delegateGroupedVoteData?.filter(v => v.supportDetailed === supportDetailedValue) ?? [];
+  const isEnUS = locale === 'en-US';
+
+  // Pre-fetch ENS of delegates (with 30 min TTL)
+  // This makes hover cards load more smoothly
+  useEffect(() => {
+    if (delegateGroupedVoteData == null || publicClient == null || ensCached === true) {
+      return;
+    }
+
+    delegateGroupedVoteData.forEach((delegateInfo: { delegate: Address }) => {
+      if (localStorage.getItem(ensCacheKey(delegateInfo.delegate))) {
+        return;
+      }
+
+      lookupNNSOrENS(publicClient, delegateInfo.delegate)
+        .then(name => {
+          // Store data as mapping of address_Expiration => address or ENS
+          if (name) {
+            localStorage.setItem(
+              ensCacheKey(delegateInfo.delegate),
+              JSON.stringify({
+                name,
+                expires: Date.now() / 1000 + 30 * 60,
+              }),
+            );
+          }
+        })
+        .catch(error => {
+          console.log(`error resolving reverse ens lookup: `, error);
+        });
+    });
+    setEnsCached(true);
+  }, [publicClient, ensCached, delegateGroupedVoteData]);
+
+  return (
+    <div className={cn('lg:col-span-4', 'max-xl:w-1/3')}>
+      <Card
+        className={cn('bg-brand-gray-background mt-4 min-h-72 rounded-xl p-2', 'max-xl:min-h-0')}
+      >
+        <Card.Body className="p-2">
+          <Card.Text className="m-0 py-2">
+            <span
+              className={cn(
+                isEnUS
+                  ? 'font-londrina text-22 max-xl:mx-auto'
+                  : 'font-londrina max-xl:mx-auto max-xl:text-base text-base',
+                titleClass,
+              )}
+            >
+              {titleCopy}
+            </span>
+            <span
+              className={cn(
+                'font-pt text-22 mt-[0.15rem] font-bold',
+                'max-xl:hidden',
+                !isEnUS ? 'text-base' : '',
+                'relative',
+                'max-xl:mx-auto',
+              )}
+            >
+              {i18n.number(voteCount)}
+              {filteredDelegateGroupedVoteData.length > 0 && (
+                <small className="text-muted-foreground absolute bottom-0 right-0 translate-y-1/2 whitespace-nowrap text-xs">
+                  {filteredDelegateGroupedVoteData.length}{' '}
+                  <Plural
+                    value={filteredDelegateGroupedVoteData.length}
+                    one="voter"
+                    other="voters"
+                  />
+                </small>
+              )}
+            </span>
+          </Card.Text>
+
+          <Card.Text className={cn('m-0 py-2', 'max-xl:flex max-xl:flex-col hidden')}>
+            <span className={cn('font-pt text-22 mt-[0.15rem] font-bold', 'relative')}>
+              {i18n.number(voteCount)}
+              {filteredDelegateGroupedVoteData.length > 0 && (
+                <small className="text-muted-foreground absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 whitespace-nowrap text-xs">
+                  {filteredDelegateGroupedVoteData.length}{' '}
+                  <Plural
+                    value={filteredDelegateGroupedVoteData.length}
+                    one="voter"
+                    other="voters"
+                  />
+                </small>
+              )}
+            </span>
+          </Card.Text>
+
+          <VoteProgressBar variant={variant} percentage={percentage} />
+          <div className={cn('flex flex-wrap', 'mt-6 px-2', 'max-xl:hidden')}>
+            <DelegateGroupedNounImageVoteTable
+              filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
+              propId={Number(proposal.id || '0')}
+              proposalCreationBlock={proposal.createdBlock}
+            />
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};
+
+export default VoteCard;

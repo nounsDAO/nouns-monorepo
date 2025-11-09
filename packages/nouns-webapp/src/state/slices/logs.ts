@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { isNullish } from 'remeda';
 
-import { EventFilter, filterToKey, Log } from '@/utils/logParsing';
+import { EventFilter, filterToKey, Log } from '@/utils/log-parsing';
 
 export interface LogsState {
   [filterKey: string]: {
@@ -26,7 +27,7 @@ const slice = createSlice({
   reducers: {
     addListener(state, { payload: { filter } }: PayloadAction<{ filter: EventFilter }>) {
       const key = filterToKey(filter);
-      if (!state[key])
+      if (isNullish(state[key]))
         state[key] = {
           listeners: 1,
         };
@@ -40,7 +41,7 @@ const slice = createSlice({
     ) {
       for (const filter of filters) {
         const key = filterToKey(filter);
-        if (!state[key]) continue;
+        if (isNullish(state[key])) continue;
         state[key].fetchingBlockNumber = blockNumber;
       }
     },
@@ -53,8 +54,8 @@ const slice = createSlice({
       const key = filterToKey(filter);
       const fetchState = state[key];
       if (
-        !fetchState ||
-        (fetchState.results && fetchState.results.blockNumber > results.blockNumber)
+        isNullish(fetchState) ||
+        (!isNullish(fetchState.results) && fetchState.results.blockNumber > results.blockNumber)
       )
         return;
       fetchState.results = results;
@@ -67,7 +68,10 @@ const slice = createSlice({
     ) {
       const key = filterToKey(filter);
       const fetchState = state[key];
-      if (!fetchState || (fetchState.results && fetchState.results.blockNumber > blockNumber))
+      if (
+        isNullish(fetchState) ||
+        (!isNullish(fetchState.results) && fetchState.results.blockNumber > blockNumber)
+      )
         return;
       fetchState.results = {
         blockNumber,
@@ -76,7 +80,7 @@ const slice = createSlice({
     },
     removeListener(state, { payload: { filter } }: PayloadAction<{ filter: EventFilter }>) {
       const key = filterToKey(filter);
-      if (!state[key]) return;
+      if (isNullish(state[key])) return;
       state[key].listeners--;
     },
   },
