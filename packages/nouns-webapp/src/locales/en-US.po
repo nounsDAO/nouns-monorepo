@@ -116,6 +116,10 @@ msgstr "sponsored votes"
 msgid "Add Function Call Arguments"
 msgstr "Add Function Call Arguments"
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "From a school in Uganda to a coffee shop in LA, from a crypto hub in São Paulo to a deli in Melbourne, Nouns lives wherever creative people bring ideas to life. Explore nounish people, places, and things with <0/>."
+msgstr "From a school in Uganda to a coffee shop in LA, from a crypto hub in São Paulo to a deli in Melbourne, Nouns lives wherever creative people bring ideas to life. Explore nounish people, places, and things with <0/>."
+
 #: src/pages/Governance/index.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBarTreasury/index.tsx
@@ -192,6 +196,10 @@ msgstr "Delegate {availableVotes} Votes"
 #: src/components/Documentation/index.tsx
 msgid "Learn more about the DUNA"
 msgstr "Learn more about the DUNA"
+
+#: src/components/Footer.tsx
+msgid "Map"
+msgstr "Map"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -1042,6 +1050,10 @@ msgstr "Candidate updated!"
 msgid "Queue"
 msgstr "Queue"
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Nouns is a global community."
+msgstr "Nouns is a global community."
+
 #: src/components/Documentation/index.tsx
 msgid "CryptoPunks"
 msgstr "CryptoPunks"
@@ -1460,6 +1472,10 @@ msgstr "Deploying Nouns fork and beginning the forking period"
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes are being delegated to a new account."
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Nounspot"
+msgstr "Nounspot"
 
 #: src/components/NounInfoCard.tsx
 msgid "Bid history"
