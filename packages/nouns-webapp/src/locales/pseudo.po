@@ -116,6 +116,10 @@ msgstr ""
 msgid "Add Function Call Arguments"
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "From a school in Uganda to a coffee shop in LA, from a crypto hub in São Paulo to a deli in Melbourne, Nouns lives wherever creative people bring ideas to life. Explore nounish people, places, and things with <0/>."
+msgstr ""
+
 #: src/pages/Governance/index.tsx
 #: src/components/Footer.tsx
 #: src/components/NavBarTreasury/index.tsx
@@ -191,6 +195,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more about the DUNA"
+msgstr ""
+
+#: src/components/Footer.tsx
+msgid "Map"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1042,6 +1050,10 @@ msgstr ""
 msgid "Queue"
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Nouns is a global community."
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "CryptoPunks"
 msgstr ""
@@ -1459,6 +1471,10 @@ msgstr ""
 
 #: src/components/ChangeDelegatePanel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Nounspot"
 msgstr ""
 
 #: src/components/NounInfoCard.tsx

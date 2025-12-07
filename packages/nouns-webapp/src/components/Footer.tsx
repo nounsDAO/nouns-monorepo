@@ -32,6 +32,10 @@ export const Footer = () => {
           label: t`Forks`,
           url: '/fork',
         },
+        {
+          label: t`Map`,
+          url: 'https://nounspot.com',
+        },
       ],
     },
     {
