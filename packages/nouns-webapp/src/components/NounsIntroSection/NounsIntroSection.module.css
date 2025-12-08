@@ -127,3 +127,34 @@
 .nounsIntroLinks:hover {
   color: #d63c5e;
 }
+
+.nounspotContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.nounspotContainer iframe {
+  width: 100%;
+  height: 500px;
+  border: 0;
+  border-radius: 0px;
+  overflow: hidden;
+}
+
+.nounspotContainer .videoSubtitle {
+  position: absolute;
+  top: 520px;
+}
+
+@media (max-width: 992px) {
+  .nounspotContainer {
+    padding: 0 2rem;
+  }
+
+  .nounspotContainer .videoSubtitle {
+    position: static;
+    margin-top: 1rem;
+    padding: 0;
+  }
+}

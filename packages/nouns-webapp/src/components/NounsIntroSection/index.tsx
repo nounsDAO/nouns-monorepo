@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import { Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
 
+import LinkComponent from '@/components/Link';
 import Section from '@/layout/Section';
 
 import classes from './NounsIntroSection.module.css';
@@ -77,6 +78,45 @@ const NounsIntroSection = () => {
               </Trans>
             </p>
           </div>
+        </Col>
+      </Section>
+      <Section fullWidth={false} className={classes.videoSection}>
+        <Col lg={12}>
+          <div className={classes.textWrapper}>
+            <h1>
+              <Trans>Nouns is a global community.</Trans>
+            </h1>
+            <p>
+              <Trans>
+                From a school in Uganda to a coffee shop in LA, from a crypto hub in São Paulo to a
+                deli in Melbourne, Nouns lives wherever creative people bring ideas to life. Explore
+                nounish people, places, and things with{' '}
+                <LinkComponent
+                  text={<Trans>Nounspot</Trans>}
+                  url="https://nounspot.com"
+                  leavesPage={true}
+                />
+                .
+              </Trans>
+            </p>
+          </div>
+        </Col>
+        <Col lg={12} className={classes.nounspotContainer}>
+          <iframe
+            src="https://nounspot.com/embed?sidebar=true&toggle=true&addspot=true&header=true&fullpage=true"
+            width="100%"
+            height="500px"
+            allow="geolocation"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Nounspot Map"
+          ></iframe>
+          <small className={`${classes.videoSubtitle} text-muted`}>
+            Built by{' '}
+            <Nav.Link as="a" href="https://x.com/playdna_" target="_blank" rel="noreferrer">
+              PlayDNA
+            </Nav.Link>
+          </small>
         </Col>
       </Section>
     </>
