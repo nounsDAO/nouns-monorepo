@@ -18,6 +18,7 @@ import ProposalTransactions from '@/components/ProposalTransactions';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
@@ -202,7 +203,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         break;
       case 'Fail':
       case 'Exception':
-        toast.error(updateProposalCandidateState?.errorMessage || _(t`Please try again.`));
+        toast.error(
+          formatTxErrorMessage(updateProposalCandidateState?.errorMessage || _(t`Please try again.`)),
+        );
         setProposePending(false);
         break;
     }

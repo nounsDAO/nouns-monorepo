@@ -20,6 +20,7 @@ import VoteSignals from '@/components/VoteSignals/VoteSignals';
 import { useAppSelector } from '@/hooks';
 import Section from '@/layout/Section';
 import { checkHasActiveOrPendingProposalOrCandidate } from '@/utils/proposals';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import {
   ProposalState,
   useProposal,
@@ -130,12 +131,14 @@ const CandidatePage = () => {
           onFinalState?.();
           break;
         case 'Fail':
-          toast.error(errorMessage || _(`Please try again.`));
+          toast.error(formatTxErrorMessage(errorMessage || _(`Please try again.`)));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          toast.error(getErrorMessage?.(errorMessage) || _(`Please try again.`));
+          toast.error(
+            getErrorMessage?.(errorMessage) || formatTxErrorMessage(errorMessage || _(`Please try again.`)),
+          );
           setPending?.(false);
           onFinalState?.();
           break;
