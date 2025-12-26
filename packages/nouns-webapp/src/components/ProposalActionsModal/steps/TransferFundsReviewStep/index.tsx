@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { encodeFunctionData, parseAbi, parseEther } from 'viem';
+import { encodeAbiParameters, erc20Abi, getAbiItem, parseEther, toFunctionSignature } from 'viem';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
@@ -41,35 +41,33 @@ const handleActionAdd = (
     const args = [state.address, BigInt(value)] as const;
 
     // Define the transfer function ABI
-    const transferAbi = parseAbi(['function transfer(address to, uint256 value) returns (bool)']);
-
-    const calldata = encodeFunctionData({
-      abi: transferAbi,
-      functionName: 'transfer',
-      args,
-    });
+    const transferFunction = getAbiItem({ abi: erc20Abi, name: 'transfer' });
+    const calldata = encodeAbiParameters(transferFunction.inputs, args);
 
     onActionAdd({
       address: stEthAddress[chainId],
       value: 0n,
-      signature: 'transfer(address,uint256)',
+      signature: toFunctionSignature(transferFunction),
       decodedCalldata: JSON.stringify(args),
       calldata,
     });
   } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
     // Convert USDC amount - USDC has 6 decimals
     const usdcAmount = Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString();
-    const calldata = encodeFunctionData({
+    const sendOrRegisterDebtFunction = getAbiItem({
       abi: nounsPayerAbi,
-      functionName: 'sendOrRegisterDebt',
-      args: [state.address, BigInt(usdcAmount)],
+      name: 'sendOrRegisterDebt',
     });
+    const calldata = encodeAbiParameters(sendOrRegisterDebtFunction.inputs, [
+      state.address,
+      BigInt(usdcAmount),
+    ]);
 
     onActionAdd({
       address: nounsPayerAddress[chainId],
       value: 0n,
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
-      signature: 'sendOrRegisterDebt(address,uint256)',
+      signature: toFunctionSignature(sendOrRegisterDebtFunction),
       decodedCalldata: JSON.stringify([state.address, usdcAmount]),
       calldata,
     });
