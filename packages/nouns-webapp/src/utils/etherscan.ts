@@ -34,14 +34,12 @@ export const buildEtherscanApiQuery = (
   module = 'contract',
   action = 'getsourcecode',
 ): string => {
-  const { apiUrl } = defaultChain.blockExplorers.default;
   const params = new URLSearchParams({
+    chainid: String(defaultChain.id),
     module,
     action,
     address,
     apikey: ETHERSCAN_API_KEY,
   });
-  const path = `/?${params.toString()}`;
-
-  return new URL(path, apiUrl).toString();
+  return `https://api.etherscan.io/v2/api?${params.toString()}`;
 };
