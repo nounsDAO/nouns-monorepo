@@ -493,7 +493,7 @@ export const formatProposalTransactionDetails = (details: {
       return {
         target,
         functionSig: name,
-        callData: (decoded as string[]).join() as Hex,
+        callData: decoded.map(v => String(v)).join(',') as Hex,
         value,
       };
     } catch (err) {

@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { encodeFunctionData, parseAbi, parseEther } from 'viem';
+import { encodeAbiParameters, parseEther } from 'viem';
 
 import ModalBottomButtonRow from '@/components/ModalBottomButtonRow';
 import ModalTitle from '@/components/ModalTitle';
 import ShortAddress from '@/components/ShortAddress';
-import { nounsPayerAbi, stEthAddress, nounsPayerAddress } from '@/contracts';
+import { stEthAddress, nounsPayerAddress } from '@/contracts';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 
@@ -40,14 +40,7 @@ const handleActionAdd = (
     const value = parseEther((state.amount ?? 0).toString()).toString();
     const args = [state.address, BigInt(value)] as const;
 
-    // Define the transfer function ABI
-    const transferAbi = parseAbi(['function transfer(address to, uint256 value) returns (bool)']);
-
-    const calldata = encodeFunctionData({
-      abi: transferAbi,
-      functionName: 'transfer',
-      args,
-    });
+    const calldata = encodeAbiParameters([{ type: 'address' }, { type: 'uint256' }], args);
 
     onActionAdd({
       address: stEthAddress[chainId],
@@ -59,11 +52,10 @@ const handleActionAdd = (
   } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
     // Convert USDC amount - USDC has 6 decimals
     const usdcAmount = Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString();
-    const calldata = encodeFunctionData({
-      abi: nounsPayerAbi,
-      functionName: 'sendOrRegisterDebt',
-      args: [state.address, BigInt(usdcAmount)],
-    });
+    const calldata = encodeAbiParameters(
+      [{ type: 'address' }, { type: 'uint256' }],
+      [state.address, BigInt(usdcAmount)],
+    );
 
     onActionAdd({
       address: nounsPayerAddress[chainId],

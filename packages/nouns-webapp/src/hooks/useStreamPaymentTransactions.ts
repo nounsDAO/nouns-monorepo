@@ -1,16 +1,13 @@
 import type { Address } from '@/utils/types';
 
-import { encodeFunctionData, parseEther } from 'viem';
+import { encodeAbiParameters, parseEther } from 'viem';
 
 import { ProposalActionModalState } from '@/components/ProposalActionsModal';
 import { SupportedCurrency } from '@/components/ProposalActionsModal/steps/TransferFundsDetailsStep';
 import {
-  nounsPayerAbi,
   nounsPayerAddress,
-  nounsStreamFactoryAbi,
   nounsStreamFactoryAddress,
   usdcAddress,
-  wethAbi,
   wethAddress,
 } from '@/contracts';
 import {
@@ -63,19 +60,26 @@ export default function useStreamPaymentTransactions({
         0,
         predictedAddress,
       ]),
-      calldata: encodeFunctionData({
-        abi: nounsStreamFactoryAbi,
-        functionName: fundStreamFunction,
-        args: [
+      calldata: encodeAbiParameters(
+        [
+          { type: 'address' },
+          { type: 'uint256' },
+          { type: 'address' },
+          { type: 'uint256' },
+          { type: 'uint256' },
+          { type: 'uint8' },
+          { type: 'address' },
+        ],
+        [
           state.address,
           formatTokenAmount(Number(amount), state.TransferFundsCurrency),
           getTokenAddressForCurrency(state.TransferFundsCurrency),
-          BigInt(state.streamStartTimestamp ? state.streamStartTimestamp : 0),
-          BigInt(state.streamEndTimestamp ? state.streamEndTimestamp : 0),
+          BigInt(state.streamStartTimestamp ?? 0),
+          BigInt(state.streamEndTimestamp ?? 0),
           0,
           predictedAddress,
         ],
-      }),
+      ),
     },
   ];
 
@@ -98,11 +102,10 @@ export default function useStreamPaymentTransactions({
         predictedAddress,
         parseEther((amount ?? 0).toString()).toString(),
       ]),
-      calldata: encodeFunctionData({
-        abi: wethAbi,
-        functionName: wethTransfer,
-        args: [predictedAddress, parseEther(amount.toString())],
-      }),
+      calldata: encodeAbiParameters(
+        [{ type: 'address' }, { type: 'uint256' }],
+        [predictedAddress, parseEther(amount.toString())],
+      ),
     });
   } else {
     const signature = 'sendOrRegisterDebt';
@@ -112,11 +115,10 @@ export default function useStreamPaymentTransactions({
       usdcValue: Number(human2ContractUSDCFormat(amount)),
       signature: signature,
       decodedCalldata: JSON.stringify([predictedAddress, human2ContractUSDCFormat(amount)]),
-      calldata: encodeFunctionData({
-        abi: nounsPayerAbi,
-        functionName: signature,
-        args: [predictedAddress, BigInt(human2ContractUSDCFormat(amount))],
-      }),
+      calldata: encodeAbiParameters(
+        [{ type: 'address' }, { type: 'uint256' }],
+        [predictedAddress, BigInt(human2ContractUSDCFormat(amount))],
+      ),
     });
   }
 
