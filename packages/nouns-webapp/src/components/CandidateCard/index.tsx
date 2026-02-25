@@ -48,7 +48,9 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
             <CandidateSponsors
               signers={signers}
               nounsRequired={candidate.requiredVotes}
-              currentBlock={currentBlock != null && currentBlock > 0n ? currentBlock - 1n : undefined}
+              currentBlock={
+                currentBlock != null && currentBlock > 0n ? currentBlock - 1n : undefined
+              }
               isThresholdMetByProposer={
                 !!(proposerVoteCount && proposerVoteCount >= candidate.requiredVotes)
               }
