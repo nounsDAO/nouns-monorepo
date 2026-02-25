@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
@@ -108,7 +108,12 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidatesData } = useCandidateProposals(blockNumber, activeTab === 1);
+  const {
+    data: candidatesData,
+    fetchMore,
+    loadingMore,
+    hasMore,
+  } = useCandidateProposals(blockNumber, activeTab === 1);
   const dispatch = useAppDispatch();
   const candidates = useAppSelector(state => state.candidates.data);
   const connectedAccountNounVotes = useUserVotes() ?? 0;
@@ -119,6 +124,27 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
+
+  // Infinite scroll: the sentinel div uses a `key` tied to the candidates
+  // count, so React unmounts/remounts it after each page load. The callback
+  // ref fires on mount, sets up a one-shot IntersectionObserver, and
+  // fetchMore is guarded by refs in the hook to prevent double-fires.
+  const sentinelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node) return;
+      const observer = new IntersectionObserver(
+        entries => {
+          if (entries[0]?.isIntersecting) {
+            observer.disconnect();
+            fetchMore();
+          }
+        },
+        { rootMargin: '200px' },
+      );
+      observer.observe(node);
+    },
+    [fetchMore],
+  );
 
   useEffect(() => {
     if (candidatesData.length > 0) {
@@ -138,13 +164,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
     }
   }, [hash]);
 
-  useEffect(() => {
-    if (activeTab === 1) {
-      navigate('/vote#candidates');
+  const handleTabChange = (index: number) => {
+    setActiveTab(index);
+    if (index === 1) {
+      navigate('/vote#candidates', { replace: true });
     } else {
-      navigate('/vote');
+      navigate('/vote', { replace: true });
     }
-  }, [activeTab, navigate]);
+  };
 
   const nullStateCopy = () => {
     if (!!account) {
@@ -173,7 +200,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 <button
                   type="button"
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
-                  onClick={() => setActiveTab(index)}
+                  onClick={() => handleTabChange(index)}
                   key={index}
                 >
                   {tab}
@@ -345,7 +372,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
               <Col lg={9}>
                 {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
                   (() => {
-                    const sortedCandidates = candidates.slice(0).reverse();
+                    const sortedCandidates = candidates;
                     const myCandidates = account
                       ? sortedCandidates.filter(
                           c => c.proposer?.toLowerCase() === account.toLowerCase(),
@@ -399,6 +426,18 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                             )}
                             {otherCandidates.map(renderCandidate)}
                           </>
+                        )}
+                        {hasMore && (
+                          <div
+                            ref={sentinelRef}
+                            key={`sentinel-${candidates.length}`}
+                            style={{ height: 1 }}
+                          />
+                        )}
+                        {loadingMore && (
+                          <div className="d-flex justify-content-center py-3">
+                            <Spinner animation="border" size="sm" />
+                          </div>
                         )}
                       </>
                     );

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import clsx from 'clsx';
-import { Link } from 'react-router';
 
 import ShortAddress from '@/components/ShortAddress';
 import { relativeTimestamp } from '@/utils/timeUtils';
@@ -28,9 +27,9 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
   const proposerVoteCount = candidate.proposerVotes;
 
   return (
-    <Link
+    <a
       className={clsx(classes.candidateLink, classes.candidateLinkWithCountdown)}
-      to={`/candidates/${candidate.id}`}
+      href={`/candidates/${candidate.id}`}
     >
       <div className={classes.title}>
         <span className={classes.candidateTitle}>
@@ -78,7 +77,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
           </p>
         </div>
       </div>
-    </Link>
+    </a>
   );
 };
 

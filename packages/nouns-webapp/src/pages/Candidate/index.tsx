@@ -88,10 +88,10 @@ const CandidatePage = () => {
     if (candidate && account) {
       setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
     }
-    if (candidate?.isProposal) {
+    if (candidate?.isProposal === true) {
       setIsProposal(true);
     }
-    if (candidate?.proposalIdToUpdate && +candidate?.proposalIdToUpdate > 0) {
+    if (candidate?.proposalIdToUpdate != null && +candidate?.proposalIdToUpdate > 0) {
       setIsUpdateToProposal(true);
     }
   }, [candidate, account]);
@@ -188,7 +188,7 @@ const CandidatePage = () => {
             <strong>Note: </strong>
             This proposal candidate has been proposed onchain.
           </Trans>{' '}
-          {primaryProposalId && (
+          {primaryProposalId != null && (
             <Link to={`/vote/${primaryProposalId}`}>View the proposal here</Link>
           )}
         </Alert>
@@ -266,30 +266,33 @@ const CandidatePage = () => {
             <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col id="feedback" lg={4} className={classes.sidebar}>
-            {!!currentBlock && !!threshold && !!userVotes && !candidate.isProposal && (
-              <CandidateSponsors
-                candidate={candidate}
-                slug={candidate.slug ?? ''}
-                id={candidate.id}
-                isProposer={isProposer}
-                handleRefetchCandidateData={() => {
-                  candidateRefetch();
-                }}
-                setDataFetchPollInterval={(interval: number | null) =>
-                  interval !== null
-                    ? setDataFetchPollInterval(interval)
-                    : setDataFetchPollInterval(0)
-                }
-                currentBlock={currentBlock - 1n}
-                requiredVotes={threshold + 1}
-                userVotes={userVotes}
-                isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
-                latestProposal={latestProposal}
-                isUpdateToProposal={isUpdateToProposal}
-                originalProposal={originalProposal}
-                blockNumber={currentBlock}
-              />
-            )}
+            {currentBlock != null &&
+              threshold != null &&
+              userVotes != null &&
+              !candidate.isProposal && (
+                <CandidateSponsors
+                  candidate={candidate}
+                  slug={candidate.slug ?? ''}
+                  id={candidate.id}
+                  isProposer={isProposer}
+                  handleRefetchCandidateData={() => {
+                    candidateRefetch();
+                  }}
+                  setDataFetchPollInterval={(interval: number | null) =>
+                    interval !== null
+                      ? setDataFetchPollInterval(interval)
+                      : setDataFetchPollInterval(0)
+                  }
+                  currentBlock={currentBlock - 1n}
+                  requiredVotes={threshold + 1}
+                  userVotes={userVotes}
+                  isSignerWithActiveOrPendingProposal={isSignerWithActiveOrPendingProposal}
+                  latestProposal={latestProposal}
+                  isUpdateToProposal={isUpdateToProposal}
+                  originalProposal={originalProposal}
+                  blockNumber={currentBlock}
+                />
+              )}
             <VoteSignals
               proposalId={candidate.id}
               proposer={candidate.proposer}

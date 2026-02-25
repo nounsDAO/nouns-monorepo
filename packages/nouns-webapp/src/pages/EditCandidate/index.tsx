@@ -218,7 +218,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       !bodyValue &&
       !proposalTransactions?.length
     ) {
-      const transactions = candidate?.version.content.details.map((txn: ProposalDetail) => {
+      const transactions = candidate!.version.content.details.map((txn: ProposalDetail) => {
         return {
           address: txn.target,
           value: txn.value != null ? BigInt(txn.value.toString()) : BigInt(0),

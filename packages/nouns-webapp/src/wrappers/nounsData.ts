@@ -1,6 +1,6 @@
 import type { Address, Hash, Hex } from '@/utils/types';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
 import { filter, isNonNullish, isNullish, map, pipe, sort } from 'remeda';
@@ -41,7 +41,7 @@ import { useDelegateNounsAtBlockQuery } from './nounToken';
 import {
   candidateFeedbacksQuery,
   candidateProposalQuery,
-  candidateProposalsListQuery,
+  candidateProposalsQuery,
   candidateProposalVersionsQuery,
   Delegates,
   proposalFeedbacksQuery,
@@ -218,12 +218,62 @@ const filterSigners = (
   return { activeSigs: sortedSignatures, voteCount };
 };
 
+const CANDIDATES_PAGE_SIZE = 50;
+
 export const useCandidateProposals = (blockNumber?: bigint, enabled: boolean = true) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { query, variables } = candidateProposalsListQuery();
-  const { loading, data, error, refetch } = useQuery<{
+  const { query, variables } = candidateProposalsQuery(CANDIDATES_PAGE_SIZE, 0);
+  const { loading, data, error, refetch, fetchMore } = useQuery<{
     proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
   }>(query, { variables, skip: !enabled });
+
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const fetchedCountRef = useRef(0);
+  const loadingMoreRef = useRef(false);
+  const hasMoreRef = useRef(true);
+
+  // Track how many we've fetched so far
+  const currentCount = data?.proposalCandidates?.length ?? 0;
+  if (currentCount > fetchedCountRef.current) {
+    fetchedCountRef.current = currentCount;
+  }
+
+  const handleFetchMore = useCallback(async () => {
+    if (loadingMoreRef.current || !hasMoreRef.current) return;
+    loadingMoreRef.current = true;
+    setLoadingMore(true);
+    try {
+      const result = await fetchMore({
+        variables: {
+          first: CANDIDATES_PAGE_SIZE,
+          skip: fetchedCountRef.current,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          const newCandidates = fetchMoreResult?.proposalCandidates ?? [];
+          if (newCandidates.length === 0) {
+            hasMoreRef.current = false;
+            setHasMore(false);
+            return prev;
+          }
+          if (newCandidates.length < CANDIDATES_PAGE_SIZE) {
+            hasMoreRef.current = false;
+            setHasMore(false);
+          }
+          return {
+            proposalCandidates: [...(prev.proposalCandidates ?? []), ...newCandidates],
+          };
+        },
+      });
+      if ((result.data?.proposalCandidates?.length ?? 0) === 0) {
+        hasMoreRef.current = false;
+        setHasMore(false);
+      }
+    } finally {
+      loadingMoreRef.current = false;
+      setLoadingMore(false);
+    }
+  }, [fetchMore]);
 
   const unmatchedCandidates = pipe(
     data?.proposalCandidates ?? [],
@@ -268,12 +318,15 @@ export const useCandidateProposals = (blockNumber?: bigint, enabled: boolean = t
     );
   });
 
-  if (candidatesData.length > 0) {
-    candidatesData.sort((a, b) => {
-      return Number(a?.lastUpdatedTimestamp ?? 0) - Number(b?.lastUpdatedTimestamp ?? 0);
-    });
-  }
-  return { loading, data: candidatesData, error, refetch };
+  return {
+    loading,
+    data: candidatesData,
+    error,
+    refetch,
+    fetchMore: handleFetchMore,
+    loadingMore,
+    hasMore,
+  };
 };
 
 export const useCandidateProposal = (
@@ -313,18 +366,18 @@ export const useCandidateProposal = (
   const candidate = data?.proposalCandidate ?? undefined;
 
   const parsedData =
-    proposerDelegates.data != null &&
-    data?.proposalCandidate != null &&
-    parseSubgraphCandidate(
-      candidate,
-      proposerNounVotes,
-      threshold,
-      timestampNow,
-      activePendingProposers.data,
-      toUpdate,
-      signersDelegateSnapshot.data,
-      updatableProposalIds.data,
-    );
+    proposerDelegates.data != null && data?.proposalCandidate != null
+      ? parseSubgraphCandidate(
+          candidate,
+          proposerNounVotes,
+          threshold,
+          timestampNow,
+          activePendingProposers.data,
+          toUpdate,
+          signersDelegateSnapshot.data,
+          updatableProposalIds.data,
+        )
+      : undefined;
 
   return { loading, data: parsedData, error, refetch };
 };
@@ -679,7 +732,7 @@ const parseSubgraphCandidate = (
     proposer: candidate.proposer as Address,
     lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
     canceled: candidate.canceled,
-    versionsCount: candidate.versions?.length ?? 0,
+    versionsCount: candidate.versions.length,
     createdTransactionHash: candidate.createdTransactionHash as Hash,
     isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
     matchingProposalIds: isNonNullish(latestVersion.content.matchingProposalIds)
