@@ -1465,6 +1465,10 @@ msgstr "The Nouns Foundation considers the veto an emergency power that should n
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
 msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
 
+#: src/components/Proposals/index.tsx
+msgid "Your Candidates"
+msgstr "Your Candidates"
+
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploying Nouns fork and beginning the forking period"
 msgstr "Deploying Nouns fork and beginning the forking period"
@@ -1499,6 +1503,10 @@ msgstr "Adding your feedback"
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 msgid "Proposed Transactions"
 msgstr "Proposed Transactions"
+
+#: src/components/CandidateCard/index.tsx
+msgid "No sponsors needed"
+msgstr "No sponsors needed"
 
 #. placeholder {0}: i18n.date(new Date(proposalCreationTimestamp * 1000), { dateStyle: 'long', timeStyle: 'long', })
 #: src/components/ProposalHeader/index.tsx
@@ -1556,6 +1564,10 @@ msgstr "No arguments required "
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Add Streaming Payment Action"
 msgstr "Add Streaming Payment Action"
+
+#: src/components/Proposals/index.tsx
+msgid "All Candidates"
+msgstr "All Candidates"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Generate endless Nouns assembled from the onchain artwork"
