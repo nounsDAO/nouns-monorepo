@@ -236,6 +236,39 @@ export const candidateProposalsQuery = (first = 1_000) => ({
   variables: { first },
 });
 
+export const candidateProposalsListQuery = (first = 1_000) => ({
+  query: gql`
+    query GetCandidateProposalsList($first: Int!) {
+      proposalCandidates(first: $first, where: { canceled: false }) {
+        id
+        slug
+        proposer
+        lastUpdatedTimestamp
+        createdTransactionHash
+        canceled
+        latestVersion {
+          content {
+            title
+            proposalIdToUpdate
+            contentSignatures {
+              signer {
+                id
+                proposals {
+                  id
+                }
+              }
+              expirationTimestamp
+              canceled
+            }
+            matchingProposalIds
+          }
+        }
+      }
+    }
+  `,
+  variables: { first },
+});
+
 export const candidateProposalQuery = (id: string) => ({
   query: gql`
     query GetCandidateProposal($id: ID!) {

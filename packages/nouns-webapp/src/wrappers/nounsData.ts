@@ -41,7 +41,7 @@ import { useDelegateNounsAtBlockQuery } from './nounToken';
 import {
   candidateFeedbacksQuery,
   candidateProposalQuery,
-  candidateProposalsQuery,
+  candidateProposalsListQuery,
   candidateProposalVersionsQuery,
   Delegates,
   proposalFeedbacksQuery,
@@ -216,12 +216,12 @@ const filterSigners = (
   return { activeSigs: sortedSignatures, voteCount };
 };
 
-export const useCandidateProposals = (blockNumber?: bigint) => {
+export const useCandidateProposals = (blockNumber?: bigint, enabled: boolean = true) => {
   const timestampNow = Math.floor(Date.now() / 1000); // in seconds
-  const { query, variables } = candidateProposalsQuery();
+  const { query, variables } = candidateProposalsListQuery();
   const { loading, data, error, refetch } = useQuery<{
     proposalCandidates: Maybe<GraphQLProposalCandidate[]>;
-  }>(query, { variables });
+  }>(query, { variables, skip: !enabled });
 
   const unmatchedCandidates = pipe(
     data?.proposalCandidates ?? [],
@@ -644,7 +644,7 @@ const parseSubgraphCandidate = (
     values: map(latestVersion.content.values ?? [], v => BigInt(v)),
     signatures: map(latestVersion.content.signatures ?? [], s => s),
     calldatas: map(latestVersion.content.calldatas ?? [], t => t as Hex),
-    encodedProposalHash: latestVersion.content.encodedProposalHash as Hash,
+    encodedProposalHash: (latestVersion.content.encodedProposalHash ?? '') as Hash,
   };
   let details;
   if (toUpdate) {
@@ -664,13 +664,17 @@ const parseSubgraphCandidate = (
     updatableProposalIds,
   );
   const requiredVotes = threshold + 1 - proposerVotes > 0 ? threshold + 1 - proposerVotes : 0;
+  const title =
+    (description ? pipe(description, extractTitle, removeMarkdownStyle) : null) ??
+    latestVersion.content.title ??
+    'Untitled';
   return {
     id: candidate.id,
     slug: candidate.slug,
     proposer: candidate.proposer as Address,
     lastUpdatedTimestamp: BigInt(candidate.lastUpdatedTimestamp),
     canceled: candidate.canceled,
-    versionsCount: candidate.versions.length,
+    versionsCount: candidate.versions?.length ?? 0,
     createdTransactionHash: candidate.createdTransactionHash as Hash,
     isProposal: Boolean(candidate?.latestVersion?.content?.matchingProposalIds?.length),
     matchingProposalIds: isNonNullish(latestVersion.content.matchingProposalIds)
@@ -683,7 +687,7 @@ const parseSubgraphCandidate = (
     voteCount: voteCount,
     version: {
       content: {
-        title: pipe(description, extractTitle, removeMarkdownStyle) ?? 'Untitled',
+        title,
         description: description ?? 'No description.',
         details: details,
         transactionHash: transactionDetails.encodedProposalHash as Hash,

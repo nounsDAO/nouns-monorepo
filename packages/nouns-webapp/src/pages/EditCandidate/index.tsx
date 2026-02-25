@@ -51,7 +51,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [commitMessage, setCommitMessage] = useState<string>('');
   const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: currentBlock } = useBlockNumber();
   const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
   const hasVotes = availableVotes && availableVotes > 0;

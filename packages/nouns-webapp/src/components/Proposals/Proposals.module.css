@@ -388,6 +388,15 @@
   box-shadow: none;
 }
 
+.candidatesSectionHeader {
+  font-family: 'PT Root UI';
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--brand-gray-light-text);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .dataStatus {
   text-align: center;
   margin-top: 1rem;

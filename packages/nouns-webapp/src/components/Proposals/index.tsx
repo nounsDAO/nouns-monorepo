@@ -103,11 +103,12 @@ interface ProposalsProps {
 
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const { hash } = useLocation();
+  const [activeTab, setActiveTab] = useState(hash === '#candidates' ? 1 : 0);
   const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
+  const { data: candidatesData } = useCandidateProposals(blockNumber, activeTab === 1);
   const dispatch = useAppDispatch();
   const candidates = useAppSelector(state => state.candidates.data);
   const connectedAccountNounVotes = useUserVotes() ?? 0;
@@ -118,23 +119,18 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
-  const { hash } = useLocation();
 
   useEffect(() => {
-    (async () => {
-      if (candidates) {
-        return;
-      }
-      await refetchCandidates();
+    if (candidatesData.length > 0) {
       const filteredCandidates = filter(
-        candidatesData ?? [],
+        candidatesData,
         (candidate): candidate is ProposalCandidate => candidate !== undefined,
       );
       if (filteredCandidates.length > 0) {
         dispatch(setCandidates(filteredCandidates));
       }
-    })();
-  }, [candidates, candidatesData, refetchCandidates, dispatch]);
+    }
+  }, [candidatesData, dispatch]);
 
   useEffect(() => {
     if (hash === '#candidates') {
@@ -348,10 +344,20 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             <Row>
               <Col lg={9}>
                 {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
-                  candidates
-                    .slice(0)
-                    .reverse()
-                    .map((c, i) => {
+                  (() => {
+                    const sortedCandidates = candidates.slice(0).reverse();
+                    const myCandidates = account
+                      ? sortedCandidates.filter(
+                          c => c.proposer?.toLowerCase() === account.toLowerCase(),
+                        )
+                      : [];
+                    const otherCandidates = account
+                      ? sortedCandidates.filter(
+                          c => c.proposer?.toLowerCase() !== account.toLowerCase(),
+                        )
+                      : sortedCandidates;
+
+                    const renderCandidate = (c: (typeof candidates)[number], i: number) => {
                       if (c.proposalIdToUpdate !== undefined && +c.proposalIdToUpdate > 0) {
                         const prop = find(proposals ?? [], p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
@@ -372,7 +378,31 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                           />
                         </div>
                       );
-                    })
+                    };
+
+                    return (
+                      <>
+                        {myCandidates.length > 0 && (
+                          <>
+                            <h5 className={classes.candidatesSectionHeader}>
+                              <Trans>Your Candidates</Trans>
+                            </h5>
+                            {myCandidates.map(renderCandidate)}
+                          </>
+                        )}
+                        {otherCandidates.length > 0 && (
+                          <>
+                            {myCandidates.length > 0 && (
+                              <h5 className={classes.candidatesSectionHeader}>
+                                <Trans>All Candidates</Trans>
+                              </h5>
+                            )}
+                            {otherCandidates.map(renderCandidate)}
+                          </>
+                        )}
+                      </>
+                    );
+                  })()
                 ) : (
                   <>
                     {!candidates && (

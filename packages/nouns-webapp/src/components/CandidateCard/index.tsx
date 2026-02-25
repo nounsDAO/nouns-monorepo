@@ -48,7 +48,7 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
             <CandidateSponsors
               signers={signers}
               nounsRequired={candidate.requiredVotes}
-              currentBlock={currentBlock && currentBlock - 1n}
+              currentBlock={currentBlock != null && currentBlock > 0n ? currentBlock - 1n : undefined}
               isThresholdMetByProposer={
                 !!(proposerVoteCount && proposerVoteCount >= candidate.requiredVotes)
               }
@@ -59,15 +59,16 @@ const CandidateCard: React.FC<Readonly<CandidateCardProps>> = ({
                 candidate.voteCount - candidate.requiredVotes > 0 && classes.sponsorCountOverflow,
               )}
             >
-              <strong>
-                {candidate.voteCount} /{' '}
-                {candidate.proposerVotes > nounsRequired ? (
-                  <em className={classes.naVotesLabel}>n/a</em>
-                ) : (
-                  candidate.requiredVotes
-                )}
-              </strong>{' '}
-              <Trans>sponsored votes</Trans>
+              {candidate.proposerVotes > nounsRequired && candidate.voteCount === 0 ? (
+                <Trans>No sponsors needed</Trans>
+              ) : (
+                <>
+                  <strong>
+                    {candidate.voteCount} / {candidate.requiredVotes}
+                  </strong>{' '}
+                  <Trans>sponsored votes</Trans>
+                </>
+              )}
             </span>
           </div>
           <p className={classes.timestamp}>
