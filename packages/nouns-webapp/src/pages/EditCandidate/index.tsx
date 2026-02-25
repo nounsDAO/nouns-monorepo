@@ -51,10 +51,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [commitMessage, setCommitMessage] = useState<string>('');
   const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
-  const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: currentBlock } = useBlockNumber();
   const { data: candidate } = useCandidateProposal(id ?? '', 0, true, currentBlock); // get updatable transaction details
   const availableVotes = useUserVotes();
-  const hasVotes = availableVotes && availableVotes > 0;
+  const hasVotes = availableVotes != null && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
   const chainId = defaultChain.id;
   const ethNeeded = useEthNeeded(
@@ -76,7 +76,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         if (!transaction.calldata.startsWith('0x')) {
           transaction.calldata = `0x${transaction.calldata}`;
         }
-        if (transaction.usdcValue) {
+        if (transaction.usdcValue != null && transaction.usdcValue > 0) {
           setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
       });
@@ -103,8 +103,9 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
     return description.replace(titleRegex, '');
   };
   const isolatedDescription =
-    candidate?.version.content.description &&
-    removeTitleFromDescription(candidate.version.content.description, titleValue);
+    candidate?.version.content.description != null
+      ? removeTitleFromDescription(candidate.version.content.description, titleValue)
+      : undefined;
 
   useEffect(() => {
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
@@ -210,11 +211,17 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
 
   // set initial values on page load
   useEffect(() => {
-    if (proposal && candidate && !titleValue && !bodyValue && !proposalTransactions?.length) {
-      const transactions = candidate?.version.content.details.map((txn: ProposalDetail) => {
+    if (
+      proposal != null &&
+      candidate != null &&
+      !titleValue &&
+      !bodyValue &&
+      !proposalTransactions?.length
+    ) {
+      const transactions = candidate!.version.content.details.map((txn: ProposalDetail) => {
         return {
           address: txn.target,
-          value: txn.value ? BigInt(txn.value.toString()) : BigInt(0),
+          value: txn.value != null ? BigInt(txn.value.toString()) : BigInt(0),
           calldata: txn.callData,
           signature: txn.functionSig,
         };
@@ -227,7 +234,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
         transactions.map(txn => ({
           ...txn,
           value: txn.value,
-          signature: txn.signature || '',
+          signature: (txn.signature as string) || '',
         })),
       );
     }
@@ -251,10 +258,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           proposalTransactions.map(({ calldata }) => calldata as `0x${string}`), // Calldatas
           `# ${titleValue}\n\n${bodyValue}`, // Description
           candidate?.slug, // Slug
-          candidate?.proposalIdToUpdate ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
+          candidate?.proposalIdToUpdate != null ? BigInt(candidate.proposalIdToUpdate) : 0n, // if a candidate is an update to a proposal, use the proposalIdToUpdate number
           commitMessage,
         ],
-        value: hasVotes ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),
+        value: hasVotes === true ? BigInt(0) : (updateCandidateCost ?? BigInt(0)),
       }, // Fee for non-nouners
     );
   };
@@ -335,15 +342,17 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
           isCandidate={true}
         />
 
-        {!hasVotes && !!updateCandidateCost && Number(formatEther(updateCandidateCost)) > 0 && (
-          <p className={classes.feeNotice}>
-            {updateCandidateCost ? formatEther(updateCandidateCost) : '0'} ETH fee upon submission
-          </p>
-        )}
+        {hasVotes !== true &&
+          updateCandidateCost != null &&
+          Number(formatEther(updateCandidateCost)) > 0 && (
+            <p className={classes.feeNotice}>
+              {updateCandidateCost ? formatEther(updateCandidateCost) : '0'} ETH fee upon submission
+            </p>
+          )}
 
         <p className="text-center">
           <Trans>This will clear all previous sponsors and feedback votes</Trans>
-          {proposal && proposal.content.contentSignatures?.length > 0 && (
+          {proposal != null && (proposal.content.contentSignatures?.length ?? 0) > 0 && (
             <>
               <br />
               <Trans>

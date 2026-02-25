@@ -189,10 +189,16 @@ export const updatableProposalsQuery = (first = 1_000, currentBlock: bigint = 0n
   variables: { first, currentBlock: currentBlock || 0 },
 });
 
-export const candidateProposalsQuery = (first = 1_000) => ({
+export const candidateProposalsQuery = (first = 50, skip = 0) => ({
   query: gql`
-    query GetCandidateProposals($first: Int!) {
-      proposalCandidates(first: $first) {
+    query GetCandidateProposals($first: Int!, $skip: Int!) {
+      proposalCandidates(
+        first: $first
+        skip: $skip
+        orderBy: lastUpdatedTimestamp
+        orderDirection: desc
+        where: { canceled: false }
+      ) {
         id
         slug
         proposer
@@ -233,7 +239,7 @@ export const candidateProposalsQuery = (first = 1_000) => ({
       }
     }
   `,
-  variables: { first },
+  variables: { first, skip },
 });
 
 export const candidateProposalQuery = (id: string) => ({

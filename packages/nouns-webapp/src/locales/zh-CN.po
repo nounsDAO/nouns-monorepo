@@ -1465,6 +1465,10 @@ msgstr "Nouns 基金会认为，否决权是一种紧急权力，不应在日常
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{0}</1> is required to submit proposals."
 msgstr "Nouns 管理<0>Nouns DAO</0>。Nouns 可以对提案进行投票或将其投票委托给第三方。提交提案至少需要 <1>{0}</1>。"
 
+#: src/components/Proposals/index.tsx
+msgid "Your Candidates"
+msgstr "Your Candidates"
+
 #: src/pages/Fork/DeployForkButton.tsx
 msgid "Deploying Nouns fork and beginning the forking period"
 msgstr "正在部署 Nouns 分叉并开始分叉期"
@@ -1499,6 +1503,10 @@ msgstr "正在添加您的反馈"
 #: src/components/ProposalContent/ProposalCandidateContent.tsx
 msgid "Proposed Transactions"
 msgstr "提议的交易"
+
+#: src/components/CandidateCard/index.tsx
+msgid "No sponsors needed"
+msgstr "No sponsors needed"
 
 #. placeholder {0}: i18n.date(new Date(proposalCreationTimestamp * 1000), { dateStyle: 'long', timeStyle: 'long', })
 #: src/components/ProposalHeader/index.tsx
@@ -1556,6 +1564,10 @@ msgstr "无需参数 "
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Add Streaming Payment Action"
 msgstr "添加流支付操作"
+
+#: src/components/Proposals/index.tsx
+msgid "All Candidates"
+msgstr "All Candidates"
 
 #: src/pages/BrandAssets/BrandAssetsPage.tsx
 msgid "Generate endless Nouns assembled from the onchain artwork"

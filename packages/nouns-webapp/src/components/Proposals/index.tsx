@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ClockIcon } from '@heroicons/react/solid';
 import { i18n } from '@lingui/core';
@@ -103,11 +103,17 @@ interface ProposalsProps {
 
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const { hash } = useLocation();
+  const [activeTab, setActiveTab] = useState(hash === '#candidates' ? 1 : 0);
   const { data: blockNumber } = useBlockNumber();
   const { address: account } = useAccount();
   const navigate = useNavigate();
-  const { data: candidatesData, refetch: refetchCandidates } = useCandidateProposals(blockNumber);
+  const {
+    data: candidatesData,
+    fetchMore,
+    loadingMore,
+    hasMore,
+  } = useCandidateProposals(blockNumber, activeTab === 1);
   const dispatch = useAppDispatch();
   const candidates = useAppSelector(state => state.candidates.data);
   const connectedAccountNounVotes = useUserVotes() ?? 0;
@@ -118,23 +124,39 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const hasNounBalance = (useNounTokenBalance(account ?? '0x0') ?? 0) > 0;
   const isDaoGteV3 = useIsDaoGteV3();
   const tabs = ['Proposals', config.featureToggles.candidates && isDaoGteV3 && 'Candidates'];
-  const { hash } = useLocation();
+
+  // Infinite scroll: the sentinel div uses a `key` tied to the candidates
+  // count, so React unmounts/remounts it after each page load. The callback
+  // ref fires on mount, sets up a one-shot IntersectionObserver, and
+  // fetchMore is guarded by refs in the hook to prevent double-fires.
+  const sentinelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node) return;
+      const observer = new IntersectionObserver(
+        entries => {
+          if (entries[0]?.isIntersecting) {
+            observer.disconnect();
+            fetchMore();
+          }
+        },
+        { rootMargin: '200px' },
+      );
+      observer.observe(node);
+    },
+    [fetchMore],
+  );
 
   useEffect(() => {
-    (async () => {
-      if (candidates) {
-        return;
-      }
-      await refetchCandidates();
+    if (candidatesData.length > 0) {
       const filteredCandidates = filter(
-        candidatesData ?? [],
+        candidatesData,
         (candidate): candidate is ProposalCandidate => candidate !== undefined,
       );
       if (filteredCandidates.length > 0) {
         dispatch(setCandidates(filteredCandidates));
       }
-    })();
-  }, [candidates, candidatesData, refetchCandidates, dispatch]);
+    }
+  }, [candidatesData, dispatch]);
 
   useEffect(() => {
     if (hash === '#candidates') {
@@ -142,13 +164,14 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
     }
   }, [hash]);
 
-  useEffect(() => {
-    if (activeTab === 1) {
-      navigate('/vote#candidates');
+  const handleTabChange = (index: number) => {
+    setActiveTab(index);
+    if (index === 1) {
+      navigate('/vote#candidates', { replace: true });
     } else {
-      navigate('/vote');
+      navigate('/vote', { replace: true });
     }
-  }, [activeTab, navigate]);
+  };
 
   const nullStateCopy = () => {
     if (!!account) {
@@ -177,7 +200,7 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                 <button
                   type="button"
                   className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
-                  onClick={() => setActiveTab(index)}
+                  onClick={() => handleTabChange(index)}
                   key={index}
                 >
                   {tab}
@@ -348,10 +371,20 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
             <Row>
               <Col lg={9}>
                 {nounsRequired !== undefined && candidates && candidates.length > 0 ? (
-                  candidates
-                    .slice(0)
-                    .reverse()
-                    .map((c, i) => {
+                  (() => {
+                    const sortedCandidates = candidates;
+                    const myCandidates = account
+                      ? sortedCandidates.filter(
+                          c => c.proposer?.toLowerCase() === account.toLowerCase(),
+                        )
+                      : [];
+                    const otherCandidates = account
+                      ? sortedCandidates.filter(
+                          c => c.proposer?.toLowerCase() !== account.toLowerCase(),
+                        )
+                      : sortedCandidates;
+
+                    const renderCandidate = (c: (typeof candidates)[number], i: number) => {
                       if (c.proposalIdToUpdate !== undefined && +c.proposalIdToUpdate > 0) {
                         const prop = find(proposals ?? [], p => p.id == c.proposalIdToUpdate);
                         const isOriginalPropUpdatable = !!(
@@ -372,7 +405,43 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                           />
                         </div>
                       );
-                    })
+                    };
+
+                    return (
+                      <>
+                        {myCandidates.length > 0 && (
+                          <>
+                            <h5 className={classes.candidatesSectionHeader}>
+                              <Trans>Your Candidates</Trans>
+                            </h5>
+                            {myCandidates.map(renderCandidate)}
+                          </>
+                        )}
+                        {otherCandidates.length > 0 && (
+                          <>
+                            {myCandidates.length > 0 && (
+                              <h5 className={classes.candidatesSectionHeader}>
+                                <Trans>All Candidates</Trans>
+                              </h5>
+                            )}
+                            {otherCandidates.map(renderCandidate)}
+                          </>
+                        )}
+                        {hasMore && (
+                          <div
+                            ref={sentinelRef}
+                            key={`sentinel-${candidates.length}`}
+                            style={{ height: 1 }}
+                          />
+                        )}
+                        {loadingMore && (
+                          <div className="d-flex justify-content-center py-3">
+                            <Spinner animation="border" size="sm" />
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()
                 ) : (
                   <>
                     {!candidates && (
