@@ -1,0 +1,23 @@
+---
+title: "Voting"
+description: "Voting"
+sidebarTitle: "Voting"
+---
+
+Voting is the core mechanism through which members of Nouns DAO turn ownership into meaningful governance power. Every vote influences how the treasury is spent, what projects are funded and how the ecosystem evolves.
+
+---
+
+## Voting Power
+
+- Each Noun NFT equals **one vote** in the Nouns DAO governance system.
+- Voting rights are tied to ownership: if you sell your Noun, you relinquish the associated vote.
+- Delegation is supported: you may delegate your voting power to another wallet (a delegate) who can vote on your behalf.
+
+```mermaid
+flowchart LR
+    Own_Noun[Owns Noun NFT] --> Vote_Power[1 Vote]
+    Vote_Power --> DirectVote[Vote directly]
+    Vote_Power --> Delegation[Delegate to Another]
+    Delegation --> DelegateVotes[Delegate casts vote]
+

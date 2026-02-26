@@ -1,0 +1,38 @@
+---
+title: "Daily Noun Auctions"
+description: "Nouns NFT Daily Auction Mechanics"
+sidebarTitle: "Auctions"
+---
+
+The auction mechanism is one of the core operational pillars of the Nouns DAO protocol. Each day, one new Noun NFT is minted and placed up for auction, the proceeds from the auction flow directly into the DAO treasury, and membership and governance rights are created in the process. This article walks you through how the auction works, step-by-step, its logic, and the implications for participants and the DAO.
+
+---
+
+## How auctions happen
+
+1. **Minting & creation of a new Noun** – A new Noun NFT is generatively minted on the Ethereum blockchain. The art is deterministic based on the hash of the block in which the Noun is minted.
+2. **Auction start** – The freshly minted Noun is escrowed in the auction house contract, and a 24-hour auction begins.
+3. **Bidding phase** – Anyone can place bids (in ETH) so long as the auction is still active, and the bid meets the minimum-increment rules.
+4. **Auction settlement & transition** – Once the auction ends, any user can execute a settle-and-create transaction: the winner receives the Noun, the funds are transferred to the treasury, and a new auction is immediately created - all in the same transaction.
+5. **Continuous cadence** – The cycle repeats: “one Noun, every day, forever.” 
+
+## Key parameters & rules
+
+- **Minimum bid increment** – The auction house imposes a minimum bid increment. New bids must exceed the current bid by a defined percentage.
+- **Auction Duration** – Each auction has a defined duration of 24 hours.
+- **Transfer of funds & Noun** – When the auction is settled, ETH from the winning bid goes to the treasury and the Noun is transferred to the winner. In the same transaction, a new Noun is minted and the next auction begins.
+- **Single supply per period** – Only one Noun is minted and auctioned each day, preserving the cadence and ensuring regular growth of supply and treasury simultaneously.
+
+## Why this mechanic matters
+
+- **Perpetual funding model** – The auction generates consistent inflows to the treasury, enabling the DAO to scale its operations without relying on a one-time drop/sale.
+- **Governance access via ownership** – Winning the auction isn’t just owning an artwork: it grants membership in the DAO and voting rights (one Noun = one vote).
+- **Transparency & trustlessness** – Because the process is onchain and parameters are fixed within the protocol, the community can audit the process, verify outcomes, and trust the cadence.
+
+## How to participate in an auction
+
+- Monitor the live auction interface (e.g., at nouns.wtf) to see the current Noun up for bid.
+- Ensure your wallet is funded with sufficient ETH and you understand gas costs.
+- Submit a bid that exceeds the current winning amount by the minimum increment.
+- If you win, receive the Noun NFT and gain governance membership; if you don’t win, your funds are returned (assuming you were outbid).
+- For non-winners, secondary market entry is possible, governance rights transfer along with ownership of each Noun.
