@@ -37,6 +37,28 @@
   height: auto;
 }
 
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid #ddd;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.markdown th {
+  background-color: #f6f6f6;
+  font-weight: 600;
+}
+
+.markdown tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
 .txnInfoText {
   color: var(--brand-gray-light-text);
   margin-left: -0.1rem;
