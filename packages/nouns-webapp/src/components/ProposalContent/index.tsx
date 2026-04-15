@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Alert, Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import { isAddress } from 'viem';
 
 import linkIcon from '@/assets/icons/Link.svg';
@@ -69,7 +70,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <Trans>Description</Trans>
           </h5>
           {description && (
-            <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks]}>
+            <ReactMarkdown className={classes.markdown} remarkPlugins={[remarkBreaks, remarkGfm]}>
               {processProposalDescriptionText(description, title)}
             </ReactMarkdown>
           )}
