@@ -23,6 +23,7 @@ import ReactMarkdown from 'react-markdown';
 import VersionTab from './VersionTab';
 
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 
 import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
 import ProposalStatus from '@/components/ProposalStatus';
@@ -64,7 +65,7 @@ const ProposalHistory = () => {
       <ReactMarkdown
         className={clsx(editorClasses.markdown, editorClasses.diffs)}
         children={str}
-        remarkPlugins={[remarkBreaks]}
+        remarkPlugins={[remarkBreaks, remarkGfm]}
       />
     );
   };

@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
 import { ProposalCandidate } from '@/wrappers/nounsData';
@@ -29,7 +30,7 @@ const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props 
                 proposal.version.content.description,
                 proposal.version.content.title,
               )}
-              remarkPlugins={[remarkBreaks]}
+              remarkPlugins={[remarkBreaks, remarkGfm]}
             />
           )}
         </Col>

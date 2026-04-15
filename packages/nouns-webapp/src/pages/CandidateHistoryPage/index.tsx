@@ -11,6 +11,7 @@ import utc from 'dayjs/plugin/utc';
 import { Col, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 
 import navBarButtonClasses from '@/components/NavBarButton/NavBarButton.module.css';
 import ProposalTransactionsDiffs from '@/components/ProposalContent/ProposalTransactionsDiffs';
@@ -59,7 +60,7 @@ const CandidateHistoryPage = () => {
       <ReactMarkdown
         className={clsx(editorClasses.markdown, editorClasses.diffs)}
         children={str}
-        remarkPlugins={[remarkBreaks]}
+        remarkPlugins={[remarkBreaks, remarkGfm]}
       />
     );
   };
