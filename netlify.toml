@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm turbo run build --filter=!@nouns/docs"
+  command = "pnpm turbo run build"
   publish = "packages/nouns-webapp/dist"
 
 [[redirects]]
