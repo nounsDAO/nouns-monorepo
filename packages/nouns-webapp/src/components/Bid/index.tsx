@@ -8,6 +8,7 @@ import { formatEther, parseEther } from 'viem';
 import SettleManuallyBtn from '@/components/SettleManuallyBtn';
 import {
   useReadNounsAuctionHouseMinBidIncrementPercentage,
+  useReadNounsAuctionHouseReservePrice,
   useWriteNounsAuctionHouseCreateBid,
   useWriteNounsAuctionHouseSettleCurrentAndCreateNewAuction,
 } from '@/contracts';
@@ -22,22 +23,17 @@ import responsiveUiUtilsClasses from '@/utils/ResponsiveUIUtils.module.css';
 const computeMinimumNextBid = (
   currentBid: bigint,
   minBidIncPercentage: bigint | undefined,
+  reservePrice: bigint | undefined,
 ): bigint => {
-  if (minBidIncPercentage === undefined) {
+  if (minBidIncPercentage === undefined || reservePrice === undefined) {
     return 0n;
   }
-  // Calculate minBidIncPercentage/100 + 1 with bigint
-  // Since bigint division truncates, we multiply first then divide to maintain precision
-  return (currentBid * (minBidIncPercentage + 100n)) / 100n;
+  const increment = (currentBid * (minBidIncPercentage + 100n)) / 100n;
+  return increment > reservePrice ? increment : reservePrice;
 };
 
 const minBidEth = (minBid: bigint): string => {
-  if (minBid === 0n) {
-    return '0.01';
-  }
-
   const eth = formatEther(minBid);
-  // We need to round up to 2 decimal places
   const ethNum = parseFloat(eth);
   return (Math.ceil(ethNum * 100) / 100).toFixed(2);
 };
@@ -68,9 +64,11 @@ const Bid: React.FC<BidProps> = props => {
   const { t } = useLingui();
 
   const { data: minBidIncPercentage } = useReadNounsAuctionHouseMinBidIncrementPercentage();
+  const { data: reservePrice } = useReadNounsAuctionHouseReservePrice();
   const minBid = computeMinimumNextBid(
     auction.amount !== undefined ? BigInt(auction.amount.toString()) : 0n,
     minBidIncPercentage !== undefined ? BigInt(minBidIncPercentage.toString()) : undefined,
+    reservePrice !== undefined ? BigInt(reservePrice.toString()) : undefined,
   );
 
   const {
@@ -185,7 +183,7 @@ const Bid: React.FC<BidProps> = props => {
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
-              {!auctionEnded && !bidInput ? (
+              {!auctionEnded && !bidInput && minBid > 0n ? (
                 <>
                   Ξ {minBidEth(minBid)}{' '}
                   <span
