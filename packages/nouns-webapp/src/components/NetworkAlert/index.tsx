@@ -1,51 +1,81 @@
+import { useState } from 'react';
+
 import { Modal } from 'react-bootstrap';
+import { useAccount, useSwitchChain } from 'wagmi';
 
-import { CHAIN_ID } from '@/config';
+import { Button } from '@/components/ui/button';
+import { defaultChain } from '@/wagmi';
 
-const networkName = () => {
-  switch (Number(CHAIN_ID)) {
-    case 1:
-      return 'Ethereum Mainnet';
-    case 4:
-      return 'the Rinkeby network';
-    default:
-      return `Network ${CHAIN_ID}`;
-  }
+const KNOWN_CHAINS: Record<number, string> = {
+  1: 'Ethereum Mainnet',
+  10: 'Optimism',
+  56: 'BNB Chain',
+  130: 'Unichain',
+  137: 'Polygon',
+  8453: 'Base',
+  42161: 'Arbitrum One',
+  43114: 'Avalanche',
+  59144: 'Linea',
+  81457: 'Blast',
+  7777777: 'Zora',
+  11155111: 'Sepolia',
 };
 
-const metamaskNetworkName = () => {
-  switch (Number(CHAIN_ID)) {
-    case 1:
-      return 'Ethereum Mainnet';
-    case 4:
-      return 'Rinkeby Test Network';
-    default:
-      return `Network ${CHAIN_ID}`;
-  }
-};
+const chainLabel = (id: number) => KNOWN_CHAINS[id] ?? `chain ${id}`;
+
+const targetChainId = defaultChain.id;
 
 const NetworkAlert = () => {
+  const { chainId: currentChainId } = useAccount();
+  const { switchChain, isPending } = useSwitchChain();
+  const [switchError, setSwitchError] = useState<string | null>(null);
+
+  const handleSwitch = () => {
+    setSwitchError(null);
+    switchChain(
+      { chainId: targetChainId },
+      {
+        onError: err => setSwitchError(err.message),
+      },
+    );
+  };
+
+  const targetLabel = chainLabel(targetChainId);
+  const currentLabel =
+    currentChainId !== undefined ? chainLabel(currentChainId) : 'an unknown network';
+
   return (
-    <>
-      <Modal show={true} backdrop="static" keyboard={false}>
-        <Modal.Header>
-          <Modal.Title>Wrong Network Detected</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Nouns DAO auctions require you to switch over {networkName()} to be able to participate.
-          </p>
-          <p>
-            <b>To get started, please switch your network by following the instructions below:</b>
-          </p>
-          <ol>
-            <li>Open Metamask</li>
-            <li>Click the network select dropdown</li>
-            <li>Click on "{metamaskNetworkName()}"</li>
-          </ol>
-        </Modal.Body>
-      </Modal>
-    </>
+    <Modal show={true} backdrop="static" keyboard={false}>
+      <Modal.Header>
+        <Modal.Title>Wrong Network Detected</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          Your wallet is connected to <b>{currentLabel}</b>. Nouns DAO auctions require{' '}
+          <b>{targetLabel}</b> to participate.
+        </p>
+        <Button
+          onClick={handleSwitch}
+          disabled={isPending}
+          size="lg"
+          className="mt-4 w-full bg-gray-900 hover:bg-gray-800"
+        >
+          {isPending ? 'Switching…' : `Switch to ${targetLabel}`}
+        </Button>
+        {switchError && (
+          <>
+            <p className="mt-3">
+              <b>If your wallet didn&apos;t prompt, switch networks manually:</b>
+            </p>
+            <ol>
+              <li>Open your wallet</li>
+              <li>Click the network select dropdown</li>
+              <li>Select &quot;{targetLabel}&quot;</li>
+            </ol>
+          </>
+        )}
+      </Modal.Body>
+    </Modal>
   );
 };
 export default NetworkAlert;
