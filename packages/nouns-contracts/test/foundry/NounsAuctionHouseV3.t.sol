@@ -178,6 +178,25 @@ contract NounsAuctionHouseV3Test is NounsAuctionHouseV3TestBase {
         auction.settleCurrentAndCreateNewAuction();
     }
 
+    function test_settleAuction_noBid_transfersNounToTreasury() public {
+        uint128 nounId = auction.auction().nounId;
+        address treasury = auction.owner();
+
+        endAuctionAndSettle();
+
+        assertEq(auction.nouns().ownerOf(nounId), treasury);
+    }
+
+    function test_settleAuction_noBid_emitsAuctionSettledWithZeroWinner() public {
+        uint128 nounId = auction.auction().nounId;
+        uint40 endTime = auction.auction().endTime;
+        vm.warp(endTime);
+
+        vm.expectEmit(true, false, false, true);
+        emit IAH.AuctionSettled(nounId, address(0), 0);
+        auction.settleCurrentAndCreateNewAuction();
+    }
+
     function test_setMinBidIncrementPercentage_givenNonOwnerSender_reverts() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setMinBidIncrementPercentage(42);

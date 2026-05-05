@@ -286,7 +286,7 @@ contract NounsAuctionHouseV3 is
 
     /**
      * @notice Settle an auction, finalizing the bid and paying out to the owner.
-     * @dev If there are no bids, the Noun is burned.
+     * @dev If there are no bids, the Noun is transferred to the DAO treasury (the auction house owner).
      */
     function _settleAuction() internal {
         INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
@@ -298,7 +298,7 @@ contract NounsAuctionHouseV3 is
         auctionStorage.settled = true;
 
         if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
+            nouns.transferFrom(address(this), owner(), _auction.nounId);
         } else {
             nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
