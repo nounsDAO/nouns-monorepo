@@ -197,6 +197,17 @@ contract NounsAuctionHouseV3Test is NounsAuctionHouseV3TestBase {
         auction.settleCurrentAndCreateNewAuction();
     }
 
+    function test_settleAuction_noBid_worksWhenOwnerIsNonERC721Receiver() public {
+        NonERC721Receiver nonReceiver = new NonERC721Receiver();
+        vm.prank(auction.owner());
+        auction.transferOwnership(address(nonReceiver));
+
+        uint128 nounId = auction.auction().nounId;
+        endAuctionAndSettle();
+
+        assertEq(auction.nouns().ownerOf(nounId), address(nonReceiver));
+    }
+
     function test_setMinBidIncrementPercentage_givenNonOwnerSender_reverts() public {
         vm.expectRevert('Ownable: caller is not the owner');
         auction.setMinBidIncrementPercentage(42);
@@ -908,4 +919,9 @@ contract NounsAuctionHouseV3_OwnerFunctionsTest is NounsAuctionHouseV3TestBase {
 
         assertEq(auction.timeBuffer(), 1 days);
     }
+}
+
+contract NonERC721Receiver {
+    // intentionally implements no onERC721Received — proves the no-bid path
+    // uses plain transferFrom and does not require the receiver hook.
 }

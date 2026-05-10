@@ -202,6 +202,20 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         vm.prank(user1);
         auction.createBid{ value: 0.042 ether }(nounId, 0);
     }
+
+    function test_noBidSettlement_postUpgrade_transfersToTreasury() public {
+        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
+        auction.settleCurrentAndCreateNewAuction();
+
+        uint96 nounId = auction.auction().nounId;
+        uint40 endTime = auction.auction().endTime;
+
+        vm.warp(uint256(endTime) + 1);
+        auction.settleCurrentAndCreateNewAuction();
+
+        address treasury = IOwner(AUCTION_HOUSE_PROXY_MAINNET).owner();
+        assertEq(nouns.ownerOf(nounId), treasury);
+    }
 }
 
 interface IOwner {
