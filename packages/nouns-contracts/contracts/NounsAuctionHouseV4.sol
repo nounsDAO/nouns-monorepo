@@ -20,7 +20,7 @@
 // https://github.com/ourzora/auction-house/blob/54a12ec1a6cf562e49f0a4917990474b11350a2d/contracts/AuctionHouse.sol
 //
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
-// With modifications by Nounders DAO.
+// With modifications by Nouns DAO.
 
 pragma solidity ^0.8.19;
 
@@ -28,7 +28,7 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouseV3 } from './interfaces/INounsAuctionHouseV3.sol';
+import { INounsAuctionHouseV4 } from './interfaces/INounsAuctionHouseV4.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 import { IChainalysisSanctionsList } from './external/chainalysis/IChainalysisSanctionsList.sol';
@@ -38,7 +38,7 @@ import { IChainalysisSanctionsList } from './external/chainalysis/IChainalysisSa
  * storage layout as the NounsAuctionHouse contract
  */
 contract NounsAuctionHouseV4 is
-    INounsAuctionHouseV3,
+    INounsAuctionHouseV4,
     PausableUpgradeable,
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
@@ -65,7 +65,7 @@ contract NounsAuctionHouseV4 is
     uint8 public minBidIncrementPercentage;
 
     /// @notice The active auction
-    INounsAuctionHouseV3.AuctionV2 public auctionStorage;
+    INounsAuctionHouseV4.AuctionV2 public auctionStorage;
 
     /// @notice The Nouns price feed state
     mapping(uint256 => SettlementState) settlementHistory;
@@ -135,7 +135,7 @@ contract NounsAuctionHouseV4 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId, uint32 clientId) public payable override {
-        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV4.AuctionV2 memory _auction = auctionStorage;
 
         (uint192 _reservePrice, uint56 _timeBuffer, uint8 _minBidIncrementPercentage) = (
             reservePrice,
@@ -289,7 +289,7 @@ contract NounsAuctionHouseV4 is
      * @dev If there are no bids, the Noun is transferred to the DAO treasury (the auction house owner).
      */
     function _settleAuction() internal {
-        INounsAuctionHouseV3.AuctionV2 memory _auction = auctionStorage;
+        INounsAuctionHouseV4.AuctionV2 memory _auction = auctionStorage;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
