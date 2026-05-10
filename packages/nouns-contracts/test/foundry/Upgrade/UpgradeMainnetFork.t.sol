@@ -202,18 +202,42 @@ contract AuctionHouseUpgradeMainnetForkTest is UpgradeMainnetForkBaseTest {
         vm.prank(user1);
         auction.createBid{ value: 0.042 ether }(nounId, 0);
     }
+}
+
+contract AuctionHouseNoBidPostUpgradeForkTest is Test {
+    address public constant AUCTION_HOUSE_PROXY_MAINNET = 0x830BD73E4184ceF73443C15111a1DF14e495C706;
+    address public constant AUCTION_HOUSE_PROXY_ADMIN_MAINNET = 0xC1C119932d78aB9080862C5fcb964029f086401e;
+    NounsToken public nouns = NounsToken(0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03);
+
+    function setUp() public {
+        // Fork at latest so this test runs against non-archive RPCs (e.g. publicnode).
+        vm.createSelectFork(vm.envString('RPC_MAINNET'));
+
+        INounsAuctionHouseV2 ahv2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
+        NounsAuctionHouseV3 newImpl = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
+
+        address admin = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
+        vm.prank(IOwner(admin).owner());
+        IProxyAdmin(admin).upgrade(AUCTION_HOUSE_PROXY_MAINNET, address(newImpl));
+    }
 
     function test_noBidSettlement_postUpgrade_transfersToTreasury() public {
-        INounsAuctionHouseV3 auction = INounsAuctionHouseV3(AUCTION_HOUSE_PROXY_MAINNET);
-        auction.settleCurrentAndCreateNewAuction();
-
-        uint96 nounId = auction.auction().nounId;
-        uint40 endTime = auction.auction().endTime;
-
-        vm.warp(uint256(endTime) + 1);
-        auction.settleCurrentAndCreateNewAuction();
-
+        INounsAuctionHouseV2 auction = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
         address treasury = IOwner(AUCTION_HOUSE_PROXY_MAINNET).owner();
+
+        // Settle whatever's running now (warp past endTime if still active).
+        INounsAuctionHouseV2.AuctionV2View memory current = auction.auction();
+        if (block.timestamp < current.endTime) {
+            vm.warp(uint256(current.endTime) + 1);
+        }
+        auction.settleCurrentAndCreateNewAuction();
+
+        // Fresh auction, no bids. Warp past its endTime and settle — exercises the no-bid branch.
+        INounsAuctionHouseV2.AuctionV2View memory fresh = auction.auction();
+        uint96 nounId = fresh.nounId;
+        vm.warp(uint256(fresh.endTime) + 1);
+        auction.settleCurrentAndCreateNewAuction();
+
         assertEq(nouns.ownerOf(nounId), treasury);
     }
 }
@@ -224,4 +248,8 @@ interface IOwner {
 
 interface IPausible {
     function paused() external view returns (bool);
+}
+
+interface IProxyAdmin {
+    function upgrade(address proxy, address implementation) external;
 }
