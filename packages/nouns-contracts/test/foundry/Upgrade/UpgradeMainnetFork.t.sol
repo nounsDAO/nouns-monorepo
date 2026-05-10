@@ -6,6 +6,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsAuctionHouseV3 } from '../../../contracts/NounsAuctionHouseV3.sol';
+import { NounsAuctionHouseV4 } from '../../../contracts/NounsAuctionHouseV4.sol';
 import { INounsAuctionHouseV2 } from '../../../contracts/interfaces/INounsAuctionHouseV2.sol';
 import { INounsAuctionHouseV3 } from '../../../contracts/interfaces/INounsAuctionHouseV3.sol';
 import { ChainalysisSanctionsListMock } from '../helpers/ChainalysisSanctionsListMock.sol';
@@ -214,7 +215,7 @@ contract AuctionHouseNoBidPostUpgradeForkTest is Test {
         vm.createSelectFork(vm.envString('RPC_MAINNET'));
 
         INounsAuctionHouseV2 ahv2 = INounsAuctionHouseV2(AUCTION_HOUSE_PROXY_MAINNET);
-        NounsAuctionHouseV3 newImpl = new NounsAuctionHouseV3(ahv2.nouns(), ahv2.weth(), ahv2.duration());
+        NounsAuctionHouseV4 newImpl = new NounsAuctionHouseV4(ahv2.nouns(), ahv2.weth(), ahv2.duration());
 
         address admin = AUCTION_HOUSE_PROXY_ADMIN_MAINNET;
         vm.prank(IOwner(admin).owner());
