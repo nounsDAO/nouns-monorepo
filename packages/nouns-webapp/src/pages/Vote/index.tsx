@@ -37,6 +37,7 @@ import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/local
 import Section from '@/layout/Section';
 import { cn } from '@/lib/utils';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '@/utils/constants';
+import { formatTxErrorMessage } from '@/utils/txErrorMessages';
 import { getNounVotes } from '@/utils/getNounsVotes';
 import { isProposalUpdatable } from '@/utils/proposals';
 import { parseStreamCreationCallData } from '@/utils/streamingPaymentUtils/streamingPaymentUtils';
@@ -363,12 +364,14 @@ const VotePage = () => {
           onFinalState?.();
           break;
         case 'Fail':
-          toast.error(errorMessage || _(t`Please try again.`));
+          toast.error(formatTxErrorMessage(errorMessage || _(t`Please try again.`)));
           setPending?.(false);
           onFinalState?.();
           break;
         case 'Exception':
-          toast.error(getErrorMessage?.(errorMessage) || _(t`Please try again.`));
+          toast.error(
+            getErrorMessage?.(errorMessage) || formatTxErrorMessage(errorMessage || _(t`Please try again.`)),
+          );
           setPending?.(false);
           onFinalState?.();
           break;
