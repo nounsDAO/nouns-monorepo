@@ -12,9 +12,13 @@ import { formatEther } from 'viem';
 import { useAccount, useBlockNumber } from 'wagmi';
 
 import EditProposalButton from '@/components/EditProposalButton/index';
-import ProposalActionModal from '@/components/ProposalActionsModal';
+import ProposalActionModal, {
+  getProposalActionModalStateFromTransaction,
+  ProposalActionModalState,
+} from '@/components/ProposalActionsModal';
 import ProposalEditor from '@/components/ProposalEditor';
 import ProposalTransactions from '@/components/ProposalTransactions';
+import TokenBuyerTopUpAlert from '@/components/TokenBuyerTopUpAlert';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
@@ -48,7 +52,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [bodyValue, setBodyValue] = useState('');
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const [includeTokenBuyerTopUp, setIncludeTokenBuyerTopUp] = useState(false);
+  const [isTokenBuyerTopUpManuallyEdited, setIsTokenBuyerTopUpManuallyEdited] = useState(false);
   const [commitMessage, setCommitMessage] = useState<string>('');
+  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
+  const [editingTransactionIndex, setEditingTransactionIndex] = useState<number>();
+  const [editingTransactionState, setEditingTransactionState] = useState<ProposalActionModalState>();
+  const [isProposePending, setProposePending] = useState(false);
   const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
   const { data: currentBlock } = useBlockNumber();
@@ -88,14 +98,81 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
     [proposalTransactions, totalUSDCPayment],
   );
 
+  const handleSaveProposalAction = useCallback(
+    (transactions: ProposalTransaction | ProposalTransaction[]) => {
+      if (editingTransactionIndex === undefined) {
+        handleAddProposalAction(transactions);
+        return;
+      }
+
+      const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
+      transactionsArray.forEach(transaction => {
+        if (!transaction.address.startsWith('0x')) {
+          transaction.address = `0x${transaction.address}`;
+        }
+        if (!transaction.calldata.startsWith('0x')) {
+          transaction.calldata = `0x${transaction.calldata}`;
+        }
+      });
+
+      const previousUSDCValue = proposalTransactions[editingTransactionIndex]?.usdcValue ?? 0;
+      const nextUSDCValue = transactionsArray.reduce((total, txn) => total + (txn.usdcValue ?? 0), 0);
+      const editedTransaction = proposalTransactions[editingTransactionIndex];
+      const isEditingTokenBuyerTopUp =
+        editedTransaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase();
+      setTotalUSDCPayment(totalUSDCPayment - previousUSDCValue + nextUSDCValue);
+      setProposalTransactions([
+        ...proposalTransactions.slice(0, editingTransactionIndex),
+        ...transactionsArray,
+        ...proposalTransactions.slice(editingTransactionIndex + 1),
+      ]);
+      if (isEditingTokenBuyerTopUp) {
+        const tokenBuyerTopUp = transactionsArray.find(
+          txn => txn.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase(),
+        );
+        setIncludeTokenBuyerTopUp(true);
+        setTokenBuyerTopUpETH(String(tokenBuyerTopUp?.value ?? 0n));
+        setIsTokenBuyerTopUpManuallyEdited(true);
+      }
+      setEditingTransactionIndex(undefined);
+      setEditingTransactionState(undefined);
+      setShowTransactionFormModal(false);
+      setIsProposalEdited(true);
+    },
+    [chainId, editingTransactionIndex, handleAddProposalAction, proposalTransactions, totalUSDCPayment],
+  );
+
+  const handleEditProposalAction = useCallback(
+    (index: number) => {
+      const transaction = proposalTransactions[index];
+      if (
+        transaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()
+      ) {
+        setIncludeTokenBuyerTopUp(true);
+      }
+      setEditingTransactionIndex(index);
+      setEditingTransactionState(getProposalActionModalStateFromTransaction(transaction));
+      setShowTransactionFormModal(true);
+    },
+    [chainId, proposalTransactions],
+  );
+
   const handleRemoveProposalAction = useCallback(
     (index: number) => {
+      const removedTransaction = proposalTransactions[index];
+      if (
+        removedTransaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()
+      ) {
+        setIncludeTokenBuyerTopUp(false);
+        setTokenBuyerTopUpETH('0');
+        setIsTokenBuyerTopUpManuallyEdited(false);
+      }
       setIsProposalEdited(true);
       setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
 
-    [proposalTransactions, totalUSDCPayment],
+    [chainId, proposalTransactions, totalUSDCPayment],
   );
 
   const removeTitleFromDescription = (description: string, title: string) => {
@@ -108,6 +185,23 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       : undefined;
 
   useEffect(() => {
+    if (!includeTokenBuyerTopUp || totalUSDCPayment === 0) {
+      if (tokenBuyerTopUpEth !== '0') {
+        setProposalTransactions(
+          proposalTransactions.filter(
+            txn => txn.address.toLowerCase() !== nounsTokenBuyerAddress[chainId].toLowerCase(),
+          ),
+        );
+        setTokenBuyerTopUpETH('0');
+        setIsTokenBuyerTopUpManuallyEdited(false);
+      }
+      return;
+    }
+
+    if (isTokenBuyerTopUpManuallyEdited) {
+      return;
+    }
+
     if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
       const hasTokenBuyerTopUp =
         filter(
@@ -148,6 +242,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
     ethNeeded,
     handleAddProposalAction,
     handleRemoveProposalAction,
+    includeTokenBuyerTopUp,
+    isTokenBuyerTopUpManuallyEdited,
     proposalTransactions,
     tokenBuyerTopUpEth,
     totalUSDCPayment,
@@ -185,8 +281,6 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
     }
   }, [isTitleEdited, isBodyEdited]);
 
-  const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
-  const [isProposePending, setProposePending] = useState(false);
   const { _ } = useLingui();
 
   useEffect(() => {
@@ -269,9 +363,15 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
       <ProposalActionModal
-        onDismiss={() => setShowTransactionFormModal(false)}
+        onDismiss={() => {
+          setShowTransactionFormModal(false);
+          setEditingTransactionIndex(undefined);
+          setEditingTransactionState(undefined);
+        }}
         show={showTransactionFormModal}
-        onActionAdd={handleAddProposalAction}
+        onActionAdd={handleSaveProposalAction}
+        initialState={editingTransactionState}
+        isEditing={editingTransactionIndex !== undefined}
       />
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
         <div className={classes.wrapper}>
@@ -297,24 +397,25 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
             <Trans>Add Action</Trans>
           </Button>
         </div>
+
         <ProposalTransactions
           proposalTransactions={proposalTransactions}
           onRemoveProposalTransaction={handleRemoveProposalAction}
+          onEditProposalTransaction={handleEditProposalAction}
           isProposalUpdate={true}
         />
 
         {totalUSDCPayment > 0 && (
-          <Alert variant="secondary" className={classes.tokenBuyerNotif}>
-            <b>
-              <Trans>Note</Trans>
-            </b>
-            :{' '}
-            <Trans>
-              Because this proposal contains a USDC fund transfer action we&apos;ve added an
-              additional ETH transaction to refill the TokenBuyer contract. This action allows to
-              DAO to continue to trustlessly acquire USDC to fund proposals like this.
-            </Trans>
-          </Alert>
+          <TokenBuyerTopUpAlert
+            className={classes.tokenBuyerNotif}
+            includeTokenBuyerTopUp={includeTokenBuyerTopUp}
+            onIncludeTokenBuyerTopUpChange={include => {
+              setIncludeTokenBuyerTopUp(include);
+              setIsTokenBuyerTopUpManuallyEdited(false);
+            }}
+            suggestedEth={ethNeeded}
+            topUpEth={tokenBuyerTopUpEth}
+          />
         )}
         <ProposalEditor
           title={titleValue}

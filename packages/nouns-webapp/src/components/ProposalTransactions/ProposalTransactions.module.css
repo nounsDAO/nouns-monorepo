@@ -16,6 +16,21 @@
   box-shadow: none !important;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.editTransactionButton {
+  border: none;
+  background: none;
+  color: var(--brand-dark-red);
+  font-weight: 700;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .removeTransactionButton img {
   width: 1rem;
 }

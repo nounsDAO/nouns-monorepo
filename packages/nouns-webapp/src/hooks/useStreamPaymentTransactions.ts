@@ -50,7 +50,7 @@ export default function useStreamPaymentTransactions({
       address: nounsStreamFactoryAddress[chainId],
       signature: fundStreamFunction,
       value: '0',
-      usdcValue: isUSDC ? Number(human2ContractUSDCFormat(amount)) : 0,
+      usdcValue: 0,
       decodedCalldata: JSON.stringify([
         state.address,
         isUSDC ? human2ContractUSDCFormat(amount) : parseEther(amount.toString()).toString(),

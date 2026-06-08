@@ -12,10 +12,11 @@ interface BrandTextEntryProps {
   min?: string;
   label?: string;
   isInvalid?: boolean;
+  disabled?: boolean;
 }
 
 const BrandTextEntry: React.FC<BrandTextEntryProps> = props => {
-  const { onChange, value, placeholder, type, min, label, isInvalid = false } = props;
+  const { onChange, value, placeholder, type, min, label, isInvalid = false, disabled = false } = props;
 
   return (
     <div className={classes.container}>
@@ -26,6 +27,7 @@ const BrandTextEntry: React.FC<BrandTextEntryProps> = props => {
         type={type ? type : 'string'}
         min={min}
         placeholder={placeholder}
+        disabled={disabled}
         className={clsx(classes.entry, isInvalid ? classes.invalid : '')}
       />
     </div>

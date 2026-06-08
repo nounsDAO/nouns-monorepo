@@ -11,6 +11,7 @@ interface ProposalTransactionsProps {
   className?: string;
   proposalTransactions: ProposalTransaction[];
   onRemoveProposalTransaction: (index: number) => void;
+  onEditProposalTransaction?: (index: number) => void;
   isProposalUpdate?: boolean;
 }
 
@@ -18,6 +19,7 @@ const ProposalTransactions = ({
   className,
   proposalTransactions,
   onRemoveProposalTransaction,
+  onEditProposalTransaction,
   isProposalUpdate,
 }: ProposalTransactionsProps) => {
   const getPopover = (tx: ProposalTransaction) => {
@@ -84,30 +86,43 @@ const ProposalTransactions = ({
   return (
     <div className={className}>
       {proposalTransactions.map((tx, i) => (
-        <OverlayTrigger
-          key={`${tx.signature}-${tx.calldata}`}
-          trigger={['hover', 'focus']}
-          placement="top"
-          overlay={getPopover(tx)}
-        >
+          <OverlayTrigger
+            key={`${tx.signature}-${tx.calldata}`}
+            trigger={['hover', 'focus']}
+            placement="top"
+            overlay={getPopover(tx)}
+          >
           <div
             className={`${classes.transactionDetails} d-flex justify-content-between align-items-center`}
           >
-            <div>
-              <span>Transaction #{i + 1} - </span>
-              <span>
-                <b>{tx.signature || 'transfer()'}</b>
-              </span>
+              <div>
+                <span>Transaction #{i + 1} - </span>
+                <span>
+                  <b>{tx.signature || 'transfer()'}</b>
+                </span>
+              </div>
+              <div className={classes.actions}>
+                {onEditProposalTransaction &&
+                  (tx.proposalActionState as { actionType?: string } | undefined)?.actionType !==
+                    'Stream Funds' && (
+                    <button
+                      type="button"
+                      className={classes.editTransactionButton}
+                      onClick={() => onEditProposalTransaction(i)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                <button
+                  type="button"
+                  className={classes.removeTransactionButton}
+                  onClick={() => onRemoveProposalTransaction(i)}
+                >
+                  <img src={xIcon} alt="Remove Transaction" />
+                </button>
+              </div>
             </div>
-            <button
-              type="button"
-              className={classes.removeTransactionButton}
-              onClick={() => onRemoveProposalTransaction(i)}
-            >
-              <img src={xIcon} alt="Remove Transaction" />
-            </button>
-          </div>
-        </OverlayTrigger>
+          </OverlayTrigger>
       ))}
     </div>
   );
