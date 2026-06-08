@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
+
 import { Alert, Form } from 'react-bootstrap';
 import { formatEther, formatUnits } from 'viem';
 import { useBalance } from 'wagmi';
 
-import {
-  nounsPayerAddress,
-  nounsTreasuryAddress,
-  useReadUsdcBalanceOf,
-} from '@/contracts';
+import { nounsPayerAddress, nounsTreasuryAddress, useReadUsdcBalanceOf } from '@/contracts';
 import { defaultChain } from '@/wagmi';
 
 import classes from './TokenBuyerTopUpAlert.module.css';
@@ -22,18 +19,23 @@ interface TokenBuyerTopUpAlertProps {
 
 const formatUSDC = (value?: bigint | number) => {
   if (value === undefined) return 'Loading';
-  const formatted = typeof value === 'bigint' ? formatUnits(value, 6) : (value / 1_000_000).toString();
+  const formatted =
+    typeof value === 'bigint' ? formatUnits(value, 6) : (value / 1_000_000).toString();
   return Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(Number(formatted));
 };
 
 const formatSuggestedEth = (value?: string) => {
   if (!value || value === '0') return '0';
-  return Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(Number(formatEther(BigInt(value))));
+  return Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(
+    Number(formatEther(BigInt(value))),
+  );
 };
 
 const formatTreasuryEth = (value?: bigint) => {
   if (value === undefined) return 'Loading';
-  return Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(Number(formatEther(value)));
+  return Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(
+    Number(formatEther(value)),
+  );
 };
 
 const TokenBuyerTopUpAlert = ({
@@ -46,7 +48,8 @@ const TokenBuyerTopUpAlert = ({
   const chainId = defaultChain.id;
   const payerAddress = nounsPayerAddress[chainId];
   const treasuryAddress = nounsTreasuryAddress[chainId];
-  const displayedEth = includeTokenBuyerTopUp && topUpEth && topUpEth !== '0' ? topUpEth : suggestedEth;
+  const displayedEth =
+    includeTokenBuyerTopUp && topUpEth && topUpEth !== '0' ? topUpEth : suggestedEth;
   const displayedEthValue = displayedEth ? BigInt(displayedEth) : 0n;
 
   const { data: payerUSDCBalance } = useReadUsdcBalanceOf({
@@ -76,8 +79,8 @@ const TokenBuyerTopUpAlert = ({
         label={
           <>
             Top up the Token Buyer with{' '}
-            <span className={classes.ethAmount}>{formatSuggestedEth(displayedEth)} ETH</span>
-            . (Optional)
+            <span className={classes.ethAmount}>{formatSuggestedEth(displayedEth)} ETH</span>.
+            (Optional)
           </>
         }
         checked={includeTokenBuyerTopUp}

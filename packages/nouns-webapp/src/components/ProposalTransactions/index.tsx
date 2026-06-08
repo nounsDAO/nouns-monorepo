@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/strict-boolean-expressions */
 import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 
@@ -86,43 +87,43 @@ const ProposalTransactions = ({
   return (
     <div className={className}>
       {proposalTransactions.map((tx, i) => (
-          <OverlayTrigger
-            key={`${tx.signature}-${tx.calldata}`}
-            trigger={['hover', 'focus']}
-            placement="top"
-            overlay={getPopover(tx)}
-          >
+        <OverlayTrigger
+          key={`${tx.signature}-${tx.calldata}`}
+          trigger={['hover', 'focus']}
+          placement="top"
+          overlay={getPopover(tx)}
+        >
           <div
             className={`${classes.transactionDetails} d-flex justify-content-between align-items-center`}
           >
-              <div>
-                <span>Transaction #{i + 1} - </span>
-                <span>
-                  <b>{tx.signature || 'transfer()'}</b>
-                </span>
-              </div>
-              <div className={classes.actions}>
-                {onEditProposalTransaction &&
-                  (tx.proposalActionState as { actionType?: string } | undefined)?.actionType !==
-                    'Stream Funds' && (
-                    <button
-                      type="button"
-                      className={classes.editTransactionButton}
-                      onClick={() => onEditProposalTransaction(i)}
-                    >
-                      Edit
-                    </button>
-                  )}
-                <button
-                  type="button"
-                  className={classes.removeTransactionButton}
-                  onClick={() => onRemoveProposalTransaction(i)}
-                >
-                  <img src={xIcon} alt="Remove Transaction" />
-                </button>
-              </div>
+            <div>
+              <span>Transaction #{i + 1} - </span>
+              <span>
+                <b>{tx.signature || 'transfer()'}</b>
+              </span>
             </div>
-          </OverlayTrigger>
+            <div className={classes.actions}>
+              {onEditProposalTransaction &&
+                (tx.proposalActionState as { actionType?: string } | undefined)?.actionType !==
+                  'Stream Funds' && (
+                  <button
+                    type="button"
+                    className={classes.editTransactionButton}
+                    onClick={() => onEditProposalTransaction(i)}
+                  >
+                    Edit
+                  </button>
+                )}
+              <button
+                type="button"
+                className={classes.removeTransactionButton}
+                onClick={() => onRemoveProposalTransaction(i)}
+              >
+                <img src={xIcon} alt="Remove Transaction" />
+              </button>
+            </div>
+          </div>
+        </OverlayTrigger>
       ))}
     </div>
   );

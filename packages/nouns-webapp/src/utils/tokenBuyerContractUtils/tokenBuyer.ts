@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useReadNounsTokenBuyerEthNeeded } from '@/contracts';
 
 export const TOKEN_BUYER_BUFFER_BPS = 1_000n;

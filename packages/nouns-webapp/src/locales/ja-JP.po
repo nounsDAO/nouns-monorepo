@@ -35,6 +35,10 @@ msgstr "ボディ ({0})"
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "これにより、以前のすべてのスポンサーとフィードバック投票がクリアされます"
 
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+msgid "Edit Token Buyer Top-Up"
+msgstr "Edit Token Buyer Top-Up"
+
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr "Nounオークションの収益の100%がNouns DAOに送られるため、Nounderは自分達をNounsで補償することに決めました。プロジェクトの最初の5年間の間、毎回10番目のNoun (Noun ID #0, #10, #20, #30 など) が自動的にNoundersのマルチシグに送られ、プロジェクトの創設メンバー達に与えられて、共有されます。"
@@ -611,11 +615,7 @@ msgid "Proposal Executed!"
 msgstr "提案が実行されました！"
 
 #: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
 msgid "Note"
 msgstr "注"
 
@@ -1325,8 +1325,8 @@ msgstr "オークション"
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateCandidate/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr "この提案にはUSDCの資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、DAOはこのような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr "この提案にはUSDCの資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、DAOはこのような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
@@ -1692,8 +1692,8 @@ msgid "Forking"
 msgstr "フォーキング"
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr "この提案にはUSDC資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、このような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr "この提案にはUSDC資金移動アクションが含まれているため、TokenBuyer契約を補充するために追加のETHトランザクションを追加しました。このアクションにより、このような提案を資金提供するためにUSDCを信頼なく取得し続けることができます。"
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx

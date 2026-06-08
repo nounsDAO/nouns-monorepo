@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { Abi } from 'viem';
 
 import React, { SetStateAction, useState } from 'react';

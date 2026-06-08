@@ -16,7 +16,16 @@ interface BrandTextEntryProps {
 }
 
 const BrandTextEntry: React.FC<BrandTextEntryProps> = props => {
-  const { onChange, value, placeholder, type, min, label, isInvalid = false, disabled = false } = props;
+  const {
+    onChange,
+    value,
+    placeholder,
+    type,
+    min,
+    label,
+    isInvalid = false,
+    disabled = false,
+  } = props;
 
   return (
     <div className={classes.container}>
