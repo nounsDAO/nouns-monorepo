@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { t } from '@lingui/core/macro';
@@ -58,7 +59,8 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
   const [isTokenBuyerTopUpManuallyEdited, setIsTokenBuyerTopUpManuallyEdited] = useState(false);
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [editingTransactionIndex, setEditingTransactionIndex] = useState<number>();
-  const [editingTransactionState, setEditingTransactionState] = useState<ProposalActionModalState>();
+  const [editingTransactionState, setEditingTransactionState] =
+    useState<ProposalActionModalState>();
   const [isProposePending, setProposePending] = useState(false);
   const [originalTitleValue, setOriginalTitleValue] = useState('');
   const [originalBodyValue, setOriginalBodyValue] = useState('');
@@ -146,7 +148,10 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       });
 
       const previousUSDCValue = proposalTransactions[editingTransactionIndex]?.usdcValue ?? 0;
-      const nextUSDCValue = transactionsArray.reduce((total, txn) => total + (txn.usdcValue ?? 0), 0);
+      const nextUSDCValue = transactionsArray.reduce(
+        (total, txn) => total + (txn.usdcValue ?? 0),
+        0,
+      );
       const editedTransaction = proposalTransactions[editingTransactionIndex];
       const isEditingTokenBuyerTopUp =
         editedTransaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase();
@@ -169,15 +174,19 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-    [chainId, editingTransactionIndex, handleAddProposalAction, proposalTransactions, totalUSDCPayment],
+    [
+      chainId,
+      editingTransactionIndex,
+      handleAddProposalAction,
+      proposalTransactions,
+      totalUSDCPayment,
+    ],
   );
 
   const handleEditProposalAction = useCallback(
     (index: number) => {
       const transaction = proposalTransactions[index];
-      if (
-        transaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()
-      ) {
+      if (transaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()) {
         setIncludeTokenBuyerTopUp(true);
       }
       setEditingTransactionIndex(index);

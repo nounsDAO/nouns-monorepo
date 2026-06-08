@@ -57,7 +57,8 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const [commitMessage, setCommitMessage] = useState<string>('');
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [editingTransactionIndex, setEditingTransactionIndex] = useState<number>();
-  const [editingTransactionState, setEditingTransactionState] = useState<ProposalActionModalState>();
+  const [editingTransactionState, setEditingTransactionState] =
+    useState<ProposalActionModalState>();
   const [isProposePending, setProposePending] = useState(false);
   const { address: account } = useAccount();
   const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
@@ -116,7 +117,10 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       });
 
       const previousUSDCValue = proposalTransactions[editingTransactionIndex]?.usdcValue ?? 0;
-      const nextUSDCValue = transactionsArray.reduce((total, txn) => total + (txn.usdcValue ?? 0), 0);
+      const nextUSDCValue = transactionsArray.reduce(
+        (total, txn) => total + (txn.usdcValue ?? 0),
+        0,
+      );
       const editedTransaction = proposalTransactions[editingTransactionIndex];
       const isEditingTokenBuyerTopUp =
         editedTransaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase();
@@ -139,15 +143,19 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
       setShowTransactionFormModal(false);
       setIsProposalEdited(true);
     },
-    [chainId, editingTransactionIndex, handleAddProposalAction, proposalTransactions, totalUSDCPayment],
+    [
+      chainId,
+      editingTransactionIndex,
+      handleAddProposalAction,
+      proposalTransactions,
+      totalUSDCPayment,
+    ],
   );
 
   const handleEditProposalAction = useCallback(
     (index: number) => {
       const transaction = proposalTransactions[index];
-      if (
-        transaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()
-      ) {
+      if (transaction?.address.toLowerCase() === nounsTokenBuyerAddress[chainId].toLowerCase()) {
         setIncludeTokenBuyerTopUp(true);
       }
       setEditingTransactionIndex(index);
