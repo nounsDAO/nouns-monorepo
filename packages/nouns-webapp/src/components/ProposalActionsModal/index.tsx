@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { Abi } from 'viem';
 
 import React, { SetStateAction, useState } from 'react';
 
+import { decodeAbiParameters, formatEther, formatUnits } from 'viem';
+
+import { nounsPayerAddress, nounsTokenBuyerAddress, stEthAddress } from '@/contracts';
 import { Address } from '@/utils/types';
+import { defaultChain } from '@/wagmi';
 import { ProposalTransaction } from '@/wrappers/nounsDao';
 
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
@@ -45,6 +50,9 @@ export interface ProposalActionModalState {
   function?: string;
   abi?: Abi;
   args?: string[];
+  isTokenBuyerTopUp?: boolean;
+  isTransferRecipientLocked?: boolean;
+  isTransferCurrencyLocked?: boolean;
 }
 export interface ProposalActionModalStepProps {
   onPrevBtnClick: (e?: React.MouseEvent | ProposalActionCreationStep) => void;
@@ -58,25 +66,119 @@ export interface FinalProposalActionStepProps extends ProposalActionModalStepPro
 }
 
 export interface ProposalActionModalProps {
-  onActionAdd: (transaction: ProposalTransaction) => void;
+  onActionAdd: (transaction: ProposalTransaction | ProposalTransaction[]) => void;
   show: boolean;
   onDismiss: () => void;
+  initialState?: ProposalActionModalState;
+  isEditing?: boolean;
 }
 
+export const getProposalActionModalStateFromTransaction = (
+  transaction: ProposalTransaction,
+): ProposalActionModalState => {
+  if (transaction.proposalActionState) {
+    return transaction.proposalActionState as ProposalActionModalState;
+  }
+
+  const chainId = defaultChain.id;
+  const transactionAddress = transaction.address.toLowerCase();
+  const amount = transaction.value ? formatEther(BigInt(transaction.value)) : '';
+
+  if (transaction.signature === '' && transaction.calldata === '0x') {
+    const isTokenBuyerTopUp = transactionAddress === nounsTokenBuyerAddress[chainId].toLowerCase();
+
+    return {
+      actionType: ProposalActionType.LUMP_SUM,
+      address: transaction.address,
+      amount,
+      TransferFundsCurrency: SupportedCurrency.ETH,
+      isTokenBuyerTopUp,
+      isTransferRecipientLocked: isTokenBuyerTopUp,
+      isTransferCurrencyLocked: isTokenBuyerTopUp,
+    };
+  }
+
+  if (
+    transactionAddress === nounsPayerAddress[chainId].toLowerCase() &&
+    transaction.signature === 'sendOrRegisterDebt(address,uint256)'
+  ) {
+    const [recipient, usdcAmount] = decodeAbiParameters(
+      [{ type: 'address' }, { type: 'uint256' }],
+      transaction.calldata,
+    );
+
+    return {
+      actionType: ProposalActionType.LUMP_SUM,
+      address: recipient,
+      amount: formatUnits(usdcAmount, 6),
+      TransferFundsCurrency: SupportedCurrency.USDC,
+    };
+  }
+
+  if (
+    transactionAddress === stEthAddress[chainId].toLowerCase() &&
+    transaction.signature === 'transfer(address,uint256)'
+  ) {
+    const [recipient, stEthAmount] = decodeAbiParameters(
+      [{ type: 'address' }, { type: 'uint256' }],
+      transaction.calldata,
+    );
+
+    return {
+      actionType: ProposalActionType.LUMP_SUM,
+      address: recipient,
+      amount: formatEther(stEthAmount),
+      TransferFundsCurrency: SupportedCurrency.STETH,
+    };
+  }
+
+  return {
+    actionType: ProposalActionType.FUNCTION_CALL,
+    address: transaction.address,
+    amount,
+    function: transaction.signature ? transaction.signature.split('(')[0] : undefined,
+    args: transaction.decodedCalldata ? JSON.parse(transaction.decodedCalldata) : undefined,
+  };
+};
+
+const getInitialStep = (state: ProposalActionModalState) => {
+  switch (state.actionType) {
+    case ProposalActionType.LUMP_SUM:
+      return ProposalActionCreationStep.LUMP_SUM_DETAILS;
+    case ProposalActionType.STREAM:
+      return ProposalActionCreationStep.STREAM_PAYMENT_PAYMENT_DETAILS;
+    case ProposalActionType.FUNCTION_CALL:
+      return ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION;
+    default:
+      return ProposalActionCreationStep.SELECT_ACTION_TYPE;
+  }
+};
+
 const ModalContent: React.FC<{
-  onActionAdd: (transaction: ProposalTransaction) => void;
+  onActionAdd: (transaction: ProposalTransaction | ProposalTransaction[]) => void;
   onDismiss: () => void;
+  initialState?: ProposalActionModalState;
 }> = props => {
-  const { onActionAdd, onDismiss } = props;
+  const { onActionAdd, onDismiss, initialState } = props;
 
   const [step, setStep] = useState<ProposalActionCreationStep>(
-    ProposalActionCreationStep.SELECT_ACTION_TYPE,
+    initialState ? getInitialStep(initialState) : ProposalActionCreationStep.SELECT_ACTION_TYPE,
   );
 
   const [state, setState] = useState<ProposalActionModalState>({
     actionType: ProposalActionType.LUMP_SUM,
     address: '0x',
+    ...initialState,
   });
+
+  const handleActionAdd = (transaction: ProposalTransaction | ProposalTransaction[]) => {
+    if (Array.isArray(transaction)) {
+      onActionAdd(transaction.map(txn => ({ ...txn, proposalActionState: state })));
+      return;
+    }
+
+    onActionAdd({ ...transaction, proposalActionState: state });
+  };
 
   switch (step) {
     case ProposalActionCreationStep.SELECT_ACTION_TYPE:
@@ -113,7 +215,7 @@ const ModalContent: React.FC<{
             if (e && 'target' in e) {
               return;
             }
-            onActionAdd(e as ProposalTransaction);
+            handleActionAdd(e as ProposalTransaction);
           }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.LUMP_SUM_DETAILS)}
           state={state}
@@ -149,7 +251,7 @@ const ModalContent: React.FC<{
             if (e && 'target' in e) {
               return;
             }
-            onActionAdd(e as ProposalTransaction);
+            handleActionAdd(e as ProposalTransaction);
           }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.FUNCTION_CALL_ADD_ARGUMENTS)}
           state={state}
@@ -185,7 +287,7 @@ const ModalContent: React.FC<{
             if (e && 'target' in e) {
               return;
             }
-            onActionAdd(e as ProposalTransaction);
+            handleActionAdd(e as ProposalTransaction);
           }}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_DATE_DETAILS)}
           state={state}
@@ -206,13 +308,23 @@ const ModalContent: React.FC<{
 };
 
 const ProposalActionModal: React.FC<ProposalActionModalProps> = props => {
-  const { onActionAdd, show, onDismiss } = props;
+  const { onActionAdd, show, onDismiss, initialState, isEditing } = props;
+  const modalKey = `${isEditing ? 'edit' : 'add'}-${initialState?.actionType ?? 'select'}-${
+    initialState?.address ?? ''
+  }-${initialState?.amount ?? ''}-${initialState?.function ?? ''}`;
 
   return (
     <SolidColorBackgroundModal
       show={show}
       onDismiss={onDismiss}
-      content={<ModalContent onActionAdd={onActionAdd} onDismiss={onDismiss} />}
+      content={
+        <ModalContent
+          key={modalKey}
+          onActionAdd={onActionAdd}
+          onDismiss={onDismiss}
+          initialState={initialState}
+        />
+      }
     />
   );
 };

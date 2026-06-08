@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/strict-boolean-expressions */
 import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { decodeFunctionData, formatEther, parseAbi } from 'viem';
 
@@ -11,6 +12,7 @@ interface ProposalTransactionsProps {
   className?: string;
   proposalTransactions: ProposalTransaction[];
   onRemoveProposalTransaction: (index: number) => void;
+  onEditProposalTransaction?: (index: number) => void;
   isProposalUpdate?: boolean;
 }
 
@@ -18,6 +20,7 @@ const ProposalTransactions = ({
   className,
   proposalTransactions,
   onRemoveProposalTransaction,
+  onEditProposalTransaction,
   isProposalUpdate,
 }: ProposalTransactionsProps) => {
   const getPopover = (tx: ProposalTransaction) => {
@@ -99,13 +102,26 @@ const ProposalTransactions = ({
                 <b>{tx.signature || 'transfer()'}</b>
               </span>
             </div>
-            <button
-              type="button"
-              className={classes.removeTransactionButton}
-              onClick={() => onRemoveProposalTransaction(i)}
-            >
-              <img src={xIcon} alt="Remove Transaction" />
-            </button>
+            <div className={classes.actions}>
+              {onEditProposalTransaction &&
+                (tx.proposalActionState as { actionType?: string } | undefined)?.actionType !==
+                  'Stream Funds' && (
+                  <button
+                    type="button"
+                    className={classes.editTransactionButton}
+                    onClick={() => onEditProposalTransaction(i)}
+                  >
+                    Edit
+                  </button>
+                )}
+              <button
+                type="button"
+                className={classes.removeTransactionButton}
+                onClick={() => onRemoveProposalTransaction(i)}
+              >
+                <img src={xIcon} alt="Remove Transaction" />
+              </button>
+            </div>
           </div>
         </OverlayTrigger>
       ))}

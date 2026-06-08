@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
@@ -29,6 +30,8 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState<Address>((state.address as Address) ?? ('0x' as Address));
   const [isValidForNextStage, setIsValidForNextStage] = useState(false);
+  const isRecipientLocked = state.isTransferRecipientLocked === true;
+  const isCurrencyLocked = state.isTransferCurrencyLocked === true;
 
   useEffect(() => {
     if (isAddress(address) && parseFloat(amount) > 0 && !isValidForNextStage) {
@@ -47,7 +50,11 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
   return (
     <div>
       <ModalTitle>
-        <Trans>Add Transfer Funds Action</Trans>
+        {state.isTokenBuyerTopUp ? (
+          <Trans>Edit Token Buyer Top-Up</Trans>
+        ) : (
+          <Trans>Add Transfer Funds Action</Trans>
+        )}
       </ModalTitle>
 
       <BrandDropdown
@@ -55,6 +62,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         value={currency}
         onChange={e => setCurrency(SupportedCurrency[e.target.value as SupportedCurrency])}
         chevronTop={38}
+        disabled={isCurrencyLocked}
       >
         <option value="USDC">USDC</option>
         <option value="ETH">ETH</option>
@@ -79,6 +87,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
         type="string"
         placeholder="0x..."
         isInvalid={address.length === 0 ? false : !isAddress(address)}
+        disabled={isRecipientLocked}
       />
 
       <ModalBottomButtonRow

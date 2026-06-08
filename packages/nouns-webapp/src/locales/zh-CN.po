@@ -30,6 +30,10 @@ msgstr "身体（{0}）"
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr "这将清除所有先前的支持者和反馈投票"
 
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+msgid "Edit Token Buyer Top-Up"
+msgstr "Edit Token Buyer Top-Up"
+
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr "由于 100% 的 Noun 拍卖收入都发往 Nouns DAO，Nounders 决定以 Noun 形式自我补偿。项目头 5 年内的每第 10 个 Noun（ID#0、#10、#20、#30 等）将自动发送到 Nounders 的多签钱包，进行归属并在创始成员间分配。"
@@ -606,11 +610,7 @@ msgid "Proposal Executed!"
 msgstr "提案已执行！"
 
 #: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
 msgid "Note"
 msgstr "注意"
 
@@ -1320,8 +1320,8 @@ msgstr "拍卖"
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateCandidate/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr "由于本提案涉及 USDC 资金转移，我们增加了一笔额外的 ETH 交易来补充 TokenBuyer 合约余额。这项操作旨在确保 DAO 能够继续以无需信任的方式获取 USDC，从而为类似的提案提供资金支持。"
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr "由于本提案涉及 USDC 资金转移，我们增加了一笔额外的 ETH 交易来补充 TokenBuyer 合约余额。这项操作旨在确保 DAO 能够继续以无需信任的方式获取 USDC，从而为类似的提案提供资金支持。"
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
@@ -1687,8 +1687,8 @@ msgid "Forking"
 msgstr "分叉中"
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr "由于此提案包含 USDC 资金转移操作，我们添加了一个额外的 ETH 交易以补充 TokenBuyer 合约。此操作允许继续无信任地获取 USDC 以资助此类提案。"
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr "由于此提案包含 USDC 资金转移操作，我们添加了一个额外的 ETH 交易以补充 TokenBuyer 合约。此操作允许继续无信任地获取 USDC 以资助此类提案。"
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx

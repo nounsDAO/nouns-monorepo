@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useReadNounsTokenBuyerEthNeeded } from '@/contracts';
 
-const BUFFER_BPS = 5_000n;
+export const TOKEN_BUYER_BUFFER_BPS = 1_000n;
 
 export const useEthNeeded = (address: string, additionalTokens: number, skip?: boolean) => {
   const { data: ethNeeded } = useReadNounsTokenBuyerEthNeeded({
-    args: [BigInt(additionalTokens), BUFFER_BPS],
+    args: [BigInt(additionalTokens), TOKEN_BUYER_BUFFER_BPS],
     query: { enabled: !skip && !!address },
   });
 

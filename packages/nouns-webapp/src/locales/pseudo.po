@@ -30,6 +30,10 @@ msgstr ""
 msgid "This will clear all previous sponsors and feedback votes"
 msgstr ""
 
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+msgid "Edit Token Buyer Top-Up"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr ""
@@ -606,11 +610,7 @@ msgid "Proposal Executed!"
 msgstr ""
 
 #: src/pages/EditProposal/index.tsx
-#: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
-#: src/pages/EditCandidate/index.tsx
-#: src/pages/CreateProposal/index.tsx
-#: src/pages/CreateCandidate/index.tsx
 msgid "Note"
 msgstr ""
 
@@ -1320,8 +1320,8 @@ msgstr ""
 #: src/pages/EditProposal/index.tsx
 #: src/pages/EditCandidate/index.tsx
 #: src/pages/CreateCandidate/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr ""
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 msgid "Stream"
@@ -1687,8 +1687,8 @@ msgid "Forking"
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
-msgstr ""
+#~ msgid "Because this proposal contains a USDC fund transfer action we've added an additional additional ETH transaction to refill the TokenBuyer contract. This action allows to continue to trustlessly acquire USDC to fund proposals like this."
+#~ msgstr ""
 
 #. placeholder {0}: createCandidateCost ? formatEther(createCandidateCost) : '0'
 #: src/pages/CreateCandidate/index.tsx
