@@ -48,8 +48,7 @@ const TokenBuyerTopUpAlert = ({
   const chainId = defaultChain.id;
   const payerAddress = nounsPayerAddress[chainId];
   const treasuryAddress = nounsTreasuryAddress[chainId];
-  const displayedEth =
-    includeTokenBuyerTopUp && topUpEth && topUpEth !== '0' ? topUpEth : suggestedEth;
+  const displayedEth = includeTokenBuyerTopUp && topUpEth !== undefined ? topUpEth : suggestedEth;
   const displayedEthValue = displayedEth ? BigInt(displayedEth) : 0n;
 
   const { data: payerUSDCBalance } = useReadUsdcBalanceOf({

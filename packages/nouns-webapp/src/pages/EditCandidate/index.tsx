@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
@@ -22,7 +22,10 @@ import TokenBuyerTopUpAlert from '@/components/TokenBuyerTopUpAlert';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
 import { processProposalDescriptionText } from '@/utils/processProposalDescriptionText';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import {
+  getTokenBuyerTopUpTransactionEth,
+  useEthNeeded,
+} from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
 import { ProposalDetail, ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
 import {
@@ -68,10 +71,16 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
   const hasVotes = availableVotes != null && availableVotes > 0;
   const proposalThreshold = useProposalThreshold();
   const chainId = defaultChain.id;
+  const tokenBuyerAddress = nounsTokenBuyerAddress[chainId];
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[chainId],
+    tokenBuyerAddress ?? '',
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
+    tokenBuyerAddress == undefined || totalUSDCPayment === 0,
+  );
+  const tokenBuyerTopUpTransactionEth = useMemo(
+    () =>
+      getTokenBuyerTopUpTransactionEth(proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth),
+    [proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth],
   );
   const proposal = candidate?.version;
   const updateCandidateCost = useGetUpdateCandidateCost();
@@ -422,7 +431,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = () => {
               setIsTokenBuyerTopUpManuallyEdited(false);
             }}
             suggestedEth={ethNeeded}
-            topUpEth={tokenBuyerTopUpEth}
+            topUpEth={tokenBuyerTopUpTransactionEth}
           />
         )}
         <ProposalEditor

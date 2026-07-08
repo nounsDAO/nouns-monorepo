@@ -21,7 +21,10 @@ import ProposalTransactions from '@/components/ProposalTransactions';
 import TokenBuyerTopUpAlert from '@/components/TokenBuyerTopUpAlert';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import {
+  getTokenBuyerTopUpTransactionEth,
+  useEthNeeded,
+} from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import { ProposalTransaction, useProposalThreshold } from '@/wrappers/nounsDao';
@@ -45,10 +48,16 @@ const CreateCandidatePage = () => {
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
   const chainId = defaultChain.id;
+  const tokenBuyerAddress = nounsTokenBuyerAddress[chainId];
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[chainId],
+    tokenBuyerAddress ?? '',
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
+    tokenBuyerAddress == undefined || totalUSDCPayment === 0,
+  );
+  const tokenBuyerTopUpTransactionEth = useMemo(
+    () =>
+      getTokenBuyerTopUpTransactionEth(proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth),
+    [proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth],
   );
   const createCandidateCost = useGetCreateCandidateCost();
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
@@ -351,7 +360,7 @@ const CreateCandidatePage = () => {
               setIsTokenBuyerTopUpManuallyEdited(false);
             }}
             suggestedEth={ethNeeded}
-            topUpEth={tokenBuyerTopUpEth}
+            topUpEth={tokenBuyerTopUpTransactionEth}
           />
         )}
         <ProposalEditor

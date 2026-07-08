@@ -11,3 +11,28 @@ export const useEthNeeded = (address: string, additionalTokens: number, skip?: b
 
   return ethNeeded ? ethNeeded.toString() : undefined;
 };
+
+type TokenBuyerTransaction = {
+  address: string;
+  value?: bigint;
+};
+
+export const isTokenBuyerTopUpTransaction = (
+  transaction: TokenBuyerTransaction | undefined,
+  tokenBuyerAddress: string | undefined,
+) =>
+  transaction !== undefined &&
+  tokenBuyerAddress !== undefined &&
+  transaction.address.toLowerCase() === tokenBuyerAddress.toLowerCase();
+
+export const getTokenBuyerTopUpTransactionEth = (
+  transactions: TokenBuyerTransaction[],
+  tokenBuyerAddress: string | undefined,
+  fallbackEth: string,
+) => {
+  const tokenBuyerTopUp = transactions.find(transaction =>
+    isTokenBuyerTopUpTransaction(transaction, tokenBuyerAddress),
+  );
+
+  return tokenBuyerTopUp === undefined ? fallbackEth : String(tokenBuyerTopUp.value ?? 0n);
+};
