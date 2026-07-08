@@ -994,6 +994,10 @@ msgstr "For"
 msgid "Function"
 msgstr "Function"
 
+#: src/components/Footer.tsx
+msgid "Propdates"
+msgstr "Propdates"
+
 #: src/pages/Vote/index.tsx
 msgid "Objection only period"
 msgstr "Objection only period"

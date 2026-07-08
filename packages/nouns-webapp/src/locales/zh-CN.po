@@ -994,6 +994,10 @@ msgstr "支持"
 msgid "Function"
 msgstr "函数"
 
+#: src/components/Footer.tsx
+msgid "Propdates"
+msgstr "Propdates"
+
 #: src/pages/Vote/index.tsx
 msgid "Objection only period"
 msgstr "仅异议期"
