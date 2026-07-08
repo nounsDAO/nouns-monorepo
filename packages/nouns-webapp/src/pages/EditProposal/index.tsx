@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { t } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
@@ -20,7 +20,10 @@ import ProposalTransactions from '@/components/ProposalTransactions';
 import TokenBuyerTopUpAlert from '@/components/TokenBuyerTopUpAlert';
 import { nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import {
+  getTokenBuyerTopUpTransactionEth,
+  useEthNeeded,
+} from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { Address, Hex } from '@/utils/types';
 import { defaultChain } from '@/wagmi';
 import {
@@ -85,10 +88,16 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
     availableVotes && proposalThreshold && availableVotes > proposalThreshold,
   );
   const chainId = defaultChain.id;
+  const tokenBuyerAddress = nounsTokenBuyerAddress[chainId];
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[chainId],
+    tokenBuyerAddress ?? '',
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
+    tokenBuyerAddress == undefined || totalUSDCPayment === 0,
+  );
+  const tokenBuyerTopUpTransactionEth = useMemo(
+    () =>
+      getTokenBuyerTopUpTransactionEth(proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth),
+    [proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth],
   );
 
   const removeTitleFromDescription = (description: string, title: string) => {
@@ -604,7 +613,7 @@ const EditProposalPage: React.FC<EditProposalProps> = () => {
               setIsTokenBuyerTopUpManuallyEdited(false);
             }}
             suggestedEth={ethNeeded}
-            topUpEth={tokenBuyerTopUpEth}
+            topUpEth={tokenBuyerTopUpTransactionEth}
           />
         )}
         <ProposalEditor

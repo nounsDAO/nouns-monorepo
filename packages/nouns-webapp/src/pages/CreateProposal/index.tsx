@@ -26,7 +26,10 @@ import config from '@/config';
 import { nounsLegacyTreasuryAddress, nounsTokenBuyerAddress } from '@/contracts';
 import Section from '@/layout/Section';
 import { buildEtherscanHoldingsLink } from '@/utils/etherscan';
-import { useEthNeeded } from '@/utils/tokenBuyerContractUtils/tokenBuyer';
+import {
+  getTokenBuyerTopUpTransactionEth,
+  useEthNeeded,
+} from '@/utils/tokenBuyerContractUtils/tokenBuyer';
 import { defaultChain } from '@/wagmi';
 import {
   ProposalState,
@@ -69,10 +72,16 @@ const CreateProposalPage = () => {
   const { proposeOnTimelockV1, proposeOnTimelockV1State } = useProposeOnTimelockV1();
   const { _ } = useLingui();
   const chainId = defaultChain.id;
+  const tokenBuyerAddress = nounsTokenBuyerAddress[chainId];
   const ethNeeded = useEthNeeded(
-    nounsTokenBuyerAddress[chainId] ?? '',
+    tokenBuyerAddress ?? '',
     totalUSDCPayment,
-    nounsTokenBuyerAddress[chainId] == undefined || totalUSDCPayment === 0,
+    tokenBuyerAddress == undefined || totalUSDCPayment === 0,
+  );
+  const tokenBuyerTopUpTransactionEth = useMemo(
+    () =>
+      getTokenBuyerTopUpTransactionEth(proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth),
+    [proposalTransactions, tokenBuyerAddress, tokenBuyerTopUpEth],
   );
   const isDaoGteV3 = useIsDaoGteV3();
   const daoEtherscanLink = buildEtherscanHoldingsLink(
@@ -408,7 +417,7 @@ const CreateProposalPage = () => {
               setIsTokenBuyerTopUpManuallyEdited(false);
             }}
             suggestedEth={ethNeeded}
-            topUpEth={tokenBuyerTopUpEth}
+            topUpEth={tokenBuyerTopUpTransactionEth}
           />
         )}
         <ProposalEditor
