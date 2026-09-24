@@ -21,7 +21,6 @@ import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao
 import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOTypes } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { INounsDAOLogic } from '../../../contracts/interfaces/INounsDAOLogic.sol';
-import { INounsToken } from '../../../contracts/interfaces/INounsToken.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
 import { ChainalysisSanctionsListMock } from './ChainalysisSanctionsListMock.sol';
 
@@ -91,9 +90,15 @@ abstract contract DeployUtilsV3 is DeployUtils {
         t.timelock.initialize(address(1), TIMELOCK_DELAY);
 
         auctionHouseProxyAdmin = new NounsAuctionHouseProxyAdmin();
-        address predictedTokenAddress = computeCreateAddress(address(this), vm.getNonce(address(this)) + 9);
+        t.nounsToken = new NounsToken(
+            makeAddr('noundersDAO'),
+            address(this),
+            _deployAndPopulateV2(),
+            new NounsSeeder(),
+            new ProxyRegistryMock()
+        );
         NounsAuctionHouseV3 auctionHouseImpl = new NounsAuctionHouseV3(
-            INounsToken(predictedTokenAddress),
+            t.nounsToken,
             address(new WETH()),
             auctionDuration
         );
@@ -104,16 +109,8 @@ abstract contract DeployUtilsV3 is DeployUtils {
         );
         auctionHouseProxyAdmin.transferOwnership(address(t.timelock));
 
-        t.nounsToken = new NounsToken(
-            makeAddr('noundersDAO'),
-            address(auctionProxy),
-            _deployAndPopulateV2(),
-            new NounsSeeder(),
-            new ProxyRegistryMock()
-        );
+        t.nounsToken.setMinter(address(auctionProxy));
         t.nounsToken.transferOwnership(address(t.timelock));
-
-        require(predictedTokenAddress == address(t.nounsToken), 'Token address mismatch');
 
         address daoLogicImplementation = address(new NounsDAOLogicV4());
 
