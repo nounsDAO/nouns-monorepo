@@ -1,0 +1,24 @@
+.explainer {
+  margin-top: 0.4rem;
+  color: var(--text-light-gray);
+  font-size: 0.9rem;
+}
+
+.value {
+  font-weight: 700;
+}
+
+.checkbox {
+  font-weight: 700;
+}
+
+.ethAmount {
+  font-weight: 700;
+}
+
+.warning {
+  margin-top: 0.4rem;
+  color: var(--brand-dark-red);
+  font-size: 0.9rem;
+  font-weight: 700;
+}

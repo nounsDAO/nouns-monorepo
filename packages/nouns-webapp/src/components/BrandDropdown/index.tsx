@@ -11,6 +11,7 @@ interface BrandDropdownProps {
   chevonRight?: number;
   chevronTop?: number;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 const BrandDropdown: React.FC<BrandDropdownProps> = ({
@@ -20,11 +21,12 @@ const BrandDropdown: React.FC<BrandDropdownProps> = ({
   label,
   chevonRight = 10,
   chevronTop = 10,
+  disabled = false,
 }) => {
   return (
     <div className={classes.dropdownContainer}>
       {label && <span className={classes.label}>{label}</span>}
-      <select onChange={onChange} className={classes.select} value={value}>
+      <select onChange={onChange} className={classes.select} value={value} disabled={disabled}>
         {children}
       </select>
       <div

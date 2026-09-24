@@ -32,6 +32,7 @@ import {
   formatEther,
   keccak256,
   parseAbiItem,
+  parseAbiParameters,
   stringToBytes,
 } from 'viem';
 import { mainnet } from 'viem/chains';
@@ -236,6 +237,7 @@ export interface ProposalTransaction {
   calldata: Hex;
   decodedCalldata?: string;
   usdcValue?: number;
+  proposalActionState?: unknown;
 }
 
 export interface EscrowDeposit {
@@ -488,7 +490,7 @@ export const formatProposalTransactionDetails = (details: {
     }
 
     try {
-      const abiParams: AbiParameter[] = types.split(/,(?![^(]*\))/g).map(t => ({ type: t.trim() }));
+      const abiParams = parseAbiParameters(types) as AbiParameter[];
       const decoded = decodeAbiParameters(abiParams, callData);
       return {
         target,
@@ -496,8 +498,7 @@ export const formatProposalTransactionDetails = (details: {
         callData: decoded.map(v => String(v)).join(',') as Hex,
         value,
       };
-    } catch (err) {
-      console.error('decodeAbiParameters failed:', err);
+    } catch {
       return { target, callData: concatSelectorToCalldata(signature, callData), value };
     }
   });

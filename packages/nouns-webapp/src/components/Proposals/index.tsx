@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { filter, find, last } from 'remeda';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -101,6 +101,20 @@ interface ProposalsProps {
   nounsRequired?: number;
 }
 
+const candidatesKey = (candidates?: ProposalCandidate[]) =>
+  candidates
+    ?.map(candidate =>
+      [
+        candidate.id,
+        candidate.slug,
+        candidate.lastUpdatedTimestamp.toString(),
+        candidate.versionsCount,
+        candidate.voteCount,
+        candidate.canceled,
+      ].join(':'),
+    )
+    .join('|') ?? '';
+
 const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const { hash } = useLocation();
@@ -153,10 +167,12 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
         (candidate): candidate is ProposalCandidate => candidate !== undefined,
       );
       if (filteredCandidates.length > 0) {
-        dispatch(setCandidates(filteredCandidates));
+        if (candidatesKey(filteredCandidates) !== candidatesKey(candidates)) {
+          dispatch(setCandidates(filteredCandidates));
+        }
       }
     }
-  }, [candidatesData, dispatch]);
+  }, [candidates, candidatesData, dispatch]);
 
   useEffect(() => {
     if (hash === '#candidates') {
@@ -475,9 +491,13 @@ const Proposals = ({ proposals, nounsRequired }: ProposalsProps) => {
                     signatures by Nouns voters, it can be promoted to a proposal.
                   </Trans>
                 </p>
-                <Link to="/create-candidate" className={clsx(classes.button)}>
+                <button
+                  type="button"
+                  className={clsx(classes.button)}
+                  onClick={() => navigate('/create-candidate')}
+                >
                   Create a candidate
-                </Link>
+                </button>
               </Col>
             </Row>
           </Col>
