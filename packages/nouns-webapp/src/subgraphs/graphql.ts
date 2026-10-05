@@ -4607,6 +4607,7 @@ export type GetProposalQuery = { __typename?: 'Query', proposal?: { __typename?:
 
 export type GetPartialProposalsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4615,6 +4616,7 @@ export type GetPartialProposalsQuery = { __typename?: 'Query', proposals: Array<
 export type GetActivePendingUpdatableProposersQueryVariables = Exact<{
   first: Scalars['Int']['input'];
   currentBlock: Scalars['BigInt']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4623,6 +4625,7 @@ export type GetActivePendingUpdatableProposersQuery = { __typename?: 'Query', pr
 export type GetUpdatableProposalsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
   currentBlock: Scalars['BigInt']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4721,7 +4724,10 @@ export type GetNounDelegationHistoryQueryVariables = Exact<{
 
 export type GetNounDelegationHistoryQuery = { __typename?: 'Query', delegationEvents: Array<{ __typename?: 'DelegationEvent', id: string, blockNumber: bigint, previousDelegate: { __typename?: 'Delegate', id: string }, newDelegate: { __typename?: 'Delegate', id: string } }> };
 
-export type GetCreateTimestampAllProposalsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCreateTimestampAllProposalsQueryVariables = Exact<{
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
+}>;
 
 
 export type GetCreateTimestampAllProposalsQuery = { __typename?: 'Query', proposals: Array<{ __typename?: 'Proposal', id: string, createdTimestamp: bigint }> };
@@ -4813,6 +4819,8 @@ export type GetEscrowWithdrawEventsQuery = { __typename?: 'Query', escrowWithdra
 
 export type GetProposalTitlesQueryVariables = Exact<{
   ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4903,8 +4911,13 @@ export const GetProposalDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetProposalQuery, GetProposalQueryVariables>;
 export const GetPartialProposalsDocument = new TypedDocumentString(`
-    query GetPartialProposals($first: Int!) {
-  proposals(first: $first, orderBy: createdBlock, orderDirection: asc) {
+    query GetPartialProposals($first: Int!, $skip: Int!) {
+  proposals(
+    first: $first
+    skip: $skip
+    orderBy: createdBlock
+    orderDirection: asc
+  ) {
     id
     title
     status
@@ -4925,9 +4938,12 @@ export const GetPartialProposalsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetPartialProposalsQuery, GetPartialProposalsQueryVariables>;
 export const GetActivePendingUpdatableProposersDocument = new TypedDocumentString(`
-    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {
+    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!, $skip: Int!) {
   proposals(
     first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
     where: {or: [{status: PENDING, endBlock_gt: $currentBlock}, {status: ACTIVE, endBlock_gt: $currentBlock}]}
   ) {
     proposer {
@@ -4940,9 +4956,12 @@ export const GetActivePendingUpdatableProposersDocument = new TypedDocumentStrin
 }
     `) as unknown as TypedDocumentString<GetActivePendingUpdatableProposersQuery, GetActivePendingUpdatableProposersQueryVariables>;
 export const GetUpdatableProposalsDocument = new TypedDocumentString(`
-    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {
+    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!, $skip: Int!) {
   proposals(
     first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
     where: {status: PENDING, endBlock_gt: $currentBlock, updatePeriodEndBlock_gt: $currentBlock}
   ) {
     id
@@ -5258,8 +5277,13 @@ export const GetNounDelegationHistoryDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetNounDelegationHistoryQuery, GetNounDelegationHistoryQueryVariables>;
 export const GetCreateTimestampAllProposalsDocument = new TypedDocumentString(`
-    query GetCreateTimestampAllProposals {
-  proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {
+    query GetCreateTimestampAllProposals($first: Int!, $skip: Int!) {
+  proposals(
+    orderBy: createdTimestamp
+    orderDirection: asc
+    first: $first
+    skip: $skip
+  ) {
     id
     createdTimestamp
   }
@@ -5401,8 +5425,14 @@ export const GetEscrowWithdrawEventsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetEscrowWithdrawEventsQuery, GetEscrowWithdrawEventsQueryVariables>;
 export const GetProposalTitlesDocument = new TypedDocumentString(`
-    query GetProposalTitles($ids: [ID!]!) {
-  proposals(where: {id_in: $ids}) {
+    query GetProposalTitles($ids: [ID!]!, $first: Int!, $skip: Int!) {
+  proposals(
+    where: {id_in: $ids}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
     title
   }

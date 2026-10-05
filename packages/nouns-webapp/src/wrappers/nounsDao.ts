@@ -66,6 +66,7 @@ import {
   useWriteNounsGovernorWithdrawFromForkEscrow,
 } from '@/contracts';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
+import { usePaginatedProposals } from '@/hooks/usePaginatedProposals';
 import { defaultChain } from '@/wagmi';
 
 import {
@@ -801,9 +802,7 @@ const parseSubgraphProposal = (
 
 export const useAllProposalsViaSubgraph = (): PartialProposalData => {
   const { query, variables } = partialProposalsQuery();
-  const { loading, data, error } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, {
-    variables,
-  });
+  const { loading, data, error } = usePaginatedProposals<GraphQLProposal>(query, variables);
   const isDaoGteV3 = useIsDaoGteV3();
   const { data: blockNumber } = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
@@ -921,7 +920,7 @@ export const useProposal = (id: string | number, toUpdate?: boolean) => {
 
 export const useProposalTitles = (ids: number[]): ProposalTitle[] | undefined => {
   const { query, variables } = proposalTitlesQuery(ids);
-  const { data } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables });
+  const { data } = usePaginatedProposals<GraphQLProposal>(query, variables);
 
   return (
     data?.proposals?.map(proposal => ({
@@ -1570,7 +1569,7 @@ export const useActivePendingUpdatableProposers = (blockNumber: bigint = 0n) => 
     loading,
     data: proposals,
     error,
-  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
+  } = usePaginatedProposals<ProposalProposerAndSigners>(query, variables) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;
@@ -1604,7 +1603,7 @@ export function useUpdatableProposalIds(blockNumber?: bigint) {
     loading,
     data: proposals,
     error,
-  } = useQuery<{ proposals: Maybe<GraphQLProposal[]> }>(query, { variables }) as {
+  } = usePaginatedProposals<ProposalProposerAndSigners>(query, variables) as {
     loading: boolean;
     data: { proposals: ProposalProposerAndSigners[] };
     error: Error;

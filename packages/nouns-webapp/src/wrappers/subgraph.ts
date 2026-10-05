@@ -123,8 +123,8 @@ export const proposalQuery = (id: string | number) => ({
 
 export const partialProposalsQuery = (first = 1_000) => ({
   query: gql`
-    query GetPartialProposals($first: Int!) {
-      proposals(first: $first, orderBy: createdBlock, orderDirection: asc) {
+    query GetPartialProposals($first: Int!, $skip: Int!) {
+      proposals(first: $first, skip: $skip, orderBy: createdBlock, orderDirection: asc) {
         id
         title
         status
@@ -144,14 +144,17 @@ export const partialProposalsQuery = (first = 1_000) => ({
       }
     }
   `,
-  variables: { first },
+  variables: { first, skip: 0 },
 });
 
 export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock: bigint = 0n) => ({
   query: gql`
-    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!) {
+    query GetActivePendingUpdatableProposers($first: Int!, $currentBlock: BigInt!, $skip: Int!) {
       proposals(
         first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
         where: {
           or: [
             { status: PENDING, endBlock_gt: $currentBlock }
@@ -168,14 +171,17 @@ export const activePendingUpdatableProposersQuery = (first = 1_000, currentBlock
       }
     }
   `,
-  variables: { first, currentBlock },
+  variables: { first, currentBlock, skip: 0 },
 });
 
 export const updatableProposalsQuery = (first = 1_000, currentBlock: bigint = 0n) => ({
   query: gql`
-    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!) {
+    query GetUpdatableProposals($first: Int!, $currentBlock: BigInt!, $skip: Int!) {
       proposals(
         first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
         where: {
           status: PENDING
           endBlock_gt: $currentBlock
@@ -186,7 +192,7 @@ export const updatableProposalsQuery = (first = 1_000, currentBlock: bigint = 0n
       }
     }
   `,
-  variables: { first, currentBlock: currentBlock || 0 },
+  variables: { first, currentBlock: currentBlock || 0, skip: 0 },
 });
 
 export const candidateProposalsQuery = (first = 50, skip = 0) => ({
@@ -549,16 +555,16 @@ export const nounDelegationHistoryQuery = (nounId: number, first = 1_000) => ({
   variables: { nounId, first },
 });
 
-export const createTimestampAllProposals = () => ({
+export const createTimestampAllProposals = (first = 1_000, skip = 0) => ({
   query: gql`
-    query GetCreateTimestampAllProposals {
-      proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {
+    query GetCreateTimestampAllProposals($first: Int!, $skip: Int!) {
+      proposals(orderBy: createdTimestamp, orderDirection: asc, first: $first, skip: $skip) {
         id
         createdTimestamp
       }
     }
   `,
-  variables: {},
+  variables: { first, skip },
 });
 
 export const proposalVotesQuery = (proposalId: string) => ({
@@ -744,14 +750,20 @@ export const escrowWithdrawEventsQuery = (forkId: string) => ({
 
 export const proposalTitlesQuery = (ids: number[]) => ({
   query: gql`
-    query GetProposalTitles($ids: [ID!]!) {
-      proposals(where: { id_in: $ids }) {
+    query GetProposalTitles($ids: [ID!]!, $first: Int!, $skip: Int!) {
+      proposals(
+        where: { id_in: $ids }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
         title
       }
     }
   `,
-  variables: { ids },
+  variables: { ids, first: 1_000, skip: 0 },
 });
 
 export const forkDetailsQuery = (id: string) => ({
