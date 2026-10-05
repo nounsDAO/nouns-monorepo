@@ -5,7 +5,7 @@ import { ProposalDetail } from '@/wrappers/nounsDao';
 import classes from './ProposalContent.module.css';
 import ProposalTransaction from './ProposalTransaction';
 import { Address } from '@/utils/types';
-import { Hex } from 'viem';
+import { formatEther, Hex } from 'viem';
 
 type Props = {
   oldTransactions: ProposalDetail[];
@@ -42,7 +42,9 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
   });
 
   const stringifyTx = (tx: ProposalDetail) => {
-    return tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
+    const functionName = tx.functionSig ? `.${tx.functionSig}` : '';
+    const value = tx.value ? ` [${formatEther(tx.value)} ETH]` : '';
+    return tx.target + functionName + value + '(' + tx.callData + ')';
   };
 
   const isEmptyTx = (tx: ProposalDetail) => {
@@ -64,7 +66,7 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
             const isDiff = stringifyTx(tx.oldTx) !== stringifyTx(tx.newTx);
             if (!isDiff)
               return (
-                <div className="position-relative">
+                <div key={i} className="position-relative">
                   <div className={classes.listItemNum}>{i + 1}.</div>
                   <ProposalTransaction transaction={isEmptyTx(tx.oldTx) ? tx.newTx : tx.oldTx} />
                 </div>
