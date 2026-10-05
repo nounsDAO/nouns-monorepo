@@ -69,8 +69,8 @@ export interface Delegates {
 
 export const seedsQuery = (first = 1_000) => ({
   query: gql`
-    query GetSeeds($first: Int!) {
-      seeds(first: $first) {
+    query GetSeeds($first: Int!, $skip: Int!) {
+      seeds(first: $first, skip: $skip, orderBy: id, orderDirection: asc) {
         id
         background
         body
@@ -80,7 +80,7 @@ export const seedsQuery = (first = 1_000) => ({
       }
     }
   `,
-  variables: { first },
+  variables: { first, skip: 0 },
 });
 
 export const proposalQuery = (id: string | number) => ({
@@ -442,7 +442,7 @@ export const nounsIndex = () => ({
 });
 
 export const latestAuctionsQuery = graphql(`
-  query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {
+  query GetLatestAuctions($first: Int = 1000, $skip: Int = 0, $nestedSkip: Int = 0) {
     auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {
       id
       amount
@@ -458,7 +458,7 @@ export const latestAuctionsQuery = graphql(`
           id
         }
       }
-      bids {
+      bids(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
         id
         amount
         blockNumber
@@ -472,6 +472,25 @@ export const latestAuctionsQuery = graphql(`
     }
   }
 `);
+
+export const auctionBidPagesQuery = gql`
+  query GetAuctionBidPages($id: ID!, $first: Int!, $nestedSkip: Int!) {
+    auction(id: $id) {
+      id
+      bids(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
+        id
+        amount
+        blockNumber
+        blockTimestamp
+        txHash
+        txIndex
+        bidder {
+          id
+        }
+      }
+    }
+  }
+`;
 
 export const latestBidsQuery = (first = 10) => ({
   query: gql`
@@ -569,8 +588,14 @@ export const createTimestampAllProposals = (first = 1_000, skip = 0) => ({
 
 export const proposalVotesQuery = (proposalId: string) => ({
   query: gql`
-    query GetProposalVotes($proposalId: String!) {
-      votes(where: { proposal: $proposalId, votesRaw_gt: 0 }) {
+    query GetProposalVotes($proposalId: String!, $first: Int!, $skip: Int!) {
+      votes(
+        where: { proposal: $proposalId, votesRaw_gt: 0 }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         supportDetailed
         voter {
           id
@@ -583,10 +608,23 @@ export const proposalVotesQuery = (proposalId: string) => ({
 
 export const delegateNounsAtBlockQuery = (delegates: string[], block: bigint) => ({
   query: gql`
-    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!) {
-      delegates(where: { id_in: $delegates }, block: { number: $block }) {
+    query GetDelegateNounsAtBlock(
+      $delegates: [ID!]!
+      $block: Int!
+      $first: Int!
+      $skip: Int!
+      $nestedSkip: Int!
+    ) {
+      delegates(
+        where: { id_in: $delegates }
+        block: { number: $block }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
-        nounsRepresented {
+        nounsRepresented(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
           id
         }
       }
@@ -597,10 +635,16 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: bigint) =>
 
 export const currentlyDelegatedNouns = (delegate: string) => ({
   query: gql`
-    query GetCurrentlyDelegatedNouns($delegate: ID!) {
-      delegates(where: { id: $delegate }) {
+    query GetCurrentlyDelegatedNouns($delegate: ID!, $first: Int!, $skip: Int!, $nestedSkip: Int!) {
+      delegates(
+        where: { id: $delegate }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
-        nounsRepresented {
+        nounsRepresented(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
           id
         }
       }
@@ -633,8 +677,14 @@ export const propUsingDynamicQuorum = (proposalId: string) => ({
 
 export const proposalFeedbacksQuery = (proposalId: string) => ({
   query: gql`
-    query GetProposalFeedbacks($proposalId: ID!) {
-      proposalFeedbacks(where: { proposal_: { id: $proposalId } }) {
+    query GetProposalFeedbacks($proposalId: ID!, $first: Int!, $skip: Int!) {
+      proposalFeedbacks(
+        where: { proposal_: { id: $proposalId } }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         supportDetailed
         votes
         reason
@@ -652,8 +702,14 @@ export const proposalFeedbacksQuery = (proposalId: string) => ({
 });
 export const candidateFeedbacksQuery = (candidateId: string) => ({
   query: gql`
-    query GetCandidateFeedbacks($candidateId: ID!) {
-      candidateFeedbacks(where: { candidate_: { id: $candidateId } }) {
+    query GetCandidateFeedbacks($candidateId: ID!, $first: Int!, $skip: Int!) {
+      candidateFeedbacks(
+        where: { candidate_: { id: $candidateId } }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         supportDetailed
         votes
         reason
@@ -672,8 +728,14 @@ export const candidateFeedbacksQuery = (candidateId: string) => ({
 
 export const ownedNounsQuery = (owner: string) => ({
   query: gql`
-    query GetOwnedNouns($owner: ID!) {
-      nouns(where: { owner_: { id: $owner } }) {
+    query GetOwnedNouns($owner: ID!, $first: Int!, $skip: Int!) {
+      nouns(
+        where: { owner_: { id: $owner } }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
       }
     }
@@ -683,8 +745,14 @@ export const ownedNounsQuery = (owner: string) => ({
 
 export const accountEscrowedNounsQuery = (owner: string) => ({
   query: gql`
-    query GetAccountEscrowedNouns($owner: ID!) {
-      escrowedNouns(where: { owner_: { id: $owner } }, first: 1000) {
+    query GetAccountEscrowedNouns($owner: ID!, $first: Int!, $skip: Int!) {
+      escrowedNouns(
+        where: { owner_: { id: $owner } }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         noun {
           id
         }
@@ -699,8 +767,14 @@ export const accountEscrowedNounsQuery = (owner: string) => ({
 
 export const escrowDepositEventsQuery = (forkId: string) => ({
   query: gql`
-    query GetEscrowDepositEvents($forkId: String!) {
-      escrowDeposits(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
+    query GetEscrowDepositEvents($forkId: String!, $first: Int!, $skip: Int!) {
+      escrowDeposits(
+        where: { fork: $forkId, tokenIDs_not: [] }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
         createdAt
         owner {
@@ -716,8 +790,14 @@ export const escrowDepositEventsQuery = (forkId: string) => ({
 });
 export const forkJoinsQuery = (forkId: string) => ({
   query: gql`
-    query GetForkJoins($forkId: String!) {
-      forkJoins(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
+    query GetForkJoins($forkId: String!, $first: Int!, $skip: Int!) {
+      forkJoins(
+        where: { fork: $forkId, tokenIDs_not: [] }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
         createdAt
         owner {
@@ -734,8 +814,14 @@ export const forkJoinsQuery = (forkId: string) => ({
 
 export const escrowWithdrawEventsQuery = (forkId: string) => ({
   query: gql`
-    query GetEscrowWithdrawEvents($forkId: String!) {
-      escrowWithdrawals(where: { fork: $forkId, tokenIDs_not: [] }, first: 1000) {
+    query GetEscrowWithdrawEvents($forkId: String!, $first: Int!, $skip: Int!) {
+      escrowWithdrawals(
+        where: { fork: $forkId, tokenIDs_not: [] }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         id
         createdAt
         owner {
@@ -768,7 +854,7 @@ export const proposalTitlesQuery = (ids: number[]) => ({
 
 export const forkDetailsQuery = (id: string) => ({
   query: gql`
-    query GetForkDetails($id: ID!) {
+    query GetForkDetails($id: ID!, $first: Int!, $nestedSkip: Int!) {
       fork(id: $id) {
         id
         forkID
@@ -779,12 +865,12 @@ export const forkDetailsQuery = (id: string) => ({
         tokensForkingCount
         tokensInEscrowCount
         forkingPeriodEndTimestamp
-        escrowedNouns(first: 1000) {
+        escrowedNouns(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
           noun {
             id
           }
         }
-        joinedNouns(first: 1000) {
+        joinedNouns(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
           noun {
             id
           }
@@ -797,8 +883,8 @@ export const forkDetailsQuery = (id: string) => ({
 
 export const forksQuery = () => ({
   query: gql`
-    query GetForks {
-      forks {
+    query GetForks($first: Int!, $skip: Int!) {
+      forks(first: $first, skip: $skip, orderBy: id, orderDirection: asc) {
         id
         forkID
         executed
@@ -816,8 +902,14 @@ export const forksQuery = () => ({
 
 export const isForkActiveQuery = (currentTimestamp: number) => ({
   query: gql`
-    query GetIsForkActive($currentTimestamp: BigInt!) {
-      forks(where: { executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp }) {
+    query GetIsForkActive($currentTimestamp: BigInt!, $first: Int!, $skip: Int!) {
+      forks(
+        where: { executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+      ) {
         forkID
         forkingPeriodEndTimestamp
       }

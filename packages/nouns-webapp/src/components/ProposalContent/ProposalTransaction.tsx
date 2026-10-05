@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
-import { formatUnits } from 'viem';
+import { formatEther, formatUnits } from 'viem';
 
 import ShortAddress from '@/components/ShortAddress';
 import { nounsTokenBuyerAddress, nounsPayerAddress } from '@/contracts';
@@ -22,8 +22,11 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
 
   return (
     <li className="m-0">
-      {linkIfAddress(transaction.target)}.{transaction.functionSig}
-      {transaction.value ? String(transaction.value) : null}
+      {linkIfAddress(transaction.target)}
+      {transaction.functionSig ? `.${transaction.functionSig}` : null}
+      {transaction.value != null && transaction.value !== 0n
+        ? ` [${formatEther(transaction.value)} ETH]`
+        : null}
       {transaction.functionSig ? (
         <>
           (<br />

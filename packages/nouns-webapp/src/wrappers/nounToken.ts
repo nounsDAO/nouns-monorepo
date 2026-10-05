@@ -1,9 +1,8 @@
-import type { Delegate, EscrowedNoun, Noun, Seed } from '@/subgraphs/graphql';
+import type { EscrowedNoun, Noun, Seed } from '@/subgraphs/graphql';
 import type { Address } from '@/utils/types';
 
 import { useEffect } from 'react';
 
-import { useQuery } from '@apollo/client';
 import { zeroAddress } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -19,6 +18,8 @@ import {
   useWriteNounsTokenDelegate,
   useWriteNounsTokenSetApprovalForAll,
 } from '@/contracts';
+import { useDelegateNouns } from '@/hooks/useDelegateNouns';
+import { usePaginatedSubgraph } from '@/hooks/usePaginatedSubgraph';
 import { defaultChain } from '@/wagmi';
 
 import { cache, cacheKey, CHAIN_ID } from '../config';
@@ -64,9 +65,9 @@ const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? (JSON.parse(cache) as Seed[]) : undefined;
   const { query, variables } = seedsQuery();
-  const { data } = useQuery<{ seeds: Seed[] }>(query, {
+  const { data } = usePaginatedSubgraph<{ seeds: Seed[] }>(query, variables, {
+    field: 'seeds',
     skip: !!cachedSeeds,
-    variables,
   });
 
   useEffect(() => {
@@ -201,10 +202,11 @@ export const useNounTokenBalance = (address: Address): number | undefined => {
 export const useUserOwnedNounIds = (pollInterval: number) => {
   const { address } = useAccount();
   const { query, variables } = ownedNounsQuery(address?.toLowerCase() ?? '');
-  const { loading, data, error, refetch } = useQuery<{ nouns: Noun[] }>(query, {
-    pollInterval,
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{ nouns: Noun[] }>(
+    query,
     variables,
-  });
+    { field: 'nouns', pollInterval, skip: !address },
+  );
   const userOwnedNouns: number[] = data?.nouns?.map(noun => Number(noun.id)) || [];
   return { loading, data: userOwnedNouns, error, refetch };
 };
@@ -212,12 +214,9 @@ export const useUserOwnedNounIds = (pollInterval: number) => {
 export const useUserEscrowedNounIds = (pollInterval: number, forkId: string) => {
   const { address } = useAccount();
   const { query, variables } = accountEscrowedNounsQuery(address?.toLowerCase() ?? '');
-  const { loading, data, error, refetch } = useQuery<{
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
     escrowedNouns: Array<EscrowedNoun>;
-  }>(query, {
-    pollInterval,
-    variables,
-  });
+  }>(query, variables, { field: 'escrowedNouns', pollInterval, skip: !address });
   // filter escrowed nouns to just this fork
   const userEscrowedNounIds: number[] =
     data?.escrowedNouns?.reduce((acc: number[], escrowedNoun: EscrowedNoun) => {
@@ -271,6 +270,6 @@ export const useIsApprovedForAll = () => {
 };
 export const useDelegateNounsAtBlockQuery = (signers: string[], block: bigint) => {
   const { query, variables } = delegateNounsAtBlockQuery(signers, block);
-  const { loading, data, error } = useQuery<{ delegates: Delegate[] }>(query, { variables });
+  const { loading, data, error } = useDelegateNouns(query, variables);
   return { loading, data, error };
 };

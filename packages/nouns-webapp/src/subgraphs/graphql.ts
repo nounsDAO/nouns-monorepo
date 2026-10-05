@@ -4593,6 +4593,7 @@ export enum SubgraphErrorPolicy {
 
 export type GetSeedsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4688,10 +4689,20 @@ export type GetNounsIndexQuery = { __typename?: 'Query', nouns: Array<{ __typena
 export type GetLatestAuctionsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
+  nestedSkip?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type GetLatestAuctionsQuery = { __typename?: 'Query', auctions: Array<{ __typename?: 'Auction', id: string, amount: bigint, settled: boolean, startTime: bigint, endTime: bigint, bidder?: { __typename?: 'Account', id: string } | null, noun: { __typename?: 'Noun', id: string, owner: { __typename?: 'Account', id: string } }, bids: Array<{ __typename?: 'Bid', id: string, amount: bigint, blockNumber: bigint, blockTimestamp: bigint, txHash: "Byte", txIndex: bigint, bidder?: { __typename?: 'Account', id: string } | null }> }> };
+
+export type GetAuctionBidPagesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  nestedSkip: Scalars['Int']['input'];
+}>;
+
+
+export type GetAuctionBidPagesQuery = { __typename?: 'Query', auction?: { __typename?: 'Auction', id: string, bids: Array<{ __typename?: 'Bid', id: string, amount: bigint, blockNumber: bigint, blockTimestamp: bigint, txHash: "Byte", txIndex: bigint, bidder?: { __typename?: 'Account', id: string } | null }> } | null };
 
 export type GetLatestBidsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
@@ -4734,6 +4745,8 @@ export type GetCreateTimestampAllProposalsQuery = { __typename?: 'Query', propos
 
 export type GetProposalVotesQueryVariables = Exact<{
   proposalId: Scalars['String']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4742,6 +4755,9 @@ export type GetProposalVotesQuery = { __typename?: 'Query', votes: Array<{ __typ
 export type GetDelegateNounsAtBlockQueryVariables = Exact<{
   delegates: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   block: Scalars['Int']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
+  nestedSkip: Scalars['Int']['input'];
 }>;
 
 
@@ -4749,6 +4765,9 @@ export type GetDelegateNounsAtBlockQuery = { __typename?: 'Query', delegates: Ar
 
 export type GetCurrentlyDelegatedNounsQueryVariables = Exact<{
   delegate: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
+  nestedSkip: Scalars['Int']['input'];
 }>;
 
 
@@ -4770,6 +4789,8 @@ export type GetPropUsingDynamicQuorumQuery = { __typename?: 'Query', proposal?: 
 
 export type GetProposalFeedbacksQueryVariables = Exact<{
   proposalId: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4777,6 +4798,8 @@ export type GetProposalFeedbacksQuery = { __typename?: 'Query', proposalFeedback
 
 export type GetCandidateFeedbacksQueryVariables = Exact<{
   candidateId: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4784,6 +4807,8 @@ export type GetCandidateFeedbacksQuery = { __typename?: 'Query', candidateFeedba
 
 export type GetOwnedNounsQueryVariables = Exact<{
   owner: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4791,6 +4816,8 @@ export type GetOwnedNounsQuery = { __typename?: 'Query', nouns: Array<{ __typena
 
 export type GetAccountEscrowedNounsQueryVariables = Exact<{
   owner: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4798,6 +4825,8 @@ export type GetAccountEscrowedNounsQuery = { __typename?: 'Query', escrowedNouns
 
 export type GetEscrowDepositEventsQueryVariables = Exact<{
   forkId: Scalars['String']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4805,6 +4834,8 @@ export type GetEscrowDepositEventsQuery = { __typename?: 'Query', escrowDeposits
 
 export type GetForkJoinsQueryVariables = Exact<{
   forkId: Scalars['String']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4812,6 +4843,8 @@ export type GetForkJoinsQuery = { __typename?: 'Query', forkJoins: Array<{ __typ
 
 export type GetEscrowWithdrawEventsQueryVariables = Exact<{
   forkId: Scalars['String']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4828,18 +4861,25 @@ export type GetProposalTitlesQuery = { __typename?: 'Query', proposals: Array<{ 
 
 export type GetForkDetailsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
+  first: Scalars['Int']['input'];
+  nestedSkip: Scalars['Int']['input'];
 }>;
 
 
 export type GetForkDetailsQuery = { __typename?: 'Query', fork?: { __typename?: 'Fork', id: string, forkID: bigint, executed?: boolean | null, executedAt?: bigint | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: bigint | null, escrowedNouns: Array<{ __typename?: 'EscrowedNoun', noun: { __typename?: 'Noun', id: string } }>, joinedNouns: Array<{ __typename?: 'ForkJoinedNoun', noun: { __typename?: 'Noun', id: string } }> } | null };
 
-export type GetForksQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetForksQueryVariables = Exact<{
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
+}>;
 
 
 export type GetForksQuery = { __typename?: 'Query', forks: Array<{ __typename?: 'Fork', id: string, forkID: bigint, executed?: boolean | null, executedAt?: bigint | null, forkTreasury?: "Byte" | null, forkToken?: "Byte" | null, tokensForkingCount: number, tokensInEscrowCount: number, forkingPeriodEndTimestamp?: bigint | null }> };
 
 export type GetIsForkActiveQueryVariables = Exact<{
   currentTimestamp: Scalars['BigInt']['input'];
+  first: Scalars['Int']['input'];
+  skip: Scalars['Int']['input'];
 }>;
 
 
@@ -4865,8 +4905,8 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const GetSeedsDocument = new TypedDocumentString(`
-    query GetSeeds($first: Int!) {
-  seeds(first: $first) {
+    query GetSeeds($first: Int!, $skip: Int!) {
+  seeds(first: $first, skip: $skip, orderBy: id, orderDirection: asc) {
     id
     background
     body
@@ -5180,7 +5220,7 @@ export const GetNounsIndexDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetNounsIndexQuery, GetNounsIndexQueryVariables>;
 export const GetLatestAuctionsDocument = new TypedDocumentString(`
-    query GetLatestAuctions($first: Int = 1000, $skip: Int = 0) {
+    query GetLatestAuctions($first: Int = 1000, $skip: Int = 0, $nestedSkip: Int = 0) {
   auctions(orderBy: startTime, orderDirection: desc, first: $first, skip: $skip) {
     id
     amount
@@ -5196,7 +5236,7 @@ export const GetLatestAuctionsDocument = new TypedDocumentString(`
         id
       }
     }
-    bids {
+    bids(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
       id
       amount
       blockNumber
@@ -5210,6 +5250,24 @@ export const GetLatestAuctionsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetLatestAuctionsQuery, GetLatestAuctionsQueryVariables>;
+export const GetAuctionBidPagesDocument = new TypedDocumentString(`
+    query GetAuctionBidPages($id: ID!, $first: Int!, $nestedSkip: Int!) {
+  auction(id: $id) {
+    id
+    bids(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
+      id
+      amount
+      blockNumber
+      blockTimestamp
+      txHash
+      txIndex
+      bidder {
+        id
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetAuctionBidPagesQuery, GetAuctionBidPagesQueryVariables>;
 export const GetLatestBidsDocument = new TypedDocumentString(`
     query GetLatestBids($first: Int!) {
   bids(first: $first, orderBy: blockTimestamp, orderDirection: desc) {
@@ -5290,8 +5348,14 @@ export const GetCreateTimestampAllProposalsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetCreateTimestampAllProposalsQuery, GetCreateTimestampAllProposalsQueryVariables>;
 export const GetProposalVotesDocument = new TypedDocumentString(`
-    query GetProposalVotes($proposalId: String!) {
-  votes(where: {proposal: $proposalId, votesRaw_gt: 0}) {
+    query GetProposalVotes($proposalId: String!, $first: Int!, $skip: Int!) {
+  votes(
+    where: {proposal: $proposalId, votesRaw_gt: 0}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     supportDetailed
     voter {
       id
@@ -5300,20 +5364,43 @@ export const GetProposalVotesDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetProposalVotesQuery, GetProposalVotesQueryVariables>;
 export const GetDelegateNounsAtBlockDocument = new TypedDocumentString(`
-    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!) {
-  delegates(where: {id_in: $delegates}, block: {number: $block}) {
+    query GetDelegateNounsAtBlock($delegates: [ID!]!, $block: Int!, $first: Int!, $skip: Int!, $nestedSkip: Int!) {
+  delegates(
+    where: {id_in: $delegates}
+    block: {number: $block}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
-    nounsRepresented {
+    nounsRepresented(
+      first: $first
+      skip: $nestedSkip
+      orderBy: id
+      orderDirection: asc
+    ) {
       id
     }
   }
 }
     `) as unknown as TypedDocumentString<GetDelegateNounsAtBlockQuery, GetDelegateNounsAtBlockQueryVariables>;
 export const GetCurrentlyDelegatedNounsDocument = new TypedDocumentString(`
-    query GetCurrentlyDelegatedNouns($delegate: ID!) {
-  delegates(where: {id: $delegate}) {
+    query GetCurrentlyDelegatedNouns($delegate: ID!, $first: Int!, $skip: Int!, $nestedSkip: Int!) {
+  delegates(
+    where: {id: $delegate}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
-    nounsRepresented {
+    nounsRepresented(
+      first: $first
+      skip: $nestedSkip
+      orderBy: id
+      orderDirection: asc
+    ) {
       id
     }
   }
@@ -5334,8 +5421,14 @@ export const GetPropUsingDynamicQuorumDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetPropUsingDynamicQuorumQuery, GetPropUsingDynamicQuorumQueryVariables>;
 export const GetProposalFeedbacksDocument = new TypedDocumentString(`
-    query GetProposalFeedbacks($proposalId: ID!) {
-  proposalFeedbacks(where: {proposal_: {id: $proposalId}}) {
+    query GetProposalFeedbacks($proposalId: ID!, $first: Int!, $skip: Int!) {
+  proposalFeedbacks(
+    where: {proposal_: {id: $proposalId}}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     supportDetailed
     votes
     reason
@@ -5350,8 +5443,14 @@ export const GetProposalFeedbacksDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetProposalFeedbacksQuery, GetProposalFeedbacksQueryVariables>;
 export const GetCandidateFeedbacksDocument = new TypedDocumentString(`
-    query GetCandidateFeedbacks($candidateId: ID!) {
-  candidateFeedbacks(where: {candidate_: {id: $candidateId}}) {
+    query GetCandidateFeedbacks($candidateId: ID!, $first: Int!, $skip: Int!) {
+  candidateFeedbacks(
+    where: {candidate_: {id: $candidateId}}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     supportDetailed
     votes
     reason
@@ -5366,15 +5465,27 @@ export const GetCandidateFeedbacksDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetCandidateFeedbacksQuery, GetCandidateFeedbacksQueryVariables>;
 export const GetOwnedNounsDocument = new TypedDocumentString(`
-    query GetOwnedNouns($owner: ID!) {
-  nouns(where: {owner_: {id: $owner}}) {
+    query GetOwnedNouns($owner: ID!, $first: Int!, $skip: Int!) {
+  nouns(
+    where: {owner_: {id: $owner}}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
   }
 }
     `) as unknown as TypedDocumentString<GetOwnedNounsQuery, GetOwnedNounsQueryVariables>;
 export const GetAccountEscrowedNounsDocument = new TypedDocumentString(`
-    query GetAccountEscrowedNouns($owner: ID!) {
-  escrowedNouns(where: {owner_: {id: $owner}}, first: 1000) {
+    query GetAccountEscrowedNouns($owner: ID!, $first: Int!, $skip: Int!) {
+  escrowedNouns(
+    where: {owner_: {id: $owner}}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     noun {
       id
     }
@@ -5385,8 +5496,14 @@ export const GetAccountEscrowedNounsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetAccountEscrowedNounsQuery, GetAccountEscrowedNounsQueryVariables>;
 export const GetEscrowDepositEventsDocument = new TypedDocumentString(`
-    query GetEscrowDepositEvents($forkId: String!) {
-  escrowDeposits(where: {fork: $forkId, tokenIDs_not: []}, first: 1000) {
+    query GetEscrowDepositEvents($forkId: String!, $first: Int!, $skip: Int!) {
+  escrowDeposits(
+    where: {fork: $forkId, tokenIDs_not: []}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
     createdAt
     owner {
@@ -5399,8 +5516,14 @@ export const GetEscrowDepositEventsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetEscrowDepositEventsQuery, GetEscrowDepositEventsQueryVariables>;
 export const GetForkJoinsDocument = new TypedDocumentString(`
-    query GetForkJoins($forkId: String!) {
-  forkJoins(where: {fork: $forkId, tokenIDs_not: []}, first: 1000) {
+    query GetForkJoins($forkId: String!, $first: Int!, $skip: Int!) {
+  forkJoins(
+    where: {fork: $forkId, tokenIDs_not: []}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
     createdAt
     owner {
@@ -5413,8 +5536,14 @@ export const GetForkJoinsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetForkJoinsQuery, GetForkJoinsQueryVariables>;
 export const GetEscrowWithdrawEventsDocument = new TypedDocumentString(`
-    query GetEscrowWithdrawEvents($forkId: String!) {
-  escrowWithdrawals(where: {fork: $forkId, tokenIDs_not: []}, first: 1000) {
+    query GetEscrowWithdrawEvents($forkId: String!, $first: Int!, $skip: Int!) {
+  escrowWithdrawals(
+    where: {fork: $forkId, tokenIDs_not: []}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     id
     createdAt
     owner {
@@ -5439,7 +5568,7 @@ export const GetProposalTitlesDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetProposalTitlesQuery, GetProposalTitlesQueryVariables>;
 export const GetForkDetailsDocument = new TypedDocumentString(`
-    query GetForkDetails($id: ID!) {
+    query GetForkDetails($id: ID!, $first: Int!, $nestedSkip: Int!) {
   fork(id: $id) {
     id
     forkID
@@ -5450,12 +5579,17 @@ export const GetForkDetailsDocument = new TypedDocumentString(`
     tokensForkingCount
     tokensInEscrowCount
     forkingPeriodEndTimestamp
-    escrowedNouns(first: 1000) {
+    escrowedNouns(
+      first: $first
+      skip: $nestedSkip
+      orderBy: id
+      orderDirection: asc
+    ) {
       noun {
         id
       }
     }
-    joinedNouns(first: 1000) {
+    joinedNouns(first: $first, skip: $nestedSkip, orderBy: id, orderDirection: asc) {
       noun {
         id
       }
@@ -5464,8 +5598,8 @@ export const GetForkDetailsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetForkDetailsQuery, GetForkDetailsQueryVariables>;
 export const GetForksDocument = new TypedDocumentString(`
-    query GetForks {
-  forks {
+    query GetForks($first: Int!, $skip: Int!) {
+  forks(first: $first, skip: $skip, orderBy: id, orderDirection: asc) {
     id
     forkID
     executed
@@ -5479,8 +5613,14 @@ export const GetForksDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetForksQuery, GetForksQueryVariables>;
 export const GetIsForkActiveDocument = new TypedDocumentString(`
-    query GetIsForkActive($currentTimestamp: BigInt!) {
-  forks(where: {executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp}) {
+    query GetIsForkActive($currentTimestamp: BigInt!, $first: Int!, $skip: Int!) {
+  forks(
+    where: {executed: true, forkingPeriodEndTimestamp_gt: $currentTimestamp}
+    first: $first
+    skip: $skip
+    orderBy: id
+    orderDirection: asc
+  ) {
     forkID
     forkingPeriodEndTimestamp
   }
