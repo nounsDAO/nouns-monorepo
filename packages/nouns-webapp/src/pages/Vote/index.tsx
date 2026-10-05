@@ -33,6 +33,8 @@ import VoteSignals from '@/components/VoteSignals/VoteSignals';
 import { useReadNounsGovernorQuorumVotes } from '@/contracts';
 import { useAppSelector } from '@/hooks';
 import { useActiveLocale } from '@/hooks/useActivateLocale';
+import { useDelegateNouns } from '@/hooks/useDelegateNouns';
+import { usePaginatedSubgraph } from '@/hooks/usePaginatedSubgraph';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '@/i18n/locales';
 import Section from '@/layout/Section';
 import { cn } from '@/lib/utils';
@@ -57,7 +59,6 @@ import { useProposalFeedback } from '@/wrappers/nounsData';
 import { useUserVotes, useUserVotesAsOfBlock } from '@/wrappers/nounToken';
 import {
   delegateNounsAtBlockQuery,
-  Delegates,
   ProposalVotes,
   proposalVotesQuery,
   propUsingDynamicQuorum,
@@ -405,9 +406,9 @@ const VotePage = () => {
     loading,
     error,
     data: voters,
-  } = useQuery<ProposalVotes>(votesQuery, {
+  } = usePaginatedSubgraph<ProposalVotes>(votesQuery, votesVariables, {
+    field: 'votes',
     skip: !proposal,
-    variables: votesVariables,
   });
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
@@ -415,9 +416,8 @@ const VotePage = () => {
     voterIds ?? [],
     BigInt(proposal?.voteSnapshotBlock ?? 0),
   );
-  const { data: delegateSnapshot } = useQuery<Delegates>(voteSnapshotQuery, {
+  const { data: delegateSnapshot } = useDelegateNouns(voteSnapshotQuery, voteSnapshotVariables, {
     skip: (voters?.votes?.length ?? 0) === 0,
-    variables: voteSnapshotVariables,
   });
 
   const { delegates } = delegateSnapshot || {};

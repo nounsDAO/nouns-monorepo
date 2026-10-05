@@ -1,12 +1,14 @@
+import type { Address } from '@/utils/types';
+
 import React from 'react';
 
-import { useQuery } from '@apollo/client';
 import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/react/macro';
 import { Spinner } from 'react-bootstrap';
 
 import HorizontalStackedNouns from '@/components/HorizontalStackedNouns';
 import ShortAddress from '@/components/ShortAddress';
+import { useDelegateNouns } from '@/hooks/useDelegateNouns';
 import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
 import classes from './DelegateHoverCard.module.css';
@@ -25,7 +27,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
     [unwrappedDelegateId],
     proposalCreationBlock,
   );
-  const { data, loading, error } = useQuery(query, { variables });
+  const { data, loading, error } = useDelegateNouns(query, variables);
 
   if (loading || !data || data === undefined || data.delegates.length === 0) {
     return (
@@ -52,7 +54,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
       </div>
 
       <div className={classes.address}>
-        <ShortAddress address={data ? data.delegates[0].id : ''} />
+        <ShortAddress address={data.delegates[0].id as Address} />
       </div>
 
       <div className={classes.nounInfoWrapper}>

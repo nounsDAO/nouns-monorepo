@@ -18,6 +18,7 @@ import {
   useWriteNounsGovernorProposeBySigs,
   useWriteNounsGovernorUpdateProposalBySigs,
 } from '@/contracts';
+import { usePaginatedSubgraph } from '@/hooks/usePaginatedSubgraph';
 import {
   CandidateFeedback as GraphQLCandidateFeedback,
   Maybe,
@@ -567,12 +568,9 @@ export const useSendFeedback = () => {
 
 export const useProposalFeedback = (id: string, pollInterval: number = 0) => {
   const { query, variables } = proposalFeedbacksQuery(id);
-  const { loading, data, error, refetch } = useQuery<{
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
     proposalFeedbacks: Maybe<GraphQLProposalFeedback[]>;
-  }>(query, {
-    pollInterval,
-    variables,
-  });
+  }>(query, variables, { field: 'proposalFeedbacks', pollInterval });
 
   const feedbacks: VoteSignalDetail[] = map(data?.proposalFeedbacks ?? [], feedback => ({
     ...feedback,
@@ -591,12 +589,9 @@ export const useProposalFeedback = (id: string, pollInterval: number = 0) => {
 
 export const useCandidateFeedback = (id: string, pollInterval?: number) => {
   const { query, variables } = candidateFeedbacksQuery(id);
-  const { loading, data, error, refetch } = useQuery<{
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
     candidateFeedbacks: Maybe<GraphQLCandidateFeedback[]>;
-  }>(query, {
-    pollInterval,
-    variables,
-  });
+  }>(query, variables, { field: 'candidateFeedbacks', pollInterval });
   const feedbacks: VoteSignalDetail[] = map(data?.candidateFeedbacks ?? [], feedback => ({
     ...feedback,
     reason: feedback.reason || '',

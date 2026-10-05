@@ -67,6 +67,7 @@ import {
 } from '@/contracts';
 import { useBlockTimestamp } from '@/hooks/useBlockTimestamp';
 import { usePaginatedProposals } from '@/hooks/usePaginatedProposals';
+import { usePaginatedSubgraph } from '@/hooks/usePaginatedSubgraph';
 import { defaultChain } from '@/wagmi';
 
 import {
@@ -1309,12 +1310,9 @@ export function useNumTokensInForkEscrow(): number | undefined {
 
 export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => {
   const { query, variables } = escrowDepositEventsQuery(forkId);
-  const { loading, data, error, refetch } = useQuery<{
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
     escrowDeposits: Maybe<GraphQLEscrowDeposit[]>;
-  }>(query, {
-    pollInterval,
-    variables,
-  });
+  }>(query, variables, { field: 'escrowDeposits', pollInterval });
   const escrowDeposits: EscrowDeposit[] = map(data?.escrowDeposits ?? [], escrowDeposit => {
     const proposalIDs = escrowDeposit.proposalIDs.map(id => Number(id));
     return {
@@ -1331,12 +1329,9 @@ export const useEscrowDepositEvents = (pollInterval: number, forkId: string) => 
 
 export const useEscrowWithdrawalEvents = (pollInterval: number, forkId: string) => {
   const { query, variables } = escrowWithdrawEventsQuery(forkId);
-  const { loading, data, error, refetch } = useQuery<{
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
     escrowWithdrawals: Maybe<GraphQLEscrowWithdrawal[]>;
-  }>(query, {
-    pollInterval,
-    variables,
-  });
+  }>(query, variables, { field: 'escrowWithdrawals', pollInterval });
 
   const escrowWithdrawals: EscrowWithdrawal[] = map(
     data?.escrowWithdrawals ?? [],
@@ -1378,13 +1373,9 @@ const eventsWithforkCycleEvents = (events: EscrowEvent[], forkDetails: Fork) => 
 
 export const useForkJoins = (pollInterval: number, forkId: string) => {
   const { query, variables } = forkJoinsQuery(forkId);
-  const { loading, data, error, refetch } = useQuery<{ forkJoins: Maybe<GraphQLForkJoin[]> }>(
-    query,
-    {
-      pollInterval,
-      variables,
-    },
-  );
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{
+    forkJoins: Maybe<GraphQLForkJoin[]>;
+  }>(query, variables, { field: 'forkJoins', pollInterval });
   const forkJoins = data?.forkJoins?.map(forkJoin => {
     const proposalIDs = forkJoin.proposalIDs.map(id => id);
     return {
@@ -1468,9 +1459,11 @@ export const useForkDetails = (pollInterval: number, id: string) => {
     data: forkData,
     error,
     refetch,
-  } = useQuery<{ fork: Maybe<GraphQLFork> }>(query, {
+  } = usePaginatedSubgraph<{ fork: Maybe<GraphQLFork> }>(query, variables, {
+    field: 'fork',
     pollInterval,
-    variables,
+    singleton: true,
+    nested: { fields: ['escrowedNouns', 'joinedNouns'] },
   }) as { loading: boolean; data: { fork: ForkSubgraphEntity }; error: Error; refetch: () => void };
   const joined = forkData?.fork?.joinedNouns?.map(item => item.noun.id) ?? [];
   const escrowed = forkData?.fork?.escrowedNouns?.map(item => item.noun.id) ?? [];
@@ -1489,10 +1482,11 @@ export const useForkDetails = (pollInterval: number, id: string) => {
 
 export const useForks = (pollInterval: number = 0) => {
   const { query, variables } = forksQuery();
-  const { loading, data, error, refetch } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(query, {
-    pollInterval,
+  const { loading, data, error, refetch } = usePaginatedSubgraph<{ forks: Maybe<GraphQLFork[]> }>(
+    query,
     variables,
-  });
+    { field: 'forks', pollInterval },
+  );
 
   const forks: Fork[] = map(data?.forks ?? [], fork => {
     const joined = fork?.joinedNouns?.map(item => item.noun.id) ?? [];
@@ -1519,7 +1513,7 @@ export const useIsForkActive = () => {
     loading,
     data: forksData,
     error,
-  } = useQuery<{ forks: Maybe<GraphQLFork[]> }>(query, { variables });
+  } = usePaginatedSubgraph<{ forks: Maybe<GraphQLFork[]> }>(query, variables, { field: 'forks' });
   const data = isTruthy(forksData?.forks?.length);
   return {
     loading,
