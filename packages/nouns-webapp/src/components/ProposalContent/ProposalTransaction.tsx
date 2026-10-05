@@ -24,7 +24,9 @@ export default function ProposalTransaction({ transaction }: Readonly<ProposalTr
     <li className="m-0">
       {linkIfAddress(transaction.target)}
       {transaction.functionSig ? `.${transaction.functionSig}` : null}
-      {transaction.value ? ` [${formatEther(transaction.value)} ETH]` : null}
+      {transaction.value != null && transaction.value !== 0n
+        ? ` [${formatEther(transaction.value)} ETH]`
+        : null}
       {transaction.functionSig ? (
         <>
           (<br />

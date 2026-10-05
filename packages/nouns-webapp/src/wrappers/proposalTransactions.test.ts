@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { encodeAbiParameters } from 'viem';
+import { describe, expect, it } from 'vitest';
+
 import { concatSelectorToCalldata, formatProposalTransactionDetails } from './nounsDao';
 
 const target = '0x0000000000000000000000000000000000000001' as const;

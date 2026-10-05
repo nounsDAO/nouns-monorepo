@@ -28,7 +28,7 @@ export default function ProposalTransactions({ details }: Readonly<Props>) {
           <li key={i} className="m-0">
             {linkIfAddress(d.target)}
             {d.functionSig ? `.${d.functionSig}` : null}
-            {d.value ? ` [${formatEther(d.value)} ETH]` : null}
+            {d.value != null && d.value !== 0n ? ` [${formatEther(d.value)} ETH]` : null}
             {d.functionSig ? (
               <>
                 (<br />
