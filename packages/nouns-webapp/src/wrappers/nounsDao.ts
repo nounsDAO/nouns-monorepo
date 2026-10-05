@@ -467,6 +467,16 @@ export const formatProposalTransactionDetails = (details: {
     const value = details.values[i] ?? 0n;
     const callData = details.calldatas[i];
 
+    // Preserve the historical display for a plain ETH transfer.
+    // The amount is shown as the transfer argument, without appending raw wei.
+    if (!signature && (!callData || callData === '0x')) {
+      return {
+        target,
+        functionSig: 'transfer',
+        callData: determineCallData('', value) as Hex,
+      };
+    }
+
     const [name = 'unknown', types] = (signature?.slice?.(0, -1) ?? 'unknown()').split(/\((.*)/s);
 
     if (!types) {
@@ -477,7 +487,7 @@ export const formatProposalTransactionDetails = (details: {
       return {
         target,
         functionSig: name || 'unknown',
-        callData: determineCallData('', value) as Hex,
+        callData: '' as Hex,
         value,
       };
     }
@@ -485,8 +495,7 @@ export const formatProposalTransactionDetails = (details: {
     if (callData === '0x') {
       return {
         target,
-        functionSig: name,
-        callData: callData as Hex,
+        callData: concatSelectorToCalldata(signature, callData),
         value,
       };
     }

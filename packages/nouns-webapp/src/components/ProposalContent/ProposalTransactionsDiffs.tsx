@@ -1,11 +1,11 @@
 import ReactDiffViewer from 'react-diff-viewer';
+import { formatEther, Hex } from 'viem';
 
+import { Address } from '@/utils/types';
 import { ProposalDetail } from '@/wrappers/nounsDao';
 
 import classes from './ProposalContent.module.css';
 import ProposalTransaction from './ProposalTransaction';
-import { Address } from '@/utils/types';
-import { Hex } from 'viem';
 
 type Props = {
   oldTransactions: ProposalDetail[];
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function ProposalTransactions({ oldTransactions, newTransactions }: Props) {
-  const buildTxObject = (tx: ProposalDetail) => {
+  const buildTxObject = (tx: ProposalDetail | undefined) => {
     if (!tx) {
       return {
         target: '' as Address,
@@ -42,11 +42,17 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
   });
 
   const stringifyTx = (tx: ProposalDetail) => {
-    return tx.target + '.' + tx.functionSig + (tx.value ? tx.value : '') + '(' + tx.callData + ')';
+    const functionName = tx.functionSig ? `.${tx.functionSig}` : '';
+    const value = tx.value != null && tx.value !== 0n ? ` [${formatEther(tx.value)} ETH]` : '';
+    return tx.target + functionName + value + '(' + tx.callData + ')';
   };
 
   const isEmptyTx = (tx: ProposalDetail) => {
-    const item = tx.target + tx.functionSig + (tx.value ? tx.value : '') + tx.callData;
+    const item =
+      tx.target +
+      tx.functionSig +
+      (tx.value != null && tx.value !== 0n ? tx.value : '') +
+      tx.callData;
     return item === '';
   };
 
@@ -64,7 +70,7 @@ export default function ProposalTransactions({ oldTransactions, newTransactions 
             const isDiff = stringifyTx(tx.oldTx) !== stringifyTx(tx.newTx);
             if (!isDiff)
               return (
-                <div className="position-relative">
+                <div key={i} className="position-relative">
                   <div className={classes.listItemNum}>{i + 1}.</div>
                   <ProposalTransaction transaction={isEmptyTx(tx.oldTx) ? tx.newTx : tx.oldTx} />
                 </div>
