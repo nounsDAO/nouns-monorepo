@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 
+import { useDelegateNouns } from '@/hooks/useDelegateNouns';
 import { CandidateSignature } from '@/wrappers/nounsData';
-import { delegateNounsAtBlockQuery, Delegates } from '@/wrappers/subgraph';
+import { delegateNounsAtBlockQuery } from '@/wrappers/subgraph';
 
 import CandidateSponsorImage from './CandidateSponsorImage';
 import classes from './CandidateSponsors.module.css';
@@ -25,10 +25,11 @@ const CandidateSponsors = ({
   const maxVisibleSpots = 5;
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   const activeSigners =
-    signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id) ?? [];
+    signers?.filter(s => s.signer.activeOrPendingProposal === false && s.signer.id.length > 0) ??
+    [];
   const signerIds = activeSigners?.map(s => s.signer.id) ?? [];
   const { query, variables } = delegateNounsAtBlockQuery(signerIds ?? [], currentBlock ?? 0n);
-  const { data: delegateSnapshot } = useQuery<Delegates>(query, { variables });
+  const { data: delegateSnapshot } = useDelegateNouns(query, variables);
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
     acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
@@ -39,7 +40,7 @@ const CandidateSponsors = ({
     setSignerCountOverflow(signers.length - maxVisibleSpots);
   }
   const placeholderCount =
-    isThresholdMetByProposer && nounIds.length === 0 ? 1 : nounsRequired - nounIds.length;
+    isThresholdMetByProposer === true && nounIds.length === 0 ? 1 : nounsRequired - nounIds.length;
   const placeholderArray = Array(placeholderCount >= 1 ? placeholderCount : 0).fill(0);
 
   return (

@@ -1,9 +1,10 @@
 import type { Address } from './utils/types';
+import type { GetLatestAuctionsQuery } from '@/subgraphs/graphql';
 
 import React, { useEffect } from 'react';
 
-import { ApolloProvider } from '@apollo/client';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { gql, ApolloProvider } from '@apollo/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -14,8 +15,8 @@ import { usePublicClient, WagmiProvider } from 'wagmi';
 import { CustomConnectkitProvider } from '@/components/CustomConnectkitProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { usePaginatedSubgraph } from '@/hooks/usePaginatedSubgraph';
 import { store } from '@/store';
-import { execute } from '@/subgraphs/execute';
 
 import App from './App';
 import config, { CHAIN_ID } from './config';
@@ -44,7 +45,7 @@ import { setLastAuctionNounId, setOnDisplayAuctionNounId } from './state/slices/
 import { addPastAuctions } from './state/slices/pastAuctions';
 import { nounPath } from './utils/history';
 import { defaultChain, config as wagmiConfig } from './wagmi';
-import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
+import { clientFactory, latestAuctionsQuery, auctionBidPagesQuery } from './wrappers/subgraph';
 
 const queryClient = new QueryClient();
 
@@ -201,14 +202,21 @@ const ChainSubscriber: React.FC = () => {
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
-  const { data: auctions } = useQuery({
-    queryKey: ['latestAuctions'],
-    queryFn: async () =>
-      await Promise.all([
-        execute(latestAuctionsQuery, { first: 1000 }),
-        execute(latestAuctionsQuery, { first: 1000, skip: 1000 }),
-      ]).then(([page1, page2]) => [...page1.auctions, ...page2.auctions]),
-  });
+  const { data } = usePaginatedSubgraph<GetLatestAuctionsQuery>(
+    gql(latestAuctionsQuery.toString()),
+    {},
+    {
+      field: 'auctions',
+      nested: {
+        fields: ['bids'],
+        parentVariable: 'id',
+        query: auctionBidPagesQuery,
+        field: 'auction',
+        singleton: true,
+      },
+    },
+  );
+  const auctions = data?.auctions;
 
   const dispatch = useAppDispatch();
 
