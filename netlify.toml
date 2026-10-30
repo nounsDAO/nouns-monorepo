@@ -2,6 +2,9 @@
   command = "pnpm turbo run build"
   publish = "packages/nouns-webapp/dist"
 
+[functions]
+  directory = "packages/nouns-bots/src/functions"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

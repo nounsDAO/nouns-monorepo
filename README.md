@@ -20,6 +20,12 @@ The [nouns sdk](packages/nouns-sdk) includes methods and react hooks for interac
 
 A [ponder.sh](https://github.com/ponder-sh/ponder) based API for all historical NounsDAO data
 
+### nouns-bots
+
+The [nouns bots](packages/nouns-bots) package contains Netlify-scheduled social automation,
+including the onchain proposal-to-X publisher. Production administrators should use its
+[setup and operations runbook](packages/nouns-bots/ADMIN_SETUP.md).
+
 ### nouns-subgraph
 
 **deprecated** in favor of **nouns-api**

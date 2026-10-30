@@ -1,0 +1,28 @@
+{
+  "name": "@nouns/bots",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nouns DAO social automation workers",
+  "homepage": "https://nouns.wtf",
+  "repository": "github:nounsDAO/nouns-monorepo",
+  "license": "GPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.9",
+    "twitter-api-v2": "^1.29.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsup": "^8.5.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18.14"
+  }
+}
