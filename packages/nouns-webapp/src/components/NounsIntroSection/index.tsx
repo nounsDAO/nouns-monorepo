@@ -26,9 +26,17 @@ const NounsIntroSection = () => {
           </div>
         </Col>
         <Col lg={6} className={classes.youtubeEmbedContainer}>
+          {/* original iframe on youtube 
+            <iframe
+              src="https://www.youtube.com/embed/lOzCA7bZG_k"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>*/}
+          {/* Nouns TV embed; falls back to the YouTube video in `yt` if Nouns TV is unreachable */}
           <iframe
-            src="https://www.youtube.com/embed/lOzCA7bZG_k"
-            title="YouTube video player"
+            src="https://nounstv.com/embed/54hiIbPi?yt=lOzCA7bZG_k"
+            title="This is Nouns"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
@@ -49,9 +57,17 @@ const NounsIntroSection = () => {
       </Section>
       <Section fullWidth={false} className={classes.videoSection}>
         <Col lg={6} className={`${classes.youtubeEmbedContainer} order-lg-1 order-2`}>
+          {/* original iframe on youtube 
+            <iframe
+              src="https://www.youtube.com/embed/oa79nN4gMPs"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>*/}
+          {/* Nouns TV embed; falls back to the YouTube video in `yt` if Nouns TV is unreachable */}
           <iframe
-            src="https://www.youtube.com/embed/oa79nN4gMPs"
-            title="YouTube video player"
+            src="https://nounstv.com/embed/XinWAdWy?yt=oa79nN4gMPs"
+            title="The Story of Nouns DAO and How I Got Funded"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
